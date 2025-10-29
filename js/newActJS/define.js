@@ -1,6 +1,4 @@
-const Define = (() => {
-
-    const scriptPath = 'modules'
+const Define = (() => {    
 
     // DEFINE BUTTONS
     const buttons = [
@@ -368,6 +366,8 @@ const Define = (() => {
     };
 
     (async () => {
+        const scriptPath = 'js/newActJS';
+        
         const loadScript = (src) =>
             new Promise((resolve, reject) => {
                 const s = document.createElement('script');
