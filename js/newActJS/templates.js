@@ -4675,7 +4675,7 @@ const TrueAndFalse = (() => {
         dataSet.forEach( (item, ind) => {
             const html = `
                 <div class="row m-0 mb-3 question-block">
-                    <div style="width:40px">${optionLabels[ind]}</div>
+                    <div style="width:40px">(${optionLabels[ind]})</div>
                     <div class="col p-0">
                         <div class="row m-0">
                             <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${item.question}</div>
@@ -4796,7 +4796,7 @@ const TrueAndFalse = (() => {
 
             const body = `
                 <tr clsss='trData'>
-                    <th>${optionLabels[i]}</th>
+                    <th>(${optionLabels[i]})</th>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${tempUserAnswer}</td>
                     <td class="text-success">${tempCorrectAnswer}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
