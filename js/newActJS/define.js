@@ -48,13 +48,13 @@ const Define = (() => {
                 col2: [
                     { id: 1, text: "जादू दिखाना" },
                     { id: 2, text: "पत्र बाँटना" },
-                    { id: 3, text: "वकालत करना" },
+                    { id: 3, text: "वकालत करना" },                    
                     { id: 4, text: "रखवाली करना" },
                     { id: 5, text: "पढ़ाना" },
                     { id: 6, text: "खेती करना" },
                 ],
                 col3: [
-                    { id: 1, img: "./img/4.png" },
+                    { id: 1, img: "./img/4.png" },                    
                     { id: 2, img: "./img/5.png" },
                     { id: 3, img: "./img/6.png" },
                 ],

@@ -926,19 +926,24 @@ const MatchLeftRightToCenter = (() => {
             const col2 = Array.isArray(content.col2) ? Activity.shuffleQuestions(content.col2) : [];
             const col3 = Array.isArray(content.col3) ? Activity.shuffleQuestions(content.col3) : [];
 
-            col1.forEach(item => {
-                matchItems1.insertAdjacentHTML('beforeend',
-                    `<div class="imgBoxes shadow" data-col="1" data-id="${item.id}"><img src="${item.img}" alt="" ondragstart="return false";></div>`);
+            const returnHtml = (colSeq, item) => {
+                const html = item.text ? 
+                    `<div class="centerItems shadow-sm" data-col="${colSeq}" data-id="${item.id}">${item.text}</div>` : 
+                    `<div class="imgBoxes shadow" data-col="${colSeq}" data-id="${item.id}"><img src="${item.img}" alt="" ondragstart="return false";></div>`;
+                // ..
+                return html;
+            }
+            
+            col1.forEach(item => {                
+                matchItems1.insertAdjacentHTML('beforeend', returnHtml(1, item) );
             });
 
             col2.forEach(item => {
-                matchItems2.insertAdjacentHTML('beforeend',
-                    `<div class="centerItems shadow-sm" data-col="2" data-id="${item.id}">${item.text}</div>`);
+                matchItems2.insertAdjacentHTML('beforeend', returnHtml(2, item) );
             });
 
             col3.forEach(item => {
-                matchItems3.insertAdjacentHTML('beforeend',
-                    `<div class="imgBoxes shadow" data-col="3" data-id="${item.id}"><img src="${item.img}" alt="" ondragstart="return false";></div>`);
+                matchItems3.insertAdjacentHTML('beforeend', returnHtml(3, item) );
             });
 
             const leftEls   = Array.from(matchItems1.querySelectorAll('[data-col="1"]'));
