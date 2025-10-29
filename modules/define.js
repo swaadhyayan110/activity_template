@@ -25,6 +25,7 @@ const Define = (() => {
     const questions = [
         {
             id      : 1,
+            lang    : 'en',
             head    : '1. Vocabulary',
             subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
             content : [

@@ -105,9 +105,9 @@ const Activity = (() => {
 
     const getOptionLabels = (lang='en') => {
         if( lang == 'en' ) {
-            return ["(a)", "(b)", "(c)", "(d)", "(e)", "(f)", "(g)", "(h)", "(i)", "(j)", "(k)", "(l)", "(m)", "(n)", "(o)"];
+            return ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"];
         } else {
-            return ["(क)", "(ख)", "(ग)", "(घ)", "(ङ)", "(च)", "(छ)", "(ज)", "(झ)", "(ञ)", "(ट)", "(ठ)", "(ड)", "(ढ)", "(ण)"];
+            return ["क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "ट", "ठ", "ड", "ढ", "ण"];
         }
     }
 
@@ -133,7 +133,15 @@ const Activity = (() => {
         } else {            
             return ['प्रश्‍न संख्या','आपका उत्तर','सही उत्तर','परिणाम'];
         }
-    }    
+    }
+
+    const getSectionLabels = (lang='en') => {
+        if( lang == 'en' ) {
+            return 'Column';
+        } else {
+            return 'खंड';
+        }
+    }
 
     const get = (key) => store[key];
 
@@ -187,6 +195,7 @@ const Activity = (() => {
         toggleCheckBtn,
         getOptionLabels,
         shuffleQuestions,
+        getSectionLabels,
         getTrueFalseLabels,
         setQuestionDetails,
         getAnswerTableHeads,
@@ -379,8 +388,14 @@ const MatchLeftToRight = (() => {
         }
     };
 
-    const ui = (activityId="m1") => {
+    const ui = (activityId="m1", questionId) => {
         try {
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+
+            const columnLabel = Activity.getSectionLabels(lang);
+            const optionLabel = Activity.getOptionLabels(lang).map(label => label.toUpperCase());
+
             const html = `<div class="question">
                 <div class="container">
                     <div class="qSections">
@@ -389,8 +404,8 @@ const MatchLeftToRight = (() => {
                     </div>
                     <hr />
                     <div class="forLevelAB">
-                        <div class="levelText">Column-A</div>
-                        <div class="levelText">Column-B</div>
+                        <div class="levelText">${columnLabel}-${optionLabel[0]}</div>
+                        <div class="levelText">${columnLabel}-${optionLabel[1]}</div>
                     </div>
                     <div class="content user-select-none">
                         <div class="instructions">
@@ -429,7 +444,7 @@ const MatchLeftToRight = (() => {
             const data = Activity.getData( questionId );
             if( !Object.entries(data).length ) return;            
 
-            ui(activityId);
+            ui(activityId, questionId);
             Activity.setQuestionDetails( questionId );
 
             const leftContainer  = document.getElementById(`leftItems_${activityId}`);
@@ -4590,7 +4605,7 @@ const TrueAndFalse = (() => {
             }
 
             const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';            
+            const lang     = activity.lang || 'en';
 
             const btns = Activity.getBtnLabels( lang );
 
