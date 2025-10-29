@@ -1,0 +1,110 @@
+.hindiHeadings {
+  padding: 15px 14px;
+  margin: 15px 0;
+  border: 2px solid #e3e3e3;
+  border-radius: 12px;
+  font-weight: bold;
+  background: #f9f9f9;
+  transition: all 0.3s ease;
+  color: #004084;
+  font-size: 22px;
+}
+
+.hindiHeadings:hover {
+  border-color: #1e88e5;
+  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.25);
+  transform: translateY(-2px);
+}
+
+.questionFIllN {
+  margin: 35px 0;
+  font-size: 17px;
+}
+
+.inPutHindiNew {
+  background: none !important;
+  border: none !important;
+  border-bottom: 2px dashed #333 !important;
+  max-width: 150px !important;
+  text-align: center !important;
+  color: #4CAF50 !important;
+}
+
+.inPutHindiNew:focus {
+  outline: none !important;
+}
+
+.questionFILL {
+    font-size: 23px;
+    margin: 23px 0;
+    color: #1041ff;
+    border-bottom: 1px solid #dfdfdf;
+    padding: 10px 0;
+}
+
+.keyboard-input {
+  width: 60%;
+  max-width: 300px;
+  font-size: 18px;
+  padding: 8px;
+  margin: 8px 0 18px 0;
+  border-radius: 6px;
+  border: 2px solid #444;
+  background: #1e1e1e;
+  color: #fff;
+}
+
+.keyboard-input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+}
+
+
+
+.result {
+  margin-top: 25px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffeb3b;
+}
+
+.ui-keyboard {
+  background: #000 !important;
+  border-radius: 12px !important;
+  padding: 15px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9);
+}
+
+.ui-keyboard-button {
+  background: #222 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+  border-radius: 6px !important;
+  margin: 3px !important;
+  min-width: 40px;
+  font-size: 16px !important;
+}
+
+.ui-keyboard-button:hover {
+  background: #00bfff !important;
+  color: #000 !important;
+}
+
+.ui-keyboard-caret {
+  border-left: 2px solid #00bfff !important;
+}
+
+@media (min-width:300px) and (max-width:880px) {
+.questionFILL {
+  font-size: 15px;
+  margin: 0;
+}
+.inPutHindiNew {
+  width: 90px;
+}
+.hindiHeadings {
+  padding: 8px 14px;
+  margin: 14px 0;
+  font-size: 15px;
+}
+}

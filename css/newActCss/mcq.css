@@ -1,0 +1,278 @@
+.option-btn {
+    background: #ffffff;
+    border: 2px solid #cfe5f5;
+    /* same thickness always */
+    border-radius: 14px;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    cursor: pointer;
+    padding: 12px 18px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    font-family: 'PoppinsLight';
+    transition: all 0.3s ease, transform 0.25s ease;
+}
+
+.option-btn:hover {
+    background: linear-gradient(135deg, #ffffff, #d4f1ff);
+    color: #000 !important;
+    border: 2px solid #1485c638;
+    /* keep border 2px */
+    box-shadow: 0 0 10px rgba(36, 202, 230, 0.6);
+    transform: scale(1.03);
+    /* smooth zoom without shifting layout */
+}
+
+
+
+/* Selected state */
+.option-btn.selected {
+    background: linear-gradient(135deg, #ffffff, #d4f1ff);
+    color: #000 !important;
+    border: 3px solid #1485c638;
+    box-shadow: 0 0 8px rgba(36, 202, 230, 0.6);
+    animation: pulse 0.2s;
+}
+
+/* Radio inside option */
+.option-btn input[type="radio"] {
+    accent-color: #24cae6;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+
+
+/* Button Styling */
+#show-answer-btn {
+    background: linear-gradient(135deg, #24cae6, #1485c6);
+    border: none;
+    border-radius: 50px;
+    padding: 12px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(20, 133, 198, 0.3);
+    transition: all 0.3s ease;
+}
+
+#show-answer-btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 10px 20px rgba(20, 133, 198, 0.4);
+}
+
+
+
+
+/* ================== ANIMATIONS ================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* ===== Result Popup ===== */
+#popupDialogAns {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    z-index: 999;
+    animation: fadeIn 0.5s ease;
+}
+
+.baseMod {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.answerdiv {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    width: 85%;
+    max-width: 850px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    animation: slideUp 0.6s ease;
+    overflow: hidden;
+}
+
+/* ===== Score Heading ===== */
+#scoreTextQ1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1485c6;
+    margin-bottom: 15px;
+    animation: pulse 1.2s infinite;
+}
+
+/* ===== Table Styling ===== */
+.answerdiv table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.answerdiv thead th {
+    background: linear-gradient(135deg, #24cae6, #1485c6);
+    color: #fff;
+    padding: 14px;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px 10px 0 0;
+    font-family: 'PoppinsSemiBold';
+}
+
+.answerdiv tbody tr {
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.answerdiv tbody tr:hover {
+    background: #e9f7fc;
+    transform: scale(1.01);
+}
+
+.answerdiv td,
+.answerdiv th {
+    padding: 12px;
+    text-align: left;
+    font-size: 17px;
+    border-bottom: 2px solid #eee;
+}
+
+/* ===== Correct / Wrong ===== */
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* ===== Close Button ===== */
+.answerdiv button {
+    border-radius: 50%;
+    font-weight: bold;
+    padding: 6px 12px;
+    background: #f44336;
+    border: none;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.answerdiv button:hover {
+    background: #d32f2f;
+    transform: rotate(90deg);
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.trData {
+    font-family: 'PoppinsLight' !important;
+}
+
+.questionHeadingMCQ {
+    font-size: 18px;
+    color: #141516;
+    font-family: 'PoppinsSemiBold';
+}
+
+#quiz-container {
+    margin-top: 15px;
+}
+
+.colorsDiff {
+    color: #fa7a03;
+}

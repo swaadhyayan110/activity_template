@@ -1,0 +1,148 @@
+
+.exerciseDiv {
+    position: relative;
+}
+
+.container-sub {
+    margin: 16px auto;
+    border: none;
+    min-height: 83vh;
+    overflow-x: hidden;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.audio-box {
+    width: 560px;
+    height: 500px;
+    position: relative;
+}
+.rowAudioBtns{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.audio-music-bg {
+    background-image: url('../images/music.png');
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+}
+
+.audio-container {
+    width: 90%;
+    height: 90%;
+    background: #fff;
+    border-radius: 50px;
+    padding: 15px;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.audio-banner {
+    height: 26vh;
+    background-color: #115f97;
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+
+}
+
+.bi-music-note-beamed {
+    filter: drop-shadow(4px 4px 1px #000)
+}
+
+.audio-name {
+    text-align: center;
+    padding-inline: 20px;
+    font-size: 18px;
+    width: 100%;
+    font-weight: bold;
+    color: #000;
+}
+
+.progress-bar-seek {
+    font-size: 18px;
+}
+
+.play-icon {
+    cursor: pointer;
+}
+
+.play-icon:active {
+    scale: .97;
+}
+
+input[type="range"] {
+    width: 300px;
+    transition: all 0.1s linear;
+}
+
+#loader {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 18px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 1000;
+}
+
+#youtubePlayer {
+    display: none;
+}
+
+.audio-replay-btn {
+    width: 40px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.audio-replay-btn:active {
+    scale: .95;
+}
+
+@media screen and (max-width: 500px) {
+    .audio-container {
+        align-items: center;
+        border-radius: 20px;
+    }
+
+    .audio-banner {
+        width: 26vh;
+        border-radius: 50%;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    }
+
+    .audio-name {
+        font-size: 15px;
+        width: 100%;
+    }
+
+    .progress-bar-seek {
+        font-size: 14px;
+    }
+
+    .play-icon {
+        width: 30% !important;
+    }
+
+    .audio-replay-btn {
+        width: 30px;
+    }
+}

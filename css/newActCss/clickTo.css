@@ -1,0 +1,295 @@
+/* CLICKABLE BUTTONS */
+.clickable {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    color: #000;
+    position: relative;
+}
+
+/* Hover Animation (does not disturb layout) */
+.clickable:hover {
+    transform: scale(1.15) rotate(-5deg);
+    /* purely visual transform */
+    color: #4364f7;
+    text-shadow: 0 2px 8px rgba(67, 100, 247, 0.5);
+    box-shadow: 0 6px 20px rgba(67, 100, 247, 0.3);
+}
+
+/* Active / Click Animation */
+.clickable:active {
+    transform: scale(0.95);
+    /* visual press effect */
+}
+
+/* Bounce Animation Keyframes */
+@keyframes hoverBounce {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    30% {
+        transform: scale(1.15) rotate(-5deg);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(3deg);
+    }
+
+    70% {
+        transform: scale(1.12) rotate(-2deg);
+    }
+
+    100% {
+        transform: scale(1.15) rotate(0deg);
+    }
+}
+
+/* QUESTION CONTAINER */
+.questInC {
+    font-size: 23px;
+    margin: 0;
+    color: #041d29;
+    border-bottom: 1px solid #dfdfdf;
+    padding: 15px 0;
+    transition: color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    position: relative;
+}
+
+/* Hover Animation for Questions (only visual) */
+.questInC:hover {
+    transform: translateY(-2px);
+    /* subtle lift */
+    color: #4364f7;
+    border-bottom-color: #4364f7;
+}
+
+/* Keyframes for text lift and glow */
+@keyframes textHover {
+    0% {
+        transform: translateY(0) scale(1);
+        color: #041d29;
+    }
+
+    50% {
+        transform: translateY(-4px) scale(1.03);
+        color: #4364f7;
+    }
+
+    100% {
+        transform: translateY(-2px) scale(1.02);
+        color: #4364f7;
+    }
+}
+
+.circle {
+    border: 1px solid #041d29;
+    color: #041d29;
+    padding: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover Glow for Circles */
+.circle:hover {
+    transform: scale(1.1);
+    /* visual effect only */
+    box-shadow: 0 0 15px rgba(67, 100, 247, 0.4);
+}
+
+@keyframes circleGlow {
+    0% {
+        transform: scale(1);
+        box-shadow: none;
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(67, 100, 247, 0.4);
+    }
+
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(67, 100, 247, 0.3);
+    }
+}
+
+/* CORRECT / WRONG STATES */
+.correct {
+    border: 2px solid green;
+    color: green;
+}
+
+.wrong {
+    border: 2px solid red;
+    color: red;
+}
+
+
+.baseFixeds {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background: #0002038e;
+    z-index: 999;
+    overflow: auto;
+    z-index: 999;
+}
+
+#clickAct {
+    display: none;
+}
+
+.report_clicks {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    width: 85%;
+    max-width: 850px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    animation: slideUp 0.6s ease;
+    overflow: hidden;
+    margin: 3vh auto;
+}
+
+/* ===== Score Heading ===== */
+#scoreTextQ1Click {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1485c6;
+    animation: pulse 1.2s infinite;
+}
+
+/* ===== Table Styling ===== */
+.report_clicks table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.report_clicks thead th {
+    background: linear-gradient(135deg, #24cae6, #1485c6);
+    color: #fff;
+    padding: 14px;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px 10px 0 0;
+    font-family: 'PoppinsSemiBold';
+}
+
+.report_clicks tbody tr {
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.report_clicks tbody tr:hover {
+    background: #e9f7fc;
+    transform: scale(1.01);
+}
+
+.report_clicks td,
+.report_clicks th {
+    padding: 12px;
+    text-align: left;
+    font-size: 17px;
+    border-bottom: 2px solid #eee;
+}
+
+/* ===== Correct / Wrong ===== */
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* ===== Close Button ===== */
+.report_clicks button {
+    border-radius: 50%;
+    font-weight: bold;
+    padding: 6px 12px;
+    background: #f44336;
+    border: none;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.report_clicks button:hover {
+    background: #d32f2f;
+    transform: rotate(90deg);
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.disabled-click {
+    pointer-events: none;
+    /* क्लिक disable */
+    opacity: 0.7;
+    /* थोड़ा fade दिखे */
+}
+
+
+@media (min-width:300px) and (max-width:880px) {
+    .questHindi {
+        font-size: 16px;
+        margin: 11px 0;
+        padding: 9px;
+        border-radius: 12px;
+    }
+
+    .questInC {
+        font-size: 13px;
+        transition: color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+        position: relative;
+    }
+
+    .clickable {
+        cursor: pointer;
+        padding: 8px 6px;
+    }
+
+
+}

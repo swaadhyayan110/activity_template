@@ -1,0 +1,171 @@
+#Bottom_AtItems {
+  margin-top: 18vw;
+}
+
+.matching-area3 {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rowHoriZ {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  z-index: 2;
+}
+
+.item2 {
+  padding: 18px 8px;
+  background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+  border: 2px solid #90caf9;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 17px;
+  font-family: 'PoppinsLight';
+  color: #000;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 6px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Hover with lift + glow */
+.item2:hover {
+  background: linear-gradient(135deg, #ffffff, #d9ecff);
+  border-color: #4facfe;
+  box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+  transform: translateY(-4px) scale(1.03);
+}
+
+/* Shine streak effect */
+.item2:hover::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent);
+  animation: shimmer2 1.3s forwards;
+}
+
+@keyframes shimmer2 {
+  from {
+    transform: translateX(-100%) rotate(25deg);
+  }
+
+  to {
+    transform: translateX(100%) rotate(25deg);
+  }
+}
+
+/* Selected State */
+.item2.selected {
+  background: linear-gradient(135deg, #e0ffe0, #d0ffd8);
+  color: #0a2a66;
+  border: 2px solid #28a745;
+  box-shadow: 0 0 15px rgba(40, 167, 69, 0.5), inset 0 0 6px rgba(40, 167, 69, 0.25);
+  transform: scale(1.04);
+  font-weight: 600;
+  animation: pulseSelected2 1.2s infinite alternate;
+}
+
+/* Subtle glowing pulse */
+@keyframes pulseSelected2 {
+  from {
+    box-shadow: 0 0 12px rgba(40, 167, 69, 0.4);
+  }
+
+  to {
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.7);
+  }
+}
+
+/* Click Feedback */
+.item2:active {
+  transform: scale(0.96);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+
+.third-line {
+  stroke: green;
+  stroke-width: 2;
+  marker-end: url(#arrowhead3);
+}
+
+#svg3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* so clicks go through */
+  z-index: 5;
+  /* higher than .item2 */
+}
+
+.item2 {
+  position: relative;
+  z-index: 2;
+  /* lower than svg */
+}
+
+
+@media (min-width:300px) and (max-width:880px) {
+  .m3Holders {
+    overflow: auto;
+  }
+
+  .matching-area3 {
+    width: 1024px;
+  }
+
+  .item2 {
+    padding: 7px 7px;
+    font-size: 13px;
+    margin: 5px;
+  }
+}
+
+.matching-area3 {
+  position: relative;
+  /* important */
+  width: 100%;
+  min-height: 15vw;
+  /* adjust as needed */
+}
+
+.matching-area3 svg[data-svg] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* don't block clicks on items */
+  z-index: 1;
+}
+
+.rowHoriZ {
+  position: relative;
+  z-index: 2;
+  /* items above SVG */
+}
+
+.rowHoriZ[data-bottom] {
+  margin-top: 5vw;
+  /* adjust for visual spacing */
+}

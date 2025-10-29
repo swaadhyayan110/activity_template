@@ -1,0 +1,161 @@
+
+.rowWordLet {
+  margin-bottom: 20px;
+  font-family: 'PoppinsLight';
+  color: #000;
+  font-size: 18px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(255, 255, 255, 0.6) inset;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 17px;
+}
+
+.rowWordLet:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.15),
+    0 1px 3px rgba(255, 255, 255, 0.6) inset;
+}
+
+
+.numLe {
+  font-weight: 700;
+  color: #0a74da;
+  text-shadow: 0 1px 2px rgba(10, 116, 218, 0.2);
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+
+.wordStance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  border-radius: 12px;
+  transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.wordStance:focus-within {
+  background: linear-gradient(145deg, #eef6ff, #fdfdfd);
+  border-color: #0a74da;
+  box-shadow: 0 0 0 3px rgba(10, 116, 218, 0.15);
+}
+
+
+.word2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff, #f3f6fb);
+  border: 1px solid #d0d7e2;
+  box-shadow:
+    2px 2px 5px rgba(0, 0, 0, 0.08),
+    -2px -2px 6px rgba(255, 255, 255, 0.7);
+  cursor: grab;
+  user-select: none;
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  transition: transform 0.25s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.word2:hover {
+  background: linear-gradient(135deg, #e7f0ff, #ffffff);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    4px 4px 10px rgba(0, 0, 0, 0.1),
+    -2px -2px 6px rgba(255, 255, 255, 0.8);
+}
+
+.word2:active {
+  cursor: grabbing;
+  transform: scale(0.92);
+  background: linear-gradient(135deg, #d7e9ff, #f6faff);
+}
+
+
+.word2.ui-sortable-helper {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  transform: rotate(2deg) scale(1.08);
+  opacity: 0.95;
+}
+
+
+.word-placeholder {
+  min-width: 70px;
+  height: 38px;
+  border-radius: 10px;
+  border: 2px dashed #bbb;
+  background: rgba(10, 116, 218, 0.05);
+  margin: 6px;
+  animation: pulseGlow 1.5s infinite ease-in-out;
+}
+
+
+.correctWord {
+  background: linear-gradient(135deg, #e4fbe9, #d6f5e0);
+  border-color: #4db872;
+  color: #267a47;
+  box-shadow: 0 0 10px rgba(77, 184, 114, 0.3);
+  animation: popIn 0.35s ease;
+}
+
+.wrongRORD {
+  background: linear-gradient(135deg, #ffecec, #ffd9d9);
+  border-color: #e05c5c;
+  color: #9d1c1c;
+  box-shadow: 0 0 10px rgba(224, 92, 92, 0.3);
+  animation: shake 0.4s ease;
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0px rgba(10, 116, 218, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 10px rgba(10, 116, 218, 0.4);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-3px);
+  }
+}

@@ -1,0 +1,4828 @@
+const activities = {};
+
+const Activity = (() => {
+
+    const store = { modules: {} };
+
+    const css = (href) => {
+        try {
+            if( !href ) return;
+
+            const link = document.createElement("link");
+            link.rel   = "stylesheet";
+            link.type  = "text/css";
+            link.href  = 'css/newActCss/'+href;
+            document.head.appendChild(link);
+        } catch( err ) {
+            console.error( 'Actitvity.css : ', err );
+        }
+    };
+
+    const module = (id) => {
+        try {            
+            const found = Modules.get()?.find(m => m.id === id);
+            return found ? found.module : null;
+        } catch ( err ) {
+            console.error( 'Actitvity.module : ', err );
+        }
+    };
+    
+    const getData = (questionId) => {
+        try {
+            return Define.get('questions')?.find(q => q.id == questionId);
+        } catch ( err ) {
+            console.error( 'Actitvity.getData : ', err );
+        }
+    };
+
+    const shuffleQuestions = (array) => {
+        try { 
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        } catch ( err ) {
+            console.error( 'Actitvity.shuffleQuestions : ', err );
+        }
+    }
+
+    const shuffleWords = (words) => {
+        try {
+            if( !Array.isArray(words) ) return words;
+
+            const arr = [...words];
+            do {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+            } while (JSON.stringify(arr) === JSON.stringify(words) && words.length > 1);
+            return arr;
+        } catch ( err ) {
+            console.error( 'Actitvity.shuffleWords : ', err );
+        }
+    }
+
+    const setQuestionDetails = ( questionID ) => {
+        try {
+            const data = getData( questionID );
+            const container = document.querySelector(Define.get('questionContainer'));
+            if( !container ) {
+                console.warn('matchLeftToRight: container not found:', container);
+                return;
+            }
+
+            const head    = Define.get('head');
+            const subHead = Define.get('subHead');
+
+            const arr = [ head, subHead ].map(item => `.${item}`);            
+
+            const elHead = container.querySelector(arr[0]);
+            if (elHead) elHead.innerHTML = data.head || '';
+
+            const elSub = container.querySelector(arr[1]);
+            if (elSub) elSub.innerHTML = data.subhead || '';
+
+        } catch( err ) {
+            console.error( 'Activity.setQuestionDetails :- ', err );
+        }
+    }
+
+    const toggleCheckBtn = (selector, disable) => {
+        try {
+            const container = document.querySelector( Define.get('questionContainer') );
+            const btn       = container.querySelector(selector);        
+            if( !btn ) return;
+            btn.disabled = disable;
+            btn.style.opacity = disable ? "0.5" : "1";
+            btn.style.pointerEvents = disable ? "none" : "auto";
+        } catch ( err ) {
+            console.error( 'Actitvity.toggleCheckBtn : ', err );
+        }
+    }
+
+    const getOptionLabels = (lang='en') => {
+        if( lang == 'en' ) {
+            return ["(a)", "(b)", "(c)", "(d)", "(e)", "(f)", "(g)", "(h)", "(i)", "(j)", "(k)", "(l)", "(m)", "(n)", "(o)"];
+        } else {
+            return ["(क)", "(ख)", "(ग)", "(घ)", "(ङ)", "(च)", "(छ)", "(ज)", "(झ)", "(ञ)", "(ट)", "(ठ)", "(ड)", "(ढ)", "(ण)"];
+        }
+    }
+
+    const getBtnLabels = (lang='en') => {
+        if( lang == 'en' ) {
+            return ['Check Answers', 'Show Answers', 'Try Again'];
+        } else {
+            return ['उत्तर जाँचिए', 'उत्तर देखो', 'पुनः प्रयास करें'];
+        }
+    }
+
+    const getTrueFalseLabels = (lang='en') => {
+        if( lang == 'en' ) {
+            return ['True', 'False'];
+        } else {
+            return ['सही', 'गलत'];
+        }
+    }
+
+    const getAnswerTableHeads = (lang='en') => {
+        if( lang == 'en' ) {
+            return ['Question No.', 'Your Answer', 'Correct Answer', 'Result'];
+        } else {            
+            return ['प्रश्‍न संख्या','आपका उत्तर','सही उत्तर','परिणाम'];
+        }
+    }    
+
+    const get = (key) => store[key];
+
+    const register = (name, mod) => {
+        try {
+            store.modules[name] = mod;
+        } catch ( err ) {
+            console.error( 'Actitvity.register : ', err );
+        }
+    };
+  
+    const render = (moduleId, questionId, activityId=null) => {
+        try {
+            const moduleName = module(moduleId);
+            if( !moduleName ) {
+                console.error('Activity.render: unknown moduleId', moduleId);
+                return;
+            }       
+
+            const mod = store.modules[moduleName];
+            if( !mod || !mod.render ) {
+                console.error('Activity.render: module not registered:', moduleName);
+                return;
+            }
+
+            const qObj = getData( questionId );
+            if( !qObj ) {
+                console.error('Activity.render: no question found for', questionId );
+                return;
+            }
+            
+            if( !activityId ) {
+                activityId = moduleName === 'MatchLeftToRight' ? `m${qObj.id}` : `act${qObj.id}`;
+            }        
+            
+            mod.render( questionId, activityId );
+        } catch ( err ) {
+            console.error( 'Actitvity.render : ', err );
+        }
+    };
+
+    return {
+        get,
+        css,
+        module,
+        render,
+        getData,
+        register,
+        getBtnLabels,
+        shuffleWords,
+        toggleCheckBtn,
+        getOptionLabels,
+        shuffleQuestions,
+        getTrueFalseLabels,
+        setQuestionDetails,
+        getAnswerTableHeads,
+    };    
+})();
+
+const MatchLeftToRight = (() => {
+
+    const drawArrow = (activityId, fromElement, toElement, color = "green") => {
+        try {
+    
+            const svg = document.querySelector(`.matching-area.${activityId} svg`);
+            if( !svg || !fromElement || !toElement ) return;
+
+            const leftId  = fromElement.dataset.id;
+            const rightId = toElement.dataset.id;
+            
+            svg.querySelectorAll(`line[data-from="${leftId}"], line[data-to="${rightId}"]`)
+            .forEach(l => l.remove());
+
+            const fromRect = fromElement.getBoundingClientRect();
+            const toRect   = toElement.getBoundingClientRect();
+            const containerRect = fromElement.closest(".matching-area").getBoundingClientRect();
+
+            const x1 = fromRect.right - containerRect.left;
+            const y1 = fromRect.top + fromRect.height / 2 - containerRect.top;
+            const x2 = toRect.left - containerRect.left;
+            const y2 = toRect.top + toRect.height / 2 - containerRect.top;
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x1);
+            line.setAttribute("y1", y1);
+            line.setAttribute("x2", x2);
+            line.setAttribute("y2", y2);
+            line.setAttribute("stroke", color);
+            line.setAttribute("stroke-width", "2");
+            line.setAttribute("marker-end", "url(#arrowhead)");
+            line.dataset.from = leftId;
+            line.dataset.to = rightId;
+            svg.appendChild(line);
+        } catch( err ) {
+            console.error( 'MatchLeftToRight.drawArrow :', err );
+        }
+    };
+    
+    const checkAnswers = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            if( !activity ) return;
+
+            const correctMatches = activity.correctMatches || {};
+            let correctCount     = 0;
+
+            const area = document.querySelector(`.matching-area.${activityId}`);
+            if( !area ) return;
+
+            area.querySelectorAll(".item").forEach(item => {
+                item.classList.remove("correct", "wrong");
+            });
+
+            for( const leftId in correctMatches ) {
+                const rightId = activity.userMatches[leftId];
+                const leftItem = area.querySelector(`.left-items .item[data-id="${leftId}"]`);
+                const rightItem = area.querySelector(`.right-items .item[data-id="${rightId}"]`);
+
+                if (!leftItem || !rightItem) continue;
+
+                if (rightId == correctMatches[leftId]) {
+                    correctCount++;
+                    drawArrow(activityId, leftItem, rightItem, "green");
+                    leftItem.classList.add("correct");
+                    rightItem.classList.add("correct");
+                } else {
+                    drawArrow(activityId, leftItem, rightItem, "red");
+                    leftItem.classList.add("wrong");
+                    rightItem.classList.add("wrong");
+                }
+            }
+
+            const total = Object.keys(correctMatches).length;
+            if (correctCount === total) {
+                Swal.fire({ icon: "success", title: "Excellent!", text: `All ${total} answers are correct 🎉` });
+            } else if (correctCount === 0) {
+                Swal.fire({ icon: "error", title: "Oops!", text: "No answers are correct ❌" });
+            } else {
+                Swal.fire({ icon: "info", title: "Almost!", text: `You got ${correctCount} out of ${total} correct ✅` });
+            }
+        } catch( err ) {
+            console.error( 'MatchLeftToRight.checkAnswers :', err );
+        }
+    };
+
+    const showAnswers = (activityId) => {
+        try {
+            resetActivity(activityId);
+            const activity = activities[activityId];        
+            if( !activity ) return;
+
+            const correctMatches = activity.correctMatches || {};
+            const area = document.querySelector(`.matching-area.${activityId}`);
+            if( !area ) return;
+
+            for( const leftId in correctMatches ) {
+                const leftItem  = area.querySelector(`.left-items .item[data-id="${leftId}"]`);
+                const rightItem = area.querySelector(`.right-items .item[data-id="${correctMatches[leftId]}"]`);
+
+                if( !leftItem || !rightItem ) continue;
+
+                drawArrow(activityId, leftItem, rightItem, "green");
+
+                leftItem.classList.add("correct");
+                rightItem.classList.add("correct");
+                activities[activityId].userMatches[leftId] = correctMatches[leftId];
+            }
+            
+            Activity.toggleCheckBtn( '.submit-btn', true );
+        } catch( err ) {
+            console.error( 'MatchLeftToRight.showAnswers :', err );
+        }
+    };
+
+    const resetActivity = (activityId) => {
+        try {
+            const svg = document.querySelector(`.matching-area.${activityId} svg`);
+            if( svg ) {
+                const defs = svg.querySelector("defs");
+                svg.innerHTML = "";
+                if (defs) svg.appendChild(defs);
+            }
+
+            activities[activityId] = activities[activityId] || { userMatches: {}, selectedLeftItem: null, correctMatches: {} };
+            activities[activityId].userMatches = {};
+            activities[activityId].selectedLeftItem = null;
+
+            const area = document.querySelector(`.matching-area.${activityId}`);
+            if (!area) return;
+                area.querySelectorAll(".item").forEach(item => {
+                item.classList.remove("correct", "wrong", "selected");
+            });
+
+            Activity.toggleCheckBtn( '.submit-btn', false );
+        } catch( err ) {
+            console.error( 'MatchLeftToRight.resetActivity :', err );
+        }
+    };
+
+    const checkIfAllAttempted = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            if( !activity ) return;
+
+            const correctMatches = activity.correctMatches || {};
+            const total = Object.keys(correctMatches).length;
+
+            const attempted = Object.keys(activity.userMatches || {}).filter(leftId => activity.userMatches[leftId]).length;
+
+            const submitBtn = document.querySelector(`.buttons.machiNgs .submit-btn[data-activity="${activityId}"]`);
+            if( submitBtn ) {
+                if( attempted === total ) {
+                    submitBtn.classList.remove("disable"); 
+                } else {
+                    submitBtn.classList.add("disable");
+                }
+            }
+        } catch( err ) {
+            console.error( 'MatchLeftToRight.checkIfAllAttempted :', err );
+        }
+    };
+
+    const redrawAllArrows = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            const svg = document.querySelector(`.matching-area.${activityId} svg`);
+            if( !svg || !activity ) return;
+
+            const defs = svg.querySelector("defs");
+            svg.innerHTML = "";
+            if( defs ) svg.appendChild(defs);
+
+            for( const leftId in activity.userMatches ) {
+                const rightId = activity.userMatches[leftId];
+                const leftEl  = document.querySelector(`.matching-area.${activityId} .left-items .item[data-id="${leftId}"]`);
+                const rightEl = document.querySelector(`.matching-area.${activityId} .right-items .item[data-id="${rightId}"]`);
+                if( leftEl && rightEl ) {
+                    drawArrow(activityId, leftEl, rightEl);
+                }
+            }
+        } catch( err ) {
+            console.error( 'MatchLeftToRight.redrawAllArrows :', err );
+        }
+    };
+
+    const ui = (activityId="m1") => {
+        try {
+            const html = `<div class="question">
+                <div class="container">
+                    <div class="qSections">
+                        <div class="${Define.get('head')}"></div>
+                        <p class="${Define.get('subHead')}"></p>
+                    </div>
+                    <hr />
+                    <div class="forLevelAB">
+                        <div class="levelText">Column-A</div>
+                        <div class="levelText">Column-B</div>
+                    </div>
+                    <div class="content user-select-none">
+                        <div class="instructions">
+                            <div class="activity-wrapper">
+                            <div class="matching-area ${activityId}" data-id="${activityId}">
+                                <div class="left-items" id="leftItems_${activityId}"></div>
+                                <svg width="100%" height="100%">
+                                    <defs>
+                                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                                        </marker>
+                                    </defs>
+                                </svg>
+                                <div class="right-items" id="rightItems_${activityId}"></div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons machiNgs">
+                    <button class="submit-btn disable" data-activity="${activityId}">Check Answer</button>
+                    <button class="show-btn">Show Answer</button>
+                    <button class="reset-btn">Reset</button>
+                </div>
+                </div>`;
+            // ..
+            const cont = document.querySelector(Define.get('questionContainer'));
+            cont.innerHTML = html;
+        } catch( err ) {
+            console.error( 'MatchLeftToRight.ui :', err );
+        }
+    };
+    
+    const matchLeftToRight = (questionId, activityId="m1") => {
+        try {
+            const data = Activity.getData( questionId );
+            if( !Object.entries(data).length ) return;            
+
+            ui(activityId);
+            Activity.setQuestionDetails( questionId );
+
+            const leftContainer  = document.getElementById(`leftItems_${activityId}`);
+            const rightContainer = document.getElementById(`rightItems_${activityId}`);
+            const area    = document.querySelector(`.matching-area.${activityId}`);
+            const buttons = document.querySelector(`.matching-area.${activityId}`)?.closest('.container')?.querySelector('.buttons.machiNgs');
+
+            const leftFrag  = document.createDocumentFragment();
+            const rightFrag = document.createDocumentFragment();
+
+            const questions      = data.content;
+            const correctMatches = Object.fromEntries(questions.map(q => [String(q.id), String(q.id)]));
+
+            const leftShuffled  = Activity.shuffleQuestions(questions);
+            const rightShuffled = Activity.shuffleQuestions(questions);
+            
+            activities[activityId] = activities[activityId] || { userMatches: {}, selectedLeftItem: null, correctMatches: {} };
+            activities[activityId].correctMatches = correctMatches || {};
+            activities[activityId].userMatches = {};
+            
+            leftShuffled.forEach(d => {
+                const div       = document.createElement('div');
+                div.className   = 'item';
+                div.dataset.id  = d.id;
+                div.textContent = d.left;
+
+                div.addEventListener('click', (ev) => {
+                    leftContainer.querySelectorAll('.item.selected').forEach(i => i.classList.remove('selected'));
+                    div.classList.add('selected');
+                    activities[activityId].selectedLeftItem = div;
+                });
+
+                leftFrag.appendChild(div);
+            });
+            
+            rightShuffled.forEach(d => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.dataset.id = d.id;
+                div.textContent = d.right;
+
+                div.addEventListener('click', (ev) => {
+                    const activity = activities[activityId];
+                    if (!activity || !activity.selectedLeftItem) {
+                    Swal.fire({ icon: "error", text: "Please select left item first!" });
+                    return;
+                    }
+
+                    const leftId = activity.selectedLeftItem.dataset.id;
+                    const rightId = div.dataset.id;
+
+                    activity.userMatches[leftId] = rightId;
+                    drawArrow(activityId, activity.selectedLeftItem, div);
+                    
+                    activity.selectedLeftItem.classList.remove('selected');
+                    activity.selectedLeftItem = null;
+
+                    checkIfAllAttempted(activityId);
+                });
+
+                rightFrag.appendChild(div);
+            });
+
+            leftContainer.innerHTML  = '';
+            rightContainer.innerHTML = '';
+
+            leftContainer.appendChild(leftFrag);
+            rightContainer.appendChild(rightFrag);
+            
+            const submitBtn = document.querySelector(`.buttons.machiNgs .submit-btn[data-activity="${activityId}"]`);
+            const showBtn   = document.querySelector(`.buttons.machiNgs .show-btn`);
+            const resetBtn  = document.querySelector(`.buttons.machiNgs .reset-btn`);
+
+            if( submitBtn ) {
+                submitBtn.addEventListener('click', () => checkAnswers(activityId));
+            }
+            if( showBtn ) {
+                showBtn.addEventListener('click', () => showAnswers(activityId));
+            }
+            if( resetBtn ) {
+                resetBtn.addEventListener('click', () => resetActivity(activityId));
+            }
+        } catch( err ) {
+            console.error( 'MatchLeftToRight.matchLeftToRight :', err );
+        }
+    };
+
+    window.addEventListener('resize', () => {
+        for( const activityId in activities ) redrawAllArrows(activityId);
+    });
+
+    return {
+        render: matchLeftToRight,
+        drawArrow,
+        checkAnswers,
+        showAnswers,
+        resetActivity,
+        checkIfAllAttempted,
+        redrawAllArrows
+    };
+})();
+
+const MatchLeftRightToCenter = (() => {
+    
+    const qS  = (sel, ctx = document) => (ctx && ctx.querySelector) ? ctx.querySelector(sel) : null;
+    const qSA = (sel, ctx = document) => (ctx && ctx.querySelectorAll) ? Array.from(ctx.querySelectorAll(sel)) : [];    
+
+    const getBoundaryPoint = (rect, targetX, targetY) => {
+        try {
+            const cx = (rect.left + rect.right) / 2;
+            const cy = (rect.top + rect.bottom) / 2;
+            const dx = targetX - cx;
+            const dy = targetY - cy;
+
+            if (Math.abs(dx) < 1e-6 && Math.abs(dy) < 1e-6) {
+                return { x: cx, y: cy };
+            }
+
+            const w = rect.width;
+            const h = rect.height;
+            const isCircle = Math.abs(w - h) < 2;
+
+            if (isCircle) {
+                const r = Math.min(w, h) / 2;
+                const len = Math.sqrt(dx*dx + dy*dy);
+                const ux = dx / len;
+                const uy = dy / len;
+                return { x: cx + ux * r, y: cy + uy * r };
+            } else {
+                const tx1 = (rect.left - cx) / dx;
+                const tx2 = (rect.right - cx) / dx;
+                const ty1 = (rect.top - cy) / dy;
+                const ty2 = (rect.bottom - cy) / dy;
+
+                const candidates = [];
+                const pushIfValid = (t, edge) => {
+                    if (!isFinite(t) || t <= 0) return;
+                    const x = cx + dx * t;
+                    const y = cy + dy * t;
+                    if (edge === 'left' || edge === 'right') {
+                        if (y >= rect.top && y <= rect.bottom) candidates.push({t,x,y});
+                    } else {
+                        if (x >= rect.left && x <= rect.right) candidates.push({t,x,y});
+                    }
+                };
+
+                if (isFinite(tx1)) pushIfValid(tx1, 'left');
+                if (isFinite(tx2)) pushIfValid(tx2, 'right');
+                if (isFinite(ty1)) pushIfValid(ty1, 'top');
+                if (isFinite(ty2)) pushIfValid(ty2, 'bottom');
+
+                if (candidates.length === 0) return { x: cx, y: cy };
+                candidates.sort((a,b) => a.t - b.t);
+                return { x: candidates[0].x, y: candidates[0].y };
+            }
+        } catch( err ) {
+            console.error( 'MatchLeftRightToCenter.getBoundaryPoint :', err );
+        }
+    };
+
+    const drawLine = (svg, fromEl, toEl, color = "green", tag = "L") => {
+        try {
+            if (!svg || !fromEl || !toEl) return;
+
+            const fromId = fromEl.dataset.id;
+            const toId = toEl.dataset.id;
+            
+            svg.querySelectorAll(`line[data-from="${tag}~${fromId}"]`).forEach(l => l.remove());
+
+            const fromRect = fromEl.getBoundingClientRect();
+            const toRect   = toEl.getBoundingClientRect();        
+            const svgRect  = svg.getBoundingClientRect();
+        
+            const fromCenterX = (fromRect.left + fromRect.right) / 2;
+            const fromCenterY = (fromRect.top + fromRect.bottom) / 2;
+            const toCenterX   = (toRect.left + toRect.right) / 2;
+            const toCenterY   = (toRect.top + toRect.bottom) / 2;
+            
+            const p1v = getBoundaryPoint(fromRect, toCenterX, toCenterY);
+            const p2v = getBoundaryPoint(toRect, fromCenterX, fromCenterY);
+            
+            const x1 = p1v.x - svgRect.left;
+            const y1 = p1v.y - svgRect.top;
+            const x2 = p2v.x - svgRect.left;
+            const y2 = p2v.y - svgRect.top;
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x1);
+            line.setAttribute("y1", y1);
+            line.setAttribute("x2", x2);
+            line.setAttribute("y2", y2);
+            line.setAttribute("stroke", color);
+            line.setAttribute("stroke-width", "2");
+            line.setAttribute("stroke-linecap", "round");
+            line.setAttribute("marker-end", "url(#arrowhead2)");
+
+            line.dataset.from = `${tag}~${fromId}`;
+            line.dataset.to   = `${tag}~${toId}`;
+            svg.appendChild(line);
+        } catch( err ) {
+            console.error( 'MatchLeftRightToCenter.drawLine :', err );
+        }
+    };
+
+    const clearSvg = (svg) => {
+        try {
+            if (!svg) return;
+            svg.querySelectorAll("line").forEach(l => l.remove());
+        } catch( err ) {
+            console.error( 'MatchLeftRightToCenter.clearSvg :', err );
+        }
+    };
+
+    const resetActivity = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            if (!activity) return;
+
+            const container = document.getElementById(activityId);
+            if (!container) return;
+
+            const svg = qS(".svg2", container);
+
+            if (svg) {
+                const defs = svg.querySelector("defs");
+                svg.innerHTML = "";
+                if (defs) svg.appendChild(defs);
+            }
+
+            activity.userLeftMatches = {};
+            activity.userRightMatches = {};
+            activity.selectedLeft = null;
+            activity.selectedRight = null;
+
+            qSA(".matchItems1 .imgBoxes, .matchItems2 .centerItems, .matchItems3 .imgBoxes", container)
+                .forEach(el => el.classList.remove("correct", "wrong", "selected"));        
+
+            Activity.toggleCheckBtn( '.submit-btn', false );
+        } catch( err ) {
+            console.error( 'MatchLeftRightToCenter.resetActivity :', err );
+        }
+    };
+
+    const checkAnswers = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            if (!activity) return;
+            const container = document.getElementById(activityId);
+            if (!container) return;
+            const svg = qS(".svg2", container);
+
+            qSA(".matchItems1 .imgBoxes, .matchItems2 .centerItems, .matchItems3 .imgBoxes", container)
+                .forEach(el => el.classList.remove("correct", "wrong", "selected"));
+
+            let correctCount = 0;
+            const totalLeft = Object.keys(activity.correctLeft || {}).length;
+            const totalRight = Object.keys(activity.correctRight || {}).length;
+            const total = totalLeft + totalRight;
+
+            Object.entries(activity.correctLeft || {}).forEach(([leftId, centerCorrectId]) => {
+                const userCenterId = activity.userLeftMatches[leftId];
+                const leftEl = qS(`.matchItems1 [data-id="${leftId}"]`, container);
+                const centerEl = qS(`.matchItems2 [data-id="${userCenterId}"]`, container);
+
+                if (!leftEl || !centerEl) return;
+
+                if (String(userCenterId) === String(centerCorrectId)) {
+                    leftEl.classList.add("correct");
+                    centerEl.classList.add("correct");
+                    drawLine(svg, leftEl, centerEl, "green", "L");
+                    correctCount++;
+                } else {
+                    leftEl.classList.add("wrong");
+                    centerEl.classList.add("wrong");
+                    drawLine(svg, leftEl, centerEl, "red", "L");
+                }
+            });
+
+            Object.entries(activity.correctRight || {}).forEach(([rightId, centerCorrectId]) => {
+                const userCenterId = activity.userRightMatches[rightId];
+                const rightEl = qS(`.matchItems3 [data-id="${rightId}"]`, container);
+                const centerEl = qS(`.matchItems2 [data-id="${userCenterId}"]`, container);
+
+                if (!rightEl || !centerEl) return;
+
+                if (String(userCenterId) === String(centerCorrectId)) {
+                    rightEl.classList.add("correct");
+                    centerEl.classList.add("correct");
+                    drawLine(svg, rightEl, centerEl, "green", "R");
+                    correctCount++;
+                } else {
+                    rightEl.classList.add("wrong");
+                    centerEl.classList.add("wrong");
+                    drawLine(svg, rightEl, centerEl, "red", "R");
+                }
+            });
+
+            if (correctCount === total && total > 0) {
+                Swal.fire({ icon: "success", title: "Great!", text: `All ${total} matches are correct 🎉` });
+            } else if (correctCount === 0) {
+                Swal.fire({ icon: "error", title: "Oops!", text: "No answers are correct ❌" });
+            } else {
+                Swal.fire({ icon: "info", title: "Almost!", text: `You got ${correctCount} out of ${total} correct ✅` });
+            }
+        } catch( err ) {
+            console.error( 'MatchLeftRightToCenter.checkAnswers :', err );
+        }
+    };
+
+    const showAnswers = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            if (!activity) return;
+            const container = document.getElementById(activityId);
+            if (!container) return;
+            const svg = qS(".svg2", container);
+
+            resetActivity(activityId);
+
+            Object.entries(activity.correctLeft || {}).forEach(([leftId, centerId]) => {
+                const leftEl = qS(`.matchItems1 [data-id="${leftId}"]`, container);
+                const centerEl = qS(`.matchItems2 [data-id="${centerId}"]`, container);
+
+                if (!leftEl || !centerEl) return;
+
+                drawLine(svg, leftEl, centerEl, "green", "L");
+                leftEl.classList.add("correct");
+                centerEl.classList.add("correct");
+                activity.userLeftMatches[leftId] = centerId;
+            });
+
+            Object.entries(activity.correctRight || {}).forEach(([rightId, centerId]) => {
+                const rightEl = qS(`.matchItems3 [data-id="${rightId}"]`, container);
+                const centerEl = qS(`.matchItems2 [data-id="${centerId}"]`, container);
+
+                if (!rightEl || !centerEl) return;
+
+                drawLine(svg, rightEl, centerEl, "green", "R");
+                rightEl.classList.add("correct");
+                centerEl.classList.add("correct");
+                activity.userRightMatches[rightId] = centerId;
+            });
+
+            Activity.toggleCheckBtn( '.submit-btn', true );
+        } catch( err ) {
+            console.error( 'MatchLeftRightToCenter.showAnswers :', err );
+        }
+    };
+        
+    const redrawAll = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            if (!activity) return;
+            const container = document.getElementById(activityId);
+            if (!container) return;
+            const svg = qS(".svg2", container);
+            if (!svg) return;
+
+            const defs = svg.querySelector("defs");
+            svg.innerHTML = "";
+            if (defs) svg.appendChild(defs);
+
+            Object.entries(activity.userLeftMatches || {}).forEach(([leftId, centerId]) => {
+                const leftEl = qS(`.matchItems1 [data-id="${leftId}"]`, container);
+                const centerEl = qS(`.matchItems2 [data-id="${centerId}"]`, container);
+                if (leftEl && centerEl) drawLine(svg, leftEl, centerEl, "green", "L");
+            });
+
+            Object.entries(activity.userRightMatches || {}).forEach(([rightId, centerId]) => {
+                const rightEl = qS(`.matchItems3 [data-id="${rightId}"]`, container);
+                const centerEl = qS(`.matchItems2 [data-id="${centerId}"]`, container);
+                if (rightEl && centerEl) drawLine(svg, rightEl, centerEl, "green", "R");
+            });
+        } catch( err ) {
+            console.error( 'MatchLeftRightToCenter.redrawAll :', err );
+        }
+    };
+
+    const sizeAndPlaceSvg = (svg, wrapper) => {
+        try {
+            if (!svg || !wrapper) return;
+
+            const prevPos = getComputedStyle(wrapper).position;
+            if (prevPos === "static") wrapper.style.position = "relative";
+
+            const w = wrapper.clientWidth || wrapper.offsetWidth || wrapper.scrollWidth || 0;
+            const h = wrapper.clientHeight || wrapper.offsetHeight || wrapper.scrollHeight || 0;
+
+            svg.style.position = "absolute";
+            svg.style.left = "0px";
+            svg.style.top = "0px";
+            svg.style.width = (w ? w + "px" : "100%");
+            svg.style.height = (h ? h + "px" : "100%");
+            svg.style.pointerEvents = "none";
+            svg.style.zIndex = 50;
+
+            if (w && h) {
+                svg.setAttribute("width", String(w));
+                svg.setAttribute("height", String(h));
+                svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+                svg.setAttribute("preserveAspectRatio", "none");
+            }
+        } catch( err ) {
+            console.error( 'MatchLeftRightToCenter.sizeAndPlaceSvg :', err );
+        }
+    };
+
+    const matchLeftRightToCenter = (questionId, activityId="act1") => {
+        try {
+            const data    = Activity.getData( questionId );
+            const content = data.content;
+
+            activities[activityId]                  = activities[activityId] || {};
+            activities[activityId].correctLeft      = content.correctLeft || {};
+            activities[activityId].correctRight     = content.correctRight || {};
+            activities[activityId].userLeftMatches  = {};
+            activities[activityId].userRightMatches = {};
+            activities[activityId].selectedLeft     = null;
+            activities[activityId].selectedRight    = null;
+
+            const container = Define.get('questionContainer');
+            const cont = document.querySelector(container);
+            if (!cont) {
+                console.warn("Container not found:", container);
+                return;
+            }
+            
+            cont.innerHTML = `<div id="${activityId}" class="question">
+                            <div class="container">
+                            <div class="qSections">
+                                <div class="${Define.get('head')}"></div>
+                                <p class="${Define.get('subHead')}"></p>
+                            </div>
+                            <hr />
+                            <div class="rowM3 matching-area user-select-none" style="position:relative;">
+                                <div class="colmn1 matchItems1"></div>
+                                <div class="colmn1 matchItems2"></div>
+                                <div class="colmn1 matchItems3"></div>
+                                <svg class="svg2" style="position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:9999;">
+                                <defs>
+                                    <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                                    </marker>
+                                </defs>
+                                </svg>
+                            </div>
+                            <div class="buttons machiNgs">
+                                <button class="submit-btn">Check Answer</button>
+                                <button class="show-btn">Show Answer</button>
+                                <button class="reset-btn">Reset</button>
+                            </div>
+                            </div>
+                        </div>`;
+            // ..           
+
+            let activityRoot = null;
+            if (cont.id && cont.id === activityId) {
+                activityRoot = cont;
+            } else {
+                activityRoot = cont.querySelector(`#${activityId}`) || cont;
+            }
+            
+            const row         = cont.querySelector('.rowM3');
+            const matchItems1 = row.querySelector('.matchItems1');
+            const matchItems2 = row.querySelector('.matchItems2');
+            const matchItems3 = row.querySelector('.matchItems3');
+
+            const svg = cont.querySelector('.svg2');
+            if (svg) {
+                svg.dataset.activity = activityId;
+                sizeAndPlaceSvg(svg, row);
+            }
+            
+            matchItems1.innerHTML = "";
+            matchItems2.innerHTML = "";
+            matchItems3.innerHTML = "";
+
+            const col1 = Array.isArray(content.col1) ? Activity.shuffleQuestions(content.col1) : [];
+            const col2 = Array.isArray(content.col2) ? Activity.shuffleQuestions(content.col2) : [];
+            const col3 = Array.isArray(content.col3) ? Activity.shuffleQuestions(content.col3) : [];
+
+            col1.forEach(item => {
+                matchItems1.insertAdjacentHTML('beforeend',
+                    `<div class="imgBoxes shadow" data-col="1" data-id="${item.id}"><img src="${item.img}" alt="" ondragstart="return false";></div>`);
+            });
+
+            col2.forEach(item => {
+                matchItems2.insertAdjacentHTML('beforeend',
+                    `<div class="centerItems shadow-sm" data-col="2" data-id="${item.id}">${item.text}</div>`);
+            });
+
+            col3.forEach(item => {
+                matchItems3.insertAdjacentHTML('beforeend',
+                    `<div class="imgBoxes shadow" data-col="3" data-id="${item.id}"><img src="${item.img}" alt="" ondragstart="return false";></div>`);
+            });
+
+            const leftEls   = Array.from(matchItems1.querySelectorAll('[data-col="1"]'));
+            const centerEls = Array.from(matchItems2.querySelectorAll('[data-col="2"]'));
+            const rightEls  = Array.from(matchItems3.querySelectorAll('[data-col="3"]'));
+            
+            leftEls.forEach(el => {
+                el.addEventListener('click', () => {
+                    leftEls.forEach(i => i.classList.remove('selected'));
+                    el.classList.add('selected');
+                    activities[activityId].selectedLeft = el;
+                    activities[activityId].selectedRight = null;
+                });
+            });
+
+            rightEls.forEach(el => {
+                el.addEventListener('click', () => {
+                    rightEls.forEach(i => i.classList.remove('selected'));
+                    el.classList.add('selected');
+                    activities[activityId].selectedRight = el;
+                    activities[activityId].selectedLeft = null;
+                });
+            });
+
+            centerEls.forEach(centerEl => {
+                centerEl.addEventListener('click', () => {
+                    const centerId = centerEl.dataset.id;
+                    const act = activities[activityId];
+                    if (!act) return;
+
+                    const svgLocal = cont.querySelector('.svg2');                    
+
+                    if (act.selectedLeft) {
+                        const leftId = act.selectedLeft.dataset.id;
+                        act.userLeftMatches[leftId] = centerId;
+                        if (svgLocal) drawLine(svgLocal, act.selectedLeft, centerEl, "green", "L");
+                        act.selectedLeft.classList.remove('selected');
+                        act.selectedLeft = null;
+                    } else if (act.selectedRight) {
+                        const rightId = act.selectedRight.dataset.id;
+                        act.userRightMatches[rightId] = centerId;
+                        if (svgLocal) drawLine(svgLocal, act.selectedRight, centerEl, "green", "R");
+                        act.selectedRight.classList.remove('selected');
+                        act.selectedRight = null;
+                    } else {
+                        Swal.fire({ icon: "info", text: "Please select an image from left or right column first." });
+                    }
+                });
+            });
+            
+            Activity.setQuestionDetails( questionId );
+            
+            const btnContainer = cont.querySelector('.buttons.machiNgs');
+            if (btnContainer) {
+                const submitBtn = btnContainer.querySelector('.submit-btn');
+                const showBtn = btnContainer.querySelector('.show-btn');
+                const resetBtn = btnContainer.querySelector('.reset-btn');
+
+                if (submitBtn) {                    
+                    submitBtn.dataset.activity = activityId;
+                    submitBtn.addEventListener('click', () => checkAnswers(activityId));
+                }
+                if (showBtn) {
+                    showBtn.dataset.activity = activityId;
+                    showBtn.addEventListener('click', () => showAnswers(activityId));
+                }
+                if (resetBtn) {
+                    resetBtn.dataset.activity = activityId;
+                    resetBtn.addEventListener('click', () => resetActivity(activityId));
+                }
+            }
+        } catch (err) {
+            console.error("MatchLeftRightToCenter.matchLeftRightToCenter:", err);
+        }
+    };
+
+    let __m2resizeTO = null;
+    window.addEventListener("resize", () => {
+        clearTimeout(__m2resizeTO);
+        __m2resizeTO = setTimeout(() => {
+            Object.keys(activities).forEach(id => {                
+                if (activities[id] && (activities[id].correctLeft || activities[id].correctRight)) {
+                    redrawAll(id);
+                }
+            });
+        }, 120);
+    });
+
+    return {
+        render: matchLeftRightToCenter,
+        checkAnswers,
+        showAnswers,
+        resetActivity,
+        redrawAll
+    };    
+})();
+
+const MatchTopToBottom = (() => {
+
+    Activity.css('matchType3.css');
+    
+    const drawArrow = (activityId, fromEl, toEl, color = "green") => {
+        try {
+            if (!fromEl || !toEl) return;
+            const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
+            if (!area) return;
+
+            const svg = area.querySelector("svg[data-svg]");
+            if (!svg) return;
+
+            const topId = fromEl.dataset.id;
+            const bottomId = toEl.dataset.id;
+            
+            svg.querySelectorAll(`line[data-from="${topId}"], line[data-to="${bottomId}"]`)
+            .forEach(l => l.remove());
+
+            const fromRect = fromEl.getBoundingClientRect();
+            const toRect = toEl.getBoundingClientRect();
+            const containerRect = area.getBoundingClientRect();
+            
+            const x1 = (fromRect.left + fromRect.right) / 2 - containerRect.left;
+            const y1 = fromRect.bottom - containerRect.top;
+            const x2 = (toRect.left + toRect.right) / 2 -containerRect.left;
+            const y2 = toRect.top - containerRect.top;
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x1);
+            line.setAttribute("y1", y1);
+            line.setAttribute("x2", x2);
+            line.setAttribute("y2", y2);
+            line.setAttribute("stroke", color);
+            line.setAttribute("stroke-width", "2");
+            line.setAttribute("marker-end", `url(#arrowhead_${activityId})`);
+            line.dataset.from = topId;
+            line.dataset.to = bottomId;
+            svg.appendChild(line);
+        } catch( err ) {
+            console.error( 'MatchTopToBottom.drawArrow : ', err );
+        }
+    };    
+
+    const checkIfAllAttempted = (activityId) => {
+        try {
+            const act = activities[activityId];
+            if (!act) return;
+            const total = Object.keys(act.correctMatches || {}).length;
+            const attempted = Object.keys(act.userMatches || {}).filter(k => act.userMatches[k]).length;
+            const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
+            if (!area) return;
+            Activity.toggleCheckBtn('.submit-btn', attempted === total);
+        } catch( err ) {
+            console.error( 'MatchTopToBottom.checkIfAllAttempted : ', err );
+        }
+    };
+
+    const redrawAllArrows = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
+            if (!area || !activity) return;
+            const svg = area.querySelector("svg[data-svg]");
+            if (!svg) return;
+
+            const defs = svg.querySelector("defs");
+            svg.innerHTML = "";
+            if (defs) svg.appendChild(defs);
+
+            for (const topId in activity.userMatches) {
+                const bottomId = activity.userMatches[topId];
+                const topEl = area.querySelector(`.rowHoriZ.topItem .item2[data-id="${topId}"]`);
+                const bottomEl = area.querySelector(`.rowHoriZ.bottItem .item2[data-id="${bottomId}"]`);
+                if (topEl && bottomEl) drawArrow(activityId, topEl, bottomEl);
+            }
+        } catch( err ) {
+            console.error( 'MatchTopToBottom.redrawAllArrows : ', err );
+        }
+    };
+
+    const resetActivity = (activityId) => {
+        try {
+            const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
+            if (!area) return;
+
+            const svg = area.querySelector("svg[data-svg]");
+            if (svg) {
+                const defs = svg.querySelector("defs");
+                svg.innerHTML = "";
+                if (defs) svg.appendChild(defs);
+            }
+
+            activities[activityId] = activities[activityId] || { userMatches: {}, selectedTop: null, correctMatches: {} };
+            activities[activityId].userMatches = {};
+            activities[activityId].selectedTop = null;
+
+            area.querySelectorAll(".item2").forEach(it => it.classList.remove("selected", "correct", "wrong"));        
+        } catch( err ) {
+            console.error( 'MatchTopToBottom.resetActivity : ', err );
+        }
+    };
+    
+    const checkAnswers = (activityId) => {
+        try {
+            const activity = activities[activityId];
+            const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
+            if (!activity || !area) return;
+
+            area.querySelectorAll(".item2").forEach(el => { el.classList.remove("correct", "wrong"); });
+
+            const correctMatches = activity.correctMatches || {};
+            let correctCount = 0;
+
+            for (const topId in correctMatches) {
+                const chosenBottom = activity.userMatches[topId];
+                const topItem = area.querySelector(`.rowHoriZ.topItem .item2[data-id="${topId}"]`);
+                const bottomItem = area.querySelector(`.rowHoriZ.bottItem .item2[data-id="${chosenBottom}"]`);
+
+                if (!chosenBottom) continue;
+
+                if (String(chosenBottom) === String(correctMatches[topId])) {
+                    correctCount++;
+                    topItem?.classList.add("correct");
+                    bottomItem?.classList.add("correct");
+                    drawArrow(activityId, topItem, bottomItem, "green");
+                } else {
+                    topItem?.classList.add("wrong");
+                    bottomItem?.classList.add("wrong");
+                    drawArrow(activityId, topItem, bottomItem, "red");
+                }
+            }
+
+            const total = Object.keys(correctMatches).length;
+            if (correctCount === total) {
+                Swal.fire({ icon: "success", title: "Good!", text: `You got ${correctCount} out of ${total} correct.` });
+            } else if (correctCount === 0) {
+                Swal.fire({ icon: "error", title: "Oops...", text: `No correct answers. ${correctCount}/${total}` });
+            } else {
+                Swal.fire({ icon: "info", title: "Not bad", text: `You got ${correctCount} out of ${total} correct.` });
+            }
+        } catch( err ) {
+            console.error( 'MatchTopToBottom.checkAnswers : ', err );
+        }
+    };
+
+    const showAnswers = (activityId) => {
+        try {
+            resetActivity(activityId);
+            const activity = activities[activityId];
+            const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
+            if (!activity || !area) return;
+
+            const correctMatches = activity.correctMatches || {};
+            for (const topId in correctMatches) {
+                const topItem = area.querySelector(`.rowHoriZ.topItem .item2[data-id="${topId}"]`);
+                const bottomItem = area.querySelector(`.rowHoriZ.bottItem .item2[data-id="${correctMatches[topId]}"]`);
+                if (!topItem || !bottomItem) continue;
+
+                drawArrow(activityId, topItem, bottomItem, "green");
+                topItem.classList.add("correct");
+                bottomItem.classList.add("correct");
+                activity.userMatches[topId] = String(correctMatches[topId]);
+            }
+            Activity.toggleCheckBtn('.submit-btn', true);
+        } catch( err ) {
+            console.error( 'MatchTopToBottom.showAnswers : ', err );
+        }
+    };
+    
+    const ui = (activityId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const cont = document.querySelector(container);
+            if (!cont) {
+                console.error("Container not found:", container);
+                return;
+            }        
+
+            cont.innerHTML = `<div class="question">
+                <div class="container">
+                <div class="qSections">
+                    <div class="${Define.get('head')}"></div>
+                    <p class="${Define.get('subHead')}"></p>
+                </div>
+
+                <div class="m3Holders">
+                    <div class="matching-area3 user-select-none" data-activity="${activityId}">
+                    <div class="rowHoriZ topItem" data-top="">                
+                    </div>
+                    <svg data-svg width="100%" height="100%" style="position: absolute; left: 0; top: 0;">
+                        <defs>
+                        <marker id="arrowhead_${activityId}" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                        </marker>
+                        </defs>
+                    </svg>
+                    <div class="rowHoriZ bottItem" style="margin-top: 10vw;" data-bottom="">                
+                    </div>
+                    </div>
+                </div>
+
+                <div class="buttons machiNgs">
+                    <button class="submit-btn" data-check>CheckAnswer</button>
+                    <button class="show-btn" data-show>Show Answer</button>
+                    <button class="reset-btn" data-reset>Reset</button>
+                </div>
+                </div>
+            </div>`;
+        } catch( err ) {
+            console.error( 'MatchTopToBottom.ui : ', err );
+        }
+    };  
+
+    const matchTopToBottom = (questionId, activityId = "m3_1") => {
+        try {
+            const data = Activity.getData( questionId );
+            if (!data || !Array.isArray(data.content) || data.content.length === 0) return;
+            
+            const questions = data.content.map(q => ({
+                id: String(q.id),
+                top: q.top || "",
+                bottom: q.bottom || "",
+                match: String(q.match !== undefined ? q.match : q.id)
+            }));
+            
+            const correctMatches = Object.fromEntries(questions.map(q => [String(q.id), String(q.match)]));
+            
+            activities[activityId] = activities[activityId] || { userMatches: {}, selectedTop: null, correctMatches: {} };
+            activities[activityId].correctMatches = correctMatches;
+            activities[activityId].userMatches = {};
+            
+            ui(activityId);
+            Activity.setQuestionDetails( questionId );
+            
+            const area            = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
+            const topContainer    = area.querySelector("[data-top]");
+            const bottomContainer = area.querySelector("[data-bottom]");
+
+            topContainer.innerHTML    = "";
+            bottomContainer.innerHTML = "";
+            
+            const topList    = Activity.shuffleQuestions(questions);
+            const bottomList = Activity.shuffleQuestions(questions);
+            
+            topList.forEach(item => {
+                const div         = document.createElement("div");
+                div.className     = "item2";
+                div.dataset.id    = item.id;
+                div.dataset.match = item.match;
+
+                const inner       = document.createElement("div");
+                inner.className   = "item-text";
+                inner.textContent = item.top;
+                div.appendChild(inner);
+
+                div.addEventListener("click", () => {
+                    area.querySelectorAll(".rowHoriZ.topItem .item2.selected").forEach(i => i.classList.remove("selected"));
+                    div.classList.add("selected");
+                    activities[activityId].selectedTop = div;
+                });
+                topContainer.appendChild(div);
+            });
+            
+            bottomList.forEach(item => {
+                const div      = document.createElement("div");
+                div.className  = "item2";
+                div.dataset.id = item.id;
+
+                const inner       = document.createElement("div");
+                inner.className   = "item-text";
+                inner.textContent = item.bottom;
+                div.appendChild(inner);
+
+                div.addEventListener("click", () => {
+                    const act = activities[activityId];
+                    if (!act || !act.selectedTop) {
+                        Swal.fire({ icon: "error", text: "Select top item first" });
+                        return;
+                    }
+                    const topId    = act.selectedTop.dataset.id;
+                    const bottomId = div.dataset.id;
+
+                    act.userMatches[topId] = String(bottomId);
+                    drawArrow(activityId, act.selectedTop, div);
+
+                    act.selectedTop.classList.remove("selected");
+                    act.selectedTop = null;
+
+                    checkIfAllAttempted(activityId);
+                });
+                bottomContainer.appendChild(div);
+            });
+
+            const containerEl = document.querySelector(Define.get('questionContainer'));
+            const checkBtn = containerEl.querySelector(".buttons.machiNgs [data-check]");
+            const showBtn  = containerEl.querySelector(".buttons.machiNgs [data-show]");
+            const resetBtn = containerEl.querySelector(".buttons.machiNgs [data-reset]");
+
+            if (checkBtn) checkBtn.addEventListener("click", () => checkAnswers(activityId));
+            if (showBtn) showBtn.addEventListener("click", () => showAnswers(activityId));
+            if (resetBtn) resetBtn.addEventListener("click", () => resetActivity(activityId));
+
+            window.addEventListener("resize", () => redrawAllArrows(activityId));
+        } catch (err) {
+            console.error("MatchTopToBottom.matchTopToBottom : ", err);
+        }
+    };
+
+    return {
+        render: matchTopToBottom,
+        drawArrow,
+        checkAnswers,
+        showAnswers,
+        resetActivity,
+        checkIfAllAttempted,
+        redrawAllArrows
+    };
+})();
+
+const FillInTheBlanksWithImage = (() => {
+
+    Activity.css('fillUp.css');
+
+    const ui = () => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+            
+            parent.innerHTML= `<div class="question user-select-none">
+                <div class="container-fluid">
+                    <div class="qSections">
+                        <div class="${Define.get('head')}"></div>
+                        <p class="${Define.get('subHead')}"></p>
+                    </div>
+                    <div class="wordRows"></div>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="imgBoxFill"></div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="fillBoxSections shadow-sm">
+                                <div id="inputsContainer" class="row"></div>
+                            </div>
+                            <div class="buttons machiNgs">
+                                <button class="submit-btn" id="checkBtnF">Check Answer</button>
+                                <button class="show-btn" id="showBtnF">Show Answer</button>
+                                <button class="reset-btn" id="resetBtnF">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>`;
+            // ..
+			
+			const checkBtn = parent.querySelector("#checkBtnF");
+			const showBtn  = parent.querySelector("#showBtnF");
+			const resetBtn = parent.querySelector("#resetBtnF");
+
+			if (checkBtn) checkBtn.addEventListener("click", checkAnswerFill);
+			if (showBtn) showBtn.addEventListener("click", showAnswersFill);
+			if (resetBtn) resetBtn.addEventListener("click", resetFill);
+        } catch ( err ) {
+            console.error( 'FillInTheBlanksWithImage.ui : ', err );
+        }
+	};
+	
+	const fillInTheBlanks = (questionId) => {
+        try {
+            const data = Activity.getData( questionId );
+
+            ui();
+            Activity.setQuestionDetails( questionId );
+
+            document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid = data?.id;
+
+            const container2 = document.getElementById("inputsContainer");
+            if (!container2) {                
+                return;
+            }		
+            container2.innerHTML = "";        
+            
+            const textFrag = document.createDocumentFragment();
+            data?.content?.hinttext?.forEach((item) => {
+                const div       = document.createElement('div');
+                div.className   = 'wordBoxesFill shadow-sm';
+                div.textContent = item;
+
+                textFrag.appendChild(div);
+            });
+            document.querySelector('.wordRows').appendChild(textFrag);
+
+            document.querySelector('.imgBoxFill').innerHTML = `<img src="${data?.content?.hintimage}" ondragstart="return false";/>`;
+            
+            let blanksBlock = '';
+            data?.content?.blanks.forEach((item, i) => {
+                if( item.img ) {
+                    blanksBlock += `<div class="col-md-4">
+                            <div class="fillBox shadow-sm">
+                            <img class="imgInboxFill" src="${item.img}" alt="feature-${i + 1}" ondragstart="return false;"/>
+                            <input class="inputsFills form-control" 
+                                    type="text" 
+                                    placeholder="Fill Answer" 
+                                    data-ans="${item.ans}" 
+                                    data-type="image">
+                            </div>
+                        </div>`;
+                    // ..
+                } else {
+                    blanksBlock += `<div class="col-md-4">
+                        <div class="fillBox shadow-sm">
+                        <p class="fw-bold">${item.text}</p>
+                        <input class="inputsFills form-control" data-ans="${item.ans}" type="text" placeholder="Fill Answer" data-type="text">
+                        </div>
+                    </div>`;
+                    // ..
+                }
+            });
+            container2.innerHTML = blanksBlock;
+        } catch ( err ) {
+            console.error( 'FillInTheBlanksWithImage.fillInTheBlanks : ', err );
+        }
+	};
+	
+	const checkAnswerFill = () => {
+        try {
+            let correct = 0;
+            const inputs = document.querySelectorAll(".inputsFills");
+            inputs.forEach(input => {
+                const type       = input.dataset.type;
+                const userVal    = input.value.trim().toLowerCase();
+                const correctVal = (input.dataset.ans || "").toLowerCase();
+                if (input.value.trim() === "") {
+                    input.classList.add("is-invalid");
+                    input.classList.remove("is-valid");
+                } else {
+                    if (type === "image") {
+                        if (userVal === correctVal) {
+                            input.classList.add("is-valid");
+                            input.classList.remove("is-invalid");
+                            correct++;
+                        } else {
+                            input.classList.add("is-invalid");
+                            input.classList.remove("is-valid");
+                        }
+                    } else if (type === "text") {
+                        input.classList.add("is-valid");
+                        input.classList.remove("is-invalid");
+                        correct++;
+                    }
+                }
+            });
+
+            const questionId = document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid;
+            const dataFills  = Activity.getData( questionId )?.content?.blanks;
+
+            Swal.fire({
+                icon: correct === (dataFills || []).length ? "success" : "info",
+                title: correct === (dataFills || []).length ? "Perfect!" : "Checked",
+                text: `You got ${correct} / ${(dataFills || []).length} correct.`
+            });
+        } catch ( err ) {
+            console.error( 'FillInTheBlanksWithImage.checkAnswerFill : ', err );
+        }
+	};
+	
+	const showAnswersFill = () => {
+        try {
+            Activity.toggleCheckBtn( '#checkBtnF', true );
+            disableAll();
+            document.querySelectorAll(".inputsFills").forEach(input => {
+                input.value = input.dataset.ans;
+                input.classList.add("is-valid");
+                input.classList.remove("is-invalid");
+            });
+        } catch ( err ) {
+            console.error( 'FillInTheBlanksWithImage.showAnswersFill : ', err );
+        }
+	};
+	
+	const resetFill = () => {
+        try {
+            Activity.toggleCheckBtn( '#checkBtnF', false );
+            enableAll();
+            document.querySelectorAll(".inputsFills").forEach(input => {
+                input.value = "";
+                input.classList.remove("is-valid", "is-invalid");
+            });
+        } catch ( err ) {
+            console.error( 'FillInTheBlanksWithImage.resetFill : ', err );
+        }
+	};
+
+	const disableAll = () => {
+        try {
+            document.querySelectorAll(".inputsFills").forEach(el => {
+                el.setAttribute("disabled", true);
+            });
+        } catch ( err ) {
+            console.error( 'FillInTheBlanksWithImage.disableAll : ', err );
+        }
+	};
+
+	const enableAll = () => {
+        try {
+            document.querySelectorAll(".inputsFills").forEach(el => {
+                el.removeAttribute("disabled");
+		    });
+        } catch ( err ) {
+            console.error( 'FillInTheBlanksWithImage.enableAll : ', err );
+        }
+	};
+
+	return {
+		render:fillInTheBlanks,
+		checkAnswerFill,
+		showAnswersFill,
+		resetFill,
+		disableAll,
+		enableAll
+	};
+})();
+
+const JumbleLetters = (() => {
+    
+    let isDragging   = false;
+    let lastDragTime = 0;    
+    
+    const shuffle = (word) => {
+        try {
+            const orig = word.split('');
+            let arr;
+            const allSame = orig.every(c => c === orig[0]);
+            if (orig.length <= 1 || allSame) return orig;
+            do {
+                arr = [...orig];
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+            } while (arr.join('') === word);
+            return arr;
+        } catch( err ) {
+            console.log( 'JumbleLetters.shuffle : ', err );
+        }
+    }
+
+    const ui = () => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            parent.innerHTML = `<div class="question">
+                <div class="container">
+                    <div class="qSections">
+                        <div class="${Define.get('head')}"></div>
+                        <p class="${Define.get('subHead')}"></p>
+                    <hr />
+                    <div class="row" id="letterContainer"></div>
+                </div>
+                <div class="buttons machiNgs">
+                    <button class="submit-btn" id="submit">Check Answer</button>
+                    <button class="show-btn">Show Answer</button>
+                    <button class="reset-btn" data-qid="">Reset</button>
+                </div>
+                </div>`;
+            // ..            
+            
+            const checkBtn = parent.querySelector("#submit");
+            const showBtn  = parent.querySelector(".show-btn");
+            const resetBtn = parent.querySelector(".reset-btn");
+            if (checkBtn) checkBtn.addEventListener("click", submit);
+            if (showBtn) showBtn.addEventListener("click", showAns);
+            if (resetBtn) resetBtn.addEventListener("click", reset);            
+        } catch( err ) {
+            console.log( 'JumbleLetters.ui : ', err );
+        }
+    }
+
+    const loadAllQuestions = (questionId) => {
+        try {
+
+            const data = Activity.getData( questionId );
+
+            ui();        
+            Activity.setQuestionDetails( questionId );
+
+            document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid  = data?.id;        
+
+            $("#letterContainer").empty();
+
+            const words = data?.content;
+            words.forEach((word, index) => {
+                const jumbled = shuffle(word);
+
+                const gameBox = $(`
+                    <div class="col-md-6 col-12 col-sm-12">
+                        <div class="rowLines">
+                        <div class="numb">${index + 1}.</div>
+                        <div class="letterjumbRow" id="letters-${index}" aria-label="Arrange the letters for ${word}"></div>
+                        </div>
+                    </div>
+                `);
+
+                const $row = gameBox.find(`#letters-${index}`);
+                jumbled.forEach(letter => {
+                    $row.append(`<div class="letterjumb" role="button" tabindex="0">${letter}</div>`);
+                });
+
+                $("#letterContainer").append(gameBox);
+
+                $row.sortable({
+                    placeholder: "letterjumb-placeholder",
+                    tolerance: "pointer",
+                    helper: "clone",
+                    appendTo: "body",
+                    zIndex: 999999,
+                    revert: 0,   // instant move
+                    distance: 1, // start dragging immediately
+                    delay: 0,
+                    scroll: true,
+                    containment: "#letterContainer",
+                    start: function (e, ui) {
+                        isDragging = true;
+                        isDragging = true;
+                        ui.placeholder.width(ui.helper.outerWidth());
+                        ui.placeholder.height(ui.helper.outerHeight());
+                    },
+                    stop: function (e, ui) {
+                        lastDragTime = Date.now();
+                        lastDragTime = lastDragTime;
+                        setTimeout(() => { isDragging = false; isDragging = false; }, 30);
+                    }
+                }).disableSelection();
+
+                enableTapSwapFallback($row[0]);
+            });
+        } catch( err ) {
+            console.log( 'JumbleLetters.loadAllQuestions : ', err );
+        }
+    }
+    
+    const enableTapSwapFallback = (container) => {
+        try {
+            let selected = null;
+
+            $(container).on("click touchend", ".letterjumb", function (e) {
+                if (Date.now() - lastDragTime < 200) return;
+                if (isDragging) return;
+                if (e.type === "touchend") e.preventDefault();
+
+                const $this = $(this);
+
+                if (!selected) {
+                    selected = this;
+                    $this.addClass("ui-state-active");
+                    return;
+                }
+
+                if (selected === this) {
+                    $this.removeClass("ui-state-active");
+                    selected = null;
+                    return;
+                }
+
+                const a = selected;
+                const b = this;
+                const parent = a.parentNode;
+
+                const aNext = a.nextSibling;
+                const bNext = b.nextSibling;
+
+                if (aNext === b) {
+                    parent.insertBefore(b, a);
+                } else if (bNext === a) {
+                    parent.insertBefore(a, b);
+                } else {
+                    parent.insertBefore(a, bNext);
+                    parent.insertBefore(b, aNext);
+                }
+
+                $(a).removeClass("ui-state-active");
+                selected = null;
+            });
+        } catch( err ) {
+            console.log( 'JumbleLetters.enableTapSwapFallback : ', err );
+        }
+    }
+    
+    const submit = () => {
+        try {
+            let score = 0;
+
+            const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
+            const jumbleData = Activity.getData( questionId )?.content;
+
+            jumbleData.forEach((word, index) => {
+                let isCorrect = true;
+
+                $(`#letters-${index} .letterjumb`).each(function (i) {
+                if ($(this).text() === word[i]) {
+                    $(this).removeClass("wrong").addClass("correct");
+                } else {
+                    $(this).removeClass("correct").addClass("wrong");
+                    isCorrect = false;
+                }
+                });
+
+                if (isCorrect) score++;
+            });
+
+            if (score === jumbleData.length) {
+                Swal.fire({ title: "Good!", text: "Congratulations! All are correct!", icon: "success" });
+            } else {
+                Swal.fire({ icon: "error", title: "Oops...", text: `You got ${score} out of ${jumbleData.length} correct. Please try again.` });
+            }
+        } catch( err ) {
+            console.log( 'JumbleLetters.submit : ', err );
+        }
+    }
+    
+    const reset = () => {
+        try {
+            Activity.toggleCheckBtn( '#submit', false );
+            const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
+            loadAllQuestions( questionId );
+        } catch( err ) {
+            console.log( 'JumbleLetters.reset : ', err );
+        }
+    }
+    
+    const showAns = () => {
+        try {
+            Activity.toggleCheckBtn( '#submit', true );
+
+            const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
+            const jumbleData = Activity.getData( questionId )?.content;
+
+            jumbleData.forEach((word, index) => {
+                const letterRow = $(`#letters-${index}`);
+                letterRow.empty();
+                word.split('').forEach(letter => {
+                    letterRow.append(`<div class="letterjumb correct">${letter}</div>`);
+                });
+            });
+        } catch( err ) {
+            console.log( 'JumbleLetters.showAns : ', err );
+        }
+    }    
+    
+    return {
+        render:loadAllQuestions,
+        enableTapSwapFallback,
+        submit,
+        reset,
+        showAns,
+        isDragging,
+        lastDragTime
+    };
+})();
+
+const JumbleWords = (() => {
+
+    Activity.css('wordJumb.css');
+
+    const idiomContainer = "#idiomContainer";
+
+    let isDraggingIdioms   = false;
+    let lastDragTimeIdioms = 0;
+
+    const ui = () => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container">
+                                        <div class="${Define.get('head')}"></div>
+                                        <p class="${Define.get('subHead')}"></p>
+                                        <div id="idiomContainer"></div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn" id="submit7">Check Answer</button>
+                                            <button class="show-btn">Show Answer</button>
+                                            <button class="reset-btn">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..        
+			
+			const checkBtn = parent.querySelector( '.submit-btn' );
+			const showBtn  = parent.querySelector( '.show-btn' );
+			const resetBtn = parent.querySelector( '.reset-btn' );            
+
+			if (checkBtn) checkBtn.addEventListener("click", checkAnswersWORD);
+			if (showBtn) showBtn.addEventListener("click", showAnswersWORD);
+			if (resetBtn) resetBtn.addEventListener("click", resetWord);
+           
+		} catch (e) {
+            console.error( 'JumbleWords.ui :', err );
+        }
+    }
+
+    const renderIdioms = (questionId) => {
+        try {
+            ui();
+
+            const $container = $(idiomContainer);        
+            $container.empty();
+
+            $container[0].dataset.qid = questionId;
+
+            Activity.setQuestionDetails( questionId );        
+
+            const idioms = Activity.shuffleQuestions( Activity.getData( questionId )?.content );
+
+            $container[0].dataset.shuffledIdioms = JSON.stringify(idioms);
+
+            idioms.forEach((sentence, index) => {
+                const words   = splitWords(sentence);
+                const jumbled = Activity.shuffleWords(words);
+
+                const $row = $(`<div class="rowWordLet" data-index="${index}">
+                        <div style="display:flex; gap:12px;">
+                            <div class="numLe">${index + 1}.</div>
+                            <div>
+                                <div class="wordStance" id="words-${index}" role="list"></div>
+                                <div class="finalOutput" aria-live="polite"></div>
+                            </div>
+                        </div>
+                    </div>`);
+                $container.append($row);            
+
+                const $wordStance = $row.find(`#words-${index}`);
+                jumbled.forEach(w => {                
+                    const $el = $(`<div class="word2" role="listitem" tabindex="0">${w}</div>`);
+                    $wordStance.append($el);
+                });
+
+                if( $wordStance.data('ui-sortable') ) {
+                    $wordStance.sortable('destroy');
+                }
+                
+                $wordStance.sortable({
+                    items: ".word2",
+                    placeholder: "word-placeholder",
+                    helper: "clone",
+                    tolerance: "pointer",
+                    forcePlaceholderSize: true,
+                    appendTo: document.body,
+                    zIndex: 999999,
+                    start: function (e, ui) {
+                        isDraggingIdioms = true;                    
+                        ui.placeholder.css({
+                            width: ui.helper.outerWidth(),
+                            height: ui.helper.outerHeight()
+                        });
+                    },
+                    stop: function (e, ui) {
+                        lastDragTimeIdioms = Date.now();
+                        setTimeout(() => { isDraggingIdioms = false; }, 30);
+                    }
+                }).disableSelection();            
+            
+                enableTapSwapFallback($wordStance[0], index);
+            });
+        } catch( err ) {
+            console.error( 'JumbleWords.renderIdioms :', err );
+        }
+    }
+
+    const enableTapSwapFallback = (container) => {
+        try {
+            let selected = null;
+            $(container).off("click.touchSwap")
+            .on("click.touchSwap touchend.touchSwap", ".word2", function (e) {
+                if( Date.now() - lastDragTimeIdioms < 200 ) return;
+                if( isDraggingIdioms ) return;
+                if( e.type === "touchend" ) e.preventDefault();
+
+                const a = selected;
+                const b = this;
+
+                if( !a ) {
+                    selected = this;
+                    $(this).addClass("ui-state-active");
+                    return;
+                }
+                if( a === b ) {
+                    $(this).removeClass("ui-state-active");
+                    selected = null;
+                    return;
+                }
+
+                const parent = a.parentNode;
+                const aNext  = a.nextSibling;
+                const bNext  = b.nextSibling;
+
+                if( aNext === b ) {
+                    parent.insertBefore(b, a);
+                } else if( bNext === a ) {
+                    parent.insertBefore(a, b);
+                } else {
+                    parent.insertBefore(a, bNext);
+                    parent.insertBefore(b, aNext);
+                }
+
+                $(a).removeClass("ui-state-active");
+                selected = null;
+            });
+        } catch( err ) {
+            console.error( 'JumbleWords.enableTapSwapFallback :', err );
+        }
+    }
+
+    const checkAnswersWORD = () => {
+        try {
+            let allRowsCorrect = true;        
+            const idioms = JSON.parse($(idiomContainer)[0].dataset.shuffledIdioms);  
+
+            $(".rowWordLet").each(function () {
+                const index   = $(this).data("index");
+                const correct = splitWords(idioms[index]);
+                const user    = $(this).find(".word2").map(function () {
+                    return $(this).text().trim();
+                }).get();
+
+                const $out = $(this).find(".finalOutput");            
+                $(this).find(".word2").removeClass("correctWord wrongwrongRORD");
+
+                let allGood = true;
+                $(this).find(".word2").each(function (i) {
+                    if( $(this).text().trim() === correct[i] ) {
+                        $(this).addClass("correctWord");
+                    } else {
+                        $(this).addClass("wrongwrongRORD");
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Some Answer are uncompleted please try again.!",
+                        });
+                        allGood = false;
+                        allRowsCorrect = false;
+                    }
+                });
+
+                if (allGood) {
+                    
+                } else {
+                    
+                }
+            });
+            
+            if( allRowsCorrect ) {
+                Swal.fire({
+                    title : "Correct!",
+                    text  : "All answers are correct!",
+                    icon  : "success"
+                });
+            }
+        } catch( err ) {
+            console.error( 'JumbleWords.checkAnswersWORD :', err );
+        }
+    }
+
+    const showAnswersWORD = () => {
+        try {
+            const questionId = $(idiomContainer)[0].dataset.qid;
+            const idioms = Activity.getData( questionId )?.content;
+
+            Activity.toggleCheckBtn( '.submit-btn', true );
+
+            $(".rowWordLet").each(function () {
+                const index   = $(this).data("index");
+                const words   = splitWords(idioms[index]);
+                const $stance = $(this).find(".wordStance");
+                
+                const map = {};
+                $stance.find(".word2").each(function () {
+                    const txt = $(this).text().trim();
+                    if (!map[txt]) map[txt] = [];
+                    map[txt].push(this);
+                });
+                $(".word2").addClass("correctWord");
+                
+                $stance.empty();
+                words.forEach(w => {
+                    if (map[w] && map[w].length) {
+                        $stance.append(map[w].shift());
+                    } else {
+                        $stance.append(`<div class="word2">${w}</div>`);
+                    }
+                });
+                $stance.sortable("disable");
+            });
+        } catch( err ) {
+            console.error( 'JumbleWords.showAnswersWORD :', err );
+        }
+    }
+
+    const resetWord = () => {
+        try {
+            Activity.toggleCheckBtn( '.submit-btn', false );
+
+            const questionId = $(idiomContainer)[0].dataset.qid;
+            renderIdioms( questionId );
+        } catch( err ) {
+            console.error( 'JumbleWords.resetWord :', err );
+        }
+    }
+
+    const splitWords = ( sentence, spliter=' ' ) => {
+        try {
+            return sentence.split( spliter ).map( s => s.trim() );
+        } catch( err ) {
+            console.error( 'JumbleWords.splitWords :', err );
+        }
+    }
+
+    return {
+        render:renderIdioms,
+        enableTapSwapFallback,
+        checkAnswersWORD,
+        showAnswersWORD,
+        resetWord,
+        splitWords,
+        isDraggingIdioms,
+        lastDragTimeIdioms
+    }
+
+})();
+
+const DragAndDrop = (() => {
+
+    Activity.css('dnd.css');
+
+    const containerId       = 'dragItemsQ1';
+    const containerSelector = '#question1';
+
+    const ui = () => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            parent.innerHTML = `<div class="question">
+                                <div class="container">
+                                    <div class="rowWithAudios">
+                                        <p class="questLine"> 
+                                            <span class="${Define.get('head')}"></span> 
+                                            <span class="hindTrans ${Define.get('subHead')}"></span>
+                                        </p>
+                                        <div class="playsBtns">
+                                            <svg fill="currentColor" id="playSvg" class="bi bi-play-fill btnSounds" viewBox="0 0 16 16">
+                                                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
+                                            </svg>
+                                            <svg fill="currentColor" id="pauseSvg" class="bi bi-pause btnSounds" viewBox="0 0 16 16">
+                                                <path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div id="question1" class="question-block">
+                                        <div class="dragItems" id="${containerId}"></div>                                    
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn">Check</button>
+                                            <button class="show-btn">Show Answers</button>
+                                            <button class="reset-btn">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..       
+			
+			const checkBtn = parent.querySelector( '.submit-btn' );
+			const showBtn  = parent.querySelector( '.show-btn' );
+			const resetBtn = parent.querySelector( '.reset-btn' );
+            const playSvg  = parent.querySelector( '#playSvg' );
+            const pauseSvg = parent.querySelector( '#pauseSvg' );
+
+			if (checkBtn) checkBtn.addEventListener("click", checkAnswersDnd);
+			if (showBtn) showBtn.addEventListener("click", showAnswersDnd);
+			if (resetBtn) resetBtn.addEventListener("click", resetActivityDnd);
+
+			if (playSvg)  playSvg.addEventListener("click", () => toggleAudio(true));
+            if (pauseSvg) pauseSvg.addEventListener("click", () => toggleAudio(false));
+		} catch (e) {
+            console.error( 'DragAndDrop.ui :', e );
+        }
+    }
+    
+    const renderDataDND = (questionId) => {
+        try {
+            const data = Activity.getData( questionId );
+
+            ui();
+            Activity.setQuestionDetails( questionId );
+
+            const dragItems = document.getElementById(containerId);
+            dragItems.dataset.qid = questionId;
+            
+            const head     = [ '<div class="row w-100">' ];
+            const headings = Activity.shuffleQuestions( data?.content?.heading );
+            headings.forEach((item) => {
+                const html = `<div class="col-md-4 col-12">
+                                <div class="wh1">
+                                    <div class="headingsDND">${item.text}</div> 
+                                    <div class="dropSect" data-accept="${item.accept}"></div> 
+                                </div>
+                            </div>`;
+                // ..
+                head.push( html );
+            });
+            head.push( '</div>' );
+            dragItems.innerHTML = head.join('');
+
+            const opt     = [];
+            const options = Activity.shuffleQuestions( data?.content?.options );
+            options.forEach((item) => {
+                const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
+                opt.push( html );
+            });
+            dragItems.insertAdjacentHTML( "afterbegin", opt.join('') );
+
+            makeDraggable(`#${containerId} .wordDrag`);
+            initDroppable(containerSelector);
+        } catch (e) {
+            console.error( 'DragAndDrop.renderDataDND :', err );
+        }
+    }
+
+    const makeDraggable = (selector) => {
+        try {
+            $(selector).draggable({
+                helper: "original",
+                revert: "invalid",
+                start: function () { $(this).addClass("dragging"); },
+                stop: function () { $(this).removeClass("dragging"); }
+            });
+
+            $(selector).on("touchstart", function (e) {
+                const touch = e.originalEvent.touches[0];
+                const $this = $(this);
+                $this.addClass("dragging");
+                $this.data("touchOffsetX", touch.pageX - $this.offset().left);
+                $this.data("touchOffsetY", touch.pageY - $this.offset().top);
+
+                $(document).on("touchmove.drag", function (e) {
+                    const moveTouch = e.originalEvent.touches[0];
+                    $this.css({
+                        position: "absolute",
+                        left: moveTouch.pageX - $this.data("touchOffsetX"),
+                        top: moveTouch.pageY - $this.data("touchOffsetY"),
+                        zIndex: 9999
+                    });
+                });
+
+                $(document).on("touchend.drag", function () {
+                    $(document).off(".drag");
+                    $this.removeClass("dragging");
+                });
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.makeDraggable :', err );
+        }
+    }
+
+    const initDroppable = () => {
+        try {
+            $(`${containerSelector} .dropSect`).droppable({
+                accept: ".wordDrag",
+                drop: function (event, ui) {
+                    const $dragged = ui.draggable;
+                    $dragged.removeClass("ui-draggable ui-draggable-handle dragging");
+                    $dragged.css({ top: "auto", left: "auto", position: "relative" });
+                    $(this).append($dragged);
+                }
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.initDroppable :', err );
+        }
+    }
+
+    const checkAnswersDnd = () => {
+        try {
+            let correct = 0;
+            let total = $(`${containerSelector} .dropSect`).length;
+
+            $(`${containerSelector} .dropSect`).each(function () {
+                const correctAnswer = $(this).data("accept");
+                const droppedItem = $(this).children(".wordDrag").first();
+                if (droppedItem.length && droppedItem.data("ans") === correctAnswer) {
+                    droppedItem.css("background", "#c8e6c9");
+                    correct++;
+                } else if (droppedItem.length) {
+                    droppedItem.css("background", "#ffcdd2");
+                }
+            });
+
+            Swal.fire({
+                title: correct === total ? "All Correct!" : "Check your answers",
+                text: `You got ${correct} out of ${total} correct!`,
+                icon: correct === total ? "success" : "info",
+                confirmButtonText: "OK"
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.checkAnswersDnd :', err );
+        }
+    }
+
+    const showAnswersDnd = () => {
+        try {
+            Activity.toggleCheckBtn( '.submit-btn', true );
+
+            const dragItems  = document.getElementById(containerId);
+            const questionId = dragItems.dataset.qid;
+
+            renderDataDND(dragItems.dataset.qid);
+
+            $(`${containerSelector} .dropSect`).empty();
+            const data = Activity.getData( questionId )?.content?.options;
+            
+            data.forEach((item) => {
+                const $clone = $(`<div class="wordDrag">${item.text}</div>`)
+                    .css({ background: "#c8e6c9", position: "relative" })
+                    .attr("data-ans", item.ans);
+                $(`${containerSelector} .dropSect[data-accept='${item.ans}']`).append($clone);
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.showAnswersDnd :', err );
+        }
+    }
+
+    const resetActivityDnd = () => {
+        try {
+            Activity.toggleCheckBtn( '.submit-btn', false );
+
+            const dragItems = document.getElementById(containerId);
+            renderDataDND(dragItems.dataset.qid);
+            $(`${containerSelector} .dropSect`).empty();
+            $(`${containerSelector} .wordDrag`);
+        } catch (e) {
+            console.error( 'DragAndDrop.resetActivityDnd :', err );
+        }
+    }
+
+    const toggleAudio = ( play=true ) => {
+        try {
+            const dragItems  = document.getElementById(containerId);
+            const questionId = dragItems.dataset.qid;
+
+            const src   = Activity.getData( questionId )?.content?.audio;
+            const audio = new Audio(src);
+            if( play ) {
+                $("#playSvg").hide();
+                $("#pauseSvg").show();
+                audio.play();
+            } else {
+                $("#playSvg").show();
+                $("#pauseSvg").hide();
+                audio.pause();
+            }
+        } catch (e) {
+            console.error( 'DragAndDrop.toggleAudio :', err );
+        }
+    }
+    
+    return {
+        render:renderDataDND,
+        toggleAudio,
+        makeDraggable,
+        initDroppable,
+        showAnswersDnd,
+        checkAnswersDnd,
+        resetActivityDnd
+    }
+
+})();
+
+const Mcq = (() => {
+
+    Activity.css('mcq.css');
+
+    const heading = 'quiz-container';
+
+    let userAnswers = [];
+
+    const ui = () => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container">
+                                        <div class="rowWithAudios py-0">                                        
+                                            <span class="m-0 ${Define.get('head')}"></span> 
+                                            <span class="colorsDiff ${Define.get('subHead')}"></span>                                        
+                                        </div>
+                                        <div id="${heading}"></div>
+                                        <div id="popupDialogAns">
+                                            <div class="baseMod">
+                                                <div class="answerdiv">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                                        <button id="close-popup" class="btn btn-secondary">X</button>
+                                                    </div>
+                                                    <div id="answerShowMCW"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+            
+            const closeBtn = parent.querySelector( '#close-popup' );
+            if( closeBtn ) closeBtn.addEventListener("click", closeFnMCQ);
+        } catch (e) {
+            console.error( 'Mcq.ui :', e );
+        }
+    }
+
+    const renderAllQuestionsMCQ = (questionId) => {
+        try {
+            ui();
+            Activity.setQuestionDetails( questionId );
+
+            const headingEl = document.getElementById(heading);
+            headingEl.dataset.qid = questionId;
+
+            const data = Activity.getData( questionId )?.content?.mcq || [];
+            const lang = Activity.getData( questionId )?.content?.lang || 'hi';
+            
+            if (userAnswers.length < data.length) {
+                for (let i = userAnswers.length; i < data.length; i++) userAnswers.push(null);
+            } else if (userAnswers.length > data.length) {            
+                userAnswers.length = data.length;
+            }
+
+            const container = document.getElementById(heading);
+            container.innerHTML = data.map((q, qi) => `<div class="p-2">
+                    <div class="row m-0" style="font-size:18px">
+                        <div style="width:30px" class="questionHeadingMCQ"><strong>${qi + 1}.</strong></div>
+                        <div class="col questionHeadingMCQ">${q.question}</div>
+                    </div>
+                    <div class="row mt-2 ml-4">
+                        ${q.options.map((opt, oi) => {
+                                const isSelected = userAnswers[qi] === oi ? "selected" : "";
+                                const lable = lang == "hi" ? ['(क)', '(ख)', '(ग)', '(घ)'] : ["A.", 'B.', 'C.', 'D.']
+                                const html = `
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                        <label class="option-btn ${isSelected} mcq-type" data-oi="${oi}" data-qi="${qi}" >
+                                            <input type="radio" name="question-${qi}" ${userAnswers[qi] === oi ? "checked" : ""}>
+                                            <strong>${lable[oi]}</strong> ${opt}
+                                        </label>
+                                        </div>
+                                    `;
+                                return html;
+                            }).join('')
+                        }
+                        </div>
+                    </div>`).join('');
+            // ..
+            
+            Array.from(document.querySelectorAll('.mcq-type')).forEach(mcq => {
+                mcq.addEventListener("click", (ev) => {
+                    const qi = parseInt(mcq.dataset.qi, 10);
+                    const oi = parseInt(mcq.dataset.oi, 10);
+                    selectOptionMCQ(qi, oi);
+                });
+            });
+        } catch( e ) {
+            console.error( 'Mcq.renderAllQuestionsMCQ', e );
+        }
+    }
+
+    const selectOptionMCQ = (qIndex, optIndex) => {
+        try {
+            const qi = parseInt(qIndex, 10);
+            const oi = parseInt(optIndex, 10);
+            
+            const headingEl  = document.getElementById(heading);
+            const questionId = headingEl.dataset.qid;
+            
+            const data = Activity.getData( questionId )?.content?.mcq || [];
+            if( userAnswers.length < data.length ) {
+                for( let i = userAnswers.length; i < data.length; i++ ) userAnswers.push(null);
+            }
+
+            userAnswers[qi] = oi;
+
+            updateAttemptedCountMCQ();        
+            renderAllQuestionsMCQ( questionId );
+            checkIfAllAnsweredMCW();
+        } catch( e ) {
+            console.error( 'Mcq.selectOptionMCQ', e );
+        }
+    }
+
+    const setUserAnswer = (qIndex, optIndex) => {
+        try {
+            const qi = parseInt(qIndex, 10);
+            const oi = parseInt(optIndex, 10);
+            userAnswers[qi] = oi;
+            
+            const questionId = document.getElementById(heading)?.dataset.qid;
+            if (questionId) renderAllQuestionsMCQ(questionId);
+        } catch( e ) {
+            console.error( 'Mcq.setUserAnswer', e );
+        }
+    }
+
+    const getUserAnswers = () => {
+        return userAnswers.slice();
+    }
+
+    const updateAttemptedCountMCQ = () => {
+        const attempted = userAnswers.filter(a => a !== null).length;        
+    }
+
+    const checkIfAllAnsweredMCW = () => {
+        const allAnswered = userAnswers.length > 0 && userAnswers.every(ans => ans !== null);
+        if( allAnswered ) {
+            showAnswerPopupMCQ();
+        }
+    }
+
+    const showAnswerPopupMCQ = () => {
+        try {
+            let correctCount = 0;
+
+            const questionId = document.getElementById(heading)?.dataset.qid;
+            const data = Activity.getData( questionId )?.content;
+            const lang = data?.lang;
+            const mcq  = data?.mcq || [];
+
+            let totalQues = mcq.length;
+
+            let tableHTML = `<div class="table-responsive p-2">
+                <table class="table table-bordered" style="font-size:20px">
+                <thead class="text-light" style="white-space: nowrap;">
+                    <tr>
+                    <th>${lang === "hi" ? "प्रश्‍न संख्या" : "Q. No."}</th>
+                    <th>${lang === "hi" ? "आपका उत्तर" : "Your Answer"}</th>
+                    <th>${lang === "hi" ? "सही उत्तर" : "Correct Answer"}</th>
+                    <th>${lang === "hi" ? "परिणाम" : "Result"}</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            const lable = lang == "hi" ? ['(क)', '(ख)', '(ग)', '(घ)'] : ["A.", 'B.', 'C.', 'D.', "E", 'F']
+            mcq.forEach((q, i) => {
+                const userIndex = userAnswers[i];
+                const userAnswerText =
+                userIndex !== null && userIndex !== undefined
+                    ? `${lable[userIndex]} ${q.options[userIndex]}`
+                    : (lang === "hi" ? "प्रयास नहीं किया" : "Not Attempted");
+
+                const correctAnswerText = `${lable[q.answer]} ${q.options[q.answer]}`;
+                const isCorrect = userIndex === q.answer;
+                if (isCorrect) correctCount++;
+                tableHTML += `
+                <tr>
+                    <th>${i + 1}.</th>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswerText}</td>
+                    <td class="text-success">${correctAnswerText}</td>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">
+                    ${isCorrect ? (lang === "hi" ? "✔ " : "✔ ") : (lang === "hi" ? "✘ " : "✘")}
+                    </td>
+                </tr>`;
+            });
+
+            tableHTML += `</tbody></table></div>`;
+
+            const answerShowEl = document.getElementById("answerShowMCW");
+            if (answerShowEl) answerShowEl.innerHTML = tableHTML;
+            const popup = document.getElementById("popupDialogAns");
+            if (popup) popup.style.display = "block";
+
+            const scoreText = document.getElementById("scoreTextQ1");
+            if (scoreText) {
+                scoreText.innerText =
+                    lang === "hi"
+                    ? `आपको ${totalQues} में से ${correctCount} अंक मिले हैं`
+                    : `You scored ${correctCount} out of ${totalQues}`;
+            }
+        } catch( e ) {
+            console.error( 'Mcq.showAnswerPopupMCQ', e );
+        }
+    }
+
+    const closeFnMCQ = () => {
+        try {
+            const popup = document.getElementById("popupDialogAns");
+            if (popup) popup.style.display = "none";
+            userAnswers = userAnswers.map(() => null);
+            const questionId = document.getElementById(heading)?.dataset.qid;
+            if (questionId) renderAllQuestionsMCQ( questionId );
+        } catch( e ) {
+            console.error( 'Mcq.closeFnMCQ', e );
+        }
+    }
+
+    return {
+        render: renderAllQuestionsMCQ,
+        selectOptionMCQ,
+        updateAttemptedCountMCQ,
+        checkIfAllAnsweredMCW,
+        showAnswerPopupMCQ,
+        closeFnMCQ,        
+        getUserAnswers,
+        setUserAnswer
+    }
+
+})();
+
+const FillInTheBlanksHindiKb = (() => {
+
+    Activity.css('fillHindi.css');
+
+    const quizContainerID = 'quizContainer';
+
+    const ui = () => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container">
+                                        <div class="hindiHeadings ${Define.get('head')}"></div>
+                                        <div id="${quizContainerID}"></div>
+                                    </div>
+                                    <div class="buttons machiNgs">
+                                        <button class="submit-btn check_1">Submit</button>
+                                        <button class="show-btn">Show Answer</button>
+                                        <button class="reset-btn">Reset</button>
+                                    </div>
+                                    <div class="result" id="result"></div>                                    
+                                </div>`;
+            // ..
+
+            const submitBtn = parent.querySelector( '.submit-btn' );
+            const showBtn   = parent.querySelector( '.show-btn' );
+            const resetBtn  = parent.querySelector( '.reset-btn' );
+
+            if( submitBtn ) submitBtn.addEventListener("click", checkAnswersHandler);
+            if( showBtn ) showBtn.addEventListener("click", showAnswersHandler);
+            if( resetBtn ) resetBtn.addEventListener("click", resetQuizHandler);
+        } catch (e) {
+            console.error( 'FillInTheBlanksHindiKb.ui :', e );
+        }
+    }
+
+    const fillInTheBlanks = (questionId) => {
+        try {
+
+            ui();
+            Activity.setQuestionDetails( questionId );
+
+            const container = $('#'+quizContainerID)[0];
+
+            container.dataset.qid = questionId;
+            const data        = Activity.getData(questionId)?.content;
+            const replacement = data?.replacement;
+
+            data?.questions.forEach((item, qIndex) => {
+                const div = document.createElement("div");
+                div.classList.add("questionFILL");
+                
+                const parts = item.question.split( replacement );
+
+                const html = [];
+                parts.forEach((part, idx) => {
+                    html.push(part);
+                    if( item.answers[idx] !== undefined ) {
+                        html.push(`<input class="hindiInput inPutHindiNew" data-qindex="${qIndex}" data-blankindex="${idx}" autocomplete="off" type="text" placeholder="उत्तर लिखें">`);
+                    }
+                });
+                div.innerHTML = html.join( '' );
+                container.appendChild( div );
+            });
+
+            $(function () {
+                $.keyboard.layouts["hindiQuiz"] = {
+                    "default": [
+                        "` १ २ ३ ४ ५ ६ ७ ८ ९ ० - = {bksp}",
+                        "{tab} क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण",
+                        "{lock} त थ द ध न प फ ब भ म य र ल व {enter}",
+                        "{shift} श ष स ह क्ष त्र ज्ञ ़ ं ँ ः {shift}",
+                        "{accept} {space} {alt}"
+                    ],
+                    "shift": [
+                        "~ ! @ # ₹ % ^ & * ( ) _ + {bksp}",
+                        "{tab} औ ऐ आ ई ऊ ए ओ ऋ ॠ ऌ ॡ { } |",
+                        "{lock} ा ि ी ु ू ृ े ै ो ौ ् {enter}",
+                        "{shift} ॐ ॰ ऽ ‘ ’ “ ” < > ? {shift}",
+                        "{accept} {space} {alt}"
+                    ],
+                    "alt": [
+                        "` ॑ ॒ ॓ ॔ ॕ ॖ ॗ क़ ख़ ग़ ज़ ड़ ढ़ फ़ {bksp}",
+                        "{tab} ॲ ऑ ऒ अ इ उ ए ओ औ ॠ ॡ { } |",
+                        "{lock} ँ ं ः ऽ ॐ ॰ ॠ ॡ ॲ {enter}",
+                        "{shift} ऍ ॅ ॉ ॊ ॴ ॵ ॶ ॷ ॸ ॹ {shift}",
+                        "{accept} {space} {default}"
+                    ]
+                };
+                
+                $(".hindiInput")
+                .keyboard({
+                    layout: "hindiQuiz",
+                    usePreview: false,
+                    autoAccept: true,
+                })
+                .addTyping({ showTyping: true, delay: 70 })
+                .addCaret({
+                    caretClass: "ui-keyboard-caret",
+                    animate: true,
+                    blinkRate: 600,
+                });
+            });
+
+
+        } catch( e ) {
+            console.error( 'FillInTheBlanksHindiKb.fillIntheBlanks :', e );
+        }
+    }
+
+    const normalizeHindi = (str) => {
+    return (str || "").normalize("NFC").replace(/\s+/g, "").replace(/[।|,.;:'"!?]/g, "").trim().toLowerCase();
+    }
+
+    const checkAnswersHandler = () => {
+        let score = 0;
+        const inputs = document.querySelectorAll(".inPutHindiNew");
+
+        const questionId = $('#'+quizContainerID)[0].dataset.qid;
+        const questions  = Activity.getData(questionId)?.content?.questions;
+
+        inputs.forEach(el => {
+            const qIndex = el.dataset.qindex;
+            const blankIndex = el.dataset.blankindex;
+            const val = normalizeHindi(el.value);
+            const correctAns = normalizeHindi(questions[qIndex].answers[blankIndex]);
+
+            if (val === correctAns) {
+                score++;
+                el.style.borderColor = "limegreen";
+            } else {
+                el.style.borderColor = "red";
+            }
+        });
+
+        const totalBlanks = questions.reduce((acc, q) => acc + q.answers.length, 0);
+
+        const swalIcon = (score === totalBlanks) ? "success" : "info";
+        const swalTitle = (score === totalBlanks) ? "🎉 सभी सही!" : "अरे नहीं...";
+
+        Swal.fire({
+            icon: swalIcon,
+            title: swalTitle,
+            text: `✅ आपका स्कोर: ${score}/${totalBlanks}`,
+            confirmButtonColor: "#00bfff"
+        });
+    }
+
+    const showAnswersHandler = () => {
+        const questionId = $('#'+quizContainerID)[0].dataset.qid;
+        const questions  = Activity.getData(questionId)?.content?.questions;
+
+        $(".check_1").addClass("disable");
+        const inputs = document.querySelectorAll(".inPutHindiNew");
+        inputs.forEach(el => {
+            const qIndex = el.dataset.qindex;
+            const blankIndex = el.dataset.blankindex;
+            el.value = questions[qIndex].answers[blankIndex];
+            el.style.borderColor = "dodgerblue";
+        });
+    }
+
+    const resetQuizHandler = () => {
+        $(".check_1").removeClass("disable")
+        const inputs = document.querySelectorAll(".inPutHindiNew");
+        inputs.forEach(el => {
+            el.value = "";
+            el.style.borderColor = "#444";
+        });
+    }
+
+    return {
+        render: fillInTheBlanks,
+        checkAnswersHandler,
+        showAnswersHandler,
+        resetQuizHandler
+    }
+
+})();
+
+const Adaptiv = (() => {
+
+    Activity.css('adaptiv.css');
+
+    const headerContainer = 'headersTopT';
+
+    let currentLevel    = 1;
+    let currentQuestion = 0;
+    let attemptCount    = 0;
+    let submitted       = false;
+    let currentQuizData    = undefined;
+    let userAnswersAdaptiv = undefined;
+    let showResultPending  = false;
+
+    const getQid = () => {
+        const el = document.querySelector('.' + headerContainer);
+        return el ? el.dataset.qid : undefined;
+    }
+
+    const ui = ( questionId, totalQues ) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const data = Activity.getData(questionId)?.content;
+
+            const instructions = [];
+            (data?.headings?.right?.instruction || []).forEach((item) => {
+                instructions.push(`<li>${item}</li>`);
+            });
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container-fluid">
+                                        <div class="${headerContainer}">
+                                            <div class="btnAdapt shadow-sm">
+                                                <span class="level-text">${data?.headings?.left ?? ''}</span>
+                                                - 
+                                                <span class="levelUpdate">${currentLevel}</span>
+                                            </div>
+                                            <div class="btnAdapt shadow-sm">
+                                                <span id="attempted-text">${data?.headings?.mid?.attempted ?? ''}</span> 
+                                                <span class="showD" id="attempted-count"> 0 </span> 
+                                                <span id="outof-text">${data?.headings?.mid?.outof ?? ''}</span>
+                                                <span class="showD" id="total-questions"> ${totalQues ?? 0} </span>
+                                            </div>
+                                            <div class="btnAdapt shadow-sm" id="nirdesh" style="cursor: pointer;">
+                                                <svg class="iconsIns" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                                                </svg>
+                                                <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
+                                            </div>
+                                        </div>
+                                        <div class="container my-5 contAdapt shadow-lg">
+                                            <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
+                                            <div class="buttonection" id="nav-buttons">
+                                                <div class="buttons machiNgs">
+                                                    <button class="submit-btn" id="prev-btn">Prev</button>
+                                                    <button class="show-btn" id="next-btn">Next</button>
+                                                    <button class="reset-btn" id="sub-btn" style="display: none;">Submit</button>
+                                                </div>
+                                                <div id="submit-btn-wrapper" class="text-center"></div>
+                                            </div>
+                                        </div>
+                                        <div id="overlayAns"></div>
+                                    </div>
+                                    <div id="overlay">
+                                        <div id="popupDialog">
+                                            <p class="text-danger fw-bold">
+                                                <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
+                                            </p>
+                                            <ul class="instructionsList">${instructions.join('')}</ul>
+                                            <div class="mt-3 text-center">
+                                                <button class="btn btn-primary close-overlay">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="popupDialogAnsAd">
+                                    <div class="baseMod2">
+                                        <div class="answerdiv2" id="answer-reviewAD">
+                                        </div>
+                                    </div>
+                                </div>`;
+
+            const headerCont = document.querySelector('.' + headerContainer);
+            if (headerCont && questionId !== undefined) {
+                headerCont.dataset.qid = questionId;
+            }
+
+            updateAttemptedCount();
+
+            const prevBtn    = parent.querySelector( '#prev-btn' );
+            const nextBtn    = parent.querySelector( '#next-btn' );
+            const submitBtn  = parent.querySelector( '#sub-btn' );
+            const nirdeshBtn = parent.querySelector( '#nirdesh' );
+            const closeOverlayBtn = parent.querySelector( '.close-overlay' );
+
+            if( closeOverlayBtn ) closeOverlayBtn.addEventListener("click", closeFn);
+            if( prevBtn ) prevBtn.addEventListener("click", prevQuestion);
+            if( nextBtn ) nextBtn.addEventListener("click", nextQuestion);
+            if( submitBtn ) submitBtn.addEventListener("click", showResult);
+            if( nirdeshBtn ) nirdeshBtn.addEventListener("click", openFn);
+
+        } catch (e) {
+            console.error( 'Adaptiv.ui :', e );
+        }
+    }
+
+    const renderQuestion = (questionId, direction) => {
+        const level = currentLevel;
+        const data  = Activity.getData(questionId)?.content?.levels;
+        const found = (data || []).find( lvl => lvl.level === level );
+        const questLen  = found?.questions?.length || 0;
+        const q         = found?.questions?.[currentQuestion];
+        currentQuizData = found?.questions || [];
+
+        ui(questionId, questLen );
+
+        if( userAnswersAdaptiv == undefined ) {
+            userAnswersAdaptiv = new Array(questLen).fill(null);
+        } else if( userAnswersAdaptiv.length !== questLen ) {
+            const newArr = new Array(questLen).fill(null);
+            for (let i=0;i<Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
+                newArr[i] = userAnswersAdaptiv[i];
+            }
+            userAnswersAdaptiv = newArr;
+        }        
+
+        const container = document.getElementById("quizContainerAdaptiv");
+        if (!container) return;
+
+        container.classList.remove('animate__fadeInDown', 'animate__fadeInUp');
+
+        if (direction === 'next') {
+            container.classList.add('animate__animated', 'animate__fadeInDown');
+        } else if (direction === 'prev') {
+            container.classList.add('animate__animated', 'animate__fadeInUp');
+        } else {
+            container.classList.add('animate__animated', 'animate__fadeInDown');
+        }
+
+        void container.offsetWidth;
+
+        if (!q) {
+            container.innerHTML = `<div class="row m-0"><div class="col">Question not found.</div></div>`;
+            updateNavButtons();
+            return;
+        }
+
+        container.innerHTML = `<div class="row m-0" style="font-size:18px">
+                <div style="width:30px" class="questionHeadingMCQ"><strong>Q${currentQuestion + 1}. </strong></div>
+                <div class="col questionHeadingMCQ">${q.question}</div>
+            </div>
+            <div class="row mt-3">
+                <div class="row mt-2 ml-4">
+                ${q.options.map((opt, i) => {
+                    const optionLabel = String.fromCharCode(65 + i);
+                    // check selected for this question index (not level)
+                    const isSelected = userAnswersAdaptiv[currentQuestion] === i;
+                    let extraClass = isSelected ? "selected" : "";
+                    if (submitted) {
+                        if (i === q.answer) extraClass = "correct";
+                        else if (isSelected && i !== q.answer) extraClass = "incorrect";
+                    }
+                    // put data attributes so click handler can read index
+                    return `        
+                        <div class="col-md-6 col-sm-12 mb-2">
+                            <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
+                                <input type="radio" name="question-${currentQuestion}" ${isSelected ? "checked" : ""} />
+                                <strong>${optionLabel}.</strong> ${opt}
+                            </label>
+                        </div>
+                    `;
+                }).join('')}
+                </div>
+            </div>
+        `;
+
+        // add handlers to labels
+        Array.from(document.querySelectorAll('.option-btnAdpt')).forEach((optionEl) => {
+            optionEl.addEventListener("click", (ev) => {
+                const idxAttr = optionEl.getAttribute('data-option-index');
+                const idx = idxAttr !== null ? parseInt(idxAttr, 10) : 0;
+                selectOption(currentQuestion, idx);
+                // re-render current question to reflect classes/checked state
+                renderQuestion(questionId);
+            });
+        });
+
+        updateNavButtons();
+    }
+
+    const selectOption = (qIndex, optIndex) => {
+        if (submitted) return;
+        if (!Array.isArray(userAnswersAdaptiv) || qIndex < 0) return;
+        userAnswersAdaptiv[qIndex] = optIndex;
+        updateAttemptedCount();
+        if (Array.isArray(currentQuizData) && userAnswersAdaptiv.filter(a => a !== null).length === currentQuizData.length && currentQuestion === currentQuizData.length - 1) {
+            showResultPending = true;
+        }
+    }
+
+    const nextQuestion = () => {
+        if (userAnswersAdaptiv[currentQuestion] === null || userAnswersAdaptiv[currentQuestion] === undefined) {
+            Swal.fire({
+                title: "Info",
+                text: "Please select an option before next.",
+                icon: "info"
+            });
+            return;
+        }
+
+        if( currentQuestion < (currentQuizData?.length || 0) - 1 ) {
+            currentQuestion++;
+            renderQuestion(getQid(), 'next');
+        }
+        updateNavButtons();
+    }
+
+    const prevQuestion = () => {
+        if( currentQuestion > 0 ) {
+            currentQuestion--;
+            renderQuestion(getQid(), 'prev');
+        }
+        updateNavButtons();
+    }
+
+    const updateNavButtons = () => {
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const subBtn = document.getElementById("sub-btn");
+        const isLast = currentQuestion === (currentQuizData?.length || 0) - 1;
+        const allAnswered = Array.isArray(userAnswersAdaptiv) && userAnswersAdaptiv.length > 0 && userAnswersAdaptiv.every(ans => ans !== null);
+
+        if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
+
+        if (nextBtn && subBtn) {
+            if (isLast && allAnswered) {
+                nextBtn.style.display = 'none';
+                subBtn.style.display = 'inline-block';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                subBtn.style.display = 'none';
+            }
+        }
+    }
+
+    const showResult = () => {
+        try {
+            const levelTextEl = document.getElementById("levelText");
+            if (levelTextEl) levelTextEl.style.display = 'none';
+            const container = document.getElementById("quizContainerAdaptiv");
+            submitted = true;
+            attemptCount++;
+            const correct = (userAnswersAdaptiv || []).filter((a, i) => a === (currentQuizData?.[i]?.answer)).length;
+            const showAnswerBtn = attemptCount >= 5;
+            const showRetryBtn = correct < (currentQuizData?.length || 0);
+            const showNextLevel = correct === (currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0;
+            const finished = currentLevel === 3;
+            const whenCompleteLevel = showNextLevel ? "completed." : "";
+            const navButtonsEl = document.getElementById("nav-buttons");
+            if (navButtonsEl) navButtonsEl.style.display = "none";
+            const submitWrapper = document.getElementById("submit-btn-wrapper");
+            if (submitWrapper) submitWrapper.innerHTML = '';
+            if (!container) return;
+
+            // Buttons now have IDs instead of inline onclicks
+            container.innerHTML = `
+                <div class="result-box">
+                    <h4><strong class="fs-1">Level ${currentLevel} ${whenCompleteLevel}</strong></h4>
+                    <p class="text-danger my-3">Total Questions: ${currentQuizData?.length || 0}</p>
+                    <p class="text-success my-3">Correct Answers: ${correct}</p>
+                    <p class="text-success my-3">Attempt No: ${attemptCount}</p>
+                    <div class="rowBtns">
+                        ${showNextLevel ? `<button class='btn btn-success mt-3 mx-3' id='btn-next-level'>Go To Level ${currentLevel + 1}</button>` : ''}
+                        ${(showRetryBtn || showNextLevel) ? `<button class='btn btn-primary mt-3 mx-3' id='btn-retry'>दोबारा प्रयास करें</button>` : ''}
+                        ${(showAnswerBtn || showNextLevel) ? `<button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>Show Answers</button>` : ''}
+                        ${(finished && showNextLevel) ? `<button class='btn btn-success mt-3 mx-3' id='btn-finish'>Finished</button>` : ''}
+                    </div>
+                </div>`;
+
+            // Attach listeners to the new buttons (if they exist)
+            const btnNextLevel = document.getElementById('btn-next-level');
+            const btnRetry = document.getElementById('btn-retry');
+            const btnShowAnswers = document.getElementById('btn-show-answers');
+            const btnFinish = document.getElementById('btn-finish');
+
+            if (btnNextLevel) {
+                btnNextLevel.addEventListener('click', (e) => {
+                    // keep original behaviour
+                    loadNextLevel();
+                });
+            }
+            if (btnRetry) {
+                btnRetry.addEventListener('click', (e) => {
+                    retryQuiz();
+                });
+            }
+            if (btnShowAnswers) {
+                btnShowAnswers.addEventListener('click', (e) => {
+                    showAnswerPopup();
+                });
+            }
+            if (btnFinish) {
+                btnFinish.addEventListener('click', (e) => {
+                    finishMessage();
+                });
+            }
+
+            showResultPending = false;
+            $(".instruc").hide();
+            $(".submit-info").hide();
+
+            // control visibility for back-compat with earlier logic
+            const hideBtn = document.getElementById("btn-next-level");
+            if (finished && showNextLevel) {
+                if (hideBtn) hideBtn.style.display = 'none';
+            } else {
+                if (hideBtn) hideBtn.style.display = 'inline-block';
+            }
+        } catch (e) {
+            console.error('showResult error:', e);
+        }
+    }
+
+    const loadNextLevel = () => {
+        const levelTextEl = document.getElementById("levelText");
+        if (levelTextEl) levelTextEl.style.display = 'block';
+        currentLevel++;
+        // keep original logic references (quizDataLevelB / C might be global in your app)
+        if (currentLevel === 2 && typeof quizDataLevelB !== 'undefined') currentQuizData = quizDataLevelB;
+        if (currentLevel === 3 && typeof quizDataLevelC !== 'undefined') currentQuizData = quizDataLevelC;
+        currentQuestion = 0;
+        submitted = false;
+        userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);
+        attemptCount = 0;
+        const navButtonsEl = document.getElementById("nav-buttons");
+        if (navButtonsEl) navButtonsEl.style.display = "block";
+        const levelUpdateEl = document.querySelector(".levelUpdate");
+        if (levelUpdateEl && typeof levelHeadings !== 'undefined') levelUpdateEl.textContent = levelHeadings[currentLevel];
+        // renderQuestion expects questionId param - we call with getQid()
+        renderQuestion(getQid());
+        updateAttemptedCount();
+        $(".instruc").show();
+        $(".submit-info").show();
+        if (currentLevel === 2) {
+            $("#quizContainerAdaptiv").removeClass("animate__bounceInLeft").addClass("animate__bounceInRight");
+        }
+        else if (currentLevel === 3) {
+            $("#quizContainerAdaptiv").removeClass("animate__bounceInRight").addClass("animate__bounceInLeft");
+        }
+        if (navButtonsEl) navButtonsEl.style.display = "block";
+    }
+
+    const updateAttemptedCount = () => {
+        if (!Array.isArray(userAnswersAdaptiv)) {
+            const el = document.getElementById("attempted-count");
+            if (el) el.textContent = 0;
+            return;
+        }
+        const attempted = userAnswersAdaptiv.filter(a => a !== null).length;
+        const el = document.getElementById("attempted-count");
+        if (el) el.textContent = attempted;
+    }
+
+    const retryQuiz = () => {
+        currentQuestion = 0;
+        submitted = false;
+        userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);        
+        const navButtonsEl = document.getElementById("nav-buttons");
+        if (navButtonsEl) navButtonsEl.style.display = "flex";
+        renderQuestion(getQid());
+        updateAttemptedCount();
+        $(".instruc").show();
+        $(".submit-info").show();
+        const levelTextEl = document.getElementById("levelText");
+        if (levelTextEl) levelTextEl.style.display = 'block';
+        if (navButtonsEl) navButtonsEl.style.display = "block";
+    }
+
+    const showAnswerPopup = () => {
+        let totalCorrect = 0;
+        let totalQuestion = 0;
+        let topData = ``;
+        let midData1 = ``;
+        let midData2 = ``;
+        let midData3 = ``;
+        const optionLabel = index => (typeof index === 'number' && index >= 0) ? String.fromCharCode(65 + index) : "";
+
+        // Build table rows safely
+        (currentQuizData || []).forEach((q, i) => {
+            const userIndex = userAnswersAdaptiv?.[i];
+            const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${optionLabel(userIndex)}. ${q.options[userIndex]}` : "Not attempted";
+            const correctAnswerText = `${optionLabel(q.answer)}. ${q.options[q.answer]}`;
+            if (userAnswerText === correctAnswerText) totalCorrect++;
+            totalQuestion++;
+            const status = (userAnswerText === correctAnswerText) ? '✔' : '✘';
+            midData2 += `<tr class="trData">
+                <th>Q${totalQuestion}.</th>
+                <td class="text-danger">${userAnswerText}</td>
+                <td class="text-success">${correctAnswerText}</td>
+                <td class="text-danger">${status}</td>
+            </tr>`;
+        });
+
+        topData = `<div class="d-flex justify-content-between align-items-center">
+                    <h4 id="scoreTextQ1" class="text-center mb-3">You got : ${totalCorrect} out of ${totalQuestion}</h4>
+                    <button class="btn btn-secondary" id="btn-close-answers">X</button>
+                </div>`;
+        midData1 = `<div id="" class="innerDIV">
+                    <div class="table-responsive p-2">
+                        <table class="table table-bordered" style="font-size:20px">
+                        <thead class="thead-light" style="white-space: nowrap;">
+                            <tr>
+                            <th>Ques. No.</th>
+                            <th>Your Answer</th>
+                            <th>Correct Answer</th>
+                            <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+        midData3 = `</tbody>
+                        </table>
+                    </div>
+                </div>`;
+        const reviewHtml = topData + midData1 + midData2 + midData3;
+        const reviewEl = document.getElementById("answer-reviewAD");
+        if (reviewEl) reviewEl.innerHTML = reviewHtml;
+
+        $("#popupDialogAnsAd").css("display", "block");
+        const btnCloseAnswers = document.getElementById("btn-close-answers");
+        if (btnCloseAnswers) {
+            btnCloseAnswers.addEventListener("click", closeFnAD);
+        }
+    }
+
+    const closeFnAD = () => {
+        $("#popupDialogAnsAd").hide();
+    }
+
+    const popupFn = () => {
+        $("#overlay,#popupDialog").show();
+    }
+
+    const finishMessage = () => {
+        Swal.fire({
+            title: "All level has been completed.",
+            text: "",
+            icon: "success",
+            timer: 3000,
+            showConfirmButton: false
+        });
+    }
+
+    const openFn = () => {
+        const ov = document.getElementById('overlay');
+        if (ov) ov.classList.add('active');
+    }
+
+    const closeFn = () => {
+        const ov = document.getElementById('overlay');
+        if (ov) ov.classList.remove('active');
+    }
+
+    return {
+        render:renderQuestion,        
+        userAnswersAdaptiv,
+        currentLevel,
+        currentQuestion,        
+        submitted,
+        currentQuizData,
+        attemptCount,
+        showResultPending
+    }
+
+})();
+
+const Audio = (() => {
+    
+    Activity.css('audioPlay.css');
+    
+    let mode = ""; 
+    let ytPlayer = null;
+    let animationFrameId = null;
+    let loaderInterval = null;
+    let isPlaying = false;
+    let isSeeking = false;
+    let wasPlayingBeforeSeek = false;
+    let pendingYouTubeVideoId = null; 
+    let initialized = false;
+    
+    let audioEl = null;
+    let seekSlider = null;
+    let currentTimeEl = null;
+    let durationEl = null;
+    let loader = null;
+    let playPauseBtn = null;
+    let replayBtn = null;
+    let youtubeContainer = null;    
+
+    const isYouTube = (url) => {
+        return typeof url === "string" && (url.includes("youtube.com") || url.includes("youtu.be"));
+    };
+
+    const extractVideoId = (url) => {
+        const match = (url || "").match(/(?:v=|\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        return match ? match[1] : null;
+    };
+
+    const safeLog = (...args) => {
+        if (console && console.log) console.log(...args);
+    };
+    
+    const formatTime = (sec) => {
+        if (!Number.isFinite(sec) || sec < 0) sec = 0;
+        const m = Math.floor(sec / 60).toString();
+        const s = Math.floor(sec % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+    };
+   
+    const showLoader = () => {
+        if (!loader) return;
+        loader.style.display = "block";
+        loader.textContent = "Loading... 0%";
+        clearInterval(loaderInterval);
+        let percent = 0;
+        loaderInterval = setInterval(() => {
+            percent += Math.floor(Math.random() * 10) + 5;
+            if (percent >= 100) percent = 99;
+            loader.textContent = `Loading... ${percent}%`;
+        }, 150);
+    };
+
+    const hideLoader = () => {
+        clearInterval(loaderInterval);
+        if (loader) loader.textContent = "Loading... 100%";
+        setTimeout(() => {
+            if (loader) loader.style.display = "none";
+        }, 250);
+    };
+    
+    const cacheElements = () => {
+        audioEl = document.getElementById("localAudio");
+        seekSlider = document.getElementById("seekSlider");
+        currentTimeEl = document.getElementById("currentTime");
+        durationEl = document.getElementById("duration");
+        loader = document.getElementById("loader");
+        playPauseBtn = document.getElementById("playPauseBtn");
+        replayBtn = document.getElementById("replayBtn");
+        youtubeContainer = document.getElementById("youtubePlayer");
+    };    
+
+    const renderUI = (questionId) => {
+        try {
+            const description = Activity.getData(questionId)?.content?.desc;
+
+            const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
+            const parent = container ? document.querySelector(container) : null;
+
+            if (!parent) {
+                console.error("Audio.renderUI: ui container not found (Define.get('questionContainer') =>", container, ")");
+                return;
+            }
+
+            parent.innerHTML = `
+            <div class="question">
+                <div class="container">
+                <div class="audio-music-bg"></div>
+                <div class="container-sub">
+                    <div class="row g-0 justify-content-center audio-box">
+                    <div class="col-lg-11 col-md-10 col-sm-10 col-12 d-flex justify-content-center align-items-center">
+                        <div class="audio-container">
+                        <div class="audio-banner">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" fill="#fff"
+                            class="bi bi-music-note-beamed" viewBox="0 0 16 16">
+                            <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
+                            <path fill-rule="evenodd" d="M14 11V2h1v9zM6 3v10H5V3z" />
+                            <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
+                            </svg>
+                        </div>
+                        <div class="audio-name">${description}</div>
+                        <div>
+                            <input type="range" class="w-100" id="seekSlider" min="0" max="100" value="0" step="0.1">
+                            <div class="d-flex justify-content-between align-items-center progress-bar-seek">
+                            <span id="currentTime">00:00</span>
+                            <span id="duration">00:00</span>
+                            </div>
+                            <audio id="localAudio"></audio>
+                            <div id="youtubePlayer"></div>
+                            <div class="rowAudioBtns">
+                            <img src="images/replay2.png" class="audio-replay-btn" id="replayBtn" alt="replay">
+                            <div id="loader" style="display:none">Loading... 0%</div>
+                            <img src="images/play2.png" class="w-25 play-icon" alt="play-pause" id="playPauseBtn">
+                            <img src="images/replay2.png" class="audio-replay-btn invisible" alt>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            `;
+
+            $('.container-sub').children().css({ 'width': '560px', 'height': '500px' });
+            $('.audio-container').css({ 'width': '90%', 'height': '90%' }).removeClass('mb-3');
+            $('.audio-container').parent().addClass('d-flex justify-content-center align-items-center');
+        } catch (e) {
+            console.error('Audio.renderUI error:', e);
+        }
+    };    
+
+    const attachEvents = () => {
+        if (!seekSlider) return;
+        
+        seekSlider.addEventListener("input", (e) => {
+            handleSeek(e.target.value);
+        });
+        
+        const onStart = () => {
+            isSeeking = true;
+            wasPlayingBeforeSeek = isPlaying;
+            if (mode === "file" && audioEl && !audioEl.paused) audioEl.pause();
+            else if (mode === "youtube" && ytPlayer && typeof ytPlayer.pauseVideo === "function") {
+                try { ytPlayer.pauseVideo(); } catch (e) {}
+            }
+        };
+        
+        const onEnd = (val) => {
+            isSeeking = false;
+            handleSeek(val);
+            if (wasPlayingBeforeSeek) {
+                if (mode === "file" && audioEl) audioEl.play();
+                else if (mode === "youtube" && ytPlayer && typeof ytPlayer.playVideo === "function") {
+                    try { ytPlayer.playVideo(); } catch (e) {}
+                }
+            }
+        };
+
+        seekSlider.addEventListener("mousedown", onStart);
+        seekSlider.addEventListener("touchstart", onStart);
+        seekSlider.addEventListener("mouseup", (e) => onEnd(e.target.value));
+        seekSlider.addEventListener("touchend", (e) => onEnd(e.target.value));
+
+        if (playPauseBtn) playPauseBtn.addEventListener("click", togglePlay);
+        if (replayBtn) replayBtn.addEventListener("click", () => {
+            if (mode === "youtube" && ytPlayer && typeof ytPlayer.seekTo === "function") {
+                ytPlayer.seekTo(0, true);
+                ytPlayer.playVideo && ytPlayer.playVideo();
+            } else if (mode === "file" && audioEl) {
+                audioEl.currentTime = 0;
+                audioEl.play();
+            }
+        });
+        
+        if (audioEl) {
+            audioEl.addEventListener("loadedmetadata", () => {
+                hideLoader();
+                if (durationEl) durationEl.textContent = formatTime(audioEl.duration);
+            });
+
+            audioEl.addEventListener("play", () => {
+                updateButton(true);
+                updateProgressLoop();
+            });
+
+            audioEl.addEventListener("pause", () => {
+                updateButton(false);
+                stopProgressLoop();
+            });
+
+            audioEl.addEventListener("ended", () => {
+                if (seekSlider) seekSlider.value = 100;
+                updateButton(false);
+                stopProgressLoop();
+            });
+        }
+    };
+
+    const togglePlay = () => {
+        if (mode === "youtube" && ytPlayer) {
+            const state = (typeof YT !== "undefined" && YT.PlayerState) ? ytPlayer.getPlayerState() : null;
+            if (state === YT.PlayerState.PLAYING) {
+            try { ytPlayer.pauseVideo(); } catch (e) {}
+            } else {
+            try { ytPlayer.playVideo(); } catch (e) {}
+            }
+        } else if (mode === "file" && audioEl) {
+            if (audioEl.paused) audioEl.play();
+            else audioEl.pause();
+        }
+    };
+
+    const updateButton = (playing) => {
+        isPlaying = !!playing;
+        if (playPauseBtn) playPauseBtn.src = playing ? "images/pause2.png" : "images/play2.png";
+    };
+    
+    const seek = (seconds) => {
+        if (mode === "youtube" && ytPlayer && typeof ytPlayer.seekTo === "function") {
+            try {
+            const current = ytPlayer.getCurrentTime();
+            ytPlayer.seekTo(current + seconds, true);
+            } catch (e) {}
+        } else if (mode === "file" && audioEl) {
+            const target = Math.max(0, Math.min(audioEl.duration || 0, (audioEl.currentTime || 0) + seconds));
+            audioEl.currentTime = target;
+        }
+    };
+    
+    const handleSeek = (val) => {
+        const percent = parseFloat(val);
+        if (isNaN(percent)) return;
+        if (mode === "youtube" && ytPlayer && typeof ytPlayer.getDuration === "function") {
+            const dur = ytPlayer.getDuration() || 0;
+            const target = (dur * percent) / 100;
+            try { ytPlayer.seekTo(target, true); } catch (e) {}
+        } else if (mode === "file" && audioEl && audioEl.duration) {
+            audioEl.currentTime = (audioEl.duration * percent) / 100;
+        } else {            
+            if (seekSlider) seekSlider.value = percent;
+        }
+    };
+    
+    const updateProgressLoop = () => {
+        const step = () => {
+            if (!isSeeking) {
+                let current = 0, duration = 0;
+                if (mode === "youtube" && ytPlayer && typeof ytPlayer.getCurrentTime === "function") {
+                    try {
+                    current = ytPlayer.getCurrentTime() || 0;
+                    duration = ytPlayer.getDuration() || 0;
+                    } catch (e) { current = 0; duration = 0; }
+                } else if (mode === "file" && audioEl) {
+                    current = audioEl.currentTime || 0;
+                    duration = audioEl.duration || 0;
+                }
+
+                if (duration > 0) {
+                    const percent = (current / duration) * 100;
+                    if (seekSlider) {
+                    if (percent >= 99.5 || current >= duration) seekSlider.value = 100;
+                    else seekSlider.value = percent;
+                    }
+                    if (durationEl) durationEl.textContent = formatTime(duration);
+                }
+
+                if (currentTimeEl) currentTimeEl.textContent = formatTime(current);
+            }
+
+            animationFrameId = requestAnimationFrame(step);
+        };
+
+        if (!animationFrameId) step();
+    };
+
+    const stopProgressLoop = () => {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    };
+    
+    const ensureYouTubeApi = () => {
+        if (window.YT && window.YT.Player) return;
+        if (document.querySelector('script[data-audio-yt]')) return;
+        const tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/iframe_api";
+        tag.setAttribute('data-audio-yt', '1');
+        document.head.appendChild(tag);
+    };
+    
+    window.onYouTubeIframeAPIReady = function () {
+        try {
+            safeLog("YouTube Iframe API ready");
+            if (!pendingYouTubeVideoId) return;
+            createYouTubePlayer(pendingYouTubeVideoId);
+            pendingYouTubeVideoId = null;
+        } catch (e) {
+            console.error("onYouTubeIframeAPIReady error:", e);
+        }
+    };
+
+    const createYouTubePlayer = (videoId) => {
+        if (!youtubeContainer) return;
+        try {
+            ytPlayer = new YT.Player("youtubePlayer", {
+            height: "0",
+            width: "0",
+            videoId,
+            playerVars: { autoplay: 0, controls: 0, rel: 0 },
+            events: {
+                onReady: (event) => {
+                    hideLoader();            
+                    const waitForDuration = setInterval(() => {
+                            try {
+                                const dur = ytPlayer.getDuration();
+                                if (dur > 0) {
+                                    if (durationEl) durationEl.textContent = formatTime(dur);
+                                    clearInterval(waitForDuration);
+                                }
+                            } catch (err) {}
+                        }, 300);
+                },
+                onStateChange: (event) => {
+                    const state = event.data;
+                    if (state === YT.PlayerState.PLAYING) {
+                        updateButton(true);
+                        updateProgressLoop();
+                    } else if (state === YT.PlayerState.PAUSED || state === YT.PlayerState.ENDED) {
+                        updateButton(false);
+                        stopProgressLoop();
+                        if (state === YT.PlayerState.ENDED && seekSlider) seekSlider.value = 100;
+                    }
+                }
+            }
+            });
+        } catch (e) {
+            console.error("createYouTubePlayer error:", e);
+        }
+    };
+    
+    const init = (questionId) => {
+        try {
+            const source = Activity.getData(questionId)?.content?.src;
+
+            if (!source || typeof source !== "string") {
+                alert("Audio.init requires a source string (audio file URL or YouTube URL).");
+                return;
+            }
+            
+            if (initialized) destroy();
+
+            renderUI(questionId);
+            cacheElements();
+            attachEvents();
+            
+            if (isYouTube(source)) {
+                const vid = extractVideoId(source);
+                if (!vid) {
+                    alert("Invalid YouTube URL provided to Audio.init()");
+                    return;
+                }
+                mode = "youtube";
+                pendingYouTubeVideoId = vid;
+                showLoader();
+                ensureYouTubeApi();
+            } else {
+                mode = "file";
+                if (!audioEl) {
+                    console.error("Audio.init: audio element not found");
+                    return;
+                }
+                audioEl.src = source;
+                showLoader();
+                audioEl.load();
+            }
+
+            initialized = true;
+            safeLog("Audio initialized in mode:", mode);
+        } catch (err) {
+            console.error("Audio.init error:", err);
+        }
+    };
+    
+    const destroy = () => {
+        try {
+            stopProgressLoop();
+            clearInterval(loaderInterval);
+            loaderInterval = null;
+
+            // audio element cleanup
+            if (audioEl) {
+                try {
+                    audioEl.pause();
+                } catch (e) {}
+                // remove listeners by cloning node (simple way)
+                const cloned = audioEl.cloneNode(true);
+                audioEl.parentNode && audioEl.parentNode.replaceChild(cloned, audioEl);
+            }
+
+            // remove play button listener
+            if (playPauseBtn) {
+                try { playPauseBtn.removeEventListener("click", togglePlay); } catch (e) {}
+            }
+
+            // destroy YT player
+            if (ytPlayer && typeof ytPlayer.destroy === "function") {
+                try { ytPlayer.destroy(); } catch (e) {}
+                ytPlayer = null;
+            }
+
+            // clear UI
+            const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
+            const parent = container ? document.querySelector(container) : null;
+            if (parent) parent.innerHTML = "";
+
+            // reset refs
+            audioEl = seekSlider = currentTimeEl = durationEl = loader = playPauseBtn = replayBtn = youtubeContainer = null;
+            pendingYouTubeVideoId = null;
+            mode = "";
+            initialized = false;
+        } catch (e) {
+            console.error("Audio.destroy error:", e);
+        }
+    };
+
+    return {
+        render:init,
+        destroy
+    };
+})();
+
+const DropDown = (() => {
+
+    Activity.css('dd.css');
+
+    const quesClass = 'questionSections';    
+
+    const getQid = () => {
+        return  $(`.${quesClass}`)[0].dataset.qid;
+    }
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const lang  = Activity.getData(questionId)?.content?.lang;
+            const hindi = lang == 'hi' ? true : false;
+
+            const btns = hindi
+                ? ['उत्तर जाँचिए', 'सही उत्तर देखें', 'पुनः प्रयास करें']
+                : ['Check Answers', 'Show Answers', 'Try Again'];
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container">
+                                        <div class="qSections">
+                                            <div class="questHindi ${Define.get('head')}"></div>
+                                        </div>
+                                        <div class="${quesClass}"></div>
+                                    </div>
+                                    <div class="buttons machiNgs">
+                                        <button class="submit-btn" id="checkBtnDD_quiz1">${btns[0]}</button>
+                                        <button class="show-btn">${btns[1]}</button>
+                                        <button class="reset-btn">${btns[2]}</button>
+                                    </div>
+                                </div>
+                                <div class="reportTBl" id="commonReport">
+                                    <div class="reportBox">
+                                        <div class="holdWhite">
+                                        <div class="headerRep">
+                                            <div class="statusIfallgood" id="statusIfallgood"></div>
+                                            <div class="closeModels" onclick="document.getElementById('commonReport').style.display='none'">
+                                                <svg width="25" height="25" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div id="reportBoxRender"></div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            const submitBtn = parent.querySelector( '.submit-btn' );
+            const showBtn   = parent.querySelector( '.show-btn' );
+            const resetBtn  = parent.querySelector( '.reset-btn' );
+
+            if( submitBtn ) submitBtn.addEventListener("click", checkAnswersDD );
+            if( showBtn ) showBtn.addEventListener("click", showAnswersDD );
+            if( resetBtn ) resetBtn.addEventListener("click", resetActivityDD );
+        } catch (e) {
+            console.error( 'FillInTheBlanksHindiKb.ui :', e );
+        }
+    }
+
+    const renderQuestions = (questionId) => {
+        ui();
+        Activity.setQuestionDetails( questionId );        
+
+        const container     = document.querySelector(`.${quesClass}`);
+        container.innerHTML = "";
+
+        $(`.${quesClass}`)[0].dataset.qid = questionId;
+        
+        const content     = Activity.getData(questionId)?.content;
+        const questions   = content?.questions;
+        const replacement = content?.replacement;
+
+        questions.forEach((q, i) => {
+            const wrapper     = document.createElement("div");
+            wrapper.className = "qLines";
+            
+            const parts = q.text.split( replacement );
+            
+            if( Array.isArray(q.options[0]) ) {
+                parts.forEach((part, blankIndex) => {
+                    wrapper.appendChild(document.createTextNode(part));
+
+                    if (blankIndex < q.options.length) {
+                        const select = makeSelect(i, blankIndex, q.options[blankIndex]);
+                        wrapper.appendChild(select);
+                    }
+                });
+            } else {
+                wrapper.appendChild(document.createTextNode(parts[0] || ""));
+                const select = makeSelect(i, null, q.options);
+                wrapper.appendChild(select);
+                wrapper.appendChild(document.createTextNode(parts[1] || ""));
+            }
+
+            container.appendChild(wrapper);
+        });
+    }
+
+    const makeSelect = (qIndex, blankIndex, optionsArr) => {
+        const select = document.createElement("select");
+        select.setAttribute("data-index", qIndex);        
+        if( blankIndex !== null ) select.setAttribute("data-blank", blankIndex);
+
+        const lang = Activity.getData(getQid())?.content?.lang;
+        const optionSelect = lang == 'hi' ? 'चुनें' : 'choose';
+
+        const def = document.createElement("option");
+        def.value = "";
+        def.disabled = true;
+        def.selected = true;
+        def.hidden = true;
+        def.textContent = optionSelect;
+        select.appendChild(def);
+
+        optionsArr.forEach(optValue => {
+            const opt = document.createElement("option");
+            opt.value = norm(optValue);
+            opt.textContent = optValue;
+            select.appendChild(opt);
+        });
+
+        return select;
+    }
+
+    const norm = (s) => {
+        if (s === null || s === undefined) return "";
+        return String(s).trim().normalize();
+    }
+
+    const checkAnswersDD = () => {
+        document.getElementById("commonReport").style.display = "block";
+        const selects = document.querySelectorAll(`select`);
+
+        const content = Activity.getData(getQid())?.content;
+        const lang    = content?.lang;
+        const data    = content?.questions;
+        const isHindi = lang == 'hi' ? true : false;        
+
+        const headings = isHindi
+            ? { yourAns: "आपका उत्तर", correctAns: "सही उत्तर", status: "स्थिति", correct: "✔ सही", incorrect: "❌ गलत", unattempted: "उत्तर नहीं दिया", statusText: "सही उत्तर" }
+            : { yourAns: "Your Answer", correctAns: "Correct Answer", status: "Status", correct: "✔ Correct", incorrect: "❌ Incorrect", unattempted: "Unattempted", statusText: "Correct" };
+
+        const numbering = isHindi
+            ? ["क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "ट", "ठ", "ड", "ढ", "ण", "त", "थ", "द", "ध", "न", "प", "फ", "ब", "भ", "म", "य", "र", "ल", "व", "श"]
+            : ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+
+        let reportHtml = `
+            <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr style="background:#f1f5f9; color:#000;">
+                    <th>#</th>
+                    <th>${headings.yourAns}</th>
+                    <th>${headings.correctAns}</th>
+                    <th>${headings.status}</th>
+                </tr>
+                </thead>
+                <tbody>
+        `;
+
+        let correctCount = 0;
+        let questionTracker = {};
+
+        selects.forEach(sel => {
+            const qIdx = parseInt(sel.getAttribute("data-index"), 10);
+            const blankIdx = parseInt(sel.getAttribute("data-blank"), 10) || 0;
+
+            const yourAns = sel.value ? norm(sel.value) : headings.unattempted;
+            const correctRaw = Array.isArray(data[qIdx].answer) ? data[qIdx].answer[blankIdx] : data[qIdx].answer;
+            const correctAns = norm(correctRaw);
+
+            let status = yourAns === correctAns
+            ? headings.correct
+            : (yourAns === headings.unattempted ? headings.unattempted : headings.incorrect);
+
+            sel.classList.remove("correct", "incorrect");
+            if (status === headings.correct) {
+                sel.classList.add("correct");
+                correctCount++;
+            } else if (status === headings.incorrect) {
+                sel.classList.add("incorrect");
+            }
+
+            if (!questionTracker[qIdx]) questionTracker[qIdx] = { yourAns: [], correctAns: [], status: [] };
+            questionTracker[qIdx].yourAns.push(yourAns);
+            questionTracker[qIdx].correctAns.push(correctAns);
+            questionTracker[qIdx].status.push(status);
+        });
+
+        Object.keys(questionTracker).forEach(qIdx => {
+            const q = questionTracker[qIdx];
+            reportHtml += `
+            <tr>
+                <td>${numbering[parseInt(qIdx)] || (parseInt(qIdx) + 1)}</td>
+                <td>${q.yourAns.join(", ")}</td>
+                <td>${q.correctAns.join(", ")}</td>
+                <td>${q.status.join(", ")}</td>
+            </tr>
+            `;
+        });
+
+        reportHtml += `</tbody></table></div>`;
+        document.getElementById("reportBoxRender").innerHTML = reportHtml;
+
+        const statusIfallgood = document.getElementById("statusIfallgood");
+        if (statusIfallgood) {
+            statusIfallgood.innerHTML = `
+            <span class="blinkMe" style="font-weight:bold; color:${correctCount === selects.length ? "green" : "red"}">
+                ${correctCount} / ${selects.length} ${headings.statusText} 
+                (${selects.length ? Math.round((correctCount / selects.length) * 100) : 0}%)
+            </span>
+            `;
+        }
+    }
+
+    const showAnswersDD = () => {
+        const container = Define.get('questionContainer');
+        const parent    = document.querySelector(container);
+        const btn       = parent.querySelector( '.show-btn' )
+        const btnGroup  = btn.closest(".buttons");
+        if (btnGroup) {
+            const submitBtn = btnGroup.querySelector(".submit-btn");
+            if (submitBtn) submitBtn.classList.add("disable");
+        }
+
+        const data = Activity.getData(getQid())?.content?.questions;        
+        const selects = document.querySelectorAll(`select`);
+        selects.forEach(sel => {
+            const qIdx     = parseInt(sel.getAttribute("data-index"), 10) || 0;
+            const blankIdx = parseInt(sel.getAttribute("data-blank"), 10) || 0;
+
+            const correctRaw = Array.isArray(data[qIdx].answer)
+            ? data[qIdx].answer[blankIdx]
+            : data[qIdx].answer;
+            const correctAns = norm(correctRaw);
+
+            let matched = Array.from(sel.options).find(opt => norm(opt.value) === correctAns);
+            if (!matched) {
+                matched = Array.from(sel.options).find(opt => norm(opt.textContent) === correctAns);
+            }
+            if (matched) sel.value = matched.value;
+
+            sel.classList.remove("incorrect");
+            sel.classList.add("correct");
+        });        
+        
+    }
+
+    const resetActivityDD = () => {
+        const container = Define.get('questionContainer');
+        const parent    = document.querySelector(container);
+        const btn       = parent.querySelector( '.reset-btn' )
+        const btnGroup  = btn.closest(".buttons");
+        if (btnGroup) {
+            const submitBtn = btnGroup.querySelector(".submit-btn");
+            if (submitBtn) submitBtn.classList.remove("disable");
+        }        
+        const selects = document.querySelectorAll(`select`);
+        selects.forEach(sel => {
+            sel.selectedIndex = 0;
+            sel.classList.remove("correct", "incorrect");
+        });
+    }
+
+    return {
+        render:renderQuestions
+    };
+
+})();
+
+const Circle = (() => {
+
+    Activity.css('clickTo.css');
+
+    const quesClass = 'questInCHeading';
+    const dataKey   = 'c1';
+    let activitiesClicked = {};
+    let userSelections    = {};
+    
+    const getQid = () => {
+        const el = document.querySelector(`.${quesClass}`);
+        return el ? el.dataset.qid : undefined;
+    };
+    
+    const ui = (questionId) => {
+        try {
+            const containerSelector = Define.get('questionContainer');
+            const parent = document.querySelector(containerSelector);
+            if (!parent) {
+                console.error("ui container not found:", containerSelector);
+                return;
+            }
+            
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            const hindi    = (lang === 'hi');
+
+            const btns = hindi
+                ? ['उत्तर जाँचिए', 'सही उत्तर देखें', 'पुनः प्रयास करें']
+                : ['Check Answers', 'Show Answers', 'Try Again'];
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container" id="${dataKey}">
+                                        <div class="${quesClass}">
+                                            <div class="questHindi ${Define.get('head')}"></div>
+                                        </div>
+                                        <div id="datClikToCir"></div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn">${btns[0]}</button>
+                                            <button class="show-btn">${btns[1]}</button>
+                                            <button class="reset-btn">${btns[2]}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="clickAct">
+                                    <div class="baseFixeds">
+                                        <div class="report_clicks">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center">
+                                            <h4 id="scoreTextQ1Click" class="text-center"></h4>
+                                            <button id="pop-close" class="btn btn-secondary">X</button>
+                                        </div>
+                                        <div id="datapendReportClick"></div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            const submitBtn = parent.querySelector( '.submit-btn' );
+            const showBtn   = parent.querySelector( '.show-btn' );
+            const resetBtn  = parent.querySelector( '.reset-btn' );
+            const closepop  = parent.querySelector( '#pop-close' );
+
+            if( submitBtn ) submitBtn.addEventListener("click", () => checkCircle(dataKey) );
+            if( showBtn ) showBtn.addEventListener("click", (ev) => showCircle(dataKey, ev.currentTarget) );
+            if( resetBtn ) resetBtn.addEventListener("click", () => resetCircle(dataKey) );
+            if( closepop ) closepop.addEventListener("click", closeReportClick );
+        } catch (e) {
+            console.error('Circle.ui :', e);
+        }
+    };
+    
+    const renderQuestions = (questionId) => {
+        ui(questionId);
+        Activity.setQuestionDetails(questionId);
+
+        const heading = document.querySelector(`.${quesClass}`);
+        if (!heading) {
+            console.error("renderQuestions: heading element not found");
+            return;
+        }
+        heading.dataset.qid = questionId;
+
+        const renderDiv = document.querySelector(`#datClikToCir`);
+        if (!renderDiv) {
+            console.error("renderQuestions: render container #datClikToCir not found");
+            return;
+        }
+        renderDiv.innerHTML = "";
+
+        const activity = Activity.getData(questionId);
+        const content  = activity?.content;
+        if (!Array.isArray(content)) {
+            console.error("renderQuestions: activity content should be an array", content);
+            return;
+        }
+
+        activitiesClicked[dataKey] = {
+            mode: activity.mode || activity?.content?.mode || activity?.mode || 'multi',
+            questions: content,
+            lang: activity?.content?.lang || activity.lang || 'en'
+        };
+        
+        if( !userSelections[dataKey] ) userSelections[dataKey] = {};
+        
+        content.forEach((item) => {
+            const parts = item.text.split(/(\s+|,)/);
+            const html = parts.map((part) => {
+            if (part.trim() === "" || part === ",") return part;
+                return `<span class="clickable" data-act="${dataKey}" data-id="${item.id}" data-word="${part.trim()}">${part}</span>`;
+            }).join("");
+            renderDiv.innerHTML += `
+            <div class="questInC" data-id="${item.id}">
+                <span class="label">${item.label}</span> ${html}
+            </div>`;
+        });
+        
+        if( !document.__circle_click_attached ) {
+            document.addEventListener("click", function (e) {
+                if (!e.target || !e.target.classList) return;
+                if (e.target.classList.contains("clickable")) {
+                    const span = e.target;
+                    const act = span.dataset.act;
+                    const qId = span.dataset.id;
+                    const word = span.dataset.word;
+
+                    const activityMeta = activitiesClicked[act];
+                    if (!activityMeta) {                    
+                        const qid = getQid();
+                        const actActivity = Activity.getData(qid);
+                        const mode = actActivity?.mode || 'multi';
+                        activitiesClicked[act] = activitiesClicked[act] || { mode, questions: actActivity?.content || [], lang: actActivity?.lang || 'en' };
+                    }
+
+                    const mode = activitiesClicked[act].mode;
+                    
+                    if (!userSelections[act]) userSelections[act] = {};
+                    if (!userSelections[act][qId]) userSelections[act][qId] = [];
+
+                    if (mode === "single") {
+                        const siblings = document.querySelectorAll(`[data-act="${act}"][data-id="${qId}"]`);
+                        siblings.forEach(sib => sib.classList.remove("circle"));
+                        
+                        userSelections[act][qId] = [word];
+                        span.classList.add("circle");
+                    } else {
+                        span.classList.toggle("circle");
+
+                        if (span.classList.contains("circle")) {
+                            if (!userSelections[act][qId].includes(word)) {
+                                userSelections[act][qId].push(word);
+                            }
+                        } else {
+                            userSelections[act][qId] = userSelections[act][qId].filter(w => w !== word);
+                        }
+                    }
+                }
+            });
+            document.__circle_click_attached = true;
+        }
+    };
+    
+    const checkCircle = (dataKeyParam) => {
+        const key = dataKeyParam || dataKey;
+        const container = document.getElementById(key);
+        const activity = activitiesClicked[key];
+        if (!container || !activity) {
+            console.error("checkCircle: missing container or activity for", key);
+            return;
+        }
+        const data = activity.questions;
+
+        data.forEach((item) => {
+            const answers = Array.isArray(item.answer) ? item.answer : [item.answer];
+            const spans = container.querySelectorAll(`[data-id="${item.id}"] .clickable`);
+            spans.forEach((span) => {
+            span.classList.remove("correct", "wrong");
+            if (span.classList.contains("circle")) {
+                if (answers.includes(span.dataset.word)) {
+                span.classList.add("correct");
+                } else {
+                span.classList.add("wrong");
+                }
+            }
+            });
+        });
+
+        showClickReportClick(activity.questions, userSelections[key], activity.lang || 'en');
+    };
+    
+    const showCircle = (dataKeyParam, btn) => {
+        const key = dataKeyParam || dataKey;
+        const container = document.getElementById(key);
+        const activity = activitiesClicked[key];
+        if (!container || !activity) {
+            console.error("showCircle: missing container or activity for", key);
+            return;
+        }
+        const data = activity.questions;
+
+        container.querySelectorAll(".clickable").forEach((el) => {
+            el.classList.remove("circle", "wrong", "correct");
+        });
+
+        data.forEach((item) => {
+            const answers = Array.isArray(item.answer) ? item.answer : [item.answer];
+            const spans = container.querySelectorAll(`[data-id="${item.id}"] .clickable`);
+            spans.forEach((span) => {
+            if (answers.includes(span.dataset.word)) {
+                span.classList.add("correct");
+            }
+            });
+        });
+
+        const checkBtn = container.querySelector(".submit-btn");
+        if (checkBtn) {
+            checkBtn.classList.add("disabled-click");
+            checkBtn.disabled = true;
+        }
+        if (btn && btn.classList) {
+            btn.classList.add("clicked-show");
+        }
+    };
+    
+    const resetCircle = (dataKeyParam) => {
+        const key = dataKeyParam || dataKey;
+        const container = document.getElementById(key);
+        if (!container) return;
+
+        container.querySelectorAll(".clickable").forEach((el) => {
+            el.classList.remove("circle", "correct", "wrong");
+        });
+
+        const checkBtn = container.querySelector(".submit-btn");
+        if (checkBtn) {
+            checkBtn.classList.remove("disabled-click");
+            checkBtn.disabled = false;
+        }
+
+        const showBtn = container.querySelector(".show-btn");
+        if (showBtn) {
+            showBtn.classList.remove("clicked-show");
+        }
+
+        userSelections[key] = {};
+    };
+    
+    const showClickReportClick = (clickData, selections = {}, typeLang = 'en') => {
+        $("#clickAct").css("display", "block");
+        let correctCount = 0;
+        let totalQues = Array.isArray(clickData) ? clickData.length : 0;
+
+        let tableHTML = `<div class="table-responsive p-2">
+            <table class="table table-bordered" style="font-size:18px">
+            <thead class="text-light" style="white-space: nowrap;">
+            <tr>
+                <th>${typeLang === "hi" ? "प्रश्न संख्या" : "Q. No."}</th>
+                <th>${typeLang === "hi" ? "आपका उत्तर" : "Your Answer"}</th>
+                <th>${typeLang === "hi" ? "सही उत्तर" : "Correct Answer"}</th>
+                <th>${typeLang === "hi" ? "परिणाम" : "Result"}</th>
+            </tr>
+            </thead>
+            <tbody>`;
+
+        (clickData || []).forEach((q, i) => {
+            const correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
+            const userAns = (selections && selections[q.id]) ? selections[q.id] : [];
+            let isCorrect =
+            userAns.length > 0 &&
+            correctAnswers.every(a => userAns.includes(a)) &&
+            userAns.length === correctAnswers.length;
+            if (isCorrect) correctCount++;
+
+            const userAnswerText =
+            userAns.length > 0
+                ? userAns.join(", ")
+                : typeLang === "hi" ? "प्रयास नहीं किया" : "Not Attempted";
+            const correctAnswerText = correctAnswers.join(", ");
+            tableHTML += `
+            <tr>
+                <th>${q.label || (i + 1)}</th>
+                <td class="${isCorrect ? "text-success" : "text-danger"}">${userAnswerText}</td>
+                <td class="text-success">${correctAnswerText}</td>
+                <td class="${isCorrect ? "text-success" : "text-danger"}">
+                ${isCorrect ? "✔" : "✘"}
+                </td>
+            </tr>`;
+        });
+
+        tableHTML += `</tbody></table></div>`;
+
+        const reportEl = document.getElementById("datapendReportClick");
+        if (reportEl) reportEl.innerHTML = tableHTML;
+
+        const scoreEl = document.getElementById("scoreTextQ1Click");
+        if (scoreEl) {
+            scoreEl.innerText = typeLang === "hi"
+                ? `आपको ${totalQues} में से ${correctCount} अंक मिले हैं`
+                : `You scored ${correctCount} out of ${totalQues}`;
+        }
+    };
+
+    const closeReportClick = () => {
+        $("#clickAct").css("display", "none");
+        const reportEl = document.getElementById("datapendReportClick");
+        if (reportEl) reportEl.innerHTML = "";
+    };
+
+    return {
+        render: renderQuestions
+    };
+
+})();
+
+const ShravanKaushal = (() => {
+
+    Activity.css('shrvan.css');
+
+    const inputDataId = 'showrowInputsData1';
+
+    let curntInd = -1;
+    let audioPlayer = null;
+
+    const getQid = () => {
+        const el = document.querySelector(`#${inputDataId}`);
+        return el ? el.dataset.qid : undefined;
+    };    
+
+    const ui = (questionId) => {
+        try {
+            const containerSelector = Define.get('questionContainer');
+            const btnid  = 'shravanPopupClose'
+            const parent = document.querySelector(containerSelector);
+            if (!parent) {
+                console.error("ui container not found:", containerSelector);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang = activity.lang || 'en';
+            const hindi = (lang === 'hi');
+
+            const btns = hindi
+                ? ['उत्तर जाँचिए', 'पुनः प्रयास करें']
+                : ['Check Answers', 'Try Again'];
+
+            parent.innerHTML = `<div class="question">
+                                    <audio id="audioPlayer" preload="auto"></audio>
+                                    <div class="startActBtns">
+                                        <div class="play-btn" role="button" tabindex="0">
+                                            <div class="icon"></div>
+                                        </div>
+                                    </div>
+                                    <div class="afterClicks" style="display:none;">
+                                        <div class="container">
+                                            <div class="bigHeadingS ${Define.get('head')}"></div>
+                                            <div class="runingHead ${Define.get('subhead')}"></div>
+                                            <div id="${inputDataId}" class="rowInputsData"></div>                     
+                                            <div class="secondRowaBB">
+                                                <div class="nextPreviRow">
+                                                    <button class="buttShar" id="prevBtns">Previous</button>
+                                                    <button class="buttShar" id="nextBtns">Next</button>
+                                                    <button class="buttShar" id="replayBtns">Replay</button>
+                                                </div>
+                                                <div class="buttons machiNgs">
+                                                    <button class="submit-btn">${btns[0]}</button>
+                                                    <button class="reset-btn">${btns[1]}</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <div id="clickActShravan" style="display:none;">
+                                    <div class="baseFixeds">
+                                        <div class="report_shravan">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h4 id="scoreTextQ8Click" class="text-center"></h4>
+                                                <button class="btn btn-secondary" id="${btnid}">X</button>
+                                            </div>
+                                            <div id="dataReportShravan"></div>
+                                            <div class="ansViews"></div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+            
+            const closeBtn = document.getElementById(btnid);
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeReportShravan);
+            }            
+            
+            const inputEl = document.getElementById(inputDataId);
+            if (inputEl) inputEl.dataset.qid = questionId;
+            
+            audioPlayer = parent.querySelector('#audioPlayer');
+
+            const playBtn = parent.querySelector('.play-btn');
+            const prevBtn = parent.querySelector('#prevBtns');
+            const nextBtn = parent.querySelector('#nextBtns');
+            const replayBtn = parent.querySelector('#replayBtns');
+            const submiBtn = parent.querySelector('.submit-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
+            
+            if (playBtn) playBtn.addEventListener('click', startShravan);
+            if (prevBtn) prevBtn.addEventListener('click', prevStep);
+            if (nextBtn) nextBtn.addEventListener('click', nextStep);
+            if (replayBtn) replayBtn.addEventListener('click', replayAudio);
+            if (submiBtn) submiBtn.addEventListener('click', checkAns);
+            if (resetBtn) resetBtn.addEventListener('click', resetAns);
+            
+            if (playBtn) {
+                playBtn.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        startShravan();
+                    }
+                });
+            }            
+            updateButtons();
+        } catch (e) {
+            console.error('Shravan.ui :', e);
+        }
+    };    
+
+    const renderQues = (questionId) => {
+        ui(questionId);
+        
+        const dataSet = Activity.getData(getQid())?.content?.questions || [];
+
+        const rowDiv = document.getElementById(inputDataId);
+        rowDiv.innerHTML = "";
+        
+        const popupcontainer = document.querySelector('.ansViews');
+        const popupContent   = [];
+        dataSet.forEach((item, ind) => {
+            const html = `
+                <div class="columan shadow-lg">
+                    <div class="textHindiOpt">${item.text}</div>
+                    <input id="f${inputDataId}_${item.id}" type="text" maxlength="1" class="inputTSharavan" />
+                </div>
+            `;
+            rowDiv.innerHTML += html;
+
+            const popuprow = `<div class="viewsDivs">${ind+1}. ${item.popuptext} — ${item.text}</div>`;
+            popupContent.push( popuprow );
+        });
+        popupcontainer.innerHTML = popupContent.join( '' );
+       
+    }
+
+    const startShravan = () => {
+        if (!audioPlayer) {
+            // Try to find player again in case ui wasn't fully initialized earlier
+            audioPlayer = document.getElementById('audioPlayer');
+            if (!audioPlayer) {
+                console.error('audioPlayer not found');
+                return;
+            }
+        }
+
+        const src = Activity.getData(getQid())?.content?.audio?.headsrc
+            ?? Activity.getData(getQid())?.content?.audio?.options?.[0]; // fallback
+        if (src) {
+            audioPlayer.src = src;
+            audioPlayer.currentTime = 0;
+            audioPlayer.play().catch(err => {
+                // Some browsers block autoplay; handle gracefully
+                console.warn('Audio play failed (user gesture required?):', err);
+            });
+        } else {
+            console.warn('No audio source found for this activity.');
+        }
+
+        // show/hide UI blocks (use DOM API to avoid jQuery dependency)
+        const startBlock = document.querySelector('.startActBtns');
+        const afterBlock = document.querySelector('.afterClicks');
+        if (startBlock) startBlock.style.display = 'none';
+        if (afterBlock) afterBlock.style.display = 'block';
+
+        updateButtons();
+    };
+
+    const updateButtons = () => {
+        const audioList = Activity.getData(getQid())?.content?.audio?.options || [];
+        const prevBtn = document.getElementById('prevBtns');
+        const nextBtn = document.getElementById('nextBtns');
+
+        if (!prevBtn || !nextBtn) return;
+
+        if (curntInd <= 0) {
+            prevBtn.classList.add('cNotAll');
+            prevBtn.disabled = true;
+        } else {
+            prevBtn.classList.remove('cNotAll');
+            prevBtn.disabled = false;
+        }
+
+        if( curntInd >= audioList.length - 1 ) {
+            nextBtn.classList.add('cNotAll');
+            nextBtn.disabled = true;
+        } else {
+            nextBtn.classList.remove('cNotAll');
+            nextBtn.disabled = false;
+        }
+    };
+
+    const nextStep = () => {
+        const audioList = Activity.getData(getQid())?.content?.audio?.options || [];
+        if( curntInd < audioList.length ) {
+            if (!audioPlayer) audioPlayer = document.getElementById('audioPlayer');
+
+            if( curntInd < audioList.length - 1 ) {
+                curntInd++;
+            }
+
+            audioPlayer.src = audioList[curntInd].src;
+            audioPlayer.currentTime = 0;
+            audioPlayer.play().catch(() => {});            
+        }
+        updateButtons();
+    };
+
+    const prevStep = () => {
+        const audioList = Activity.getData(getQid())?.content?.audio?.options || [];
+        if( curntInd > 0 ) {
+            if (!audioPlayer) audioPlayer = document.getElementById('audioPlayer');
+            curntInd--;
+            audioPlayer.src = audioList[curntInd].src;
+            audioPlayer.currentTime = 0;
+            audioPlayer.play().catch(() => {});
+        }
+        updateButtons();
+    };
+
+    const replayAudio = () => {
+        if (!audioPlayer) audioPlayer = document.getElementById('audioPlayer');
+        if (!audioPlayer) return;
+        audioPlayer.currentTime = 0;
+        audioPlayer.play().catch(() => {});
+    };
+
+    const checkAns = () => {
+        const data    = Activity.getData(getQid());
+        const dataSet = data?.content?.questions || [];
+        const isHindi = (data?.lang === 'hi');
+
+        let correctCount = 0;
+        const totalQues = dataSet.length;
+
+        let tableHTML = `<div class="table-responsive p-2">
+            <table class="table table-bordered" style="font-size:18px">
+            <thead class="text-light" style="white-space: nowrap;">
+                <tr>
+                <th>${isHindi ? "प्रश्न संख्या" : "Q. No."}</th>
+                <th>${isHindi ? "आपका उत्तर" : "Your Answer"}</th>
+                <th>${isHindi ? "सही उत्तर" : "Correct Answer"}</th>
+                <th>${isHindi ? "परिणाम" : "Result"}</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+        dataSet.forEach((q, i) => {
+            const inputEl = document.getElementById(`f${inputDataId}_${q.id}`);
+            const userAns = parseInt( inputEl.value );
+            const correctAnswers = Array.isArray(q.ans) ? q.ans : [q.ans];            
+            
+            const isCorrect = userAns && correctAnswers.includes(userAns);
+            if (isCorrect) correctCount++;            
+
+            const userAnswerText =
+                userAns.length > 0 ? userAns : (isHindi ? "प्रयास नहीं किया" : "Not Attempted");
+            const correctAnswerText = correctAnswers.join(", ");
+
+            tableHTML += `
+            <tr>
+                <th>${q.label || (i + 1)}</th>
+                <td class="${isCorrect ? "text-success" : "text-danger"}">${escapeHtml(userAnswerText)}</td>
+                <td class="text-success">${escapeHtml(correctAnswerText)}</td>
+                <td class="${isCorrect ? "text-success" : "text-danger"}">
+                ${isCorrect ? "✔" : "✘"}
+                </td>
+            </tr>`;
+        });
+
+        tableHTML += `</tbody></table></div>`;
+
+        const reportEl = document.getElementById("dataReportShravan");
+        if (reportEl) reportEl.innerHTML = tableHTML;
+
+        const scoreTextEl = document.getElementById("scoreTextQ8Click");
+        if (scoreTextEl) {
+            scoreTextEl.innerText = isHindi
+                ? `आपको ${correctCount} अंक मिले हैं (कुल ${totalQues})`
+                : `You scored ${correctCount} out of ${totalQues}`;
+        }
+
+        const clickAct = document.getElementById("clickActShravan");
+        if (clickAct) clickAct.style.display = "block";
+    };
+
+    const closeReportShravan = () => {
+        const el = document.getElementById("clickActShravan");
+        if (el) el.style.display = "none";
+    };
+
+    const showAns = () => {
+        const dataSet = Activity.getData(getQid())?.content?.questions || [];
+        dataSet.forEach(q => {
+            const inputEl = document.getElementById(`f${inputDataId}_${q.id}`);
+            if (inputEl) {
+                inputEl.value = Array.isArray(q.ans) ? q.ans.join(', ') : (q.ans ?? '');
+            }
+        });
+    };
+
+    const resetAns = () => {
+        const inputs = document.querySelectorAll(`#${inputDataId} input`);
+        inputs.forEach(inp => inp.value = "");
+    };
+    
+    const escapeHtml = (str) => {
+        if (typeof str !== 'string') return str;
+        return str.replace(/[&<>"']/g, (m) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
+    }
+
+    return {
+        render: renderQues,
+        startShravan,
+        curntInd,
+        get audio() { return audioPlayer; }
+    };
+
+})();
+
+const TrueAndFalse = (() => {
+
+    const inputDataId = 'trueAndFalse4';
+    let userAns = [];
+
+    const getQid = () => {
+        const el = document.querySelector(`#${inputDataId}`);
+        return el ? el.dataset.qid : undefined;
+    };    
+
+    const ui = (questionId) => {
+        try {
+            const containerSelector = Define.get('questionContainer');
+            const parent = document.querySelector(containerSelector);
+            if (!parent) {
+                console.error("ui container not found:", containerSelector);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';            
+
+            const btns = Activity.getBtnLabels( lang );
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container">
+                                        <div class="qSections">
+                                            <div class="font18 fontBold ${Define.get('head')}"></div>
+                                            <div class="runingHead ${Define.get('subhead')}"></div>
+                                        </div>
+                                        <hr/>
+                                        <div class="marTop5">
+                                            <div id="${inputDataId}"></div>
+                                        </div>
+                                    </div>
+                                    <div class="buttons machiNgs">
+                                        <button class="submit-btn disable" id="submit4">${btns[0]}</button>
+                                        <button class="show-btn">${btns[1]}</button>
+                                        <button class="reset-btn">${btns[2]}</button>
+                                    </div>
+                                </div>
+                                <div id="popupDialogAns">
+                                    <div class="baseMod">
+                                        <div class="answerdiv">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                                <button class="btn btn-secondary popUp-close-btn">X</button>
+                                            </div>
+                                            <div id="answer-review"></div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+            
+            const inputEl = document.getElementById(inputDataId);
+            if (inputEl) inputEl.dataset.qid = questionId;            
+            
+            const submiBtn = parent.querySelector('.submit-btn');
+            const showBtn  = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
+            const closePopUpBtn = parent.querySelector('.popUp-close-btn');            
+           
+            if (submiBtn) submiBtn.addEventListener('click', showPopUp );
+            if (showBtn) showBtn.addEventListener('click', showAnswersTandF );
+            if (resetBtn) resetBtn.addEventListener('click', resetTrueFalse );
+            if (closePopUpBtn) closePopUpBtn.addEventListener('click', closePopUp );
+        } catch (e) {
+            console.error('TrueAndFalse.ui :', e);
+        }
+    };    
+
+    const renderQues = (questionId) => {
+        ui(questionId);
+        Activity.setQuestionDetails( getQid() );
+
+        const activity = Activity.getData(getQid()) || {};
+        const lang     = activity?.lang || 'en';
+        const dataSet  = activity?.content || [];
+
+        userAns = new Array(dataSet.length).fill(null);
+
+        const btnLabels    = Activity.getTrueFalseLabels(lang);
+        const optionLabels = Activity.getOptionLabels(lang);        
+        
+        const rowDiv     = document.getElementById(inputDataId);
+        rowDiv.innerHTML = "";
+        const rowContent = [];
+        dataSet.forEach( (item, ind) => {
+            const html = `
+                <div class="row m-0 mb-3 question-block">
+                    <div style="width:40px">${optionLabels[ind]}</div>
+                    <div class="col p-0">
+                        <div class="row m-0">
+                            <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${item.question}</div>
+                            <div class="col-auto options mb-2">
+                                <button class="btn btn-sm btn-outline-success tnfBtn" data-answer="true" data-ind="${ind}">${btnLabels[0]}</button>
+                                <button class="btn btn-sm btn-outline-danger tnfBtn" data-answer="false" data-ind="${ind}">${btnLabels[1]}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            rowContent.push( html );
+        });
+        rowDiv.innerHTML = rowContent.join( '' );
+
+        const containerSelector = Define.get('questionContainer');
+        const parent  = document.querySelector(containerSelector);
+        const tnfBtns = parent.querySelectorAll('.tnfBtn');
+
+        if( tnfBtns.length > 0 ) {
+            tnfBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => selectAnswer(e.currentTarget));
+            });
+        }        
+    }
+
+    const selectAnswer = (thisObj) => {
+        const ind    = $(thisObj).attr('data-ind');
+        const answer = $(thisObj).attr('data-answer');
+        userAns[ind] = answer;
+
+        const btnGroup = thisObj.parentElement.querySelectorAll("button");
+        btnGroup.forEach(b => b.classList.remove("active"));
+        thisObj.classList.add("active");
+        checkIfAllAttempt();
+    }
+
+    const checkIfAllAttempt = () => {
+        const allAnswered = userAns.every(ans => ans !== null);        
+        const submitBtn   = document.getElementById(`submit4`);
+        if( allAnswered ) {
+            submitBtn.classList.remove("disable");
+        }
+    }
+
+    const showAnswersTandF = () => {
+        const questions = Activity.getData(getQid())?.content || [];        
+        $(`.options`).css('pointer-events', 'none');
+        $(`#submit4`).addClass('disable');
+        questions.map((item, index) => {
+            const opt1 = $(`.options`).eq(index).children().eq(0);
+            const opt2 = $(`.options`).eq(index).children().eq(1);
+
+            const opt1ans = opt1.attr( 'data-answer' );            
+            
+            $(`.options`).eq(index).children('button').removeClass('active');
+            
+            if (item.answer === (opt1ans === 'true')) {
+                $(opt1).removeClass('active').addClass('active');
+            } else {
+                $(opt2).addClass('active');
+            }
+        })
+    }
+
+    const resetTrueFalse = () => {
+        const questions = Activity.getData(getQid())?.content || [];  
+        $(".tnfBtn").removeClass('active');
+        $(`.options`).css('pointer-events', 'all');
+        userAns = new Array(questions.length).fill(null);
+        $(`#submit4`).addClass('disable');
+    }
+
+    const showPopUp = () => {
+        const activity   = Activity.getData(getQid()) || {};
+        const lang       = activity?.lang || 'en';
+        const headLabels = Activity.getAnswerTableHeads(lang);
+        const questions  = activity?.content;
+
+        let correctCount = 0;
+        const totalQues = questions.length;
+        const table = [];
+
+        const tableBodyF = `<div class="table-responsive p-2">
+                                <table class="table table-bordered" style="font-size:20px">
+                                    <thead class="text-light" style="white-space: nowrap;">
+                                        <tr>
+                                            <th>${headLabels[0]}</th>
+                                            <th>${headLabels[1]}</th>
+                                            <th>${headLabels[2]}</th>
+                                            <th>${headLabels[3]}</th>
+                                        </tr>
+                                    </thead>
+                                <tbody>`;
+        // ..
+        table.push( tableBodyF );
+
+        const optionLabels = Activity.getOptionLabels( lang );
+
+        questions.forEach((item, i) => {
+            const userAnswer = userAns[i];
+            const correctAnswerText = item.answer;
+            let count = 0;
+            let isCorrect = false;
+            
+            if( item.answer === (userAnswer === 'true') ) {
+                isCorrect = true;
+                count++;
+                correctCount++;
+            }
+
+            const userAnswerText = (userAnswer !== undefined && userAnswer !== null) ? `${userAnswer}` : lang == 'hi' ? "उत्तर नहीं दिया" : "Not Attempted";
+
+            const textLabels = Activity.getTrueFalseLabels(lang);
+
+            const tempUserAnswer    = userAnswer == 'true' ? textLabels[0] : ( userAnswer == 'false' ? textLabels[1] : userAnswerText );
+            const tempCorrectAnswer = correctAnswerText == true ? textLabels[0] : textLabels[1];
+
+            const body = `
+                <tr clsss='trData'>
+                    <th>${optionLabels[i]}</th>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">${tempUserAnswer}</td>
+                    <td class="text-success">${tempCorrectAnswer}</td>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
+                </tr>
+            `;
+            table.push( body );
+        });
+
+        const tableBodyL = `</tbody></table></div>`;
+        table.push( tableBodyL );
+
+        document.getElementById("answer-review").innerHTML = table.join( '' );
+        document.getElementById("popupDialogAns").style.display = "block";
+
+        const finalText = lang == 'en' ?
+            `You answered ${correctCount} out of ${totalQues} questions correctly!` :
+            `आपको ${totalQues} में से ${correctCount} मिले है`;
+        // ..
+
+        document.getElementById("scoreTextQ1").innerText = finalText;
+    }
+
+    const closePopUp = () => {
+        document.getElementById("popupDialogAns").style.display = "none";
+    }
+
+    return {
+        render: renderQues        
+    };
+
+})();
+
+Modules.get().map(({ module }) => {
+    try {        
+        const mod = eval(module);
+        if( !mod || (typeof mod !== 'function' && typeof mod !== 'object') ) {
+            console.error(`FATAL :: Couldn't register ${module} :`, mod);
+            return;
+        }
+        Activity.register(module, mod);
+    } catch( err ) {
+        console.error( `FATAL :: Couldn't register ${module} :`, err )
+    }
+});

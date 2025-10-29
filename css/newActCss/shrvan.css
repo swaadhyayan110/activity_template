@@ -1,0 +1,433 @@
+.bigHeadingS {
+    font-family: 'PoppinsSemiBold', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin: 26px 0;
+    background: linear-gradient(90deg, #9C27B0, #E91E63, #FF9800, #4CAF50, #2196F3);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 8s ease infinite;
+    letter-spacing: 2px;
+    transition: transform 0.4s ease, text-shadow 0.4s ease;
+}
+
+.bigHeadingS:hover {
+    transform: scale(1.06);
+    text-shadow: 0 0 18px rgba(156, 39, 176, 0.4);
+}
+
+.runingHead {
+    font-size: 25px;
+    margin: 12px 0;
+    text-align: center;
+    color: #0b5fff;
+    font-weight: 600;
+    text-shadow: 0 0 6px rgba(11, 95, 255, 0.2);
+    animation: fadeGlow 4s ease-in-out infinite alternate;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.runingHead:hover {
+    color: #2196F3;
+    transform: translateY(-3px);
+}
+
+.rowInputsData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    animation: fadeInUp 1s ease;
+}
+
+.columan {
+    border: 2px solid transparent;
+    border-radius: 16px;
+    background: linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd) border-box;
+    padding: 18px;
+    margin: 18px 10px;
+    width: 180px;
+    text-align: center;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+}
+
+.columan:hover {
+    transform: translateY(-10px) scale(1.04) rotate(-1deg);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+    border: 2px solid #ff7eb9;
+}
+
+.textHindiOpt {
+    margin: 2px auto 12px;
+    text-align: center;
+    background: linear-gradient(135deg, #ffffff, #ffffffde);
+    font-size: 20px;
+    border-radius: 40px;
+    padding: 8px 14px;
+    border: 1px solid #ffd39e;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(221, 148, 61, 0.25);
+    transition: transform 0.35s ease, background 0.35s ease, box-shadow 0.35s ease;
+    width: 100%;
+    color: #603ce5;
+}
+
+.textHindiOpt:hover {
+    background: linear-gradient(135deg, #fff3c4, #ffd580);
+    transform: scale(1.08);
+    box-shadow: 0 8px 16px rgba(255, 165, 0, 0.35);
+}
+
+.inputTSharavan {
+    width: 80px;
+    height: 70px;
+    border-radius: 12px;
+    border: 2px solid #00afff;
+    background: #fdfdfd;
+    margin: 2px auto 0;
+    text-align: center;
+    font-size: 26px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.inputTSharavan:focus {
+    border-color: #2196F3;
+    box-shadow: 0 0 14px rgba(33, 150, 243, 0.5);
+    transform: scale(1.08);
+}
+
+.inputTSharavan:hover {
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes fadeGlow {
+    from {
+        text-shadow: 0 0 6px rgba(11, 95, 255, 0.2);
+    }
+
+    to {
+        text-shadow: 0 0 14px rgba(11, 95, 255, 0.5);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nextPreviRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin: 38px 0;
+}
+
+.buttShar {
+    font-family: 'PoppinsSemiBold';
+    background: linear-gradient(135deg, #fdf4ff, #ffd0e0);
+    color: #000000;
+    font-size: 19px;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 26px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: 1px solid #f25006;
+}
+
+.buttShar:hover {
+    background: linear-gradient(135deg, #fcd79f, #f7ca50);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.buttShar:active {
+    transform: scale(0.95);
+}
+
+.buttShar svg {
+    width: 25px;
+    height: 25px;
+}
+
+.afterClicks {
+    display: none;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+.onup {
+    position: sticky;
+    z-index: 2;
+}
+
+#scoreTextQ8Click {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1485c6;
+    animation: pulse 1.2s infinite;
+}
+
+.baseFixeds {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background: #0002038e;
+    z-index: 999;
+    overflow: auto;
+    z-index: 999;
+}
+
+.report_shravan {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    width: 85%;
+    max-width: 850px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    animation: slideUp 0.6s ease;
+    overflow: hidden;
+    margin: 3vh auto;
+}
+
+/* ===== Table Styling ===== */
+.report_shravan table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.report_shravan thead th {
+    background: linear-gradient(135deg, #24cae6, #1485c6);
+    color: #fff;
+    padding: 14px;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px 10px 0 0;
+    font-family: 'PoppinsSemiBold';
+}
+
+.report_shravan tbody tr {
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.report_shravan tbody tr:hover {
+    background: #e9f7fc;
+    transform: scale(1.01);
+}
+
+.report_shravan td,
+.report_shravan th {
+    padding: 12px;
+    text-align: left;
+    font-size: 17px;
+    border-bottom: 2px solid #eee;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.cNotAll {
+    cursor: not-allowed !important;
+}
+
+.ansViews {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.viewsDivs {
+    width: 45%;
+    font-size: 16px;
+    margin: 5px 0;
+    border-bottom: 1px solid #bbbbbb;
+    margin: 10px 15px;
+    color: #000000;
+}
+
+.secondRowaBB {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+@media (min-width:300px) and (max-width:880px) {
+    .bigHeadingS {
+        font-size: 18px;
+        margin: 19px 0;
+    }
+
+    .runingHead {
+        font-size: 16px;
+        margin: 11px 0;
+        font-weight: normal;
+    }
+
+    .columan {
+        border: 2px solid transparent;
+        border-radius: 16px;
+        padding: 18px;
+        margin: 11px 0px;
+        width: 135px;
+    }
+
+    .textHindiOpt {
+        margin: 2px auto 12px;
+        font-size: 15px;
+        border-radius: 40px;
+        padding: 8px 4px;
+        width: 100%;
+        color: #603ce5;
+    }
+
+    .inputTSharavan {
+        width: 62px;
+        height: 50px;
+        margin: 2px auto 0;
+        font-size: 19px;
+    }
+
+    .buttShar {
+        font-size: 12px;
+        border: none;
+        border-radius: 50px;
+        padding: 4px 10px;
+        gap: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        border: 1px solid #f25006;
+    }
+
+    .secondRowaBB {
+        display: block;
+        justify-content: space-between;
+        align-items: center;
+        margin: 9px 0;
+    }
+
+    .nextPreviRow {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin: 16px 0;
+    }
+
+    .viewsDivs {
+        width: 100%;
+        font-size: 14px;
+        margin: 5px 0;
+        border-bottom: 1px solid #bbbbbb;
+        margin: 8px 0px;
+        color: #000000;
+    }
+
+    #scoreTextQ8Click {
+        font-size: 15px;
+    }
+
+    .WhiteBoxes {
+        height: 93vh;
+    }
+
+    .report_shravan thead th {
+        background: linear-gradient(135deg, #24cae6, #1485c6);
+        color: #fff;
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .report_shravan td,
+    .report_shravan th {
+        padding: 12px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+}
