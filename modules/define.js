@@ -1,5 +1,7 @@
 const Define = (() => {
 
+    const scriptPath = 'modules'
+
     // DEFINE BUTTONS
     const buttons = [
         { qid : 1, text : ['Q-1', 'M-1'], module : 1, landscape : true },
@@ -363,6 +365,21 @@ const Define = (() => {
         questions,
         questionContainer
     };
+
+    (async () => {
+        const loadScript = (src) =>
+            new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = src;
+                s.onload = resolve;
+                s.onerror = reject;
+                document.body.appendChild(s);
+            });
+
+        await loadScript(`${scriptPath}/modules.js`);
+        await loadScript(`${scriptPath}/templates.js`);
+        await loadScript(`${scriptPath}/ui.js`);
+    })();
 
     const get = (key) => store[key];
 

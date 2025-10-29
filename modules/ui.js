@@ -119,7 +119,7 @@ const UI = (() => {
     };
 
     const buttons = (selector="qNumbers") => {
-        try {
+        try {            
             const container = document.getElementById(selector);
             if( !container ) {
                 console.warn("ActUI.buttons: container not found:", selector);
@@ -173,10 +173,7 @@ const UI = (() => {
             console.error( 'Error :: UI.(buttons) -', err );
         }
     };
-
-    document.addEventListener('DOMContentLoaded', () => {
-        buttons();
-    });
+    buttons();    
 
     return { detectMobile, buttons }
 })();
