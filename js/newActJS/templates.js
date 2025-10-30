@@ -143,6 +143,8 @@ const Activity = (() => {
         }
     }
 
+    const globalImagePath = () => assets_url;
+
     const get = (key) => store[key];
 
     const register = (name, mod) => {
@@ -193,6 +195,7 @@ const Activity = (() => {
         getBtnLabels,
         shuffleWords,
         toggleCheckBtn,
+        globalImagePath,
         getOptionLabels,
         shuffleQuestions,
         getSectionLabels,
@@ -929,7 +932,7 @@ const MatchLeftRightToCenter = (() => {
             const returnHtml = (colSeq, item) => {
                 const html = item.text ? 
                     `<div class="centerItems shadow-sm" data-col="${colSeq}" data-id="${item.id}">${item.text}</div>` : 
-                    `<div class="imgBoxes shadow" data-col="${colSeq}" data-id="${item.id}"><img src="${item.img}" alt="" ondragstart="return false";></div>`;
+                    `<div class="imgBoxes shadow" data-col="${colSeq}" data-id="${item.id}"><img src="${Activity.globalImagePath()}${item.img}" alt="" ondragstart="return false";></div>`;
                 // ..
                 return html;
             }
@@ -1437,14 +1440,14 @@ const FillInTheBlanksWithImage = (() => {
             });
             document.querySelector('.wordRows').appendChild(textFrag);
 
-            document.querySelector('.imgBoxFill').innerHTML = `<img src="${data?.content?.hintimage}" ondragstart="return false";/>`;
+            document.querySelector('.imgBoxFill').innerHTML = `<img src="${Activity.globalImagePath()}${data?.content?.hintimage}" ondragstart="return false";/>`;
             
             let blanksBlock = '';
             data?.content?.blanks.forEach((item, i) => {
                 if( item.img ) {
                     blanksBlock += `<div class="col-md-4">
                             <div class="fillBox shadow-sm">
-                            <img class="imgInboxFill" src="${item.img}" alt="feature-${i + 1}" ondragstart="return false;"/>
+                            <img class="imgInboxFill" src="${Activity.globalImagePath()}${item.img}" alt="feature-${i + 1}" ondragstart="return false;"/>
                             <input class="inputsFills form-control" 
                                     type="text" 
                                     placeholder="Fill Answer" 
@@ -2387,40 +2390,49 @@ const Mcq = (() => {
             const headingEl = document.getElementById(heading);
             headingEl.dataset.qid = questionId;
 
-            const activity = Activity.getData( questionId )?.content;
-            const data     = activity?.mcq || [];
-            const lang     = activity?.lang || 'hi';            
+            const activity = Activity.getData( questionId );
+            const content  = activity?.content || {};
+            const lang     = activity?.lang || 'en';
+            const data     = content?.mcq || [];
             
             if (userAnswers.length < data.length) {
                 for (let i = userAnswers.length; i < data.length; i++) userAnswers.push(null);
-            } else if (userAnswers.length > data.length) {            
+            } else if (userAnswers.length > data.length) {
                 userAnswers.length = data.length;
             }
 
+            const text = content?.text || {};
+            const img  = content?.img || {};
 
-            const text = activity?.text || {};
-            const img  = activity?.img || {};
-            // <div class="mcq-text"></div>
-            // <div class="mcq-image"><img ondragstart="return false;"/></div>
-            
-            const mcq_txt_class = ( text != '' && img != '' ) ? 
-                'col-md-12 col-lg-7 col-12 col-sm-12 subHeadTag' : 
-                ( ( text == '' ) ? 'd-none' : 'col' );
-            // ..
-            $('.mcq-text').addClass( mcq_txt_class ).html( text );
+            const mcqContextContainer = $('.mcq-context');
+            mcqContextContainer.html( '' );
 
-            const mcq_img_cont_class = ( text != '' && img != '' ) ? 
-                'col-md-12 col-lg-5 col-sm-12 col-12 text-end' :
-                ( ( img == '' ) ? 'd-none' : 'col text-center' );
-            // ..
-            const mcq_img_width = ( text != '' && img != '' ) ? 
-                '40%' : ( ( img == '' ) ? '' : '20%' );
-            // ..
-            $('.mcq-image').addClass( mcq_img_cont_class )
-                .find( 'img' )
-                .attr( 'src', img )
-                .css('width', mcq_img_width );
-            // ..
+            // heading-text
+            if( Object.keys(text).length > 0 ) {
+                mcqContextContainer.append( '<div class="mcq-text"></div>' );
+                const mcq_txt_class = ( Object.keys(img).length > 0 ) ? 
+                    'col-md-12 col-lg-7 col-12 col-sm-12 subHeadTag' : 
+                    'col';
+                // ..
+                $('.mcq-text').addClass( mcq_txt_class ).html( text.text );
+            }
+
+            // heading-image
+            if( Object.keys(img).length > 0 ) {
+                mcqContextContainer.append( '<div class="mcq-image"><img ondragstart="return false;"/></div>' );              
+
+                const mcq_img_cont_class = ( Object.keys(text).length > 0 ) ? 
+                    'col-md-12 col-lg-5 col-sm-12 col-12 text-end' :
+                    'col text-center';
+                // ..
+                const mcq_img_width = ( Object.keys(text).length > 0 ) ?  '40%' : '20%';
+
+                $('.mcq-image').addClass( mcq_img_cont_class )
+                    .find( 'img' )
+                    .attr( 'src', Activity.globalImagePath()+img.path )
+                    .css('width', mcq_img_width );
+                // ..
+            }            
 
             const container = document.getElementById(heading);
             container.innerHTML = data.map((q, qi) => `<div class="p-2">
