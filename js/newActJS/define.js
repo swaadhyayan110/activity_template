@@ -37,6 +37,7 @@ const Define = (() => {
         },
         {
             id      : 2,
+            lang    : 'hi',
             head    : '2. Vocabulary',
             subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
             content : {
@@ -64,6 +65,7 @@ const Define = (() => {
         },
         {
             id      : 3,
+            lang    : 'hi',
             head    : '3. Vocabulary',
             subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
             content : [
@@ -76,6 +78,7 @@ const Define = (() => {
         },
         {
             id      : 4,
+            lang    : 'en',
             head    : '4. Identify and write the names of the features given in the sketch using the helping words.',
             subhead : 'text..',
             content : {
@@ -111,8 +114,9 @@ const Define = (() => {
             }
         },
         {
-            id : 5,
-            head : '5. नीचे दिए गए प्रश्नों के सही उत्तर टाइप करें: ',
+            id      : 5,
+            lang    : 'en',
+            head    : '5. नीचे दिए गए प्रश्नों के सही उत्तर टाइप करें: ',
             content : {
                 replacement : '#_#',
                 questions   : [
@@ -126,6 +130,7 @@ const Define = (() => {
         },
         {
             id      : 6,
+            lang    : 'hi',
             head    : '6. Jumble letters',
             subhead : 'text..',
             content : [
@@ -135,6 +140,7 @@ const Define = (() => {
         },
         {
             id      : 7,
+            lang    : 'en',
             head    : '7. Jumble words',
             subhead : 'text ...',
             content : [
@@ -150,6 +156,7 @@ const Define = (() => {
         },
         {
             id      : 8,
+            lang    : 'hi',
             head    : '8. शब्दान् श्रुत्वा लिङ्गानुसारं योग्यपेटिकायां स्थापयत',            
             subhead : '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो )',
             content : {
@@ -168,8 +175,8 @@ const Define = (() => {
         },        
         {
             id      : 9,
-            head    : '9. MCQ',
             lang    : 'hi',
+            head    : '9. MCQ',
             subhead : '(After attempting all, your report will be displayed automatically.)',
             content : {
                 text : {
@@ -199,7 +206,8 @@ const Define = (() => {
             }
         },        
         {
-            id : 10,
+            id      : 10,
+            lang    : 'hi',
             content : {
                 headings : {
                     left : 'स्तर',
@@ -267,7 +275,8 @@ const Define = (() => {
             }
         },
         {
-            id : 11,
+            id      : 11,
+            lang    : 'hi',
             content : {
                 desc : "audio description",
                 src  : "https://swaadhyayan.com/data/learningContent/3/Hindi/video/cca24b220e4c0b05f1b84310b587da95.mp4",
@@ -275,9 +284,9 @@ const Define = (() => {
         },
         {
             id      : 12,
+            lang    : 'hi',
             head    : '12. नीचे दिए गए वाक्यों में रिक्त स्थानों की पूर्ति सही शब्द चुनकर कीजिए :-',
-            content : {
-                lang        : 'hi',
+            content : {                
                 replacement : '#_#',
                 questions   : [
                     { text: "(क) सितार के लिए #_# खोखला किया गया।", options: ["लकड़ी","कद्दू","धातु"], answer: "कद्दू" },
@@ -290,9 +299,9 @@ const Define = (() => {
         },
         {
             id      : 13,
+            lang    : 'en',
             head    : '13. उचित सर्वनाम शब्दों पर क्लिक करो - ',
             mode    : 'single',
-            lang    : 'hi',
             content : [
                 { id: 1, label: "(क)", text: "दादा जी के लिए - तू, आप, तुम", answer: "आप" },
                 { id: 2, label: "(ख)", text: "अध्यापक जी के लिए - आप, वह, तुम", answer: "आप" },
@@ -305,9 +314,9 @@ const Define = (() => {
         },
         {
             id      : 14,
-            head    : 'अनोखा जादू का खेल',
-            subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
             lang    : 'hi',
+            head    : 'अनोखा जादू का खेल',
+            subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',            
             content : {
                 questions : [
                     { id: 1, text: 'लेखक', ans: 4, popuptext: 'जो पुस्तकें लिखता है' },
@@ -332,9 +341,9 @@ const Define = (() => {
         },
         {
             id      : 15,
+            lang    : 'en',
             head    : '15. नीचे दिए गए वाक्यों को पढ़कर सही/गलत में से सही उत्तर चुनिएः-',
             subhead : '',
-            lang    : 'hi',
             content : [
                 {
                     question: "सितार बनाने के लिए लुहार ने पेड़ से लकड़ी काटी।",
@@ -357,7 +366,7 @@ const Define = (() => {
                     answer: true
                 }
             ]
-        }, 
+        }
     ];
 
     const questionContainer = '.question-container';
@@ -367,7 +376,7 @@ const Define = (() => {
     const store = {
         head,
         buttons,
-        subHead,        
+        subHead,
         questions,
         questionContainer
     };

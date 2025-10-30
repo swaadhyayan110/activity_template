@@ -103,19 +103,31 @@ const Activity = (() => {
         }
     }
 
-    const getOptionLabels = (lang='en') => {
-        if( lang == 'en' ) {
-            return ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"];
-        } else {
-            return ["क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "ट", "ठ", "ड", "ढ", "ण"];
+    const getBulletLabels = (lang='en', ind, upperCase=true) => {
+        const alphabets = {
+            en: [...'abcdefghijklmnopqrstuvwxyz'],
+            hi: ["क","ख","ग","घ","ङ","च","छ","ज","झ","ञ","ट","ठ","ड","ढ","ण","त","थ","द","ध","न","प","फ","ब","भ","म","य"]
         }
+
+        const characters = alphabets[lang] || alphabets.en;
+        const casedList  = upperCase ? characters.map(ch => ch.toUpperCase()) : characters;
+
+        return (ind !== undefined && casedList[ind] !== undefined) ? casedList[ind] : '-';
     }
 
     const getBtnLabels = (lang='en') => {
         if( lang == 'en' ) {
-            return ['Check Answers', 'Show Answers', 'Try Again'];
+            return { 
+                check : 'Check Answers',
+                show  : 'Show Answers',
+                try   : 'Try Again'
+            };
         } else {
-            return ['उत्तर जाँचिए', 'उत्तर देखो', 'पुनः प्रयास करें'];
+            return { 
+                check : 'उत्तर जाँचिए',
+                show  : 'उत्तर देखो',
+                try   : 'पुनः प्रयास करें'
+            };
         }
     }
 
@@ -196,7 +208,7 @@ const Activity = (() => {
         shuffleWords,
         toggleCheckBtn,
         globalImagePath,
-        getOptionLabels,
+        getBulletLabels,
         shuffleQuestions,
         getSectionLabels,
         getTrueFalseLabels,
@@ -395,9 +407,9 @@ const MatchLeftToRight = (() => {
         try {
             const activity = Activity.getData(questionId) || {};
             const lang     = activity.lang || 'en';
-
-            const columnLabel = Activity.getSectionLabels(lang);
-            const optionLabel = Activity.getOptionLabels(lang).map(label => label.toUpperCase());
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
+            const columnLabel = Activity.getSectionLabels(lang);            
 
             const html = `<div class="question">
                 <div class="container">
@@ -407,8 +419,8 @@ const MatchLeftToRight = (() => {
                     </div>
                     <hr />
                     <div class="forLevelAB">
-                        <div class="levelText">${columnLabel}-${optionLabel[0]}</div>
-                        <div class="levelText">${columnLabel}-${optionLabel[1]}</div>
+                        <div class="levelText">${columnLabel}-${Activity.getBulletLabels(lang, 0)}</div>
+                        <div class="levelText">${columnLabel}-${Activity.getBulletLabels(lang, 1)}</div>
                     </div>
                     <div class="content user-select-none">
                         <div class="instructions">
@@ -429,9 +441,9 @@ const MatchLeftToRight = (() => {
                     </div>
                 </div>
                 <div class="buttons machiNgs">
-                    <button class="submit-btn disable" data-activity="${activityId}">Check Answer</button>
-                    <button class="show-btn">Show Answer</button>
-                    <button class="reset-btn">Reset</button>
+                    <button class="submit-btn disable" data-activity="${activityId}">${buttonLabel.check}</button>
+                    <button class="show-btn">${buttonLabel.show}</button>
+                    <button class="reset-btn">${buttonLabel.try}</button>
                 </div>
                 </div>`;
             // ..
@@ -859,6 +871,9 @@ const MatchLeftRightToCenter = (() => {
         try {
             const data    = Activity.getData( questionId );
             const content = data.content;
+            const lang    = data?.lang || 'en';
+
+            const btnLabels = Activity.getBtnLabels( lang );
 
             activities[activityId]                  = activities[activityId] || {};
             activities[activityId].correctLeft      = content.correctLeft || {};
@@ -877,28 +892,28 @@ const MatchLeftRightToCenter = (() => {
             
             cont.innerHTML = `<div id="${activityId}" class="question">
                             <div class="container">
-                            <div class="qSections">
-                                <div class="${Define.get('head')}"></div>
-                                <p class="${Define.get('subHead')}"></p>
-                            </div>
-                            <hr />
-                            <div class="rowM3 matching-area user-select-none" style="position:relative;">
-                                <div class="colmn1 matchItems1"></div>
-                                <div class="colmn1 matchItems2"></div>
-                                <div class="colmn1 matchItems3"></div>
-                                <svg class="svg2" style="position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:9999;">
-                                <defs>
-                                    <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
-                                    </marker>
-                                </defs>
-                                </svg>
-                            </div>
-                            <div class="buttons machiNgs">
-                                <button class="submit-btn">Check Answer</button>
-                                <button class="show-btn">Show Answer</button>
-                                <button class="reset-btn">Reset</button>
-                            </div>
+                                <div class="qSections">
+                                    <div class="${Define.get('head')}"></div>
+                                    <p class="${Define.get('subHead')}"></p>
+                                </div>
+                                <hr />
+                                <div class="rowM3 matching-area user-select-none" style="position:relative;">
+                                    <div class="colmn1 matchItems1"></div>
+                                    <div class="colmn1 matchItems2"></div>
+                                    <div class="colmn1 matchItems3"></div>
+                                    <svg class="svg2" style="position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:9999;">
+                                    <defs>
+                                        <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                                        </marker>
+                                    </defs>
+                                    </svg>
+                                </div>
+                                <div class="buttons machiNgs">
+                                    <button class="submit-btn">${btnLabels.check}</button>
+                                    <button class="show-btn">${btnLabels.show}</button>
+                                    <button class="reset-btn">${btnLabels.try}</button>
+                                </div>
                             </div>
                         </div>`;
             // ..           
@@ -1214,14 +1229,19 @@ const MatchTopToBottom = (() => {
         }
     };
     
-    const ui = (activityId) => {
+    const ui = (activityId, questionId) => {
         try {
             const container = Define.get('questionContainer');
             const cont = document.querySelector(container);
             if (!cont) {
                 console.error("Container not found:", container);
                 return;
-            }        
+            }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+
+            const buttonLabel = Activity.getBtnLabels(lang);
 
             cont.innerHTML = `<div class="question">
                 <div class="container">
@@ -1245,11 +1265,10 @@ const MatchTopToBottom = (() => {
                     </div>
                     </div>
                 </div>
-
                 <div class="buttons machiNgs">
-                    <button class="submit-btn" data-check>CheckAnswer</button>
-                    <button class="show-btn" data-show>Show Answer</button>
-                    <button class="reset-btn" data-reset>Reset</button>
+                    <button class="submit-btn" data-check>${buttonLabel.check}</button>
+                    <button class="show-btn" data-show>${buttonLabel.show}</button>
+                    <button class="reset-btn" data-reset>${buttonLabel.try}</button>
                 </div>
                 </div>
             </div>`;
@@ -1276,7 +1295,7 @@ const MatchTopToBottom = (() => {
             activities[activityId].correctMatches = correctMatches;
             activities[activityId].userMatches = {};
             
-            ui(activityId);
+            ui(activityId, questionId);
             Activity.setQuestionDetails( questionId );
             
             const area            = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
@@ -1368,7 +1387,7 @@ const FillInTheBlanksWithImage = (() => {
 
     Activity.css('fillUp.css');
 
-    const ui = () => {
+    const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
             const parent    = document.querySelector(container);
@@ -1376,6 +1395,11 @@ const FillInTheBlanksWithImage = (() => {
                 console.error("ui container not found:", container);
                 return;
             }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
             
             parent.innerHTML= `<div class="question user-select-none">
                 <div class="container-fluid">
@@ -1393,9 +1417,9 @@ const FillInTheBlanksWithImage = (() => {
                                 <div id="inputsContainer" class="row"></div>
                             </div>
                             <div class="buttons machiNgs">
-                                <button class="submit-btn" id="checkBtnF">Check Answer</button>
-                                <button class="show-btn" id="showBtnF">Show Answer</button>
-                                <button class="reset-btn" id="resetBtnF">Reset</button>
+                                <button class="submit-btn" id="checkBtnF">${buttonLabel.check}</button>
+                                <button class="show-btn" id="showBtnF">${buttonLabel.show}</button>
+                                <button class="reset-btn" id="resetBtnF">${buttonLabel.try}</button>
                             </div>
                         </div>
                     </div>
@@ -1419,7 +1443,7 @@ const FillInTheBlanksWithImage = (() => {
         try {
             const data = Activity.getData( questionId );
 
-            ui();
+            ui(questionId);
             Activity.setQuestionDetails( questionId );
 
             document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid = data?.id;
@@ -1571,6 +1595,196 @@ const FillInTheBlanksWithImage = (() => {
 	};
 })();
 
+const FillInTheBlanksHindiKb = (() => {
+
+    Activity.css('fillHindi.css');
+
+    const quizContainerID = 'quizContainer';
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container">
+                                        <div class="hindiHeadings ${Define.get('head')}"></div>
+                                        <div id="${quizContainerID}"></div>
+                                    </div>
+                                    <div class="buttons machiNgs">
+                                        <button class="submit-btn check_1">${buttonLabel.check}</button>
+                                        <button class="show-btn">${buttonLabel.show}</button>
+                                        <button class="reset-btn">${buttonLabel.try}</button>
+                                    </div>
+                                    <div class="result" id="result"></div>                                    
+                                </div>`;
+            // ..
+
+            const submitBtn = parent.querySelector( '.submit-btn' );
+            const showBtn   = parent.querySelector( '.show-btn' );
+            const resetBtn  = parent.querySelector( '.reset-btn' );
+
+            if( submitBtn ) submitBtn.addEventListener("click", checkAnswersHandler);
+            if( showBtn ) showBtn.addEventListener("click", showAnswersHandler);
+            if( resetBtn ) resetBtn.addEventListener("click", resetQuizHandler);
+        } catch (e) {
+            console.error( 'FillInTheBlanksHindiKb.ui :', e );
+        }
+    }
+
+    const fillInTheBlanks = (questionId) => {
+        try {
+
+            ui(questionId);
+            Activity.setQuestionDetails( questionId );
+
+            const container = $('#'+quizContainerID)[0];
+
+            container.dataset.qid = questionId;
+            const data        = Activity.getData(questionId)?.content;
+            const replacement = data?.replacement;
+
+            data?.questions.forEach((item, qIndex) => {
+                const div = document.createElement("div");
+                div.classList.add("questionFILL");
+                
+                const parts = item.question.split( replacement );
+
+                const html = [];
+                parts.forEach((part, idx) => {
+                    html.push(part);
+                    if( item.answers[idx] !== undefined ) {
+                        html.push(`<input class="hindiInput inPutHindiNew" data-qindex="${qIndex}" data-blankindex="${idx}" autocomplete="off" type="text" placeholder="उत्तर लिखें">`);
+                    }
+                });
+                div.innerHTML = html.join( '' );
+                container.appendChild( div );
+            });
+
+            $(function () {
+                $.keyboard.layouts["hindiQuiz"] = {
+                    "default": [
+                        "` १ २ ३ ४ ५ ६ ७ ८ ९ ० - = {bksp}",
+                        "{tab} क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण",
+                        "{lock} त थ द ध न प फ ब भ म य र ल व {enter}",
+                        "{shift} श ष स ह क्ष त्र ज्ञ ़ ं ँ ः {shift}",
+                        "{accept} {space} {alt}"
+                    ],
+                    "shift": [
+                        "~ ! @ # ₹ % ^ & * ( ) _ + {bksp}",
+                        "{tab} औ ऐ आ ई ऊ ए ओ ऋ ॠ ऌ ॡ { } |",
+                        "{lock} ा ि ी ु ू ृ े ै ो ौ ् {enter}",
+                        "{shift} ॐ ॰ ऽ ‘ ’ “ ” < > ? {shift}",
+                        "{accept} {space} {alt}"
+                    ],
+                    "alt": [
+                        "` ॑ ॒ ॓ ॔ ॕ ॖ ॗ क़ ख़ ग़ ज़ ड़ ढ़ फ़ {bksp}",
+                        "{tab} ॲ ऑ ऒ अ इ उ ए ओ औ ॠ ॡ { } |",
+                        "{lock} ँ ं ः ऽ ॐ ॰ ॠ ॡ ॲ {enter}",
+                        "{shift} ऍ ॅ ॉ ॊ ॴ ॵ ॶ ॷ ॸ ॹ {shift}",
+                        "{accept} {space} {default}"
+                    ]
+                };
+                
+                $(".hindiInput")
+                .keyboard({
+                    layout: "hindiQuiz",
+                    usePreview: false,
+                    autoAccept: true,
+                })
+                .addTyping({ showTyping: true, delay: 70 })
+                .addCaret({
+                    caretClass: "ui-keyboard-caret",
+                    animate: true,
+                    blinkRate: 600,
+                });
+            });
+
+
+        } catch( e ) {
+            console.error( 'FillInTheBlanksHindiKb.fillIntheBlanks :', e );
+        }
+    }
+
+    const normalizeHindi = (str) => {
+    return (str || "").normalize("NFC").replace(/\s+/g, "").replace(/[।|,.;:'"!?]/g, "").trim().toLowerCase();
+    }
+
+    const checkAnswersHandler = () => {
+        let score = 0;
+        const inputs = document.querySelectorAll(".inPutHindiNew");
+
+        const questionId = $('#'+quizContainerID)[0].dataset.qid;
+        const questions  = Activity.getData(questionId)?.content?.questions;
+
+        inputs.forEach(el => {
+            const qIndex = el.dataset.qindex;
+            const blankIndex = el.dataset.blankindex;
+            const val = normalizeHindi(el.value);
+            const correctAns = normalizeHindi(questions[qIndex].answers[blankIndex]);
+
+            if (val === correctAns) {
+                score++;
+                el.style.borderColor = "limegreen";
+            } else {
+                el.style.borderColor = "red";
+            }
+        });
+
+        const totalBlanks = questions.reduce((acc, q) => acc + q.answers.length, 0);
+
+        const swalIcon = (score === totalBlanks) ? "success" : "info";
+        const swalTitle = (score === totalBlanks) ? "🎉 सभी सही!" : "अरे नहीं...";
+
+        Swal.fire({
+            icon: swalIcon,
+            title: swalTitle,
+            text: `✅ आपका स्कोर: ${score}/${totalBlanks}`,
+            confirmButtonColor: "#00bfff"
+        });
+    }
+
+    const showAnswersHandler = () => {
+        const questionId = $('#'+quizContainerID)[0].dataset.qid;
+        const questions  = Activity.getData(questionId)?.content?.questions;
+
+        $(".check_1").addClass("disable");
+        const inputs = document.querySelectorAll(".inPutHindiNew");
+        inputs.forEach(el => {
+            const qIndex = el.dataset.qindex;
+            const blankIndex = el.dataset.blankindex;
+            el.value = questions[qIndex].answers[blankIndex];
+            el.style.borderColor = "dodgerblue";
+        });
+    }
+
+    const resetQuizHandler = () => {
+        $(".check_1").removeClass("disable")
+        const inputs = document.querySelectorAll(".inPutHindiNew");
+        inputs.forEach(el => {
+            el.value = "";
+            el.style.borderColor = "#444";
+        });
+    }
+
+    return {
+        render: fillInTheBlanks,
+        checkAnswersHandler,
+        showAnswersHandler,
+        resetQuizHandler
+    }
+
+})();
+
 const JumbleLetters = (() => {
     
     let isDragging   = false;
@@ -1595,7 +1809,7 @@ const JumbleLetters = (() => {
         }
     }
 
-    const ui = () => {
+    const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
             const parent = document.querySelector(container);
@@ -1603,6 +1817,10 @@ const JumbleLetters = (() => {
                 console.error("ui container not found:", container);
                 return;
             }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';            
+            const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
                 <div class="container">
@@ -1613,9 +1831,9 @@ const JumbleLetters = (() => {
                     <div class="row" id="letterContainer"></div>
                 </div>
                 <div class="buttons machiNgs">
-                    <button class="submit-btn" id="submit">Check Answer</button>
-                    <button class="show-btn">Show Answer</button>
-                    <button class="reset-btn" data-qid="">Reset</button>
+                    <button class="submit-btn" id="submit">${buttonLabel.check}</button>
+                    <button class="show-btn">${buttonLabel.show}</button>
+                    <button class="reset-btn" data-qid="">${buttonLabel.try}</button>
                 </div>
                 </div>`;
             // ..            
@@ -1636,7 +1854,7 @@ const JumbleLetters = (() => {
 
             const data = Activity.getData( questionId );
 
-            ui();        
+            ui(questionId);        
             Activity.setQuestionDetails( questionId );
 
             document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid  = data?.id;        
@@ -1822,7 +2040,7 @@ const JumbleWords = (() => {
     let isDraggingIdioms   = false;
     let lastDragTimeIdioms = 0;
 
-    const ui = () => {
+    const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
             const parent = document.querySelector(container);
@@ -1831,15 +2049,20 @@ const JumbleWords = (() => {
                 return;
             }
 
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
+
             parent.innerHTML = `<div class="question">
                                     <div class="container">
                                         <div class="${Define.get('head')}"></div>
                                         <p class="${Define.get('subHead')}"></p>
                                         <div id="idiomContainer"></div>
                                         <div class="buttons machiNgs">
-                                            <button class="submit-btn" id="submit7">Check Answer</button>
-                                            <button class="show-btn">Show Answer</button>
-                                            <button class="reset-btn">Reset</button>
+                                            <button class="submit-btn" id="submit7">${buttonLabel.check}</button>
+                                            <button class="show-btn">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
                                         </div>
                                     </div>
                                 </div>`;
@@ -1860,7 +2083,7 @@ const JumbleWords = (() => {
 
     const renderIdioms = (questionId) => {
         try {
-            ui();
+            ui(questionId);
 
             const $container = $(idiomContainer);        
             $container.empty();
@@ -2094,7 +2317,7 @@ const DragAndDrop = (() => {
     const containerId       = 'dragItemsQ1';
     const containerSelector = '#question1';
 
-    const ui = () => {
+    const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
             const parent = document.querySelector(container);
@@ -2102,6 +2325,11 @@ const DragAndDrop = (() => {
                 console.error("ui container not found:", container);
                 return;
             }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                 <div class="container">
@@ -2122,9 +2350,9 @@ const DragAndDrop = (() => {
                                     <div id="question1" class="question-block">
                                         <div class="dragItems" id="${containerId}"></div>                                    
                                         <div class="buttons machiNgs">
-                                            <button class="submit-btn">Check</button>
-                                            <button class="show-btn">Show Answers</button>
-                                            <button class="reset-btn">Reset</button>
+                                            <button class="submit-btn">${buttonLabel.check}</button>
+                                            <button class="show-btn">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
                                         </div>
                                     </div>
                                 </div>`;
@@ -2151,7 +2379,7 @@ const DragAndDrop = (() => {
         try {
             const data = Activity.getData( questionId );
 
-            ui();
+            ui(questionId);
             Activity.setQuestionDetails( questionId );
 
             const dragItems = document.getElementById(containerId);
@@ -2343,7 +2571,7 @@ const Mcq = (() => {
 
     let userAnswers = [];
 
-    const ui = () => {
+    const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
             const parent = document.querySelector(container);
@@ -2351,6 +2579,9 @@ const Mcq = (() => {
                 console.error("ui container not found:", container);
                 return;
             }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -2384,7 +2615,7 @@ const Mcq = (() => {
 
     const renderAllQuestionsMCQ = (questionId) => {
         try {
-            ui();
+            ui(questionId);
             Activity.setQuestionDetails( questionId );
 
             const headingEl = document.getElementById(heading);
@@ -2486,12 +2717,11 @@ const Mcq = (() => {
                     <div class="row mt-2 ml-4">
                         ${q.options.map((opt, oi) => {
                                 const isSelected = userAnswers[qi] === oi ? "selected" : "";
-                                const label = Activity.getOptionLabels(lang).map( l => l.toUpperCase() );
                                 const html = `
                                         <div class="col-md-6 col-sm-12 mb-2">
                                         <label class="option-btn ${isSelected} mcq-type" data-oi="${oi}" data-qi="${qi}" >
                                             <input type="radio" name="question-${qi}" ${userAnswers[qi] === oi ? "checked" : ""}>
-                                            <strong>(${label[oi]})</strong> ${opt}
+                                            <strong>(${Activity.getBulletLabels(lang, oi)})</strong> ${opt}
                                         </label>
                                         </div>
                                     `;
@@ -2650,191 +2880,6 @@ const Mcq = (() => {
         closeFnMCQ,        
         getUserAnswers,
         setUserAnswer
-    }
-
-})();
-
-const FillInTheBlanksHindiKb = (() => {
-
-    Activity.css('fillHindi.css');
-
-    const quizContainerID = 'quizContainer';
-
-    const ui = () => {
-        try {
-            const container = Define.get('questionContainer');
-            const parent = document.querySelector(container);
-            if (!parent) {
-                console.error("ui container not found:", container);
-                return;
-            }
-
-            parent.innerHTML = `<div class="question">
-                                    <div class="container">
-                                        <div class="hindiHeadings ${Define.get('head')}"></div>
-                                        <div id="${quizContainerID}"></div>
-                                    </div>
-                                    <div class="buttons machiNgs">
-                                        <button class="submit-btn check_1">Submit</button>
-                                        <button class="show-btn">Show Answer</button>
-                                        <button class="reset-btn">Reset</button>
-                                    </div>
-                                    <div class="result" id="result"></div>                                    
-                                </div>`;
-            // ..
-
-            const submitBtn = parent.querySelector( '.submit-btn' );
-            const showBtn   = parent.querySelector( '.show-btn' );
-            const resetBtn  = parent.querySelector( '.reset-btn' );
-
-            if( submitBtn ) submitBtn.addEventListener("click", checkAnswersHandler);
-            if( showBtn ) showBtn.addEventListener("click", showAnswersHandler);
-            if( resetBtn ) resetBtn.addEventListener("click", resetQuizHandler);
-        } catch (e) {
-            console.error( 'FillInTheBlanksHindiKb.ui :', e );
-        }
-    }
-
-    const fillInTheBlanks = (questionId) => {
-        try {
-
-            ui();
-            Activity.setQuestionDetails( questionId );
-
-            const container = $('#'+quizContainerID)[0];
-
-            container.dataset.qid = questionId;
-            const data        = Activity.getData(questionId)?.content;
-            const replacement = data?.replacement;
-
-            data?.questions.forEach((item, qIndex) => {
-                const div = document.createElement("div");
-                div.classList.add("questionFILL");
-                
-                const parts = item.question.split( replacement );
-
-                const html = [];
-                parts.forEach((part, idx) => {
-                    html.push(part);
-                    if( item.answers[idx] !== undefined ) {
-                        html.push(`<input class="hindiInput inPutHindiNew" data-qindex="${qIndex}" data-blankindex="${idx}" autocomplete="off" type="text" placeholder="उत्तर लिखें">`);
-                    }
-                });
-                div.innerHTML = html.join( '' );
-                container.appendChild( div );
-            });
-
-            $(function () {
-                $.keyboard.layouts["hindiQuiz"] = {
-                    "default": [
-                        "` १ २ ३ ४ ५ ६ ७ ८ ९ ० - = {bksp}",
-                        "{tab} क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण",
-                        "{lock} त थ द ध न प फ ब भ म य र ल व {enter}",
-                        "{shift} श ष स ह क्ष त्र ज्ञ ़ ं ँ ः {shift}",
-                        "{accept} {space} {alt}"
-                    ],
-                    "shift": [
-                        "~ ! @ # ₹ % ^ & * ( ) _ + {bksp}",
-                        "{tab} औ ऐ आ ई ऊ ए ओ ऋ ॠ ऌ ॡ { } |",
-                        "{lock} ा ि ी ु ू ृ े ै ो ौ ् {enter}",
-                        "{shift} ॐ ॰ ऽ ‘ ’ “ ” < > ? {shift}",
-                        "{accept} {space} {alt}"
-                    ],
-                    "alt": [
-                        "` ॑ ॒ ॓ ॔ ॕ ॖ ॗ क़ ख़ ग़ ज़ ड़ ढ़ फ़ {bksp}",
-                        "{tab} ॲ ऑ ऒ अ इ उ ए ओ औ ॠ ॡ { } |",
-                        "{lock} ँ ं ः ऽ ॐ ॰ ॠ ॡ ॲ {enter}",
-                        "{shift} ऍ ॅ ॉ ॊ ॴ ॵ ॶ ॷ ॸ ॹ {shift}",
-                        "{accept} {space} {default}"
-                    ]
-                };
-                
-                $(".hindiInput")
-                .keyboard({
-                    layout: "hindiQuiz",
-                    usePreview: false,
-                    autoAccept: true,
-                })
-                .addTyping({ showTyping: true, delay: 70 })
-                .addCaret({
-                    caretClass: "ui-keyboard-caret",
-                    animate: true,
-                    blinkRate: 600,
-                });
-            });
-
-
-        } catch( e ) {
-            console.error( 'FillInTheBlanksHindiKb.fillIntheBlanks :', e );
-        }
-    }
-
-    const normalizeHindi = (str) => {
-    return (str || "").normalize("NFC").replace(/\s+/g, "").replace(/[।|,.;:'"!?]/g, "").trim().toLowerCase();
-    }
-
-    const checkAnswersHandler = () => {
-        let score = 0;
-        const inputs = document.querySelectorAll(".inPutHindiNew");
-
-        const questionId = $('#'+quizContainerID)[0].dataset.qid;
-        const questions  = Activity.getData(questionId)?.content?.questions;
-
-        inputs.forEach(el => {
-            const qIndex = el.dataset.qindex;
-            const blankIndex = el.dataset.blankindex;
-            const val = normalizeHindi(el.value);
-            const correctAns = normalizeHindi(questions[qIndex].answers[blankIndex]);
-
-            if (val === correctAns) {
-                score++;
-                el.style.borderColor = "limegreen";
-            } else {
-                el.style.borderColor = "red";
-            }
-        });
-
-        const totalBlanks = questions.reduce((acc, q) => acc + q.answers.length, 0);
-
-        const swalIcon = (score === totalBlanks) ? "success" : "info";
-        const swalTitle = (score === totalBlanks) ? "🎉 सभी सही!" : "अरे नहीं...";
-
-        Swal.fire({
-            icon: swalIcon,
-            title: swalTitle,
-            text: `✅ आपका स्कोर: ${score}/${totalBlanks}`,
-            confirmButtonColor: "#00bfff"
-        });
-    }
-
-    const showAnswersHandler = () => {
-        const questionId = $('#'+quizContainerID)[0].dataset.qid;
-        const questions  = Activity.getData(questionId)?.content?.questions;
-
-        $(".check_1").addClass("disable");
-        const inputs = document.querySelectorAll(".inPutHindiNew");
-        inputs.forEach(el => {
-            const qIndex = el.dataset.qindex;
-            const blankIndex = el.dataset.blankindex;
-            el.value = questions[qIndex].answers[blankIndex];
-            el.style.borderColor = "dodgerblue";
-        });
-    }
-
-    const resetQuizHandler = () => {
-        $(".check_1").removeClass("disable")
-        const inputs = document.querySelectorAll(".inPutHindiNew");
-        inputs.forEach(el => {
-            el.value = "";
-            el.style.borderColor = "#444";
-        });
-    }
-
-    return {
-        render: fillInTheBlanks,
-        checkAnswersHandler,
-        showAnswersHandler,
-        resetQuizHandler
     }
 
 })();
@@ -3775,12 +3820,9 @@ const DropDown = (() => {
                 return;
             }
 
-            const lang  = Activity.getData(questionId)?.content?.lang;
-            const hindi = lang == 'hi' ? true : false;
-
-            const btns = hindi
-                ? ['उत्तर जाँचिए', 'सही उत्तर देखें', 'पुनः प्रयास करें']
-                : ['Check Answers', 'Show Answers', 'Try Again'];
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -3790,9 +3832,9 @@ const DropDown = (() => {
                                         <div class="${quesClass}"></div>
                                     </div>
                                     <div class="buttons machiNgs">
-                                        <button class="submit-btn" id="checkBtnDD_quiz1">${btns[0]}</button>
-                                        <button class="show-btn">${btns[1]}</button>
-                                        <button class="reset-btn">${btns[2]}</button>
+                                        <button class="submit-btn" id="checkBtnDD_quiz1">${buttonLabel.check}</button>
+                                        <button class="show-btn">${buttonLabel.show}</button>
+                                        <button class="reset-btn">${buttonLabel.try}</button>
                                     </div>
                                 </div>
                                 <div class="reportTBl" id="commonReport">
@@ -3825,7 +3867,7 @@ const DropDown = (() => {
     }
 
     const renderQuestions = (questionId) => {
-        ui();
+        ui(questionId);
         Activity.setQuestionDetails( questionId );        
 
         const container     = document.querySelector(`.${quesClass}`);
@@ -4060,11 +4102,7 @@ const Circle = (() => {
             
             const activity = Activity.getData(questionId) || {};
             const lang     = activity.lang || 'en';
-            const hindi    = (lang === 'hi');
-
-            const btns = hindi
-                ? ['उत्तर जाँचिए', 'सही उत्तर देखें', 'पुनः प्रयास करें']
-                : ['Check Answers', 'Show Answers', 'Try Again'];
+            const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container" id="${dataKey}">
@@ -4073,9 +4111,9 @@ const Circle = (() => {
                                         </div>
                                         <div id="datClikToCir"></div>
                                         <div class="buttons machiNgs">
-                                            <button class="submit-btn">${btns[0]}</button>
-                                            <button class="show-btn">${btns[1]}</button>
-                                            <button class="reset-btn">${btns[2]}</button>
+                                            <button class="submit-btn">${buttonLabel.check}</button>
+                                            <button class="show-btn">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -4374,12 +4412,8 @@ const ShravanKaushal = (() => {
             }
 
             const activity = Activity.getData(questionId) || {};
-            const lang = activity.lang || 'en';
-            const hindi = (lang === 'hi');
-
-            const btns = hindi
-                ? ['उत्तर जाँचिए', 'पुनः प्रयास करें']
-                : ['Check Answers', 'Try Again'];
+            const lang     = activity.lang || 'en';
+            const buttonLabel = Activity.getBtnLabels(lang);           
 
             parent.innerHTML = `<div class="question">
                                     <audio id="audioPlayer" preload="auto"></audio>
@@ -4400,11 +4434,10 @@ const ShravanKaushal = (() => {
                                                     <button class="buttShar" id="replayBtns">Replay</button>
                                                 </div>
                                                 <div class="buttons machiNgs">
-                                                    <button class="submit-btn">${btns[0]}</button>
-                                                    <button class="reset-btn">${btns[1]}</button>
+                                                    <button class="submit-btn">${buttonLabel.check}</button>
+                                                    <button class="reset-btn">${buttonLabel.try}</button>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>                                    
                                 </div>
@@ -4693,8 +4726,7 @@ const TrueAndFalse = (() => {
 
             const activity = Activity.getData(questionId) || {};
             const lang     = activity.lang || 'en';
-
-            const btns = Activity.getBtnLabels( lang );
+            const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -4708,9 +4740,9 @@ const TrueAndFalse = (() => {
                                         </div>
                                     </div>
                                     <div class="buttons machiNgs">
-                                        <button class="submit-btn disable" id="submit4">${btns[0]}</button>
-                                        <button class="show-btn">${btns[1]}</button>
-                                        <button class="reset-btn">${btns[2]}</button>
+                                        <button class="submit-btn disable" id="submit4">${buttonLabel.check}</button>
+                                        <button class="show-btn">${buttonLabel.show}</button>
+                                        <button class="reset-btn">${buttonLabel.try}</button>
                                     </div>
                                 </div>
                                 <div id="popupDialogAns">
@@ -4753,8 +4785,7 @@ const TrueAndFalse = (() => {
 
         userAns = new Array(dataSet.length).fill(null);
 
-        const btnLabels    = Activity.getTrueFalseLabels(lang);
-        const optionLabels = Activity.getOptionLabels(lang);        
+        const btnLabels  = Activity.getTrueFalseLabels(lang);        
         
         const rowDiv     = document.getElementById(inputDataId);
         rowDiv.innerHTML = "";
@@ -4762,7 +4793,7 @@ const TrueAndFalse = (() => {
         dataSet.forEach( (item, ind) => {
             const html = `
                 <div class="row m-0 mb-3 question-block">
-                    <div style="width:40px">(${optionLabels[ind]})</div>
+                    <div style="width:40px">(${Activity.getBulletLabels(lang, ind)})</div>
                     <div class="col p-0">
                         <div class="row m-0">
                             <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${item.question}</div>
@@ -4858,9 +4889,7 @@ const TrueAndFalse = (() => {
                                     </thead>
                                 <tbody>`;
         // ..
-        table.push( tableBodyF );
-
-        const optionLabels = Activity.getOptionLabels( lang );
+        table.push( tableBodyF );        
 
         questions.forEach((item, i) => {
             const userAnswer = userAns[i];
@@ -4880,10 +4909,10 @@ const TrueAndFalse = (() => {
 
             const tempUserAnswer    = userAnswer == 'true' ? textLabels[0] : ( userAnswer == 'false' ? textLabels[1] : userAnswerText );
             const tempCorrectAnswer = correctAnswerText == true ? textLabels[0] : textLabels[1];
-
+            
             const body = `
                 <tr clsss='trData'>
-                    <th>(${optionLabels[i]})</th>
+                    <th>(${Activity.getBulletLabels( lang, ind )})</th>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${tempUserAnswer}</td>
                     <td class="text-success">${tempCorrectAnswer}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
