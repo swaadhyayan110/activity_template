@@ -2358,7 +2358,7 @@ const Mcq = (() => {
                                             <span class="m-0 ${Define.get('head')}"></span> 
                                             <span class="colorsDiff ${Define.get('subHead')}"></span>                                        
                                         </div>
-                                        <div class="mcq-context d-flex p-1"></div>
+                                        <div class="mcq-context p-1"></div>
                                         <div id="${heading}"></div>
                                         <div id="popupDialogAns">
                                             <div class="baseMod">
@@ -2405,34 +2405,77 @@ const Mcq = (() => {
             const img  = content?.img || {};
 
             const mcqContextContainer = $('.mcq-context');
-            mcqContextContainer.html( '' );
+            mcqContextContainer.empty();
+            
+            const hasText = text && Object.keys(text).length > 0;
+            const hasImg  = img && Object.keys(img).length > 0;
+            
+            if (hasText || hasImg) {
+                const textDiv = $('<div class="mcq-text"></div>');
+                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
+                
+                mcqContextContainer.append(textDiv, imgDiv).addClass('d-flex');
 
-            // heading-text
-            if( Object.keys(text).length > 0 ) {
-                mcqContextContainer.append( '<div class="mcq-text"></div>' );
-                const mcq_txt_class = ( Object.keys(img).length > 0 ) ? 
-                    'col-md-12 col-lg-7 col-12 col-sm-12 subHeadTag' : 
-                    'col';
-                // ..
-                $('.mcq-text').addClass( mcq_txt_class ).html( text.text );
-            }
+                const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'left';
+                const side = String(preferredSide).toLowerCase();
 
-            // heading-image
-            if( Object.keys(img).length > 0 ) {
-                mcqContextContainer.append( '<div class="mcq-image"><img ondragstart="return false;"/></div>' );              
+                const commonClassText = 'col-md-12 col-lg-7 col-12 col-sm-12';
+                const commonClassImg  = 'col-md-12 col-lg-5 col-sm-12 col-12';
 
-                const mcq_img_cont_class = ( Object.keys(text).length > 0 ) ? 
-                    'col-md-12 col-lg-5 col-sm-12 col-12 text-end' :
-                    'col text-center';
-                // ..
-                const mcq_img_width = ( Object.keys(text).length > 0 ) ?  '40%' : '20%';
+                if (hasText) {
+                    const mcq_txt_class = hasImg 
+                        ? `${commonClassText} subHeadTag`
+                        : 'col';
+                    textDiv.addClass(mcq_txt_class).html(text.text || '');
+                }
 
-                $('.mcq-image').addClass( mcq_img_cont_class )
-                    .find( 'img' )
-                    .attr( 'src', Activity.globalImagePath()+img.path )
-                    .css('width', mcq_img_width );
-                // ..
-            }            
+                if (hasImg) {
+                    const mcq_img_cont_class = hasText 
+                        ? commonClassImg
+                        : 'col';
+                    const mcq_img_width = hasText ? '40%' : '20%';
+
+                    imgDiv.addClass(mcq_img_cont_class)
+                        .find('img')
+                        .attr('src', Activity.globalImagePath() + img.path)
+                        .css('width', mcq_img_width);
+                }                               
+
+                if( side === 'left' || side === 'right' ) {
+                    mcqContextContainer.css('flex-direction', 'row');
+                    if( side === 'left' ) {                        
+                        textDiv.css('order', 1);
+                        imgDiv.css('order', 2);
+
+                        imgDiv.removeClass( 'text-start' ).addClass( 'text-end' );
+                        textDiv.removeClass( 'text-end' ).addClass( 'text-start' );
+
+                    } else {
+                        textDiv.css('order', 2);
+                        imgDiv.css('order', 1);
+
+                        imgDiv.removeClass( 'text-end' ).addClass( 'text-start' );
+                        textDiv.removeClass( 'text-start' ).addClass( 'text-end' );
+                    }
+                } else if (side === 'top' || side === 'bottom') {
+                    mcqContextContainer.css('flex-direction', 'column');
+                    if (side === 'top') {
+                        textDiv.css('order', 1);
+                        imgDiv.css('order', 2);                        
+                    } else {
+                        textDiv.css('order', 2);
+                        imgDiv.css('order', 1);                        
+                    }
+
+                    textDiv.removeClass( commonClassText ).addClass( 'col my-1' );
+                    imgDiv.removeClass( commonClassImg ).addClass( 'col my-1 text-center' ).find( 'img' ).css( 'width', '20%' );
+                } else {
+                    mcqContextContainer.css('flex-direction', 'row');
+                    textDiv.css('order', 1);
+                    imgDiv.css('order', 2);
+                }               
+                
+            }                    
 
             const container = document.getElementById(heading);
             container.innerHTML = data.map((q, qi) => `<div class="p-2">
