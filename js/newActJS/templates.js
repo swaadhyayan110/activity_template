@@ -2355,6 +2355,7 @@ const Mcq = (() => {
                                             <span class="m-0 ${Define.get('head')}"></span> 
                                             <span class="colorsDiff ${Define.get('subHead')}"></span>                                        
                                         </div>
+                                        <div class="mcq-context d-flex p-1"></div>
                                         <div id="${heading}"></div>
                                         <div id="popupDialogAns">
                                             <div class="baseMod">
@@ -2386,8 +2387,9 @@ const Mcq = (() => {
             const headingEl = document.getElementById(heading);
             headingEl.dataset.qid = questionId;
 
-            const data = Activity.getData( questionId )?.content?.mcq || [];
-            const lang = Activity.getData( questionId )?.content?.lang || 'hi';
+            const activity = Activity.getData( questionId )?.content;
+            const data     = activity?.mcq || [];
+            const lang     = activity?.lang || 'hi';            
             
             if (userAnswers.length < data.length) {
                 for (let i = userAnswers.length; i < data.length; i++) userAnswers.push(null);
@@ -2395,21 +2397,46 @@ const Mcq = (() => {
                 userAnswers.length = data.length;
             }
 
+
+            const text = activity?.text || {};
+            const img  = activity?.img || {};
+            // <div class="mcq-text"></div>
+            // <div class="mcq-image"><img ondragstart="return false;"/></div>
+            
+            const mcq_txt_class = ( text != '' && img != '' ) ? 
+                'col-md-12 col-lg-7 col-12 col-sm-12 subHeadTag' : 
+                ( ( text == '' ) ? 'd-none' : 'col' );
+            // ..
+            $('.mcq-text').addClass( mcq_txt_class ).html( text );
+
+            const mcq_img_cont_class = ( text != '' && img != '' ) ? 
+                'col-md-12 col-lg-5 col-sm-12 col-12 text-end' :
+                ( ( img == '' ) ? 'd-none' : 'col text-center' );
+            // ..
+            const mcq_img_width = ( text != '' && img != '' ) ? 
+                '40%' : ( ( img == '' ) ? '' : '20%' );
+            // ..
+            $('.mcq-image').addClass( mcq_img_cont_class )
+                .find( 'img' )
+                .attr( 'src', img )
+                .css('width', mcq_img_width );
+            // ..
+
             const container = document.getElementById(heading);
             container.innerHTML = data.map((q, qi) => `<div class="p-2">
                     <div class="row m-0" style="font-size:18px">
                         <div style="width:30px" class="questionHeadingMCQ"><strong>${qi + 1}.</strong></div>
                         <div class="col questionHeadingMCQ">${q.question}</div>
-                    </div>
+                    </div>                    
                     <div class="row mt-2 ml-4">
                         ${q.options.map((opt, oi) => {
                                 const isSelected = userAnswers[qi] === oi ? "selected" : "";
-                                const lable = lang == "hi" ? ['(क)', '(ख)', '(ग)', '(घ)'] : ["A.", 'B.', 'C.', 'D.']
+                                const label = Activity.getOptionLabels(lang).map( l => l.toUpperCase() );
                                 const html = `
                                         <div class="col-md-6 col-sm-12 mb-2">
                                         <label class="option-btn ${isSelected} mcq-type" data-oi="${oi}" data-qi="${qi}" >
                                             <input type="radio" name="question-${qi}" ${userAnswers[qi] === oi ? "checked" : ""}>
-                                            <strong>${lable[oi]}</strong> ${opt}
+                                            <strong>(${label[oi]})</strong> ${opt}
                                         </label>
                                         </div>
                                     `;

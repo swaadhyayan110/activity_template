@@ -42,20 +42,20 @@ const Define = (() => {
             content : {
                 col1: [
                     { id: 1, img: "./img/1.png" },
-                    { id: 2, img: "./img/2.png" },
+                    { id: 2, text: "./img/2.png" },
                     { id: 3, img: "./img/3.png" },
                 ],
                 col2: [
                     { id: 1, text: "जादू दिखाना" },
                     { id: 2, text: "पत्र बाँटना" },
-                    { id: 3, text: "वकालत करना" },                    
+                    { id: 3, img: "./img/2.png" },
                     { id: 4, text: "रखवाली करना" },
                     { id: 5, text: "पढ़ाना" },
                     { id: 6, text: "खेती करना" },
                 ],
                 col3: [
-                    { id: 1, img: "./img/4.png" },                    
-                    { id: 2, img: "./img/5.png" },
+                    { id: 1, img: "./img/4.png" },
+                    { id: 2, text: "./img/5.png" },
                     { id: 3, img: "./img/6.png" },
                 ],
                 correctLeft: { 1: 5, 2: 4, 3: 3 },
@@ -172,6 +172,14 @@ const Define = (() => {
             subhead : '(After attempting all, your report will be displayed automatically.)',
             content : {
                 lang : 'hi',
+                text : {
+                    text : 'वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
+                    side : 'left'
+                },
+                img  : {
+                    path : './img/1.png',
+                    side : 'left'
+                },
                 mcq  : [
                     {
                         question: "खेल के दौरान झगड़ा करना-",
