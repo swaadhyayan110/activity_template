@@ -10,7 +10,7 @@ const Modules = (() => {
         { id : 6, module  : 'JumbleLetters' },
         { id : 7, module  : 'JumbleWords' },
         { id : 8, module  : 'DragAndDrop' },
-        { id : 9, module  : 'Mcq' },
+        { id : 9, module  : 'Mcq_PathKaSaar' },
         { id : 10, module : 'Adaptiv' },
         { id : 11, module : 'Audio' },
         { id : 12, module : 'DropDown' },

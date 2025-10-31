@@ -2563,7 +2563,7 @@ const DragAndDrop = (() => {
 
 })();
 
-const Mcq = (() => {
+const Mcq_PathKaSaar = (() => {
 
     Activity.css('mcq.css');
 
