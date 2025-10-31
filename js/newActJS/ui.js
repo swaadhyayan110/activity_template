@@ -100,8 +100,6 @@ const UI = (() => {
         const quesEle = document.getElementById(selector);        
         if( quesEle ) {
             quesEle.classList.add("activeBtns");
-        } else {
-            console.warn("No element found with id:", selector);            
         }
         
         const moduleName = Activity.module(moduleId);        
