@@ -1,4 +1,4 @@
-const Define = (() => {    
+const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = [
@@ -16,7 +16,8 @@ const Define = (() => {
         { qid : 12, text : ['DD'], module : 12 },
         { qid : 13, text : ['Circle'], module : 13 },
         { qid : 14, text : ['श्रवण कौशल'], module : 14 },
-        { qid : 15, text : ['Q-9', 'T&F'], module : 15 },
+        { qid : 15, text : ['Q-15', 'T&F'], module : 15 },
+        { qid : 16, text : ['Q-16', 'DND-Multi'], module : 16 }
     ];
 
     // DEFINE QUESTIONS
@@ -177,7 +178,6 @@ const Define = (() => {
             id      : 9,
             lang    : 'hi',
             head    : '9. MCQ',
-            subhead : '(After attempting all, your report will be displayed automatically.)',
             content : {
                 text : {
                     text : 'वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
@@ -366,6 +366,22 @@ const Define = (() => {
                     answer: true
                 }
             ]
+        },
+        {
+            id      : 16,
+            lang    : 'hi',
+            head    : '16. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',
+            subhead : '',
+            content : {
+                replacement : '#_#',
+                questions   : [
+                    { text: `सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।`, answer: ["पंख", "नाचने"] },
+                    { text: `सितार के सुर #_# में गूँजने लगे।`, answer: ["जंगल"] },
+                    { text: `सितार पर खाली जगह पर #_# की गई।`, answer: ["नक्काषी"] },
+                    { text: `सितार बनाने के लिए तारों को #_# से बाँधा गया।`, answer: ["खूँटी"] },
+                    { text: `कोयल ने सितार को बड़े ही #_# से पकड़ा।`, answer: ["जतन"] }
+                ]
+            }
         }
     ];
 

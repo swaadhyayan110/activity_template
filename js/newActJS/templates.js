@@ -1716,7 +1716,7 @@ const FillInTheBlanksHindiKb = (() => {
     }
 
     const normalizeHindi = (str) => {
-    return (str || "").normalize("NFC").replace(/\s+/g, "").replace(/[।|,.;:'"!?]/g, "").trim().toLowerCase();
+        return (str || "").normalize("NFC").replace(/\s+/g, "").replace(/[।|,.;:'"!?]/g, "").trim().toLowerCase();
     }
 
     const checkAnswersHandler = () => {
@@ -2077,7 +2077,7 @@ const JumbleWords = (() => {
 			if (resetBtn) resetBtn.addEventListener("click", resetWord);
            
 		} catch (e) {
-            console.error( 'JumbleWords.ui :', err );
+            console.error( 'JumbleWords.ui :', e );
         }
     }
 
@@ -2411,7 +2411,7 @@ const DragAndDrop = (() => {
             makeDraggable(`#${containerId} .wordDrag`);
             initDroppable(containerSelector);
         } catch (e) {
-            console.error( 'DragAndDrop.renderDataDND :', err );
+            console.error( 'DragAndDrop.renderDataDND :', e );
         }
     }
 
@@ -2447,7 +2447,7 @@ const DragAndDrop = (() => {
                 });
             });
         } catch (e) {
-            console.error( 'DragAndDrop.makeDraggable :', err );
+            console.error( 'DragAndDrop.makeDraggable :', e );
         }
     }
 
@@ -2463,7 +2463,7 @@ const DragAndDrop = (() => {
                 }
             });
         } catch (e) {
-            console.error( 'DragAndDrop.initDroppable :', err );
+            console.error( 'DragAndDrop.initDroppable :', e );
         }
     }
 
@@ -2490,7 +2490,7 @@ const DragAndDrop = (() => {
                 confirmButtonText: "OK"
             });
         } catch (e) {
-            console.error( 'DragAndDrop.checkAnswersDnd :', err );
+            console.error( 'DragAndDrop.checkAnswersDnd :', e );
         }
     }
 
@@ -2513,7 +2513,7 @@ const DragAndDrop = (() => {
                 $(`${containerSelector} .dropSect[data-accept='${item.ans}']`).append($clone);
             });
         } catch (e) {
-            console.error( 'DragAndDrop.showAnswersDnd :', err );
+            console.error( 'DragAndDrop.showAnswersDnd :', e );
         }
     }
 
@@ -2526,7 +2526,7 @@ const DragAndDrop = (() => {
             $(`${containerSelector} .dropSect`).empty();
             $(`${containerSelector} .wordDrag`);
         } catch (e) {
-            console.error( 'DragAndDrop.resetActivityDnd :', err );
+            console.error( 'DragAndDrop.resetActivityDnd :', e );
         }
     }
 
@@ -2547,7 +2547,7 @@ const DragAndDrop = (() => {
                 audio.pause();
             }
         } catch (e) {
-            console.error( 'DragAndDrop.toggleAudio :', err );
+            console.error( 'DragAndDrop.toggleAudio :', e );
         }
     }
     
@@ -2640,6 +2640,8 @@ const Mcq_PathKaSaar = (() => {
             
             const hasText = text && Object.keys(text).length > 0;
             const hasImg  = img && Object.keys(img).length > 0;
+
+            if ( !hasText && !hasImg ) mcqContextContainer.remove();
             
             if (hasText || hasImg) {
                 const textDiv = $('<div class="mcq-text"></div>');
@@ -2656,7 +2658,7 @@ const Mcq_PathKaSaar = (() => {
                 if (hasText) {
                     mcqContextContainer.append(textDiv);
                     const mcq_txt_class = hasImg 
-                        ? `${commonClassText} subHeadTag`
+                        ? `${commonClassText}`
                         : 'col';
                     textDiv.addClass(mcq_txt_class).html(text.text || '');
                 }
@@ -4944,6 +4946,225 @@ const TrueAndFalse = (() => {
     return {
         render: renderQues        
     };
+
+})();
+
+const DragAndDropMulti = (() => {
+
+    Activity.css('dnd.css');
+
+    const containerId       = 'dragItemsMulti';
+    const containerSelector = '#question1';
+
+    let DragEnabled = false;
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container">
+                                        <div class="rowWithAudios border-bottom">
+                                            <div class="font18 fontBold ${Define.get('head')}"></div>
+                                        </div>
+                                        <div class="question-block">
+                                            <div class="dragItems drag-container2" id="${containerId}"></div>
+                                            <div class="drag-question-box2 mt-3"></div>
+                                        </div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn disable" id="submit2">${buttonLabel.check}</button>
+                                            <button class="show-btn" id="showAns2">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+			
+			const submitBtn = parent.querySelector( '.submit-btn' );
+			const showBtn   = parent.querySelector( '.show-btn' );
+			const resetBtn  = parent.querySelector( '.reset-btn' );
+
+			// if (submitBtn) submitBtn.addEventListener("click", showPopUp);
+			// if (showBtn) showBtn.addEventListener("click", showDropAnswers);
+			// if (resetBtn) resetBtn.addEventListener("click", resetDropBox);
+		} catch (e) {
+            console.error( 'DragAndDrop.ui :', e );
+        }
+    }
+    
+    const renderDataDND = (questionId) => {
+        try {
+            ui(questionId);
+            Activity.setQuestionDetails( questionId );
+
+            const data = Activity.getData( questionId );
+
+            const dragItems = document.getElementById(containerId);
+            dragItems.dataset.qid = questionId;
+            
+            const head  = [];
+
+            const questions = Activity.shuffleQuestions( data?.content?.questions );
+            const options   = questions?.flatMap( obj => obj.answer ) || [];
+            options.forEach((item, ind) => {                
+                const html = `<div class="drag_${ind} wordDrag font17" data-ans="${item}">
+                                ${item}
+                            </div>`;
+                // ..
+                head.push( html );
+            });
+            dragItems.innerHTML = head.join('');            
+            
+            const opt     = [];            
+            options.forEach((item) => {
+                const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
+                opt.push( html );
+            });
+            dragItems.insertAdjacentHTML( "afterbegin", opt.join('') );
+            
+            makeDraggable(`.wordDrag`);            
+            // initDroppable(containerSelector);
+        } catch (e) {
+            console.error( 'DragAndDrop.renderDataDND :', e );
+        }
+    }
+
+    const makeDraggable = (selector) => {
+        try {
+            $(selector).draggable({
+                revert: true,
+                containment: '.container-sub',
+                start: function () {
+                    if (!DragEnabled) {
+                        return false;
+                    }
+                }
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.makeDraggable :', e );
+        }
+    }
+
+    const initDroppable = () => {
+        try {
+            $(`${containerSelector} .dropSect`).droppable({
+                accept: ".wordDrag",
+                drop: function (event, ui) {
+                    const $dragged = ui.draggable;
+                    $dragged.removeClass("ui-draggable ui-draggable-handle dragging");
+                    $dragged.css({ top: "auto", left: "auto", position: "relative" });
+                    $(this).append($dragged);
+                }
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.initDroppable :', e );
+        }
+    }
+
+    const checkAnswersDnd = () => {
+        try {
+            let correct = 0;
+            let total = $(`${containerSelector} .dropSect`).length;
+
+            $(`${containerSelector} .dropSect`).each(function () {
+                const correctAnswer = $(this).data("accept");
+                const droppedItem = $(this).children(".wordDrag").first();
+                if (droppedItem.length && droppedItem.data("ans") === correctAnswer) {
+                    droppedItem.css("background", "#c8e6c9");
+                    correct++;
+                } else if (droppedItem.length) {
+                    droppedItem.css("background", "#ffcdd2");
+                }
+            });
+
+            Swal.fire({
+                title: correct === total ? "All Correct!" : "Check your answers",
+                text: `You got ${correct} out of ${total} correct!`,
+                icon: correct === total ? "success" : "info",
+                confirmButtonText: "OK"
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.checkAnswersDnd :', e );
+        }
+    }
+
+    const showAnswersDnd = () => {
+        try {
+            Activity.toggleCheckBtn( '.submit-btn', true );
+
+            const dragItems  = document.getElementById(containerId);
+            const questionId = dragItems.dataset.qid;
+
+            renderDataDND(dragItems.dataset.qid);
+
+            $(`${containerSelector} .dropSect`).empty();
+            const data = Activity.getData( questionId )?.content?.options;
+            
+            data.forEach((item) => {
+                const $clone = $(`<div class="wordDrag">${item.text}</div>`)
+                    .css({ background: "#c8e6c9", position: "relative" })
+                    .attr("data-ans", item.ans);
+                $(`${containerSelector} .dropSect[data-accept='${item.ans}']`).append($clone);
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.showAnswersDnd :', e );
+        }
+    }
+
+    const resetActivityDnd = () => {
+        try {
+            Activity.toggleCheckBtn( '.submit-btn', false );
+
+            const dragItems = document.getElementById(containerId);
+            renderDataDND(dragItems.dataset.qid);
+            $(`${containerSelector} .dropSect`).empty();
+            $(`${containerSelector} .wordDrag`);
+        } catch (e) {
+            console.error( 'DragAndDrop.resetActivityDnd :', e );
+        }
+    }
+
+    const toggleAudio = ( play=true ) => {
+        try {
+            const dragItems  = document.getElementById(containerId);
+            const questionId = dragItems.dataset.qid;
+
+            const src   = Activity.getData( questionId )?.content?.audio;
+            const audio = new Audio(src);
+            if( play ) {
+                $("#playSvg").hide();
+                $("#pauseSvg").show();
+                audio.play();
+            } else {
+                $("#playSvg").show();
+                $("#pauseSvg").hide();
+                audio.pause();
+            }
+        } catch (e) {
+            console.error( 'DragAndDrop.toggleAudio :', e );
+        }
+    }
+    
+    return {
+        render:renderDataDND,
+        toggleAudio,
+        makeDraggable,
+        initDroppable,
+        showAnswersDnd,
+        checkAnswersDnd,
+        resetActivityDnd
+    }
 
 })();
 
