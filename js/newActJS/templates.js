@@ -5040,6 +5040,8 @@ const DragAndDropMulti = (() => {
         const questions  = activity?.content?.questions;
         const headLabels = Activity.getAnswerTableHeads(lang);
 
+        const strictMatch = activity?.content?.strictMatch;        
+
         let correctCount = 0;
         const totalQues  = questions.length;
         const table      = [];
@@ -5056,7 +5058,7 @@ const DragAndDropMulti = (() => {
                                     </thead>
                                 <tbody>`;
         // ..
-        table.push( tableBodyF );
+        table.push( tableBodyF );        
 
         shuffledQuestions.forEach((item, i) => {
             const userAnswer = userAns[i];
@@ -5064,20 +5066,24 @@ const DragAndDropMulti = (() => {
             let count = 0;
             let isCorrect = false;
 
-            userAnswer.map((ans, ind) => {
-                if (correctAnswerText.includes(ans)) {
-                    count++;
-                }
-                if (count == correctAnswerText.length) {
-                    isCorrect = true
-                }
-            });
+            if( strictMatch ) {                
+                isCorrect = userAnswer.toString() === correctAnswerText.toString();
+            } else {                
+                userAnswer.map((ans, ind) => {
+                    if (correctAnswerText.includes(ans)) {
+                        count++;
+                    }
+                    if (count == correctAnswerText.length) {
+                        isCorrect = true
+                    }
+                });
+            }
 
             const body = `
                 <tr clsss='trData'>
                     <th>(${Activity.getBulletLabels( lang, i )})</th>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
-                    <td class="text-success">${item.answer.toString()}</td>
+                    <td class="text-success">${correctAnswerText.toString()}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
                 </tr>
             `;
@@ -5165,6 +5171,7 @@ const DragAndDropMulti = (() => {
             
             makeDraggable(`.wordDrag`);            
             initDroppable('.dropBox_2');
+            DragEnabled = true;
         } catch (e) {
             console.error( 'DragAndDrop.renderDataDND :', e );
         }
@@ -5177,7 +5184,7 @@ const DragAndDropMulti = (() => {
                 containment: '.container-sub',
                 start: function () {
                     if (!DragEnabled) {
-                        // return false;
+                        return false;
                     }
                 }
             });

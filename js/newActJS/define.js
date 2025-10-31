@@ -373,6 +373,7 @@ const Define = (() => {
             head    : '16. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',
             subhead : '',
             content : {
+                strictMatch : true,
                 replacement : '#_#',
                 questions   : [
                     { text: `सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।`, answer: ["पंख", "नाचने"] },
