@@ -14,7 +14,7 @@ const Activity = (() => {
             link.href  = 'css/newActCss/'+href;
             document.head.appendChild(link);
         } catch( err ) {
-            console.error( 'Actitvity.css : ', err );
+            console.error( 'Activity.css : ', err );
         }
     };
 
@@ -23,7 +23,7 @@ const Activity = (() => {
             const found = Modules.get()?.find(m => m.id === id);
             return found ? found.module : null;
         } catch ( err ) {
-            console.error( 'Actitvity.module : ', err );
+            console.error( 'Activity.module : ', err );
         }
     };
     
@@ -31,12 +31,16 @@ const Activity = (() => {
         try {
             return Define.get('questions')?.find(q => q.id == questionId);
         } catch ( err ) {
-            console.error( 'Actitvity.getData : ', err );
+            console.error( 'Activity.getData : ', err );
         }
     };
 
     const shuffleQuestions = (array) => {
         try { 
+            if( !array ) {
+                console.error( 'Please check question key' );
+            }
+
             const arr = [...array];
             for (let i = arr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -44,7 +48,8 @@ const Activity = (() => {
             }
             return arr;
         } catch ( err ) {
-            console.error( 'Actitvity.shuffleQuestions : ', err );
+            console.error( 'Activity.shuffleQuestions : ', err );
+            return [];
         }
     }
 
@@ -61,7 +66,7 @@ const Activity = (() => {
             } while (JSON.stringify(arr) === JSON.stringify(words) && words.length > 1);
             return arr;
         } catch ( err ) {
-            console.error( 'Actitvity.shuffleWords : ', err );
+            console.error( 'Activity.shuffleWords : ', err );
         }
     }
 
@@ -99,7 +104,7 @@ const Activity = (() => {
             btn.style.opacity = disable ? "0.5" : "1";
             btn.style.pointerEvents = disable ? "none" : "auto";
         } catch ( err ) {
-            console.error( 'Actitvity.toggleCheckBtn : ', err );
+            console.error( 'Activity.toggleCheckBtn : ', err );
         }
     }
 
@@ -173,7 +178,7 @@ const Activity = (() => {
         try {
             store.modules[name] = mod;
         } catch ( err ) {
-            console.error( 'Actitvity.register : ', err );
+            console.error( 'Activity.register : ', err );
         }
     };
   
@@ -203,7 +208,7 @@ const Activity = (() => {
             
             mod.render( questionId, activityId );
         } catch ( err ) {
-            console.error( 'Actitvity.render : ', err );
+            console.error( 'Activity.render : ', err );
         }
     };
 
@@ -5135,7 +5140,7 @@ const DragAndDropMulti = (() => {
             
             const head  = [];
 
-            const questions = Activity.shuffleQuestions ( data?.content?.questions );
+            const questions = Activity.shuffleQuestions ( data?.content?.questions || [] );
             const options   = questions?.flatMap( obj => obj.answer ) || [];
             Activity.shuffleQuestions( options ).forEach((item, ind) => {
                 const html = `<div class="drag_${ind} wordDrag font17" data-ans="${item}">
