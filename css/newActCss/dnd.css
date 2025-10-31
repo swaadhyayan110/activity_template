@@ -8,6 +8,16 @@
   transition: all 0.3s ease;
 }
 
+.drop-Box {
+  width: 200px;
+  height: 30px;
+  border-radius: 0;
+  border: none;
+  border-bottom: 2px dotted #1f5c9f;
+  margin: 0;
+  text-align: center;
+}
+
 .questLine:hover {
   color: #0d47a1;
   transform: scale(1.02);

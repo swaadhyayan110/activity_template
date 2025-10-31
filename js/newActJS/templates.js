@@ -141,9 +141,19 @@ const Activity = (() => {
 
     const getAnswerTableHeads = (lang='en') => {
         if( lang == 'en' ) {
-            return ['Question No.', 'Your Answer', 'Correct Answer', 'Result'];
-        } else {            
-            return ['प्रश्‍न संख्या','आपका उत्तर','सही उत्तर','परिणाम'];
+            return {
+                sequence  : 'Question No.',
+                attempted : 'Your Answer',
+                correct   : 'Correct Answer',
+                result    : 'Result'
+            };
+        } else {
+            return {
+                sequence  : 'प्रश्‍न संख्या',
+                attempted : 'आपका उत्तर',
+                correct   : 'सही उत्तर',
+                result    : 'परिणाम'
+            };
         }
     }
 
@@ -2804,9 +2814,11 @@ const Mcq_PathKaSaar = (() => {
             let correctCount = 0;
 
             const questionId = document.getElementById(heading)?.dataset.qid;
-            const data = Activity.getData( questionId )?.content;
-            const lang = data?.lang;
-            const mcq  = data?.mcq || [];
+            const activity = Activity.getData( questionId );
+            const data     = activity?.content;
+            const lang     = activity?.lang;
+            const mcq      = data?.mcq || [];
+            const headLabels = Activity.getAnswerTableHeads(lang);
 
             let totalQues = mcq.length;
 
@@ -2814,23 +2826,23 @@ const Mcq_PathKaSaar = (() => {
                 <table class="table table-bordered" style="font-size:20px">
                 <thead class="text-light" style="white-space: nowrap;">
                     <tr>
-                    <th>${lang === "hi" ? "प्रश्‍न संख्या" : "Q. No."}</th>
-                    <th>${lang === "hi" ? "आपका उत्तर" : "Your Answer"}</th>
-                    <th>${lang === "hi" ? "सही उत्तर" : "Correct Answer"}</th>
-                    <th>${lang === "hi" ? "परिणाम" : "Result"}</th>
+                        <th>${headLabels.sequence}</th>
+                        <th>${headLabels.attempted}</th>
+                        <th>${headLabels.correct}</th>
+                        <th>${headLabels.result}</th>
                     </tr>
                 </thead>
                 <tbody>`;
-
-            const lable = lang == "hi" ? ['(क)', '(ख)', '(ग)', '(घ)'] : ["A.", 'B.', 'C.', 'D.', "E", 'F']
+            // ..
+            
             mcq.forEach((q, i) => {
                 const userIndex = userAnswers[i];
                 const userAnswerText =
                 userIndex !== null && userIndex !== undefined
-                    ? `${lable[userIndex]} ${q.options[userIndex]}`
+                    ? `(${Activity.getBulletLabels(lang,i)}) ${q.options[userIndex]}`
                     : (lang === "hi" ? "प्रयास नहीं किया" : "Not Attempted");
 
-                const correctAnswerText = `${lable[q.answer]} ${q.options[q.answer]}`;
+                const correctAnswerText = `(${Activity.getBulletLabels(lang,q.answer)}) ${q.options[q.answer]}`;
                 const isCorrect = userIndex === q.answer;
                 if (isCorrect) correctCount++;
                 tableHTML += `
@@ -4885,10 +4897,10 @@ const TrueAndFalse = (() => {
                                 <table class="table table-bordered" style="font-size:20px">
                                     <thead class="text-light" style="white-space: nowrap;">
                                         <tr>
-                                            <th>${headLabels[0]}</th>
-                                            <th>${headLabels[1]}</th>
-                                            <th>${headLabels[2]}</th>
-                                            <th>${headLabels[3]}</th>
+                                            <th>${headLabels.sequence}</th>
+                                            <th>${headLabels.attempted}</th>
+                                            <th>${headLabels.correct}</th>
+                                            <th>${headLabels.result}</th>
                                         </tr>
                                     </thead>
                                 <tbody>`;
@@ -4953,10 +4965,16 @@ const DragAndDropMulti = (() => {
 
     Activity.css('dnd.css');
 
-    const containerId       = 'dragItemsMulti';
-    const containerSelector = '#question1';
+    const containerId = 'dragItemsMulti';
 
+    let shuffledQuestions;
     let DragEnabled = false;
+    let userAns;
+
+    const getQid = () => {
+        const el = document.querySelector(`#${containerId}`);
+        return el ? el.dataset.qid : undefined;
+    };
 
     const ui = (questionId) => {
         try {
@@ -4988,19 +5006,114 @@ const DragAndDropMulti = (() => {
                                             <button class="reset-btn">${buttonLabel.try}</button>
                                         </div>
                                     </div>
+                                </div>
+                                <div id="popupDialogAns">
+                                    <div class="baseMod">
+                                        <div class="answerdiv">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                                <button class="btn btn-secondary popUp-close-btn">X</button>
+                                            </div>
+                                            <div id="answer-review"></div>
+                                        </div>
+                                    </div>
                                 </div>`;
             // ..
 			
 			const submitBtn = parent.querySelector( '.submit-btn' );
 			const showBtn   = parent.querySelector( '.show-btn' );
 			const resetBtn  = parent.querySelector( '.reset-btn' );
+			const popUpCloseBtn = parent.querySelector( '.popUp-close-btn' );
 
-			// if (submitBtn) submitBtn.addEventListener("click", showPopUp);
-			// if (showBtn) showBtn.addEventListener("click", showDropAnswers);
-			// if (resetBtn) resetBtn.addEventListener("click", resetDropBox);
+			if (submitBtn) submitBtn.addEventListener("click", showPopUp);
+			if (showBtn) showBtn.addEventListener("click", showDropAnswers);
+			if (resetBtn) resetBtn.addEventListener("click", resetDropBox);
+			if (popUpCloseBtn) popUpCloseBtn.addEventListener("click", closePopUp);
 		} catch (e) {
             console.error( 'DragAndDrop.ui :', e );
         }
+    }
+
+    const showPopUp = () => {
+        const activity   = Activity.getData(getQid()) || {};
+        const lang       = activity?.lang || 'en';
+        const questions  = activity?.content?.questions;
+        const headLabels = Activity.getAnswerTableHeads(lang);
+
+        let correctCount = 0;
+        const totalQues  = questions.length;
+        const table      = [];
+
+        const tableBodyF = `<div class="table-responsive p-2">
+                                <table class="table table-bordered" style="font-size:20px">
+                                    <thead class="text-light" style="white-space: nowrap;">
+                                        <tr>
+                                            <th>${headLabels.sequence}</th>
+                                            <th>${headLabels.attempted}</th>
+                                            <th>${headLabels.correct}</th>
+                                            <th>${headLabels.result}</th>
+                                        </tr>
+                                    </thead>
+                                <tbody>`;
+        // ..
+        table.push( tableBodyF );
+
+        shuffledQuestions.forEach((item, i) => {
+            const userAnswer = userAns[i];
+            const correctAnswerText = item.answer;
+            let count = 0;
+            let isCorrect = false;
+
+            userAnswer.map((ans, ind) => {
+                if (correctAnswerText.includes(ans)) {
+                    count++;
+                }
+                if (count == correctAnswerText.length) {
+                    isCorrect = true
+                }
+            });
+
+            const body = `
+                <tr clsss='trData'>
+                    <th>(${Activity.getBulletLabels( lang, i )})</th>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
+                    <td class="text-success">${item.answer.toString()}</td>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
+                </tr>
+            `;
+            table.push( body );
+        });
+
+        const tableBodyL = `</tbody></table></div>`;
+        table.push( tableBodyL );
+
+        document.getElementById("answer-review").innerHTML = table.join( '' );
+        document.getElementById("popupDialogAns").style.display = "block";
+
+        const finalText = lang == 'en' ?
+            `You answered ${correctCount} out of ${totalQues} questions correctly!` :
+            `आपको ${totalQues} में से ${correctCount} मिले है`;
+        // ..
+
+        document.getElementById("scoreTextQ1").innerText = finalText;
+    }
+
+    const closePopUp = () => {
+        document.getElementById("popupDialogAns").style.display = "none";
+    }
+
+    const showDropAnswers = () => {
+        $(`#submit2`).addClass('disable');
+        DragEnabled = false;
+        for (let i = 0; i < $(`.dropBox_2`).length; i++) {
+            $(`.dropBox_2`).eq(i).html($(`.dropBox_2`).eq(i).attr('data-ans'));
+        }
+    }
+
+    const resetDropBox = () => {
+        $(`.dropBox_2`).html('');
+        $(`#submit2`).addClass('disable');
+        DragEnabled = true;
     }
     
     const renderDataDND = (questionId) => {
@@ -5009,32 +5122,49 @@ const DragAndDropMulti = (() => {
             Activity.setQuestionDetails( questionId );
 
             const data = Activity.getData( questionId );
+            const lang = data?.lang || 'en';
 
             const dragItems = document.getElementById(containerId);
-            dragItems.dataset.qid = questionId;
+            dragItems.dataset.qid = questionId;            
             
             const head  = [];
 
-            const questions = Activity.shuffleQuestions( data?.content?.questions );
+            const questions = Activity.shuffleQuestions ( data?.content?.questions );
             const options   = questions?.flatMap( obj => obj.answer ) || [];
-            options.forEach((item, ind) => {                
+            Activity.shuffleQuestions( options ).forEach((item, ind) => {
                 const html = `<div class="drag_${ind} wordDrag font17" data-ans="${item}">
                                 ${item}
                             </div>`;
                 // ..
                 head.push( html );
-            });
-            dragItems.innerHTML = head.join('');            
+            });            
             
-            const opt     = [];            
-            options.forEach((item) => {
-                const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
-                opt.push( html );
+            shuffledQuestions = questions;
+            questions.forEach((item, ind) => {
+                let replacedText = item.text;
+                item.answer.forEach(ans => {
+                    replacedText = replacedText.replace(
+                        '#_#',
+                        `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}"></div>`
+                    );
+                });
+
+                const html = `
+                    <div class="col-12 d-flex my-3">
+                        <div class="me-1">(${Activity.getBulletLabels(lang, ind)})</div>
+                        <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
+                            ${replacedText}
+                        </div>
+                    </div>
+                `;
+                head.push( html );
             });
-            dragItems.insertAdjacentHTML( "afterbegin", opt.join('') );
+            dragItems.innerHTML = head.join('');
+
+            userAns = Array(questions.length).fill([]);
             
             makeDraggable(`.wordDrag`);            
-            // initDroppable(containerSelector);
+            initDroppable('.dropBox_2');
         } catch (e) {
             console.error( 'DragAndDrop.renderDataDND :', e );
         }
@@ -5047,7 +5177,7 @@ const DragAndDropMulti = (() => {
                 containment: '.container-sub',
                 start: function () {
                     if (!DragEnabled) {
-                        return false;
+                        // return false;
                     }
                 }
             });
@@ -5056,114 +5186,51 @@ const DragAndDropMulti = (() => {
         }
     }
 
-    const initDroppable = () => {
+    const initDroppable = (selector) => {
         try {
-            $(`${containerSelector} .dropSect`).droppable({
-                accept: ".wordDrag",
+            $(selector).droppable({
+                revert: true,
                 drop: function (event, ui) {
-                    const $dragged = ui.draggable;
-                    $dragged.removeClass("ui-draggable ui-draggable-handle dragging");
-                    $dragged.css({ top: "auto", left: "auto", position: "relative" });
-                    $(this).append($dragged);
+                    const dragVal = ui.draggable.attr('data-ans');
+                    $(this).html(dragVal).attr('data-val', `${dragVal}`);
+                    const index = $(this).parent().attr('data-queIndex');
+
+                    if (Array.isArray(userAns[index])) {
+                        const totalDropBox = $(`.question-container_2`).eq(index).children(selector);
+                        let tempArr = [];
+                        for (let i = 0; i < totalDropBox.length; i++) {
+                            if ($(totalDropBox).eq(i).attr('data-val') != "") {
+                                tempArr.push($(totalDropBox).eq(i).attr('data-val'));
+                            }
+                        }
+                        userAns[index] = tempArr;
+                    } else {
+                        console.log(index, 'else');
+                        userAns[index] = dragVal;
+                    }
+
+                    if (enableDragCheckSubmitBtn() == $(selector).length) {
+                        $(`#submit2`).removeClass('disable');
+                    }
                 }
-            });
+            })
         } catch (e) {
             console.error( 'DragAndDrop.initDroppable :', e );
         }
     }
 
-    const checkAnswersDnd = () => {
-        try {
-            let correct = 0;
-            let total = $(`${containerSelector} .dropSect`).length;
-
-            $(`${containerSelector} .dropSect`).each(function () {
-                const correctAnswer = $(this).data("accept");
-                const droppedItem = $(this).children(".wordDrag").first();
-                if (droppedItem.length && droppedItem.data("ans") === correctAnswer) {
-                    droppedItem.css("background", "#c8e6c9");
-                    correct++;
-                } else if (droppedItem.length) {
-                    droppedItem.css("background", "#ffcdd2");
-                }
-            });
-
-            Swal.fire({
-                title: correct === total ? "All Correct!" : "Check your answers",
-                text: `You got ${correct} out of ${total} correct!`,
-                icon: correct === total ? "success" : "info",
-                confirmButtonText: "OK"
-            });
-        } catch (e) {
-            console.error( 'DragAndDrop.checkAnswersDnd :', e );
-        }
-    }
-
-    const showAnswersDnd = () => {
-        try {
-            Activity.toggleCheckBtn( '.submit-btn', true );
-
-            const dragItems  = document.getElementById(containerId);
-            const questionId = dragItems.dataset.qid;
-
-            renderDataDND(dragItems.dataset.qid);
-
-            $(`${containerSelector} .dropSect`).empty();
-            const data = Activity.getData( questionId )?.content?.options;
-            
-            data.forEach((item) => {
-                const $clone = $(`<div class="wordDrag">${item.text}</div>`)
-                    .css({ background: "#c8e6c9", position: "relative" })
-                    .attr("data-ans", item.ans);
-                $(`${containerSelector} .dropSect[data-accept='${item.ans}']`).append($clone);
-            });
-        } catch (e) {
-            console.error( 'DragAndDrop.showAnswersDnd :', e );
-        }
-    }
-
-    const resetActivityDnd = () => {
-        try {
-            Activity.toggleCheckBtn( '.submit-btn', false );
-
-            const dragItems = document.getElementById(containerId);
-            renderDataDND(dragItems.dataset.qid);
-            $(`${containerSelector} .dropSect`).empty();
-            $(`${containerSelector} .wordDrag`);
-        } catch (e) {
-            console.error( 'DragAndDrop.resetActivityDnd :', e );
-        }
-    }
-
-    const toggleAudio = ( play=true ) => {
-        try {
-            const dragItems  = document.getElementById(containerId);
-            const questionId = dragItems.dataset.qid;
-
-            const src   = Activity.getData( questionId )?.content?.audio;
-            const audio = new Audio(src);
-            if( play ) {
-                $("#playSvg").hide();
-                $("#pauseSvg").show();
-                audio.play();
-            } else {
-                $("#playSvg").show();
-                $("#pauseSvg").hide();
-                audio.pause();
+    const enableDragCheckSubmitBtn = () => {
+        let count = 0;
+        for (let i = 0; i < $(`.dropBox_2`).length; i++) {
+            if ($(`.dropBox_2`).eq(i).html() !== "") {
+                count++;
             }
-        } catch (e) {
-            console.error( 'DragAndDrop.toggleAudio :', e );
         }
-    }
+        return count;
+    }   
     
     return {
         render:renderDataDND,
-        toggleAudio,
-        makeDraggable,
-        initDroppable,
-        showAnswersDnd,
-        checkAnswersDnd,
-        resetActivityDnd
     }
 
 })();

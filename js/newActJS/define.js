@@ -176,7 +176,7 @@ const Define = (() => {
         },        
         {
             id      : 9,
-            lang    : 'hi',
+            lang    : 'en',
             head    : '9. MCQ',
             content : {
                 text : {
