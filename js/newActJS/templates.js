@@ -2359,7 +2359,8 @@ const DragAndDrop = (() => {
                                         </div>
                                     </div>
                                     <div id="question1" class="question-block">
-                                        <div class="dragItems" id="${containerId}"></div>                                    
+                                        <div class="dragItems" id="${containerId}"></div>
+                                        <div class="dropItems"></div>
                                         <div class="buttons machiNgs">
                                             <button class="submit-btn">${buttonLabel.check}</button>
                                             <button class="show-btn">${buttonLabel.show}</button>
@@ -2409,15 +2410,15 @@ const DragAndDrop = (() => {
                 head.push( html );
             });
             head.push( '</div>' );
-            dragItems.innerHTML = head.join('');
+            $('.dropItems').html( head.join('') );
 
             const opt     = [];
             const options = Activity.shuffleQuestions( data?.content?.options );
             options.forEach((item) => {
                 const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
                 opt.push( html );
-            });
-            dragItems.insertAdjacentHTML( "afterbegin", opt.join('') );
+            });            
+            dragItems.innerHTML = opt.join('');
 
             makeDraggable(`#${containerId} .wordDrag`);
             initDroppable(containerSelector);
