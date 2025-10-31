@@ -2643,9 +2643,9 @@ const Mcq = (() => {
             
             if (hasText || hasImg) {
                 const textDiv = $('<div class="mcq-text"></div>');
-                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
+                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');                
                 
-                mcqContextContainer.append(textDiv, imgDiv).addClass('d-flex');
+                mcqContextContainer.addClass('d-flex');                
 
                 const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'left';
                 const side = String(preferredSide).toLowerCase();
@@ -2654,6 +2654,7 @@ const Mcq = (() => {
                 const commonClassImg  = 'col-md-12 col-lg-5 col-sm-12 col-12';
 
                 if (hasText) {
+                    mcqContextContainer.append(textDiv);
                     const mcq_txt_class = hasImg 
                         ? `${commonClassText} subHeadTag`
                         : 'col';
@@ -2661,6 +2662,7 @@ const Mcq = (() => {
                 }
 
                 if (hasImg) {
+                    mcqContextContainer.append(imgDiv);
                     const mcq_img_cont_class = hasText 
                         ? commonClassImg
                         : 'col';
