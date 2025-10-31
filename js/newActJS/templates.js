@@ -4933,7 +4933,7 @@ const TrueAndFalse = (() => {
             
             const body = `
                 <tr clsss='trData'>
-                    <th>(${Activity.getBulletLabels( lang, ind )})</th>
+                    <th>(${Activity.getBulletLabels( lang, i )})</th>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${tempUserAnswer}</td>
                     <td class="text-success">${tempCorrectAnswer}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
