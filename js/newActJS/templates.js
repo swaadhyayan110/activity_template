@@ -3927,7 +3927,7 @@ const DropDown = (() => {
         select.setAttribute("data-index", qIndex);        
         if( blankIndex !== null ) select.setAttribute("data-blank", blankIndex);
 
-        const lang = Activity.getData(getQid())?.content?.lang;
+        const lang = Activity.getData(getQid())?.lang;
         const optionSelect = lang == 'hi' ? 'चुनें' : 'choose';
 
         const def = document.createElement("option");
@@ -5132,27 +5132,31 @@ const DragAndDropMulti = (() => {
             const lang = data?.lang || 'en';
 
             const dragItems = document.getElementById(containerId);
-            dragItems.dataset.qid = questionId;            
+            dragItems.dataset.qid = questionId;
+
+            const replacement = data?.content?.replacement || '#_#';
             
-            const optionHtml= [];
-            const questions = Activity.shuffleQuestions ( data?.content?.questions || [] );
-            const options   = questions?.flatMap( obj => obj.answer ) || [];
-            Activity.shuffleQuestions( options ).forEach((item, ind) => {
+            const optionHtml = [];
+            const questions  = Activity.shuffleQuestions( data?.content?.questions || [] );
+            const options    = Activity.shuffleQuestions( questions )?.flatMap( obj => obj.answer ) || [];
+            const addOptions = Activity.shuffleQuestions( data?.content?.addOptions ) || [];
+            const mergedOptions = [...new Set([...options, ...addOptions])];
+            mergedOptions.forEach((item, ind) => {
                 const html = `<div class="drag_${ind} wordDrag font17" data-ans="${item}">
                                 ${item}
                             </div>`;
                 // ..
                 optionHtml.push( html );
             });
-            $('.drag-container2').html( optionHtml.join( '' ) );
-            
+            $('.drag-container2').html( optionHtml.join( '' ) );            
+
             const questionHtml = [];
             shuffledQuestions  = questions;
             questions.forEach((item, ind) => {
                 let replacedText = item.text;
                 item.answer.forEach(ans => {
                     replacedText = replacedText.replace(
-                        '#_#',
+                        replacement,
                         `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}"></div>`
                     );
                 });

@@ -17,7 +17,8 @@ const Define = (() => {
         { qid : 13, text : ['Circle'], module : 13 },
         { qid : 14, text : ['श्रवण कौशल'], module : 14 },
         { qid : 15, text : ['Q-15', 'T&F'], module : 15 },
-        { qid : 16, text : ['Q-16', 'DND-Multi'], module : 16 }
+        { qid : 16, text : ['Q-16', 'DND-1'], module : 16 },
+        { qid : 17, text : ['Q-17', 'DND-2'], module : 16 }
     ];
 
     // DEFINE QUESTIONS
@@ -371,6 +372,24 @@ const Define = (() => {
             id      : 16,
             lang    : 'hi',
             head    : '16. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',
+            subhead : '',
+            content : {
+                strictMatch : true,
+                replacement : '#_#',
+                addOptions  : [ 'op1', 'op2', 'op3', 'op1'  ],
+                questions   : [
+                    { text: 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', answer: ["पंख", "नाचने"] },
+                    { text: 'सितार के सुर #_# में गूँजने लगे।', answer: ["जंगल"] },
+                    { text: 'सितार पर खाली जगह पर #_# की गई।', answer: ["नक्काषी"] },
+                    { text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', answer: ["खूँटी"] },
+                    { text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', answer: ["जतन"] }
+                ]
+            }
+        },
+        {
+            id      : 17,
+            lang    : 'hi',
+            head    : '17. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',
             subhead : '',
             content : {
                 strictMatch : true,
