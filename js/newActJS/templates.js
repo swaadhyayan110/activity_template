@@ -5138,8 +5138,7 @@ const DragAndDropMulti = (() => {
             const dragItems = document.getElementById(containerId);
             dragItems.dataset.qid = questionId;            
             
-            const head  = [];
-
+            const optionHtml= [];
             const questions = Activity.shuffleQuestions ( data?.content?.questions || [] );
             const options   = questions?.flatMap( obj => obj.answer ) || [];
             Activity.shuffleQuestions( options ).forEach((item, ind) => {
@@ -5147,10 +5146,12 @@ const DragAndDropMulti = (() => {
                                 ${item}
                             </div>`;
                 // ..
-                head.push( html );
-            });            
+                optionHtml.push( html );
+            });
+            $('.drag-container2').html( optionHtml.join( '' ) );
             
-            shuffledQuestions = questions;
+            const questionHtml = [];
+            shuffledQuestions  = questions;
             questions.forEach((item, ind) => {
                 let replacedText = item.text;
                 item.answer.forEach(ans => {
@@ -5168,9 +5169,9 @@ const DragAndDropMulti = (() => {
                         </div>
                     </div>
                 `;
-                head.push( html );
+                questionHtml.push( html );
             });
-            dragItems.innerHTML = head.join('');
+            $('.drag-question-box2').html( questionHtml.join( '' ) );
 
             userAns = Array(questions.length).fill([]);
             
