@@ -2420,6 +2420,9 @@ const DragAndDrop = (() => {
             });            
             dragItems.innerHTML = opt.join('');
 
+            const hasAudio = data?.content?.audio;
+            if( !hasAudio ) $('.playsBtns').remove();
+
             makeDraggable(`#${containerId} .wordDrag`);
             initDroppable(containerSelector);
         } catch (e) {
@@ -2547,8 +2550,8 @@ const DragAndDrop = (() => {
             const dragItems  = document.getElementById(containerId);
             const questionId = dragItems.dataset.qid;
 
-            const src   = Activity.getData( questionId )?.content?.audio;
-            const audio = new Audio(src);
+            const src   = Activity.getData( questionId )?.content?.audio;           
+            const audio = new Audio(src);            
             if( play ) {
                 $("#playSvg").hide();
                 $("#pauseSvg").show();
@@ -5140,7 +5143,7 @@ const DragAndDropMulti = (() => {
             const optionHtml = [];
             const questions  = Activity.shuffleQuestions( data?.content?.questions || [] );
             const options    = Activity.shuffleQuestions( questions )?.flatMap( obj => obj.answer ) || [];
-            const addOptions = Activity.shuffleQuestions( data?.content?.addOptions ) || [];
+            const addOptions = Activity.shuffleQuestions( data?.content?.addOptions || [] ) || [];
             const mergedOptions = [...new Set([...options, ...addOptions])];
             mergedOptions.forEach((item, ind) => {
                 const html = `<div class="drag_${ind} wordDrag font17" data-ans="${item}">

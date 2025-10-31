@@ -2,7 +2,7 @@ const Modules = (() => {
 
     // MODULES MAP [ DO NOT CHANGE ]
     const modules = [
-        { id : 1, module  : 'MatchLeftToRight' },
+        { id : 1, module  : 'MatchLeftToRight', landscape : true },
         { id : 2, module  : 'MatchLeftRightToCenter' },
         { id : 3, module  : 'MatchTopToBottom' },
         { id : 4, module  : 'FillInTheBlanksWithImage' },
