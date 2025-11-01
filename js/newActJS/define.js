@@ -174,10 +174,10 @@ const Define = (() => {
                     { id: 3, ans: 'n', text: 'क्रीडनकानि' }
                 ]
             }
-        },        
+        },
         {
             id      : 9,
-            lang    : 'en',
+            lang    : 'hi',
             head    : '9. MCQ',
             content : {
                 text : {
@@ -376,7 +376,7 @@ const Define = (() => {
             content : {
                 strictMatch : true,
                 replacement : '#_#',
-                addOptions  : [ 'op1', 'op2', 'op3', 'op1'  ],
+                addOptions  : [ 'op1', 'op2', 'op3', 'op1' ],
                 questions   : [
                     { text: 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', answer: ["पंख", "नाचने"] },
                     { text: 'सितार के सुर #_# में गूँजने लगे।', answer: ["जंगल"] },

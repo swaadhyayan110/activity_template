@@ -2662,7 +2662,7 @@ const Mcq_PathKaSaar = (() => {
                 const textDiv = $('<div class="mcq-text"></div>');
                 const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');                
                 
-                mcqContextContainer.addClass('d-flex');                
+                mcqContextContainer.addClass('row g-0');                
 
                 const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'left';
                 const side = String(preferredSide).toLowerCase();
@@ -5142,7 +5142,7 @@ const DragAndDropMulti = (() => {
             
             const optionHtml = [];
             const questions  = Activity.shuffleQuestions( data?.content?.questions || [] );
-            const options    = Activity.shuffleQuestions( questions )?.flatMap( obj => obj.answer ) || [];
+            const options    = Activity.shuffleQuestions( questions || [] )?.flatMap( obj => obj.answer ) || [];
             const addOptions = Activity.shuffleQuestions( data?.content?.addOptions || [] ) || [];
             const mergedOptions = [...new Set([...options, ...addOptions])];
             mergedOptions.forEach((item, ind) => {
