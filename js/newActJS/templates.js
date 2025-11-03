@@ -78,13 +78,13 @@ const Activity = (() => {
             const head    = Define.get('head');
             const subHead = Define.get('subHead');
 
-            const arr = [ head, subHead ].map(item => `.${item}`);            
-
+            const arr = [ head, subHead ].map(item => `.${item}`);
+            
             const elHead = container.querySelector(arr[0]);
-            if (elHead) elHead.innerHTML = data.head || '';
-
+            if (elHead) elHead.innerHTML = data.head || elHead.remove();
+            
             const elSub = container.querySelector(arr[1]);
-            if (elSub) elSub.innerHTML = data.subhead || '';
+            if (elSub) elSub.innerHTML = data.subhead || elSub.remove();
 
         } catch( err ) {
             console.error( 'Activity.setQuestionDetails :- ', err );
