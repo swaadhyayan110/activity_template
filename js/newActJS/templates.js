@@ -967,9 +967,10 @@ const MatchLeftRightToCenter = (() => {
             const col3 = Array.isArray(content.col3) ? Activity.shuffleQuestions(content.col3) : [];
 
             const returnHtml = (colSeq, item) => {
+                const image_width = item.width ?? '65%';
                 const html = item.text ? 
                     `<div class="centerItems shadow-sm" data-col="${colSeq}" data-id="${item.id}">${item.text}</div>` : 
-                    `<div class="imgBoxes shadow" data-col="${colSeq}" data-id="${item.id}"><img src="${Activity.globalImagePath()}${item.img}" alt="" ondragstart="return false";></div>`;
+                    `<div class="imgBoxes shadow" data-col="${colSeq}" data-id="${item.id}"><img src="${Activity.globalImagePath()}${item.img}" alt="" ondragstart="return false"; style="width:${image_width};"></div>`;
                 // ..
                 return html;
             }
@@ -1493,7 +1494,7 @@ const FillInTheBlanksWithImage = (() => {
             
             let blanksBlock = '';
             data?.content?.blanks.forEach((item, i) => {
-                if( item.img ) {
+                if( item.img ) {                    
                     blanksBlock += `<div class="col-md-4">
                             <div class="fillBox shadow-sm">
                             <img class="imgInboxFill" src="${Activity.globalImagePath()}${item.img}" alt="feature-${i + 1}" ondragstart="return false;"/>
@@ -5209,7 +5210,8 @@ const DragAndDropMulti = (() => {
                 
                 const image = [];
                 if( item.image != undefined ) {
-                    const img = `<img class="" style="width: 200px;" src="${Activity.globalImagePath()}${item.image}" ondragstart="return false;"></img>`
+                    const image_width = item.width ?? '200px';
+                    const img = `<img class="" style="width: ${image_width};" src="${Activity.globalImagePath()}${item.image}" ondragstart="return false;"></img>`
                     image.push( img );
                 }
                     

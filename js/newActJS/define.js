@@ -45,7 +45,7 @@ const Define = (() => {
             subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
             content : {
                 col1: [
-                    { id: 1, img: "img/1.png" },
+                    { id: 1, img: "img/1.png", width : '80%' },
                     { id: 2, text: "img/2.png" },
                     { id: 3, img: "img/3.png" },
                 ],
@@ -415,7 +415,7 @@ const Define = (() => {
                 strictMatch : false,
                 replacement : '#_#',
                 questions   : [
-                    { text: `#_#, #_#`, image : 'img/1.png', options: ["पंख", "नाचने"] },
+                    { text: `#_#, #_#`, image : 'img/1.png', width : '25%', options: ["पंख", "नाचने"] },
                     { text: `#_#, #_#`, image : 'img/2.png', options: ["जंगल", "पंखूँटी"] },
                     { text: `#_#, #_#`, image : 'img/3.png', options: ["नक्काषी", "पंखूँटी"] }
                 ]
