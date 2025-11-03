@@ -107,7 +107,7 @@ const Activity = (() => {
     const getBulletLabels = (lang='en', ind, upperCase=true) => {
         const alphabets = {
             en: [...'abcdefghijklmnopqrstuvwxyz'],
-            hi: ["क","ख","ग","घ","ङ","च","छ","ज","झ","ञ","ट","ठ","ड","ढ","ण","त","थ","द","ध","न","प","फ","ब","भ","म","य"]
+            hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय']
         }
 
         const characters = alphabets[lang] || alphabets.en;
@@ -2672,9 +2672,7 @@ const Mcq_PathKaSaar = (() => {
 
                 if (hasText) {
                     mcqContextContainer.append(textDiv);
-                    const mcq_txt_class = hasImg 
-                        ? `${commonClassText}`
-                        : 'col';
+                    const mcq_txt_class = hasImg ? `${commonClassText}` : 'col';
                     textDiv.addClass(mcq_txt_class).html(text.text || '');
                 }
 
@@ -2725,7 +2723,7 @@ const Mcq_PathKaSaar = (() => {
                     imgDiv.css('order', 2);
                 }               
                 
-            }                    
+            }            
 
             const container = document.getElementById(heading);
             container.innerHTML = data.map((q, qi) => `<div class="p-2">
@@ -5045,31 +5043,36 @@ const DragAndDropMulti = (() => {
         const questions  = activity?.content?.questions;
         const headLabels = Activity.getAnswerTableHeads(lang);
 
-        const strictMatch = activity?.content?.strictMatch;        
+        const strictMatch = activity?.content?.strictMatch;
+        const option_side = activity?.content?.option_side || 'top';
 
         let correctCount = 0;
         const totalQues  = questions.length;
         const table      = [];
 
         const tableBodyF = `<div class="table-responsive p-2">
-                                <table class="table table-bordered" style="font-size:20px">
-                                    <thead class="text-light" style="white-space: nowrap;">
-                                        <tr>
-                                            <th>${headLabels.sequence}</th>
-                                            <th>${headLabels.attempted}</th>
-                                            <th>${headLabels.correct}</th>
-                                            <th>${headLabels.result}</th>
-                                        </tr>
-                                    </thead>
-                                <tbody>`;
+                            <table class="table table-bordered" style="font-size:20px">
+                                <thead class="text-light" style="white-space: nowrap;">
+                                    <tr>
+                                        <th>${headLabels.sequence}</th>
+                                        <th>${headLabels.attempted}</th>
+                                        <th>${headLabels.correct}</th>
+                                        <th>${headLabels.result}</th>
+                                    </tr>
+                                </thead>
+                            <tbody>`;
         // ..
-        table.push( tableBodyF );        
+        table.push( tableBodyF );
 
         shuffledQuestions.forEach((item, i) => {
             const userAnswer = userAns[i];
-            const correctAnswerText = item.answer;
             let count = 0;
             let isCorrect = false;
+
+            let correctAnswerText = item.options;
+            if ( option_side == 'right' ) {                
+                correctAnswerText = item.options[item.answer] ?? '';
+            }
 
             if( strictMatch ) {                
                 isCorrect = userAnswer.toString() === correctAnswerText.toString();
@@ -5138,48 +5141,77 @@ const DragAndDropMulti = (() => {
             const dragItems = document.getElementById(containerId);
             dragItems.dataset.qid = questionId;
 
-            const replacement = data?.content?.replacement || '#_#';
+            const content     = data?.content || {};
+            const replacement = content?.replacement || '#_#';
+            const option_side = content?.option_side || 'top';
             
             const optionHtml = [];
-            const questions  = Activity.shuffleQuestions( data?.content?.questions || [] );
-            const options    = Activity.shuffleQuestions( questions || [] )?.flatMap( obj => obj.answer ) || [];
-            const addOptions = Activity.shuffleQuestions( data?.content?.addOptions || [] ) || [];
-            const mergedOptions = [...new Set([...options, ...addOptions])];
-            mergedOptions.forEach((item, ind) => {
-                const html = `<div class="drag_${ind} wordDrag font17" data-ans="${item}">
-                                ${item}
-                            </div>`;
-                // ..
-                optionHtml.push( html );
-            });
-            $('.drag-container2').html( optionHtml.join( '' ) );            
+            const questions  = Activity.shuffleQuestions( content?.questions || [] );
+
+            const drag_option_html = (item, ind) => `<div class="drag_${ind} wordDrag font17" data-text="${item}" data-ans="${item}">${item}</div>`;
+
+            if( option_side == 'top' ) {
+                const options    = Activity.shuffleQuestions( questions || [] )?.flatMap( obj => obj.options ) || [];
+                const addOptions = Activity.shuffleQuestions( content?.addOptions || [] ) || [];
+                const mergedOptions = [...new Set([...options, ...addOptions])];
+                mergedOptions.forEach((item, ind) => {
+                    const html = drag_option_html(item, ind);
+                    optionHtml.push( html );
+                });
+                $('.drag-container2').html( optionHtml.join( '' ) );
+            }
 
             const questionHtml = [];
             shuffledQuestions  = questions;
             questions.forEach((item, ind) => {
+                const quesOptions = item.options || [];
+
                 let replacedText = item.text;
-                item.answer.forEach(ans => {
+                quesOptions.forEach(ans => {
                     replacedText = replacedText.replace(
                         replacement,
                         `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}"></div>`
                     );
-                });
-
-                const html = `
-                    <div class="col-12 d-flex my-3">
-                        <div class="me-1">(${Activity.getBulletLabels(lang, ind)})</div>
-                        <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
-                            ${replacedText}
+                });                
+                    
+                if( option_side == 'right' ) {
+                    const options = [];
+                    quesOptions.map((item,ind) => {
+                        options.push( drag_option_html(item, ind) );
+                    });
+                    const html = `
+                        <div class="col-12 my-3 row g-0 align-items-center">                            
+                            <div class="col-auto me-1">
+                                (${Activity.getBulletLabels(lang, ind)})
+                            </div>
+                            <div class="col d-flex flex-wrap align-items-center question-container_2" data-queindex="${ind}">
+                                ${replacedText}
+                                <div class="ms-3 d-flex">
+                                    ${options.join( '' )}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                `;
-                questionHtml.push( html );
+                    `;
+                    questionHtml.push( html );
+                } else {
+                    const html = `
+                        <div class="col-12 d-flex my-3">
+                            <div class="col-auto me-1">
+                                (${Activity.getBulletLabels(lang, ind)})
+                            </div>
+                            <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
+                                ${replacedText}
+                            </div>
+                        </div>
+                    `;
+                    questionHtml.push( html );
+                }
             });
             $('.drag-question-box2').html( questionHtml.join( '' ) );
 
             userAns = Array(questions.length).fill([]);
             
-            makeDraggable(`.wordDrag`);            
+            makeDraggable(`.wordDrag`);
             initDroppable('.dropBox_2');
             DragEnabled = true;
         } catch (e) {
@@ -5193,7 +5225,7 @@ const DragAndDropMulti = (() => {
                 revert: true,
                 containment: '.container-sub',
                 start: function () {
-                    if (!DragEnabled) {
+                    if( !DragEnabled ) {
                         return false;
                     }
                 }
@@ -5212,7 +5244,7 @@ const DragAndDropMulti = (() => {
                     $(this).html(dragVal).attr('data-val', `${dragVal}`);
                     const index = $(this).parent().attr('data-queIndex');
 
-                    if (Array.isArray(userAns[index])) {
+                    if( Array.isArray(userAns[index]) ) {
                         const totalDropBox = $(`.question-container_2`).eq(index).children(selector);
                         let tempArr = [];
                         for (let i = 0; i < totalDropBox.length; i++) {
@@ -5222,14 +5254,13 @@ const DragAndDropMulti = (() => {
                         }
                         userAns[index] = tempArr;
                     } else {
-                        console.log(index, 'else');
                         userAns[index] = dragVal;
                     }
 
                     if (enableDragCheckSubmitBtn() == $(selector).length) {
                         $(`#submit2`).removeClass('disable');
                     }
-                }
+                }                
             })
         } catch (e) {
             console.error( 'DragAndDrop.initDroppable :', e );
