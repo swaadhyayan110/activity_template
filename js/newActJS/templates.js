@@ -2688,7 +2688,7 @@ const Mcq_PathKaSaar = (() => {
                 const textDiv = $('<div class="mcq-text"></div>');
                 const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');                
                 
-                mcqContextContainer.addClass('row g-0');                
+                mcqContextContainer.addClass('row g-0');
 
                 const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'left';
                 const side = String(preferredSide).toLowerCase();
@@ -2715,32 +2715,30 @@ const Mcq_PathKaSaar = (() => {
                         .find('img')
                         .attr('src', Activity.globalImagePath() + img.path)
                         .css({ 'border-radius' : '20px', 'width' : image_width });
-                }                               
+                }
 
                 if( side === 'left' || side === 'right' ) {
                     mcqContextContainer.css('flex-direction', 'row');
-                    if( side === 'left' ) {                        
+                    if( side === 'left' ) {
                         textDiv.css('order', 1);
                         imgDiv.css('order', 2);
-
-                        // imgDiv.removeClass( 'text-start' ).addClass( 'text-end' );
+                        
                         textDiv.removeClass( 'text-end' ).addClass( 'text-start' );
 
                     } else {
                         textDiv.css('order', 2);
                         imgDiv.css('order', 1);
-
-                        // imgDiv.removeClass( 'text-end' ).addClass( 'text-start' );
+                        
                         textDiv.removeClass( 'text-start' ).addClass( 'text-end' );
                     }
                 } else if (side === 'top' || side === 'bottom') {
                     mcqContextContainer.css('flex-direction', 'column');
                     if (side === 'top') {
                         textDiv.css('order', 1);
-                        imgDiv.css('order', 2);                        
+                        imgDiv.css('order', 2);
                     } else {
                         textDiv.css('order', 2);
-                        imgDiv.css('order', 1);                        
+                        imgDiv.css('order', 1);
                     }
 
                     textDiv.removeClass( commonClassText ).addClass( 'col my-1' );
@@ -2749,9 +2747,9 @@ const Mcq_PathKaSaar = (() => {
                     mcqContextContainer.css('flex-direction', 'row');
                     textDiv.css('order', 1);
                     imgDiv.css('order', 2);
-                }               
+                }
                 
-            }            
+            }
 
             const container = document.getElementById(heading);
             container.innerHTML = data.map((q, qi) => `<div class="p-2">
