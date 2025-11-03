@@ -2600,7 +2600,7 @@ const Mcq_PathKaSaar = (() => {
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        <div class="rowWithAudios py-0">                                        
+                                        <div class="rowWithAudios">                                        
                                             <span class="m-0 ${Define.get('head')}"></span> 
                                             <span class="colorsDiff ${Define.get('subHead')}"></span>                                        
                                         </div>
@@ -4996,9 +4996,7 @@ const DragAndDropMulti = (() => {
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        <div class="rowWithAudios border-bottom">
-                                            <div class="font18 fontBold ${Define.get('head')}"></div>
-                                        </div>
+                                        <div class="rowWithAudios border-bottom font18 fontBold ${Define.get('head')}"></div>
                                         <div class="question-block">
                                             <div class="dragItems drag-container2" id="${containerId}"></div>
                                             <div class="drag-question-box2 mt-3"></div>
@@ -5070,7 +5068,7 @@ const DragAndDropMulti = (() => {
             let isCorrect = false;
 
             let correctAnswerText = item.options;
-            if ( option_side == 'right' ) {                
+            if ( option_side == 'right' ) {
                 correctAnswerText = item.options[item.answer] ?? '';
             }
 
@@ -5172,7 +5170,13 @@ const DragAndDropMulti = (() => {
                         replacement,
                         `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}"></div>`
                     );
-                });                
+                });
+                
+                const image = [];
+                if( item.image != '' ) {
+                    const img = `<img class="" style="width: 200px;" src="${Activity.globalImagePath()}${item.image}" ondragstart="return false;"></img>`
+                    image.push( img );
+                }
                     
                 if( option_side == 'right' ) {
                     const options = [];
@@ -5180,11 +5184,12 @@ const DragAndDropMulti = (() => {
                         options.push( drag_option_html(item, ind) );
                     });
                     const html = `
-                        <div class="col-12 my-3 row g-0 align-items-center">                            
+                        <div class="col-12 my-3 row g-0 align-items-center">
                             <div class="col-auto me-1">
                                 (${Activity.getBulletLabels(lang, ind)})
                             </div>
                             <div class="col d-flex flex-wrap align-items-center question-container_2" data-queindex="${ind}">
+                                ${image.join( '' )}
                                 ${replacedText}
                                 <div class="ms-3 d-flex">
                                     ${options.join( '' )}
@@ -5200,6 +5205,7 @@ const DragAndDropMulti = (() => {
                                 (${Activity.getBulletLabels(lang, ind)})
                             </div>
                             <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
+                                ${image.join( '' )}
                                 ${replacedText}
                             </div>
                         </div>

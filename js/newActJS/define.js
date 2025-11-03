@@ -18,7 +18,8 @@ const Define = (() => {
         { qid : 14, text : ['श्रवण कौशल'], module : 14 },
         { qid : 15, text : ['Q-15', 'T&F'], module : 15 },
         { qid : 16, text : ['Q-16', 'DND-1'], module : 16 },
-        { qid : 17, text : ['Q-17', 'DND-2'], module : 16 }
+        { qid : 17, text : ['Q-17', 'DND-2'], module : 16 },
+        { qid : 18, text : ['Q-18', 'DND-3'], module : 16 }
     ];
 
     // DEFINE QUESTIONS
@@ -405,6 +406,21 @@ const Define = (() => {
                     { text: `सितार पर खाली जगह पर #_# की गई।`, options: ["नक्काषी", "पंखूँटी"], answer : 1 },
                     { text: `सितार बनाने के लिए तारों को #_# से बाँधा गया।`, options: ["खूँटी", "पंखूँटी"], answer : 0 },
                     { text: `कोयल ने सितार को बड़े ही #_# से पकड़ा।`, options: ["जतन", "पंखूँटी"], answer : 1 }
+                ]
+            }
+        },
+        {
+            id      : 18,
+            lang    : 'hi',
+            head    : '18. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',
+            subhead : '',
+            content : {
+                strictMatch : false,
+                replacement : '#_#',
+                questions   : [
+                    { text: `#_#, #_#`, image : 'img/1.png', options: ["पंख", "नाचने"] },
+                    { text: `#_#, #_#`, image : 'img/2.png', options: ["जंगल", "पंखूँटी"] },
+                    { text: `#_#, #_#`, image : 'img/3.png', options: ["नक्काषी", "पंखूँटी"] }
                 ]
             }
         }
