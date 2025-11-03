@@ -5074,15 +5074,20 @@ const DragAndDropMulti = (() => {
                 correctAnswerText = item.options[item.answer] ?? '';
             }
 
-            if( strictMatch ) {                
+            if( strictMatch ) {
                 isCorrect = userAnswer.toString() === correctAnswerText.toString();
-            } else {                
+                if( isCorrect ) {
+                    count++;
+                    correctCount++;
+                }
+            } else {
                 userAnswer.map((ans, ind) => {
                     if (correctAnswerText.includes(ans)) {
-                        count++;
+                        count++;                        
                     }
-                    if (count == correctAnswerText.length) {
-                        isCorrect = true
+                    if( count == correctAnswerText.length ) {
+                        isCorrect = true;
+                        correctCount++;
                     }
                 });
             }
@@ -5175,7 +5180,7 @@ const DragAndDropMulti = (() => {
                 });
                 
                 const image = [];
-                if( item.image != '' ) {
+                if( item.image != undefined ) {
                     const img = `<img class="" style="width: 200px;" src="${Activity.globalImagePath()}${item.image}" ondragstart="return false;"></img>`
                     image.push( img );
                 }
