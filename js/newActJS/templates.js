@@ -2681,12 +2681,14 @@ const Mcq_PathKaSaar = (() => {
                     const mcq_img_cont_class = hasText 
                         ? commonClassImg
                         : 'col';
-                    const mcq_img_width = hasText ? '40%' : '20%';
+                    // ..
+
+                    const image_width = img.width ?? '40%';
 
                     imgDiv.addClass(mcq_img_cont_class)
                         .find('img')
                         .attr('src', Activity.globalImagePath() + img.path)
-                        .css('width', mcq_img_width);
+                        .css({ 'border-radius' : '20px', 'width' : image_width });
                 }                               
 
                 if( side === 'left' || side === 'right' ) {
@@ -2716,7 +2718,7 @@ const Mcq_PathKaSaar = (() => {
                     }
 
                     textDiv.removeClass( commonClassText ).addClass( 'col my-1' );
-                    imgDiv.removeClass( commonClassImg ).addClass( 'col my-1 text-center' ).find( 'img' ).css( 'width', '20%' );
+                    imgDiv.removeClass( commonClassImg ).addClass( 'col my-1 text-center' );
                 } else {
                     mcqContextContainer.css('flex-direction', 'row');
                     textDiv.css('order', 1);
