@@ -2694,7 +2694,7 @@ const Mcq_PathKaSaar = (() => {
                 const side = String(preferredSide).toLowerCase();
 
                 const commonClassText = 'col-md-12 col-lg-7 col-12 col-sm-12';
-                const commonClassImg  = 'col-md-12 col-lg-5 col-sm-12 col-12';
+                const commonClassImg  = 'col-md-12 col-lg-5 col-sm-12 col-12 text-center';
 
                 if (hasText) {
                     mcqContextContainer.append(textDiv);
@@ -2723,14 +2723,14 @@ const Mcq_PathKaSaar = (() => {
                         textDiv.css('order', 1);
                         imgDiv.css('order', 2);
 
-                        imgDiv.removeClass( 'text-start' ).addClass( 'text-end' );
+                        // imgDiv.removeClass( 'text-start' ).addClass( 'text-end' );
                         textDiv.removeClass( 'text-end' ).addClass( 'text-start' );
 
                     } else {
                         textDiv.css('order', 2);
                         imgDiv.css('order', 1);
 
-                        imgDiv.removeClass( 'text-end' ).addClass( 'text-start' );
+                        // imgDiv.removeClass( 'text-end' ).addClass( 'text-start' );
                         textDiv.removeClass( 'text-start' ).addClass( 'text-end' );
                     }
                 } else if (side === 'top' || side === 'bottom') {
