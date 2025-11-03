@@ -79,12 +79,19 @@ const Activity = (() => {
             const subHead = Define.get('subHead');
 
             const arr = [ head, subHead ].map(item => `.${item}`);
+
+            const elements = {};
             
             const elHead = container.querySelector(arr[0]);
-            if (elHead) elHead.innerHTML = data.head || elHead.remove();
-            
-            const elSub = container.querySelector(arr[1]);
-            if (elSub) elSub.innerHTML = data.subhead || elSub.remove();
+            const elSub  = container.querySelector(arr[1]);
+
+            if (elHead) elHead.innerHTML = data.head || elHead.remove();            
+            if (elSub) elSub.innerHTML   = data.subhead || elSub.remove();
+
+            elements.head    = document.contains(elHead);
+            elements.subhead = document.contains(elSub);
+
+            return elements;
 
         } catch( err ) {
             console.error( 'Activity.setQuestionDetails :- ', err );
@@ -428,7 +435,7 @@ const MatchLeftToRight = (() => {
                         <div class="${Define.get('head')}"></div>
                         <p class="${Define.get('subHead')}"></p>
                     </div>
-                    <hr />
+                    <hr/>
                     <div class="forLevelAB">
                         <div class="levelText">${columnLabel}-${Activity.getBulletLabels(lang, 0)}</div>
                         <div class="levelText">${columnLabel}-${Activity.getBulletLabels(lang, 1)}</div>
@@ -471,7 +478,11 @@ const MatchLeftToRight = (() => {
             if( !Object.entries(data).length ) return;            
 
             ui(activityId, questionId);
-            Activity.setQuestionDetails( questionId );
+
+            const headElem = Activity.setQuestionDetails( questionId );
+            if( !headElem.head && !headElem.subhead ) {
+                document.querySelector('hr').remove();
+            }
 
             const leftContainer  = document.getElementById(`leftItems_${activityId}`);
             const rightContainer = document.getElementById(`rightItems_${activityId}`);
@@ -1021,9 +1032,12 @@ const MatchLeftRightToCenter = (() => {
                         Swal.fire({ icon: "info", text: "Please select an image from left or right column first." });
                     }
                 });
-            });
+            });            
             
-            Activity.setQuestionDetails( questionId );
+            const headElem = Activity.setQuestionDetails( questionId );
+            if( !headElem.head && !headElem.subhead ) {
+                document.querySelector('hr').remove();
+            }
             
             const btnContainer = cont.querySelector('.buttons.machiNgs');
             if (btnContainer) {
@@ -1866,7 +1880,10 @@ const JumbleLetters = (() => {
             const data = Activity.getData( questionId );
 
             ui(questionId);        
-            Activity.setQuestionDetails( questionId );
+            const headElem = Activity.setQuestionDetails( questionId );
+            if( !headElem.head && !headElem.subhead ) {
+                document.querySelector('hr').remove();
+            }
 
             document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid  = data?.id;        
 
@@ -2389,10 +2406,17 @@ const DragAndDrop = (() => {
     
     const renderDataDND = (questionId) => {
         try {
+            ui(questionId);
             const data = Activity.getData( questionId );
 
-            ui(questionId);
-            Activity.setQuestionDetails( questionId );
+            const hasAudio = data?.content?.audio;
+            if( !hasAudio ) $('.playsBtns').remove();
+
+            const headElem       = Activity.setQuestionDetails( questionId );            
+            const audioBtnExists = document.contains(document.querySelector('.playsBtns'));            
+            if( !headElem.head && !headElem.subhead && !audioBtnExists ) {
+                document.querySelector('.rowWithAudios').remove();
+            }
 
             const dragItems = document.getElementById(containerId);
             dragItems.dataset.qid = questionId;
@@ -2418,10 +2442,7 @@ const DragAndDrop = (() => {
                 const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
                 opt.push( html );
             });            
-            dragItems.innerHTML = opt.join('');
-
-            const hasAudio = data?.content?.audio;
-            if( !hasAudio ) $('.playsBtns').remove();
+            dragItems.innerHTML = opt.join('');            
 
             makeDraggable(`#${containerId} .wordDrag`);
             initDroppable(containerSelector);
@@ -2631,7 +2652,11 @@ const Mcq_PathKaSaar = (() => {
     const renderAllQuestionsMCQ = (questionId) => {
         try {
             ui(questionId);
-            Activity.setQuestionDetails( questionId );
+
+            const headElem = Activity.setQuestionDetails( questionId );
+            if( !headElem.head && !headElem.subhead ) {
+                document.querySelector( '.rowWithAudios' ).remove();
+            }
 
             const headingEl = document.getElementById(heading);
             headingEl.dataset.qid = questionId;
@@ -4798,7 +4823,10 @@ const TrueAndFalse = (() => {
 
     const renderQues = (questionId) => {
         ui(questionId);
-        Activity.setQuestionDetails( getQid() );
+        const headElem = Activity.setQuestionDetails( getQid() );
+        if( !headElem.head && !headElem.subhead ) {
+            document.querySelector('hr').remove();
+        }
 
         const activity = Activity.getData(getQid()) || {};
         const lang     = activity?.lang || 'en';
