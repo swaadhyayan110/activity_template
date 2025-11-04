@@ -19,7 +19,8 @@ const Define = (() => {
         { qid : 15, text : ['Q-15', 'T&F'], module : 15 },
         { qid : 16, text : ['Q-16', 'DND-1'], module : 16 },
         { qid : 17, text : ['Q-17', 'DND-2'], module : 16 },
-        { qid : 18, text : ['Q-18', 'DND-3'], module : 16 }
+        { qid : 18, text : ['Q-18', 'DND-3'], module : 16 },
+        { qid : 19, text : ['Q-19', 'DND-4'], module : 16 }
     ];
 
     // DEFINE QUESTIONS
@@ -164,8 +165,13 @@ const Define = (() => {
             subhead : '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो )',
             content : {
                 audio   : './bg.mp3',
+                col     : {
+                    md : 8,
+                    sm : 2,
+                    om : 12
+                },
                 heading : [
-                    { id: 1, accept: 'm', text: 'पुल्लिंग(Masculine)' },
+                    { id: 1, accept: 'm', texts: 'पुल्लिंग(Masculine)' },
                     { id: 2, accept: 'f', text: 'स्त्रीलिंग(Feminine)' },
                     { id: 3, accept: 'n', text: 'नपुंसकलिंग(Neuter)' }
                 ],
@@ -195,18 +201,41 @@ const Define = (() => {
                             head   : true,
                             option : true
                         },
-                        question : 'img/1.png',
-                        options  : ['बुरी बात है।', 'अच्छी बात है', 'आम बात है।', 'खास बात है।'],
+                        question : {
+                            image       : 'img/1.png',
+                            replacement : '#_#',
+                            text        : 'दूसरों के खिलौनों #_# को खराब कहना'
+                        },                        
+                        options  : [
+                            { image : 'img/1.png' },
+                            { text  : 'अच्छी बात है' },
+                            { text  : 'आम बात है।'},
+                            { text  : 'खास बात है।' }
+                        ],
                         answer   : 0
                     },
                     {
-                        question: "दूसरों के खिलौनों को खराब कहना-",
-                        options: ['अच्छा है।', 'बुरा है।', 'बच्चों की आदत है।', 'हमारी आदत है।'],
+                        question: {
+                            text : "दूसरों के खिलौनों को खराब कहना-"
+                        },                        
+                        options  : [
+                            { text  : 'अच्छा है।' },
+                            { text : 'अच्छी बात है' },
+                            { text : 'आम बात है।'},
+                            { text : 'खास बात है।' }
+                        ],
                         answer: 1
                     },
                     {
-                        question: "साथी खिलाड़ी को धमकाना और डराना-",
-                        options: ['उचित है।', 'अनुचित है।', 'अच्छा है।', 'आवश्यक है।'],
+                        question: {
+                            text : "साथी खिलाड़ी को धमकाना और डराना-"
+                        },
+                        options  : [
+                            { text  : 'अच्छा है।' },
+                            { text : 'अच्छी बात है' },
+                            { text : 'आम बात है।'},
+                            { text : 'खास बात है।' }
+                        ],
                         answer: 1
                     }
                 ]
@@ -306,17 +335,17 @@ const Define = (() => {
         },
         {
             id      : 13,
-            lang    : 'en',
+            lang    : 'hi',
             head    : '13. उचित सर्वनाम शब्दों पर क्लिक करो - ',
             mode    : 'single',
             content : [
-                { id: 1, label: "(क)", text: "दादा जी के लिए - तू, आप, तुम", answer: "आप" },
-                { id: 2, label: "(ख)", text: "अध्यापक जी के लिए - आप, वह, तुम", answer: "आप" },
-                { id: 3, label: "(ग)", text: "नानी जी के लिए - आप, तू, तुम", answer: "आप" },
-                { id: 4, label: "(घ)", text: "माँ के लिए - आप, वह, तुम", answer: "आप" },
-                { id: 5, label: "(ड)", text: "बड़े भाई के लिए - आप, तू, तुम", answer: "आप" },
-                { id: 6, label: "(च)", text: "पिता जी के लिए - आप, वह, तुम", answer: "आप" },
-                { id: 7, label: "(छ)", text: "छोटी बहन के लिए - तुम, तू, आप", answer: "तुम" },
+                { id: 1, text: "दादा जी के लिए - तू, आप, तुम", answer: "आप" },
+                { id: 2, text: "अध्यापक जी के लिए - आप, वह, तुम", answer: "आप" },
+                { id: 3, text: "नानी जी के लिए - आप, तू, तुम", answer: "आप" },
+                { id: 4, text: "माँ के लिए - आप, वह, तुम", answer: "आप" },
+                { id: 5, text: "बड़े भाई के लिए - आप, तू, तुम", answer: "आप" },
+                { id: 6, text: "पिता जी के लिए - आप, वह, तुम", answer: "आप" },
+                { id: 7, text: "छोटी बहन के लिए - तुम, तू, आप", answer: "तुम" },
             ]
         },
         {
@@ -378,7 +407,8 @@ const Define = (() => {
             lang    : 'hi',
             head    : '16. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',            
             content : {
-                strictMatch : true,
+                shuffle     : false,
+                strictMatch : false,
                 replacement : '#_#',
                 addOptions  : [ 'op1', 'op2', 'op3', 'op1' ],
                 questions   : [
@@ -395,6 +425,7 @@ const Define = (() => {
             lang    : 'hi',
             head    : '17. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',            
             content : {
+                shuffle     : false,
                 strictMatch : true,
                 replacement : '#_#',
                 option_side : 'right',
@@ -412,6 +443,7 @@ const Define = (() => {
             lang    : 'hi',
             head    : '18. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',
             content : {
+                shuffle     : false,
                 strictMatch : false,
                 replacement : '#_#',
                 questions   : [
@@ -419,6 +451,17 @@ const Define = (() => {
                     { text: `#_#, #_#`, image : 'img/2.png', options: ["जंगल", "पंखूँटी"] },
                     { text: `#_#, #_#`, image : 'img/3.png', options: ["नक्काषी", "पंखूँटी"] }
                 ]
+            }
+        },
+        {
+            id      : 19,
+            lang    : 'hi',
+            head    : '19. नीचे दिए गए शब्द-समूह में से सही शब्द चुनकर वाक्यों को पूरा कीजिएः-',
+            content : {
+                set : {
+                    answers : [ 'पंख', 'जंगल', 'नक्काषी' ],
+                    options : [ 'पंख', 'जंगल', 'नक्काषी', 'नाचने', 'पंखूँटी', 'पंख' ],
+                }
             }
         }
     ];
