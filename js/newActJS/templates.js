@@ -5484,6 +5484,211 @@ const DragAndDropMulti = (() => {
 
 })();
 
+const Sorting = (() => {
+
+    const containerId = 'sorting-container';
+
+    const sequenceClass    = 'sort-options';
+    const quesHeadingClass = 'sort-ques-heading';
+
+    const getQid = () => {
+        const el = document.querySelector(`#${containerId}`);
+        return el ? el.dataset.qid : undefined;
+    };
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container contAdapt shadow-lg" id="${containerId}">
+                                        <div class="questionHeadingMCQ ${Define.get('head')}"></div>
+                                        <div class="question-card justify-content-center animate__animated animate__fadeInDown animate__bounceInLeft" id="quizContainerAdaptiv">
+                                            <ul id="dragOptions" class="${sequenceClass}"></ul>
+                                        </div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn" id="submit2">${buttonLabel.check}</button>
+                                            <button class="show-btn" id="showAns2">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+			
+			const submitBtn = parent.querySelector( '.submit-btn' );
+			const showBtn   = parent.querySelector( '.show-btn' );
+			const resetBtn  = parent.querySelector( '.reset-btn' );
+
+			if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+			if (showBtn) showBtn.addEventListener("click", showAnswer);
+			if (resetBtn) resetBtn.addEventListener("click", tryAgain);
+		} catch (e) {
+            console.error( 'Sorting.ui :', e );
+        }
+    }
+
+    const renderQuestion = (questionId) => {
+        try {
+            ui(questionId);
+            Activity.setQuestionDetails( questionId );
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity?.lang || 'en';
+
+            const dragContainer = document.getElementById(containerId);
+            dragContainer.dataset.qid = questionId;
+
+            const content  = activity?.content ?? {};
+            const quesHead = content?.question ?? '';
+            const sequence = Activity.shuffleQuestions(content?.sequence ?? [] ) ?? [];
+
+            renderSequence(sequence);
+            
+            $('.'+quesHeadingClass).html( quesHead );
+
+            dragContainer.querySelectorAll(`.${sequenceClass} li`).forEach(li => {
+                li.addEventListener("dragstart", () => li.classList.add("dragging"));
+                li.addEventListener("dragend", () => li.classList.remove("dragging"));
+            });
+
+            const ul = dragContainer.querySelector('.'+sequenceClass);
+            if( ul ) ul.addEventListener("dragover", handleDragOver);
+
+        } catch (e) {
+            console.error( 'Sorting.renderQuestion :', e );
+        }
+    }
+
+    const renderSequence = (seqArray, seqClass='') => {
+        try {
+            const seqHtml = [];
+            seqArray.map( (item) => {
+                const li = `<li draggable="true" data-text="${item}" class="ddg ${seqClass}">${item}</li>`;
+                seqHtml.push( li );
+            });
+
+            $('.'+sequenceClass).html( seqHtml.join( '' ) );
+        } catch( e ) {
+            console.error( 'Sorting.renderQuestion :', e );
+        }
+    }
+
+    function handleDragOver(e) {
+        try {
+            e.preventDefault();
+            const ul = e.currentTarget;
+            const dragging = document.querySelector('.dragging');
+            if (!dragging) return;
+            const after = getDragAfterElement(ul, e.clientY);
+            if (!after) ul.appendChild(dragging);
+            else ul.insertBefore(dragging, after);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const getDragAfterElement = (container, y) => {
+        const elements = [...container.querySelectorAll("li:not(.dragging)")];
+        return elements.reduce((closest, child) => {
+            const box    = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) return { offset, element: child };
+            else return closest;
+        }, { offset: -Infinity }).element;
+    }
+
+    const showAnswer = () => {
+        const activity = Activity.getData(getQid()) || {};
+        const content  = activity?.content ?? {};
+        const sequence = content?.sequence ?? [];
+
+        renderSequence( sequence, 'text-success border-success' );
+
+        const ul = document.querySelector('.' + sequenceClass);
+        if (ul) ul.removeEventListener('dragover', handleDragOver);
+
+        $(`.${sequenceClass} li`).map( (i,item) => {
+            $(item).on('dragstart', (e) => { e.preventDefault(); return false; })
+        });
+
+        $( '.submit-btn' ).addClass( 'disable' );
+    }
+
+    const tryAgain = () => {
+        const activity = Activity.getData(getQid()) || {};
+        const content  = activity?.content ?? {};
+        const sequence = Activity.shuffleQuestions( content?.sequence ?? [] ) ?? [];
+
+        renderSequence( sequence );
+
+        const ul = document.querySelector('.' + sequenceClass);
+        if (ul) {
+            ul.removeEventListener('dragover', handleDragOver);
+            ul.addEventListener('dragover', handleDragOver);
+        }
+
+        $(`.${sequenceClass} li`).map( (i,item) => {
+            $(item).on('dragstart', (e) => {});
+        });
+
+        document.querySelectorAll(`.${sequenceClass} li`).forEach(li => {
+            li.addEventListener("dragstart", () => li.classList.add("dragging"));
+            li.addEventListener("dragend", () => li.classList.remove("dragging"));
+        });
+
+        $( '.submit-btn' ).removeClass( 'disable' );
+    }
+
+    const checkAnswer = () => {
+        const activity = Activity.getData(getQid()) || {};
+        const content  = activity?.content ?? {};
+        const sequence = content?.sequence ?? [];
+
+        const attempt = [];
+        [...$(`.${sequenceClass} li`)]?.map( (item,ind) => {
+            attempt.push( item.innerHTML );
+        });
+
+        if( sequence.toString() === attempt.toString() ) {
+            Swal.fire({
+                title: "Well Done",
+                icon: "success"
+            });
+
+            renderSequence( sequence, 'text-success border-success' );
+        } else {            
+            attempt?.map( (item, ind) => {
+                let dragClass = 'text-success border-success';
+                if( sequence[ind] != item ) {
+                    dragClass = 'text-danger border-danger';
+                }
+                $('.ddg').eq(ind).addClass( dragClass );
+            });
+
+            Swal.fire({
+                title: "Try again",
+                icon: "error"
+            });
+        }
+    }
+
+    return {
+        render : renderQuestion,
+    }
+
+})();
+
 Modules.get().map(({ module }) => {
     try {        
         const mod = eval(module);

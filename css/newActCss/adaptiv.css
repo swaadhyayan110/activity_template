@@ -9,6 +9,33 @@
     margin: 0 5px;
 }
 
+.ddg {
+        background: #ffffff;
+    border: 2px solid #99d0f7;
+    border-radius: 14px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 15px 18px;
+    overflow: hidden;
+    font-family: 'PoppinsLight';
+    transition: all 0.3s ease, transform 0.25s ease;
+    color: #000f5a;
+    margin: 9px 5px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #ffffff, #f3f6fb);
+    border: 1px solid #d0d7e2;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.08), -2px -2px 6px rgba(255, 255, 255,);
+}
+
+.ddg:hover {
+    background: linear-gradient(135deg, #e7f0ff, #ffffff);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1), -2px -2px 6px rgba(255, 255, 255, 0.8);
+}
+
 /* ================== ICONS ================== */
 .iconsIns {
     width: 25px;

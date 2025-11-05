@@ -1,5 +1,14 @@
 const Define = (() => {
 
+    /*
+        ==============
+        Language Codes
+        --------------
+        en : "English"
+        hi : "Hindi"
+        ==============
+    */
+
     // DEFINE BUTTONS
     const buttons = [
         { qid : 1, text : ['Q-1', 'M-1'], module : 1, landscape : true },
@@ -20,7 +29,8 @@ const Define = (() => {
         { qid : 16, text : ['Q-16', 'DND-1'], module : 16 },
         { qid : 17, text : ['Q-17', 'DND-2'], module : 16 },
         { qid : 18, text : ['Q-18', 'DND-3'], module : 16 },
-        { qid : 19, text : ['Q-19', 'DND-4'], module : 16 }
+        { qid : 19, text : ['Q-19', 'DND-4'], module : 16 },
+        { qid : 20, text : ['Q-20', 'DND-Sort'], module : 17 }
     ];
 
     // DEFINE QUESTIONS
@@ -462,6 +472,14 @@ const Define = (() => {
                     answers : [ 'पंख', 'जंगल', 'नक्काषी' ],
                     options : [ 'पंख', 'जंगल', 'नक्काषी', 'नाचने', 'पंखूँटी', 'पंख' ],
                 }
+            }
+        },
+        {
+            id      : 20,
+            lang    : 'en',
+            head    : '20. Arrange the days of the week starting from Monday',
+            content : {                
+                sequence : [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday' ],
             }
         }
     ];
