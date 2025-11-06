@@ -5774,7 +5774,7 @@ const Pdf = (() => {
             
             const activity = Activity.getData(questionId) || {};
             const lang     = activity?.lang || 'en';
-            const path     = activity?.content?.pdf ?? '';
+            const path     = activity?.content?.pdf ? Activity.globalImagePath()+activity?.content?.pdf : '';
 
             if( path != '' ) {
 
