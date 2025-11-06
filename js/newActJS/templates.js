@@ -2798,7 +2798,7 @@ const Mcq_PathKaSaar = (() => {
                     return html;
                 });
 
-                const imageAboveOption = mcq?.imageaboveoption ? 
+                const imageAboveOption = mcq?.imageaboveoption ?
                     `<div class="text-center my-1">
                         <img src="${mcq?.imageaboveoption.image}" style="width :${mcq?.imageaboveoption.width ?? '30%'};">
                     </div>` : '';
@@ -5768,11 +5768,9 @@ const Pdf = (() => {
             const lang     = activity?.lang || 'en';
             const path     = activity?.content?.pdf ?? '';
 
-            const pdfJsCdn = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js';
-
             if( path != '' ) {
-                await Define.get( 'loadScript' )(pdfJsCdn);
-                pdfjsLib.GlobalWorkerOptions.workerSrc ="js/pdf.worker.min.js";
+                await Define.get( 'loadScript' )('js/pdf.js');
+                await Define.get( 'loadScript' )('js/pdf.worker.js');
 
                 let pdfDoc      = null;
                 let currentPage = 1;
@@ -5785,7 +5783,7 @@ const Pdf = (() => {
 
                 pdfjsLib.getDocument(path).promise.then(doc => {
                     pdfDoc = doc;
-                    pageCountEl.textContent = `/ ${pdfDoc.numPages}`;
+                    pageCountEl.textContent = `${pdfDoc.numPages}`;
                     renderPage();
                 });
 
