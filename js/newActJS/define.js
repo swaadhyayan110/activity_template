@@ -487,7 +487,7 @@ const Define = (() => {
             id      : 21,
             lang    : 'en',            
             content : {
-                pdf : './pdf.pdf',
+                pdf : 'pdf.pdf',
                 download : true
             }
         }
