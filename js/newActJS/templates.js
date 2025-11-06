@@ -2796,13 +2796,20 @@ const Mcq_PathKaSaar = (() => {
                         </div>
                     `;
                     return html;
-                });                
+                });
+
+                const imageAboveOption = mcq?.imageaboveoption ? 
+                    `<div class="text-center my-1">
+                        <img src="${mcq?.imageaboveoption.image}" style="width :${mcq?.imageaboveoption.width ?? '30%'};">
+                    </div>` : '';
+                // ..
 
                 const ques = `<div class="p-2">
                                 <div class="row m-0 align-items-center" style="font-size:18px">
                                     <div style="width:30px" class="questionHeadingMCQ"><strong>${ind + 1}.</strong></div>
                                     <div class="col questionHeadingMCQ">${questionText}</div>
                                 </div>
+                                ${imageAboveOption}
                                 <div class="row mt-2 ml-4">${options.join('')}</div>
                             </div>
                             `;
@@ -5687,6 +5694,127 @@ const Sorting = (() => {
         render : renderQuestion,
     }
 
+})();
+
+const Pdf = (() => {
+    const containerId = 'pdf-container';
+
+    const getQid = () => {
+        const el = document.querySelector(`#${containerId}`);
+        return el ? el.dataset.qid : undefined;
+    };
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container contAdapt py-0 shadow-lg" id="${containerId}">
+                                        <div class="wrap">
+                                            <div class="d-flex align-items-center justify-content-center p-1 gap-2 mt-2">
+                                                <div class="col-2 text-center">
+                                                    <button class="btn btn-sm btn-primary p-2" id="downloadBtn">⬇ Download</button>
+                                                </div>
+                                                <div class="col mx-auto d-flex align-items-center justify-content-center">
+                                                    <button class="btn btn-sm btn-primary p-2" id="prevBtn">◀ Prev</button>
+                                                    <input class="mx-1 border rounded-2" id="pageNum" type="number" value="1" min="1" autocomplete="off" style="width: 3rem;text-align: center;">
+                                                    /
+                                                    <span id="pageCount" class="mx-1">2</span>
+                                                    <button class="btn btn-sm btn-primary p-2" id="nextBtn">Next ▶</button>
+                                                </div>
+                                                <div class="col-2 text-center">
+                                                    <button class="btn btn-sm btn-primary p-2" id="zoomOutBtn">-</button>
+                                                    <button class="btn btn-sm btn-primary p-2" id="zoomInBtn">+</button>
+                                                    <button class="btn btn-sm btn-primary p-2" id="resetBtn">Reset</button>
+                                                </div>
+                                            </div>
+                                            <div class="viewer">
+                                                <canvas id="pdfCanvas" width="756" height="972" style="width: 756px; height: 972px;"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+			
+			// const submitBtn = parent.querySelector( '.submit-btn' );
+			// const showBtn   = parent.querySelector( '.show-btn' );
+			// const resetBtn  = parent.querySelector( '.reset-btn' );
+
+			// if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+			// if (showBtn) showBtn.addEventListener("click", showAnswer);
+			// if (resetBtn) resetBtn.addEventListener("click", tryAgain);
+
+		} catch (e) {
+            console.error( 'Sorting.ui :', e );
+        }
+    };
+
+    const renderQuestion = async (questionId) => {
+        try {
+            ui(questionId);
+            
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity?.lang || 'en';
+            const path     = activity?.content?.pdf ?? '';
+
+            const pdfJsCdn = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js';
+
+            if( path != '' ) {
+                await Define.get( 'loadScript' )(pdfJsCdn);
+                pdfjsLib.GlobalWorkerOptions.workerSrc ="js/pdf.worker.min.js";
+
+                let pdfDoc      = null;
+                let currentPage = 1;
+                let scale       = 1.2;
+                let rotation    = 0;
+                const canvas    = document.getElementById("pdfCanvas");
+                const ctx 		= canvas.getContext("2d");
+                const pageNumInput = document.getElementById("pageNum");
+                const pageCountEl  = document.getElementById("pageCount");
+
+                pdfjsLib.getDocument(path).promise.then(doc => {
+                    pdfDoc = doc;
+                    pageCountEl.textContent = `/ ${pdfDoc.numPages}`;
+                    renderPage();
+                });
+
+                document.getElementById("prevBtn").onclick = () => {
+                    if (currentPage <= 1) return;
+                    currentPage--; renderPage();
+                };
+
+                document.getElementById("nextBtn").onclick = () => {
+                    if (currentPage >= pdfDoc.numPages) return;
+                    currentPage++; renderPage();
+                };
+
+                pageNumInput.onchange = () => {
+                    let v = parseInt(pageNumInput.value) || 1;
+                    if (v < 1) v = 1;
+                    if (v > pdfDoc.numPages) v = pdfDoc.numPages;
+                    currentPage = v; renderPage();
+                };
+            }
+
+            // window.open(path, '_blank');
+
+        } catch (e) {
+            console.error( 'Sorting.renderQuestion :', e );
+        }
+    };
+
+    return { render : renderQuestion }
 })();
 
 Modules.get().map(({ module }) => {

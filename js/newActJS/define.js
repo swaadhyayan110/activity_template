@@ -30,7 +30,8 @@ const Define = (() => {
         { qid : 17, text : ['Q-17', 'DND-2'], module : 16 },
         { qid : 18, text : ['Q-18', 'DND-3'], module : 16 },
         { qid : 19, text : ['Q-19', 'DND-4'], module : 16 },
-        { qid : 20, text : ['Q-20', 'DND-Sort'], module : 17 }
+        { qid : 20, text : ['Q-20', 'DND-Sort'], module : 17 },
+        { qid : 21, text : ['Q-21', 'PDF'], module : 18 },
     ];
 
     // DEFINE QUESTIONS
@@ -207,9 +208,9 @@ const Define = (() => {
                 },
                 mcq  : [
                     {
-                        image    : {
-                            head   : true,
-                            option : true
+                        imageaboveoption : {
+                            image : 'img/1.png',
+                            width : '25%'
                         },
                         question : {
                             image       : 'img/1.png',
@@ -478,8 +479,15 @@ const Define = (() => {
             id      : 20,
             lang    : 'en',
             head    : '20. Arrange the days of the week starting from Monday',
-            content : {                
+            content : {
                 sequence : [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday' ],
+            }
+        },
+        {
+            id      : 21,
+            lang    : 'en',            
+            content : {
+                pdf : './pdf.pdf'
             }
         }
     ];
@@ -488,30 +496,31 @@ const Define = (() => {
     const head    = 'qNum';
     const subHead = 'questionText';
 
+    const loadScript = (src) => {
+        return new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = src;
+            s.onload = () => resolve(s);
+            s.onerror = reject;
+            document.body.appendChild(s);
+        });
+    }
+
+    (async () => {
+        const scriptPath = 'js/newActJS';
+        await loadScript(`${scriptPath}/modules.js`);
+        await loadScript(`${scriptPath}/templates.js`);
+        await loadScript(`${scriptPath}/ui.js`);
+    })();
+
     const store = {
         head,
         buttons,
         subHead,
         questions,
+        loadScript,
         questionContainer
     };
-
-    (async () => {
-        const scriptPath = 'js/newActJS';
-        
-        const loadScript = (src) =>
-            new Promise((resolve, reject) => {
-                const s = document.createElement('script');
-                s.src = src;
-                s.onload = resolve;
-                s.onerror = reject;
-                document.body.appendChild(s);
-            });
-
-        await loadScript(`${scriptPath}/modules.js`);
-        await loadScript(`${scriptPath}/templates.js`);
-        await loadScript(`${scriptPath}/ui.js`);
-    })();
 
     const get = (key) => store[key];
 
