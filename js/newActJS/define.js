@@ -488,7 +488,7 @@ const Define = (() => {
             lang    : 'en',            
             content : {
                 pdf : './pdf.pdf',
-                // download : true
+                download : true
             }
         }
     ];
