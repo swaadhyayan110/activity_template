@@ -5728,9 +5728,9 @@ const Pdf = (() => {
                                                 </div>
                                                 <div class="col mx-auto d-flex align-items-center justify-content-center">
                                                     <button class="btn btn-sm btn-primary p-2" id="prevBtn">◀ Prev</button>
-                                                    <input class="mx-1 border rounded-2" id="pageNum" type="number" value="1" min="1" autocomplete="off" style="width: 3rem;text-align: center;">
+                                                    <input class="mx-1 border rounded-2" id="pageNum" type="number" value="-" min="1" autocomplete="off" style="width: 3rem;text-align: center;">
                                                     /
-                                                    <span id="pageCount" class="mx-1">2</span>
+                                                    <span id="pageCount" class="mx-1">-</span>
                                                     <button class="btn btn-sm btn-primary p-2" id="nextBtn">Next ▶</button>
                                                 </div>
                                                 <div class="col-2 text-center">
@@ -5746,17 +5746,25 @@ const Pdf = (() => {
                                     </div>
                                 </div>`;
             // ..
-			
-			// const submitBtn = parent.querySelector( '.submit-btn' );
-			// const showBtn   = parent.querySelector( '.show-btn' );
-			// const resetBtn  = parent.querySelector( '.reset-btn' );
-
-			// if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
-			// if (showBtn) showBtn.addEventListener("click", showAnswer);
-			// if (resetBtn) resetBtn.addEventListener("click", tryAgain);
 
 		} catch (e) {
             console.error( 'Sorting.ui :', e );
+        }
+    };
+
+    const toggle_loader = ( show=true ) => {
+        try {
+            $( '.spinner-container' ).remove();
+            $( '.viewer' ).addClass( 'position-relative' );
+            const html = `<div class="spinner-container position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-75 z-3 d-flex align-items-center justify-content-center" style="border-radius:20px;">
+                            <div class="spinner-border text-primary" role="status"></div>
+                        </div>`;
+            // ..
+            if( show ) {
+                $( '.viewer' ).append( html );
+            }
+        } catch( err ) {
+            console.log( 'ERROR : Pdf.toggle_loader', err );
         }
     };
 
@@ -5769,9 +5777,25 @@ const Pdf = (() => {
             const path     = activity?.content?.pdf ?? '';
 
             if( path != '' ) {
+
+                const downloadBtn     = document.getElementById("downloadBtn");
+                const downloadAllowed = activity?.content?.download;
+                if( downloadBtn && downloadAllowed ) {
+                    downloadBtn.onclick = () => {
+                        const a    = document.createElement("a");
+                        a.href     = path;
+                        a.download = path;
+                        a.click();
+                    };
+                } else {
+                    downloadBtn.remove();
+                }
+                
+                toggle_loader(true);
                 await Define.get( 'loadScript' )('js/pdf.js');
                 await Define.get( 'loadScript' )('js/pdf.worker.js');
 
+                let loadingTask;
                 let pdfDoc      = null;
                 let currentPage = 1;
                 let scale       = 1.2;
@@ -5806,19 +5830,10 @@ const Pdf = (() => {
 
                 document.getElementById("zoomInBtn").onclick  = () => { scale *= 1.2; renderPage(); };
                 document.getElementById("zoomOutBtn").onclick = () => { scale /= 1.2; renderPage(); };
-                document.getElementById("resetBtn").onclick   = () => { scale=1.2; rotation=0; renderPage(); };
-
-                const downloadBtn = document.getElementById("downloadBtn");
-                if( downloadBtn ) {
-                    downloadBtn.onclick = () => {
-                        const a    = document.createElement("a");
-                        a.href     = path; 
-                        a.download = path;
-                        a.click();
-                    };
-                }
+                document.getElementById("resetBtn").onclick   = () => { scale=1.2; rotation=0; renderPage(); };                
 
                 async function renderPage() {
+                    toggle_loader(true);
                     const page 	        = await pdfDoc.getPage(currentPage);
                     const viewport      = page.getViewport({ scale, rotation });
                     const outputScale   = window.devicePixelRatio || 1;
@@ -5837,10 +5852,16 @@ const Pdf = (() => {
                     }).promise;
 
                     pageNumInput.value = currentPage;
+                    toggle_loader(false);
+                }
+
+                loadingTask = pdfjsLib.getDocument( path );
+                loadingTask.onProgress = ( data ) => {
+                    if( data.loaded == data.total ) {
+                        toggle_loader(false);
+                    }
                 }
             }
-
-            // window.open(path, '_blank');
 
         } catch (e) {
             console.error( 'Pdf.renderPdf :', e );
