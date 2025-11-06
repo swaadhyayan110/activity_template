@@ -2800,7 +2800,7 @@ const Mcq_PathKaSaar = (() => {
 
                 const imageAboveOption = mcq?.imageaboveoption ?
                     `<div class="text-center my-1">
-                        <img src="${mcq?.imageaboveoption.image}" style="width :${mcq?.imageaboveoption.width ?? '30%'};">
+                        <img src="${Activity.globalImagePath()}${mcq?.imageaboveoption.image}" style="width :${mcq?.imageaboveoption.width ?? '30%'};">
                     </div>` : '';
                 // ..
 
@@ -5739,7 +5739,7 @@ const Pdf = (() => {
                                                     <button class="btn btn-sm btn-primary p-2" id="resetBtn">Reset</button>
                                                 </div>
                                             </div>
-                                            <div class="viewer">
+                                            <div class="viewer overflow-auto d-flex align-items-center justify-content-center p-1">
                                                 <canvas id="pdfCanvas" width="756" height="972" style="width: 756px; height: 972px;"></canvas>
                                             </div>
                                         </div>
@@ -5760,7 +5760,7 @@ const Pdf = (() => {
         }
     };
 
-    const renderQuestion = async (questionId) => {
+    const renderPdf = async (questionId) => {
         try {
             ui(questionId);
             
@@ -5803,16 +5803,51 @@ const Pdf = (() => {
                     if (v > pdfDoc.numPages) v = pdfDoc.numPages;
                     currentPage = v; renderPage();
                 };
+
+                document.getElementById("zoomInBtn").onclick  = () => { scale *= 1.2; renderPage(); };
+                document.getElementById("zoomOutBtn").onclick = () => { scale /= 1.2; renderPage(); };
+                document.getElementById("resetBtn").onclick   = () => { scale=1.2; rotation=0; renderPage(); };
+
+                const downloadBtn = document.getElementById("downloadBtn");
+                if( downloadBtn ) {
+                    downloadBtn.onclick = () => {
+                        const a    = document.createElement("a");
+                        a.href     = path; 
+                        a.download = path;
+                        a.click();
+                    };
+                }
+
+                async function renderPage() {
+                    const page 	        = await pdfDoc.getPage(currentPage);
+                    const viewport      = page.getViewport({ scale, rotation });
+                    const outputScale   = window.devicePixelRatio || 1;
+                    canvas.width        = viewport.width * outputScale;
+                    canvas.height       = viewport.height * outputScale;
+                    canvas.style.width  = viewport.width + "px";
+                    canvas.style.height = viewport.height + "px";
+                    const transform 	= outputScale !== 1
+                        ? [outputScale, 0, 0, outputScale, 0, 0]
+                        : null;
+
+                    await page.render({
+                        canvasContext: ctx,
+                        viewport,
+                        transform
+                    }).promise;
+
+                    pageNumInput.value = currentPage;
+                }
             }
 
             // window.open(path, '_blank');
 
         } catch (e) {
-            console.error( 'Sorting.renderQuestion :', e );
+            console.error( 'Pdf.renderPdf :', e );
         }
     };
 
-    return { render : renderQuestion }
+    return { render : renderPdf }
 })();
 
 Modules.get().map(({ module }) => {
