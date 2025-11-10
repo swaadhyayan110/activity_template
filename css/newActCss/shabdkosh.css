@@ -169,7 +169,7 @@ h2 {
 
 
 /* ✅ Mobile Scroll Tabs */
-@media (min-width: 200px) and (max-width: 980px) {
+@media (min-width: 200px) and (max-width:768px) {
 
   .tab-container {
     flex-direction: column;
@@ -185,7 +185,6 @@ h2 {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    justify-content: flex-start;
     align-items: center;
     gap: 10px;
     padding: 10px 12px;

@@ -6025,8 +6025,8 @@ const Shabdkosh = (() => {
 
         const tabpanecontent = `
             <div class="tab-pane active">
-            ${item?.tabtitle ? `<h2 class="over"><b>${item.tabtitle}</b></h2>` : '' }
-            ${item?.meaning ? `<div class="meaning"><b>अर्थ:</b>${item.meaning}</div>` : ''}
+            ${item?.tabtitle ? `<div class="over"><b>${item.tabtitle}</b></div>` : '' }
+            ${item?.meaning ? `<div class="meaning me-1"><b class="me-1">अर्थ :</b>${item.meaning}</div>` : ''}
             ${item?.sentence ? 
                 `<div class="sentence-use">
                     <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
