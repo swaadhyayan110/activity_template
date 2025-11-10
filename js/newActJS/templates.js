@@ -5725,9 +5725,9 @@ const Pdf = (() => {
                                                 </div>
                                                 <div class="col mx-auto d-flex align-items-center justify-content-center">
                                                     <button class="btn btn-sm btn-primary p-2" id="prevBtn">◀ Prev</button>
-                                                    <input class="mx-1 border rounded-2" id="pageNum" type="number" value="-" min="1" autocomplete="off" style="width: 3rem;text-align: center;">
+                                                    <input class="mx-1 border rounded-2" id="pageNum" type="number" value="0" min="1" autocomplete="off" style="width: 3rem;text-align: center;">
                                                     /
-                                                    <span id="pageCount" class="mx-1">-</span>
+                                                    <span id="pageCount" class="mx-1">0</span>
                                                     <button class="btn btn-sm btn-primary p-2" id="nextBtn">Next ▶</button>
                                                 </div>
                                                 <div class="col-2 text-center">
@@ -5773,68 +5773,84 @@ const Pdf = (() => {
             const lang     = activity?.lang || 'en';
             const path     = activity?.content?.pdf ? Activity.globalImagePath()+activity?.content?.pdf : '';
 
-            if( path != '' ) {
+            if( !path ) {
+                console.warn('No PDF path found');
+                return;
+            }
 
-                const downloadBtn     = document.getElementById("downloadBtn");
-                const downloadAllowed = activity?.content?.download;
-                if( downloadBtn && downloadAllowed ) {
-                    downloadBtn.onclick = () => {
-                        const a    = document.createElement("a");
-                        a.href     = path;
-                        a.download = path;
-                        a.click();
-                    };
-                } else {
-                    downloadBtn.remove();
-                }
-                
-                toggle_loader(true);
-                try {
-                    await Define.get( 'loadScript' )('js/pdf.js');
-                    await Define.get( 'loadScript' )('js/pdf.worker.js');
-                } catch( e ) {
-                    toggle_loader(true);
-                }
+            const downloadBtn     = document.getElementById("downloadBtn");
+            const downloadAllowed = activity?.content?.download;
+            if( downloadBtn && downloadAllowed ) {
+                downloadBtn.onclick = () => {
+                    const a    = document.createElement("a");
+                    a.href     = path;
+                    a.download = path;
+                    a.click();
+                };
+            } else {
+                downloadBtn.remove();
+            }
+            
+            toggle_loader(true);
+            await Define.get( 'loadScript' )('js/pdf.js');
+            await Define.get( 'loadScript' )('js/pdf.worker.js');
 
-                let loadingTask;
-                let pdfDoc      = null;
-                let currentPage = 1;
-                let scale       = 1.2;
-                let rotation    = 0;
-                const canvas    = document.getElementById("pdfCanvas");
-                const ctx 		= canvas.getContext("2d");
-                const pageNumInput = document.getElementById("pageNum");
-                const pageCountEl  = document.getElementById("pageCount");
+            if( window.pdfjsLib && pdfjsLib.GlobalWorkerOptions ) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/pdf.worker.js';
+            }
+            
+            const canvas    = document.getElementById("pdfCanvas");
+            const ctx 		= canvas.getContext("2d");
+            const pageNumInput = document.getElementById("pageNum");
+            const pageCountEl  = document.getElementById("pageCount");
+            
+            let pdfDoc      = null;
+            let currentPage = 1;
+            let scale       = 1.2;
+            let rotation    = 0;
 
-                pdfjsLib.getDocument(path).promise.then(doc => {
-                    pdfDoc = doc;
-                    pageCountEl.textContent = `${pdfDoc.numPages}`;
-                    renderPage();
+            const loadingTask = pdfjsLib.getDocument(path);
+            loadingTask.onProgress = (data) => {
+                if( data.total && data.loaded === data.total ) toggle_loader(false);                
+            };
+
+            try {
+                pdfDoc = await loadingTask.promise;
+                console.info( '[OK] ', 'PDF loaded.');
+            } catch (err) {
+                console.info( '[ERROR]', 'Failed to load PDF =>', err.message ?? err );
+                return;
+            }
+
+            const togglePdfControls = (enabled) => {
+                const ids = ['prevBtn','nextBtn','zoomInBtn','zoomOutBtn','resetBtn'];
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.disabled = !enabled;
                 });
+                if (pageNumInput) pageNumInput.disabled = !enabled;
+            }
 
-                document.getElementById("prevBtn").onclick = () => {
-                    if (currentPage <= 1) return;
-                    currentPage--; renderPage();
-                };
+            const renderPage = async () => {
+                toggle_loader(true);
 
-                document.getElementById("nextBtn").onclick = () => {
-                    if (currentPage >= pdfDoc.numPages) return;
-                    currentPage++; renderPage();
-                };
+                if( !pdfDoc ) return;
 
-                pageNumInput.onchange = () => {
-                    let v = parseInt(pageNumInput.value) || 1;
-                    if (v < 1) v = 1;
-                    if (v > pdfDoc.numPages) v = pdfDoc.numPages;
-                    currentPage = v; renderPage();
-                };
+                let currentRenderTask = null;
+                let isRendering = false;
 
-                document.getElementById("zoomInBtn").onclick  = () => { scale *= 1.2; renderPage(); };
-                document.getElementById("zoomOutBtn").onclick = () => { scale /= 1.2; renderPage(); };
-                document.getElementById("resetBtn").onclick   = () => { scale=1.2; rotation=0; renderPage(); };                
+                if( currentRenderTask ) {
+                    try {
+                        currentRenderTask.cancel();
+                        await new Promise(r => setTimeout(r, 0));
+                    } catch (e) {}
+                    currentRenderTask = null;
+                }
 
-                async function renderPage() {
-                    toggle_loader(true);
+                togglePdfControls(false);
+                isRendering = true;
+                
+                try {
                     const page 	        = await pdfDoc.getPage(currentPage);
                     const viewport      = page.getViewport({ scale, rotation });
                     const outputScale   = window.devicePixelRatio || 1;
@@ -5845,7 +5861,7 @@ const Pdf = (() => {
                     const transform 	= outputScale !== 1
                         ? [outputScale, 0, 0, outputScale, 0, 0]
                         : null;
-
+                        
                     await page.render({
                         canvasContext: ctx,
                         viewport,
@@ -5854,17 +5870,41 @@ const Pdf = (() => {
 
                     pageNumInput.value = currentPage;
                     toggle_loader(false);
-                }
-
-                loadingTask = pdfjsLib.getDocument( path );
-                loadingTask.onProgress = ( data ) => {
-                    if( data.loaded == data.total && data.total && data.loaded ) {
-                        toggle_loader(false);
+                } catch (err) {                    
+                    if( err && err.name === 'RenderingCancelledException' ) {
+                        console.info('render cancelled');
+                    } else {
+                        console.error('Error rendering page:', err);                        
                     }
+                } finally {
+                    isRendering = false;
+                    togglePdfControls(true);
                 }
             }
+            
+            pageCountEl.textContent = pdfDoc ? `${pdfDoc.numPages}` : 0;
+            await renderPage();
+            
+            document.getElementById("prevBtn").onclick = () => {
+                if (currentPage <= 1) return;
+                currentPage--; renderPage();
+            };
+            document.getElementById("nextBtn").onclick = () => {
+                if (currentPage >= pdfDoc.numPages) return;
+                currentPage++; renderPage();
+            };
+            pageNumInput.onchange = () => {
+                let v = parseInt(pageNumInput.value) || 1;
+                if (v < 1) v = 1;
+                if (v > pdfDoc.numPages) v = pdfDoc.numPages;
+                currentPage = v; renderPage();
+            };
+            document.getElementById("zoomInBtn").onclick  = () => { scale *= 1.2; renderPage(); };
+            document.getElementById("zoomOutBtn").onclick = () => { scale /= 1.2; renderPage(); };
+            document.getElementById("resetBtn").onclick   = () => { scale=1.2; rotation=0; renderPage(); };            
 
         } catch (e) {
+            toggle_loader(true);
             console.error( 'Pdf.renderPdf :', e );
         }
     };

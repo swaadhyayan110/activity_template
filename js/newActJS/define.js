@@ -519,7 +519,10 @@ const Define = (() => {
             const s = document.createElement('script');
             s.src = src;
             s.onload = () => resolve(s);
-            s.onerror = reject;
+            s.onerror = (err) => {
+                s.remove();
+                reject( new Error( `Failed to load script: ${src}` ) );
+            };
             document.body.appendChild(s);
         });
     }

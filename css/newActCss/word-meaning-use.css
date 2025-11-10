@@ -1,0 +1,252 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.qu_0 {
+  margin-top: 30px;
+}
+
+.tab-pane {
+  overflow: hidden;
+  display: none;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.tab-container {
+  width: 100%;
+  height: auto;
+}
+
+.tab-buttons {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: absolute;
+  width: 100%;
+  top: -43px;
+  z-index: 9999;
+}
+
+
+
+.tab-buttons button {
+  transition: all 0.3s;
+  font-weight: bold;
+  padding: 10px 10px;
+  background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 17px;
+  font-family: 'PoppinsLight';
+  color: #000;
+  align-items: center;
+  text-align: center;
+  margin: 6px;
+  border: 2px solid #b0ecb0;
+  background: #fff;
+}
+
+.tab-buttons button:hover,
+.tab-buttons button.active {
+  background: #fff;
+  border-color: green;
+  color: #000;
+}
+
+.heading {
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+  text-align: justify;
+  color: #333;
+}
+
+.tab-content {
+  padding: 30px;
+  border: 2px solid #b0ecb0;
+  margin: 2vw auto;
+  border-radius: 4px;
+  width: 95%;
+  border-radius: 50px;
+  height: 80vh;
+  position: relative;
+}
+
+.photo {
+  width: 100%;
+}
+
+
+
+.tab-pane.active {
+  display: block;
+}
+
+h2 {
+  color: #2b8a3e;
+  margin-bottom: 10px;
+}
+
+.meaning {
+  font-size: 19px;
+  color: #333;
+  padding: 10px 0;
+  transition: all 0.4s ease;
+  line-height: 2rem;
+}
+
+.sentence-use {
+  font-size: 20px;
+  color: #333;
+  padding: 10px 0;
+  transition: all 0.4s ease;
+  line-height: 2rem;
+}
+
+.blinking-underline {
+  position: relative;
+}
+
+.over {
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.sent-head {
+  font-size: 23px;
+  color: #2b8a3e;
+  line-height: 2rem;
+}
+
+
+.blinking-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  animation: blinkUnderline 1s infinite;
+}
+
+.img-box {
+  text-align: center;
+  width: 40%;
+  margin: 0 auto;
+}
+
+.content-bg {
+  margin: 20px auto;
+  text-align: center;
+}
+
+@keyframes blinkUnderline {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+/* ✅ Mobile Scroll Tabs */
+@media (min-width: 200px) and (max-width: 980px) {
+
+  .tab-container {
+    flex-direction: column;
+    width: 88%;
+    overflow-x: hidden;
+    padding: 16px;
+    margin: 0 auto;
+  }
+
+  .tab-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    width: 94%;
+    margin: 0 auto;
+  }
+
+  .tab-buttons::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-buttons button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 15px;
+    padding: 6px 4px;
+    margin: 0;
+  }
+
+
+  .tab-content {
+    margin: 25px auto 0;
+    padding: 10px;
+  }
+
+  .img-box {
+    width: 93%;
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .heading {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+  }
+
+  .meaning,
+  .over {
+    font-size: 17px;
+  }
+
+  .tab-buttons button:hover,
+  .tab-buttons button.active {
+    background: #fff;
+    border-color: green;
+    color: #000;
+  }
+
+  .tab-pane {
+    margin-top: 55px;
+  }
+
+  .tab-buttons {
+    top: -24px;
+  }
+
+.sentence-use {
+  font-size: 17px;
+}
+.sent-head{
+   font-size: 17px;
+}
+
+}
