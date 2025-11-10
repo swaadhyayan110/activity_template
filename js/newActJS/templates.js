@@ -139,9 +139,11 @@ const Activity = (() => {
         }
     }
 
-    const getTrueFalseLabels = (lang='en') => lang == 'en' ? ['True', 'False'] : ['सही', 'गलत'];
+    const getBooleanLabels = (lang='en') => lang == 'en' ? ['True', 'False'] : ['सही', 'गलत'];
 
-    const getWordSpelling = (lang='en') => lang == 'en' ? 'word' : 'शब्द';
+    const translateWordLabel = (lang='en') => lang == 'en' ? 'word' : 'शब्द';
+
+    const translateSentenceLabel = (lang='en') => lang == 'en' ? 'sentence' : 'वाक्य';
 
     const getAnswerTableHeads = (lang='en') => {
         if( lang == 'en' ) {
@@ -221,14 +223,15 @@ const Activity = (() => {
         getBtnLabels,
         shuffleWords,
         toggleCheckBtn,
-        getWordSpelling,
         globalImagePath,
         getBulletLabels,
         shuffleQuestions,
         getSectionLabels,
-        getTrueFalseLabels,
+        getBooleanLabels,
         setQuestionDetails,
+        translateWordLabel,
         getAnswerTableHeads,
+        translateSentenceLabel,
     };    
 })();
 
@@ -4889,7 +4892,7 @@ const TrueAndFalse = (() => {
 
         userAns = new Array(dataSet.length).fill(null);
 
-        const btnLabels  = Activity.getTrueFalseLabels(lang);        
+        const btnLabels  = Activity.getBooleanLabels(lang);        
         
         const rowDiv     = document.getElementById(inputDataId);
         rowDiv.innerHTML = "";
@@ -5009,7 +5012,7 @@ const TrueAndFalse = (() => {
 
             const userAnswerText = (userAnswer !== undefined && userAnswer !== null) ? `${userAnswer}` : lang == 'hi' ? "उत्तर नहीं दिया" : "Not Attempted";
 
-            const textLabels = Activity.getTrueFalseLabels(lang);
+            const textLabels = Activity.getBooleanLabels(lang);
 
             const tempUserAnswer    = userAnswer == 'true' ? textLabels[0] : ( userAnswer == 'false' ? textLabels[1] : userAnswerText );
             const tempCorrectAnswer = correctAnswerText == true ? textLabels[0] : textLabels[1];
@@ -5745,7 +5748,7 @@ const Pdf = (() => {
             // ..
 
 		} catch (e) {
-            console.error( 'Sorting.ui :', e );
+            console.error( 'Pdf.ui :', e );
         }
     };
 
@@ -5910,6 +5913,154 @@ const Pdf = (() => {
     };
 
     return { render : renderPdf }
+})();
+
+const Shabdkosh = (() => {
+    Activity.css('shabdkosh.css');
+
+    const containerId = 'shabdkosh-container';
+
+    const getQid = () => {
+        const el = document.querySelector(`#${containerId}`);
+        return el ? el.dataset.qid : undefined;
+    };
+
+    const setQid = (questionId) => {
+        const dragItems = document.getElementById(containerId);
+        if( dragItems ) {
+            dragItems.dataset.qid = questionId;
+            return true;
+        } else {
+            console.warn( '[WARNING]', 'Unable to set qid' );
+            return false;
+        }
+    }
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) || {};
+            const lang     = activity.lang || 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container contAdapt py-0 shadow-lg" id="${containerId}">
+                                        <div class="tab-container">
+                                            <div class="tab-content">
+                                                <div class="tab-buttons" id="tabButtons"></div>
+                                                <div class="content-bg" id="tabPanes"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+		} catch (e) {
+            console.error( 'Shabdkosh.ui :', e );
+        }
+    };   
+
+    const renderQuestion = (questionId) => {
+        try {
+            ui(questionId);
+            
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity?.lang ?? 'en';
+            const content  = Activity.shuffleQuestions( activity?.content ?? [] ) ?? [];
+
+            if( !setQid(questionId) ) return false;
+
+            const tabs = [];
+            content.forEach((item, ind) => {
+
+                if( !item.tabtitle || !item.id ) return;
+
+                const tab = `
+                    <button class="tab-btn" data-id="${item.id}" data-title="${item.tabtitle}">
+                        ${item.tabtitle}
+                    </button>
+                `;
+                tabs.push( tab );
+            });
+            const tabBtn = document.getElementById("tabButtons");
+            if( tabBtn && tabs.length ) tabBtn.innerHTML = tabs.join( '' );
+
+            const tabBtns = document.querySelectorAll( '#tabButtons button' );
+            tabBtns.forEach( (item, ind) => {
+                item.addEventListener('click', (e) => {
+                    renderTabContent(e);
+                    toggleTabActive(e);
+                });
+                if( ind === 0 ) {
+                    item.click();
+                }
+            });
+
+        } catch (e) {
+            console.error( 'Shabdkosh.renderPdf :', e );
+        }
+    };
+
+    const renderTabContent = (thisObj) => {
+        if( typeof thisObj != 'object' &&  typeof thisObj.target != 'object' ) {
+            console.warn( '[WARNING]', 'Invalid selector' );
+        }
+
+        const id = thisObj.target.dataset.id;
+
+        const activity = Activity.getData(getQid()) ?? {};
+        const lang     = activity?.lang ?? 'en';
+        const content  = activity?.content ?? [];
+        const tabitem  = content.filter( x => x.id == id );
+        const item     = tabitem[0];
+
+        if( !tabitem.length ) {
+            console.warn( '[WARNING]', 'Invalid tab-id' );
+            return;
+        }
+
+        if( !item?.tabtitle || !item?.id ) return;
+
+        const tabpanecontent = `
+            <div class="tab-pane active">
+            ${item?.tabtitle ? `<h2 class="over"><b>${item.tabtitle}</b></h2>` : '' }
+            ${item?.meaning ? `<div class="meaning"><b>अर्थ:</b>${item.meaning}</div>` : ''}
+            ${item?.sentence ? 
+                `<div class="sentence-use">
+                    <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
+                    ${
+                        item?.sentence ? 
+                            item?.sentence.replace(item?.tabtitle, `<span class="blinking-underline sometextcolor">${item?.tabtitle}</span>`)
+                            : ''
+                    }
+                </div>` : ''
+            }
+            ${item?.image && item?.image?.path ?
+                `<div class="img-box">
+                    <img style="width:${ item?.image?.width ?? '40%' };" src="${item.image.path}" class="photo animate__animated animate__bounceInRight">
+                </div>` 
+                : ''
+            }
+            </div>
+        `;
+        const tabPanes = document.getElementById("tabPanes");
+        if( tabPanes ) tabPanes.innerHTML = tabpanecontent;
+    };
+
+    const toggleTabActive = (thisObj) => {
+        document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+        thisObj.target.classList.add("active");
+    };
+
+    return { render : renderQuestion }
 })();
 
 Modules.get().map(({ module }) => {

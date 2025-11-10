@@ -19,7 +19,8 @@ const Modules = (() => {
         { id : 15, module : 'TrueAndFalse' },
         { id : 16, module : 'DragAndDropMulti' },
         { id : 17, module : 'Sorting' },
-        { id : 18, module : 'Pdf' },        
+        { id : 18, module : 'Pdf' },
+        { id : 19, module : 'Shabdkosh' },
     ];
 
     const get = () => modules;
