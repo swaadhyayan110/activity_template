@@ -145,6 +145,8 @@ const Activity = (() => {
 
     const translateSentenceLabel = (lang='en') => lang == 'en' ? 'sentence' : 'वाक्य';
 
+    const getSectionLabels = (lang='en') => lang == 'en' ? 'column' : 'खंड';
+
     const getAnswerTableHeads = (lang='en') => {
         if( lang == 'en' ) {
             return {
@@ -161,15 +163,7 @@ const Activity = (() => {
                 result    : 'परिणाम'
             };
         }
-    }
-
-    const getSectionLabels = (lang='en') => {
-        if( lang == 'en' ) {
-            return 'Column';
-        } else {
-            return 'खंड';
-        }
-    }
+    }    
 
     const globalImagePath = () => assets_url;
 
@@ -5952,7 +5946,7 @@ const Shabdkosh = (() => {
             const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
-                                    <div class="container contAdapt py-0 shadow-lg" id="${containerId}">
+                                    <div id="${containerId}">
                                         <div class="tab-container">
                                             <div class="tab-content">
                                                 <div class="tab-buttons" id="tabButtons"></div>
