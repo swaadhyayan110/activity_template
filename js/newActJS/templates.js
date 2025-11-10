@@ -139,13 +139,9 @@ const Activity = (() => {
         }
     }
 
-    const getTrueFalseLabels = (lang='en') => {
-        if( lang == 'en' ) {
-            return ['True', 'False'];
-        } else {
-            return ['सही', 'गलत'];
-        }
-    }
+    const getTrueFalseLabels = (lang='en') => lang == 'en' ? ['True', 'False'] : ['सही', 'गलत'];
+
+    const getWordSpelling = (lang='en') => lang == 'en' ? 'word' : 'शब्द';
 
     const getAnswerTableHeads = (lang='en') => {
         if( lang == 'en' ) {
@@ -225,6 +221,7 @@ const Activity = (() => {
         getBtnLabels,
         shuffleWords,
         toggleCheckBtn,
+        getWordSpelling,
         globalImagePath,
         getBulletLabels,
         shuffleQuestions,
@@ -3467,7 +3464,7 @@ const Adaptiv = (() => {
 
 })();
 
-const Audio = (() => {
+const OnlyAudio = (() => {
     
     Activity.css('audioPlay.css');
     
@@ -5756,7 +5753,7 @@ const Pdf = (() => {
         try {
             $( '.spinner-container' ).remove();
             $( '.viewer' ).addClass( 'position-relative' );
-            const html = `<div class="spinner-container position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-75 z-3 d-flex align-items-center justify-content-center" style="border-radius:20px;">
+            const html = `<div class="spinner-container position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-75 z-3 d-flex align-items-start justify-content-center" style="border-radius:20px;padding-top:25vh;">
                             <div class="spinner-border text-primary" role="status"></div>
                         </div>`;
             // ..
@@ -5792,8 +5789,12 @@ const Pdf = (() => {
                 }
                 
                 toggle_loader(true);
-                await Define.get( 'loadScript' )('js/pdf.js');
-                await Define.get( 'loadScript' )('js/pdf.worker.js');
+                try {
+                    await Define.get( 'loadScript' )('js/pdf.js');
+                    await Define.get( 'loadScript' )('js/pdf.worker.js');
+                } catch( e ) {
+                    toggle_loader(true);
+                }
 
                 let loadingTask;
                 let pdfDoc      = null;
@@ -5857,7 +5858,7 @@ const Pdf = (() => {
 
                 loadingTask = pdfjsLib.getDocument( path );
                 loadingTask.onProgress = ( data ) => {
-                    if( data.loaded == data.total ) {
+                    if( data.loaded == data.total && data.total && data.loaded ) {
                         toggle_loader(false);
                     }
                 }

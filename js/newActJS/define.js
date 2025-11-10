@@ -14,8 +14,8 @@ const Define = (() => {
         { qid : 1, text : ['Q-1', 'M-1'], module : 1, landscape : true },
         { qid : 2, text : ['Q-2', 'M-2'], module : 2 },
         { qid : 3, text : ['Q-3', 'M-3'], module : 3 },
-        { qid : 4, text : ['Q-4', 'Fill'], module : 4 },
-        { qid : 5, text : ['Q-5','श्रुतलेख'], module : 5 },
+        { qid : 4, text : ['Q-4', 'Fill-1'], module : 4 },
+        { qid : 5, text : ['Q-5','Fill-2'], module : 5 },
         { qid : 6, text : ['Q-6', 'Letter'], module : 6 },
         { qid : 7, text : ['Q-7', 'Word'], module : 7 },
         { qid : 8, text : ['Q-8', 'DND'], module : 8 },
@@ -31,7 +31,7 @@ const Define = (() => {
         { qid : 18, text : ['Q-18', 'DND-3'], module : 16 },
         { qid : 19, text : ['Q-19', 'DND-4'], module : 16 },
         { qid : 20, text : ['Q-20', 'DND-Sort'], module : 17 },
-        { qid : 21, text : ['Q-21', 'PDF'], module : 18 },
+        { qid : 21, text : ['Q-21', 'PDF'], module : 18 },        
     ];
 
     // DEFINE QUESTIONS
@@ -182,7 +182,7 @@ const Define = (() => {
                     om : 12
                 },
                 heading : [
-                    { id: 1, accept: 'm', texts: 'पुल्लिंग(Masculine)' },
+                    { id: 1, accept: 'm', text: 'पुल्लिंग(Masculine)' },
                     { id: 2, accept: 'f', text: 'स्त्रीलिंग(Feminine)' },
                     { id: 3, accept: 'n', text: 'नपुंसकलिंग(Neuter)' }
                 ],
@@ -363,7 +363,7 @@ const Define = (() => {
             id      : 14,
             lang    : 'hi',
             head    : 'अनोखा जादू का खेल',
-            subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',            
+            subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
             content : {
                 questions : [
                     { id: 1, text: 'लेखक', ans: 4, popuptext: 'जो पुस्तकें लिखता है' },
@@ -485,12 +485,29 @@ const Define = (() => {
         },
         {
             id      : 21,
-            lang    : 'en',            
+            lang    : 'en',
             content : {
                 pdf : 'pdf.pdf',
-                download : true
+                download : false
             }
-        }
+        },
+        {
+            id      : 22,
+            lang    : 'hi',
+            head    : 'अनोखा जादू का खेल',
+            subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
+            content : {
+                mainaudio : './audio/heading.mp3',
+                questions : [
+                    { audio : './audio/4.mp3', text: 'लेखक', description: 'जो पुस्तकें लिखता है' },
+                    { audio : './audio/3.mp3', text: 'चिकित्सक', description: 'जो मरीज़ों का इलाज़ करता है' },
+                    { audio : './audio/1.mp3', text: 'अध्यापक', description: 'जो पढ़ाता है' },
+                    { audio : './audio/6.mp3', text: 'धोबी', description: 'जो कपड़े धोता है' },
+                    { audio : './audio/2.mp3', text: 'कुम्हार', description: 'जो मिट्टी के बर्तन बनाता है' },
+                    { audio : './audio/5.mp3', text: 'दरज़ी', description: 'जो कपड़े सिलता है' }
+                ]
+            }
+        },
     ];
 
     const questionContainer = '.question-container';

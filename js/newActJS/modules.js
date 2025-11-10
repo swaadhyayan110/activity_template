@@ -12,14 +12,14 @@ const Modules = (() => {
         { id : 8, module  : 'DragAndDrop' },
         { id : 9, module  : 'Mcq_PathKaSaar' },
         { id : 10, module : 'Adaptiv' },
-        { id : 11, module : 'Audio' },
+        { id : 11, module : 'OnlyAudio' },
         { id : 12, module : 'DropDown' },
         { id : 13, module : 'Circle' },
         { id : 14, module : 'ShravanKaushal' },
         { id : 15, module : 'TrueAndFalse' },
         { id : 16, module : 'DragAndDropMulti' },
         { id : 17, module : 'Sorting' },
-        { id : 18, module : 'Pdf' },
+        { id : 18, module : 'Pdf' },        
     ];
 
     const get = () => modules;

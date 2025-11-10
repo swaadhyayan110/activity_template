@@ -202,15 +202,6 @@
     border-bottom: 2px solid #eee;
 }
 
-/* ===== Correct / Wrong ===== */
-.text-success {
-    color: #28a745 !important;
-}
-
-.text-danger {
-    color: #dc3545 !important;
-}
-
 /* ===== Close Button ===== */
 .report_clicks button {
     border-radius: 50%;
