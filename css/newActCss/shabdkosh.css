@@ -173,7 +173,7 @@ h2 {
 
   .tab-container {
     flex-direction: column;
-    width: 88%;
+    width: 100%;
     overflow-x: hidden;
     padding: 16px;
     margin: 0 auto;

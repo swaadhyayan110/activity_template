@@ -5948,7 +5948,7 @@ const Shabdkosh = (() => {
             const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
-                                    <div id="${containerId}">
+                                    <div class="pt-3" id="${containerId}">
                                         <div class="tab-container">
                                             <div class="tab-content">
                                                 <div class="tab-buttons" id="tabButtons"></div>
