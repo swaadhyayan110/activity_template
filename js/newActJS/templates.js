@@ -2517,17 +2517,19 @@ const DragAndDrop = (() => {
     const checkAnswersDnd = () => {
         try {
             let correct = 0;
-            let total = $(`${containerSelector} .dropSect`).length;
+            const total = $(`${containerSelector} .wordDrag`).length;
 
             $(`${containerSelector} .dropSect`).each(function () {
-                const correctAnswer = $(this).data("accept");
-                const droppedItem = $(this).children(".wordDrag").first();
-                if (droppedItem.length && droppedItem.data("ans") === correctAnswer) {
-                    droppedItem.css("background", "#c8e6c9");
-                    correct++;
-                } else if (droppedItem.length) {
-                    droppedItem.css("background", "#ffcdd2");
-                }
+                const accept = $(this).attr( 'data-accept' );
+                const droppedItems = $(this).children('.wordDrag');
+                droppedItems.each(function() {
+                    let background = '#ffcdd2';
+                    if( $(this).attr( 'data-ans' ) == accept ) {
+                        background = '#c8e6c9';
+                        correct++;
+                    }
+                    $(this).css( 'background',  background);
+                });
             });
 
             Swal.fire({
