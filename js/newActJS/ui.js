@@ -2,11 +2,11 @@ const UI = (() => {
     const detectMobile = () => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     const normalizeLabel = (text) => {
-        if( !text ) return ["", ""];
+        if( !text ) return ['', ''];
         
         if( Array.isArray( text ) ) {
             if( text.length === 1 ) return [ text[0], text[0] ];
-            return [text[0] ?? "", text[1] ?? text[0] ?? ""];
+            return [text[0] ?? '', text[1] ?? text[0] ?? ''];
         }
         const labels = [ String(text), String(text) ];
         return labels;
@@ -163,10 +163,20 @@ const UI = (() => {
                 frag.appendChild(div);
             });
 
-            container.innerHTML = "";
-            container.appendChild(frag);
-
+            container.replaceChildren(frag);
             container.firstElementChild?.click();
+
+            requestAnimationFrame(() => {
+                container.querySelectorAll('.boxQ').forEach((div) => {
+                    if( div.scrollWidth > div.clientWidth ) {
+                        const id   = Number( div.id.slice(1) );
+                        const item = definedBtn.find( x => x.qid === id );
+                        if( !item ) return;
+                        const [m] = normalizeLabel(item.text);
+                        div.textContent = m;
+                    }
+                });
+            });            
         } catch( err ) {
             console.error( 'Error :: UI.(buttons) -', err );
         }

@@ -2776,10 +2776,10 @@ const Mcq_PathKaSaar = (() => {
                 const replacement  = question?.replacement ?? '#_#';
                 const questionText = path != undefined ?
                     question?.text.replace(replacement, image ) :
-                    question?.text;
+                    question?.text.replace(replacement, '' );
                 // ..
 
-                const options = mcq?.options.map((option, oi) => {                    
+                const options = mcq?.options.map((option, oi) => {
                     const optionText = option_text(option);
                     const isSelected = userAnswers[ind] === oi ? "selected" : "";
                     const html = `
@@ -4525,7 +4525,7 @@ const ShravanKaushal = (() => {
                                     <div class="afterClicks" style="display:none;">
                                         <div class="container">
                                             <div class="bigHeadingS ${Define.get('head')}"></div>
-                                            <div class="runingHead ${Define.get('subhead')}"></div>
+                                            <div class="runingHead ${Define.get('subHead')}"></div>
                                             <div id="${inputDataId}" class="rowInputsData"></div>                     
                                             <div class="secondRowaBB">
                                                 <div class="nextPreviRow">
@@ -4595,6 +4595,7 @@ const ShravanKaushal = (() => {
 
     const renderQues = (questionId) => {
         ui(questionId);
+        Activity.setQuestionDetails(questionId);
         
         const dataSet = Activity.getData(getQid())?.content?.questions || [];
 
