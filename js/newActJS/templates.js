@@ -85,7 +85,7 @@ const Activity = (() => {
             const elHead = container.querySelector(arr[0]);
             const elSub  = container.querySelector(arr[1]);
 
-            if (elHead) elHead.innerHTML = data.head || elHead.remove();            
+            if (elHead) elHead.innerHTML = data.head || elHead.remove();
             if (elSub) elSub.innerHTML   = data.subhead || elSub.remove();
 
             elements.head    = document.contains(elHead);
@@ -117,7 +117,7 @@ const Activity = (() => {
             hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय']
         }
 
-        const characters = alphabets[lang] || alphabets.en;
+        const characters = alphabets[lang] ?? alphabets.en;
         const casedList  = upperCase ? characters.map(ch => ch.toUpperCase()) : characters;
 
         return (ind !== undefined && casedList[ind] !== undefined) ? casedList[ind] : '-';
@@ -163,7 +163,7 @@ const Activity = (() => {
                 result    : 'परिणाम'
             };
         }
-    }    
+    }
 
     const globalImagePath = () => assets_url;
 
@@ -318,7 +318,7 @@ const MatchLeftToRight = (() => {
     const showAnswers = (activityId) => {
         try {
             resetActivity(activityId);
-            const activity = activities[activityId];        
+            const activity = activities[activityId];
             if( !activity ) return;
 
             const correctMatches = activity.correctMatches || {};
@@ -417,11 +417,11 @@ const MatchLeftToRight = (() => {
 
     const ui = (activityId="m1", questionId) => {
         try {
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.getBtnLabels(lang);
-            const columnLabel = Activity.getSectionLabels(lang);            
+            const columnLabel = Activity.getSectionLabels(lang);
 
             const html = `<div class="question">
                 <div class="container">
@@ -469,7 +469,7 @@ const MatchLeftToRight = (() => {
     const matchLeftToRight = (questionId, activityId="m1") => {
         try {
             const data = Activity.getData( questionId );
-            if( !Object.entries(data).length ) return;            
+            if( !Object.entries(data).length ) return;
 
             ui(activityId, questionId);
 
@@ -711,7 +711,7 @@ const MatchLeftRightToCenter = (() => {
             activity.selectedRight = null;
 
             qSA(".matchItems1 .imgBoxes, .matchItems2 .centerItems, .matchItems3 .imgBoxes", container)
-                .forEach(el => el.classList.remove("correct", "wrong", "selected"));        
+                .forEach(el => el.classList.remove("correct", "wrong", "selected"));
 
             Activity.toggleCheckBtn( '.submit-btn', false );
         } catch( err ) {
@@ -887,7 +887,7 @@ const MatchLeftRightToCenter = (() => {
         try {
             const data    = Activity.getData( questionId );
             const content = data.content;
-            const lang    = data?.lang || 'en';
+            const lang    = data?.lang ?? 'en';
 
             const btnLabels = Activity.getBtnLabels( lang );
 
@@ -1009,7 +1009,7 @@ const MatchLeftRightToCenter = (() => {
                     const act = activities[activityId];
                     if (!act) return;
 
-                    const svgLocal = cont.querySelector('.svg2');                    
+                    const svgLocal = cont.querySelector('.svg2');
 
                     if (act.selectedLeft) {
                         const leftId = act.selectedLeft.dataset.id;
@@ -1062,7 +1062,7 @@ const MatchLeftRightToCenter = (() => {
     window.addEventListener("resize", () => {
         clearTimeout(__m2resizeTO);
         __m2resizeTO = setTimeout(() => {
-            Object.keys(activities).forEach(id => {                
+            Object.keys(activities).forEach(id => {
                 if (activities[id] && (activities[id].correctLeft || activities[id].correctRight)) {
                     redrawAll(id);
                 }
@@ -1258,8 +1258,8 @@ const MatchTopToBottom = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
 
             const buttonLabel = Activity.getBtnLabels(lang);
 
@@ -1272,7 +1272,7 @@ const MatchTopToBottom = (() => {
 
                 <div class="m3Holders">
                     <div class="matching-area3 user-select-none" data-activity="${activityId}">
-                    <div class="rowHoriZ topItem" data-top="">                
+                    <div class="rowHoriZ topItem" data-top="">
                     </div>
                     <svg data-svg width="100%" height="100%" style="position: absolute; left: 0; top: 0;">
                         <defs>
@@ -1281,7 +1281,7 @@ const MatchTopToBottom = (() => {
                         </marker>
                         </defs>
                     </svg>
-                    <div class="rowHoriZ bottItem" style="margin-top: 10vw;" data-bottom="">                
+                    <div class="rowHoriZ bottItem" style="margin-top: 10vw;" data-bottom="">
                     </div>
                     </div>
                 </div>
@@ -1416,8 +1416,8 @@ const FillInTheBlanksWithImage = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.getBtnLabels(lang);
             
@@ -1469,10 +1469,10 @@ const FillInTheBlanksWithImage = (() => {
             document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid = data?.id;
 
             const container2 = document.getElementById("inputsContainer");
-            if (!container2) {                
+            if (!container2) {
                 return;
             }		
-            container2.innerHTML = "";        
+            container2.innerHTML = "";
             
             const textFrag = document.createDocumentFragment();
             data?.content?.hinttext?.forEach((item) => {
@@ -1488,7 +1488,7 @@ const FillInTheBlanksWithImage = (() => {
             
             let blanksBlock = '';
             data?.content?.blanks.forEach((item, i) => {
-                if( item.img ) {                    
+                if( item.img ) {
                     blanksBlock += `<div class="col-md-4">
                             <div class="fillBox shadow-sm">
                             <img class="imgInboxFill" src="${Activity.globalImagePath()}${item.img}" alt="feature-${i + 1}" ondragstart="return false;"/>
@@ -1630,8 +1630,8 @@ const FillInTheBlanksHindiKb = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.getBtnLabels(lang);
 
@@ -1645,7 +1645,7 @@ const FillInTheBlanksHindiKb = (() => {
                                         <button class="show-btn">${buttonLabel.show}</button>
                                         <button class="reset-btn">${buttonLabel.try}</button>
                                     </div>
-                                    <div class="result" id="result"></div>                                    
+                                    <div class="result" id="result"></div>
                                 </div>`;
             // ..
 
@@ -1808,7 +1808,7 @@ const FillInTheBlanksHindiKb = (() => {
 const JumbleLetters = (() => {
     
     let isDragging   = false;
-    let lastDragTime = 0;    
+    let lastDragTime = 0;
     
     const shuffle = (word) => {
         try {
@@ -1838,8 +1838,8 @@ const JumbleLetters = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';            
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -1863,7 +1863,7 @@ const JumbleLetters = (() => {
             const resetBtn = parent.querySelector(".reset-btn");
             if (checkBtn) checkBtn.addEventListener("click", submit);
             if (showBtn) showBtn.addEventListener("click", showAns);
-            if (resetBtn) resetBtn.addEventListener("click", reset);            
+            if (resetBtn) resetBtn.addEventListener("click", reset);
         } catch( err ) {
             console.log( 'JumbleLetters.ui : ', err );
         }
@@ -2072,8 +2072,8 @@ const JumbleWords = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.getBtnLabels(lang);
 
@@ -2093,7 +2093,7 @@ const JumbleWords = (() => {
 			
 			const checkBtn = parent.querySelector( '.submit-btn' );
 			const showBtn  = parent.querySelector( '.show-btn' );
-			const resetBtn = parent.querySelector( '.reset-btn' );            
+			const resetBtn = parent.querySelector( '.reset-btn' );
 
 			if (checkBtn) checkBtn.addEventListener("click", checkAnswersWORD);
 			if (showBtn) showBtn.addEventListener("click", showAnswersWORD);
@@ -2108,12 +2108,12 @@ const JumbleWords = (() => {
         try {
             ui(questionId);
 
-            const $container = $(idiomContainer);        
+            const $container = $(idiomContainer);
             $container.empty();
 
             $container[0].dataset.qid = questionId;
 
-            Activity.setQuestionDetails( questionId );        
+            Activity.setQuestionDetails( questionId );
 
             const idioms = Activity.shuffleQuestions( Activity.getData( questionId )?.content );
 
@@ -2132,10 +2132,10 @@ const JumbleWords = (() => {
                             </div>
                         </div>
                     </div>`);
-                $container.append($row);            
+                $container.append($row);
 
                 const $wordStance = $row.find(`#words-${index}`);
-                jumbled.forEach(w => {                
+                jumbled.forEach(w => {
                     const $el = $(`<div class="word2" role="listitem" tabindex="0">${w}</div>`);
                     $wordStance.append($el);
                 });
@@ -2153,7 +2153,7 @@ const JumbleWords = (() => {
                     appendTo: document.body,
                     zIndex: 999999,
                     start: function (e, ui) {
-                        isDraggingIdioms = true;                    
+                        isDraggingIdioms = true;
                         ui.placeholder.css({
                             width: ui.helper.outerWidth(),
                             height: ui.helper.outerHeight()
@@ -2163,7 +2163,7 @@ const JumbleWords = (() => {
                         lastDragTimeIdioms = Date.now();
                         setTimeout(() => { isDraggingIdioms = false; }, 30);
                     }
-                }).disableSelection();            
+                }).disableSelection();
             
                 enableTapSwapFallback($wordStance[0], index);
             });
@@ -2228,7 +2228,7 @@ const JumbleWords = (() => {
                     return $(this).text().trim();
                 }).get();
 
-                const $out = $(this).find(".finalOutput");            
+                const $out = $(this).find(".finalOutput");
                 $(this).find(".word2").removeClass("correctWord wrongwrongRORD");
 
                 let allGood = true;
@@ -2333,285 +2333,6 @@ const JumbleWords = (() => {
 
 })();
 
-const DragAndDrop = (() => {
-
-    Activity.css('dnd.css');
-
-    const containerId       = 'dragItemsQ1';
-    const containerSelector = '#question1';
-
-    const ui = (questionId) => {
-        try {
-            const container = Define.get('questionContainer');
-            const parent = document.querySelector(container);
-            if (!parent) {
-                console.error("ui container not found:", container);
-                return;
-            }
-
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
-            
-            const buttonLabel = Activity.getBtnLabels(lang);
-
-            parent.innerHTML = `<div class="question">
-                                <div class="container">
-                                    <div class="rowWithAudios">
-                                        <p class="questLine"> 
-                                            <span class="${Define.get('head')}"></span> 
-                                            <span class="hindTrans ${Define.get('subHead')}"></span>
-                                        </p>
-                                        <div class="playsBtns">
-                                            <svg fill="currentColor" id="playSvg" class="bi bi-play-fill btnSounds" viewBox="0 0 16 16">
-                                                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
-                                            </svg>
-                                            <svg fill="currentColor" id="pauseSvg" class="bi bi-pause btnSounds" viewBox="0 0 16 16">
-                                                <path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div id="question1" class="question-block">
-                                        <div class="dragItems" id="${containerId}"></div>
-                                        <div class="dropItems"></div>
-                                        <div class="buttons machiNgs">
-                                            <button class="submit-btn">${buttonLabel.check}</button>
-                                            <button class="show-btn">${buttonLabel.show}</button>
-                                            <button class="reset-btn">${buttonLabel.try}</button>
-                                        </div>
-                                    </div>
-                                </div>`;
-            // ..       
-			
-			const checkBtn = parent.querySelector( '.submit-btn' );
-			const showBtn  = parent.querySelector( '.show-btn' );
-			const resetBtn = parent.querySelector( '.reset-btn' );
-            const playSvg  = parent.querySelector( '#playSvg' );
-            const pauseSvg = parent.querySelector( '#pauseSvg' );
-
-			if (checkBtn) checkBtn.addEventListener("click", checkAnswersDnd);
-			if (showBtn) showBtn.addEventListener("click", showAnswersDnd);
-			if (resetBtn) resetBtn.addEventListener("click", resetActivityDnd);
-
-			if (playSvg)  playSvg.addEventListener("click", () => toggleAudio(true));
-            if (pauseSvg) pauseSvg.addEventListener("click", () => toggleAudio(false));
-		} catch (e) {
-            console.error( 'DragAndDrop.ui :', e );
-        }
-    }
-    
-    const renderDataDND = (questionId) => {
-        try {
-            ui(questionId);
-            const data    = Activity.getData( questionId );
-            const content = data?.content || {};
-
-            const hasAudio = content?.audio;
-            if( !hasAudio ) $('.playsBtns').remove();
-
-            const headElem       = Activity.setQuestionDetails( questionId );            
-            const audioBtnExists = document.contains(document.querySelector('.playsBtns'));            
-            if( !headElem.head && !headElem.subhead && !audioBtnExists ) {
-                document.querySelector('.rowWithAudios').remove();
-            }
-
-            const dragItems = document.getElementById(containerId);
-            dragItems.dataset.qid = questionId;
-            
-            const head     = [ '<div class="row w-100 justify-content-center">' ];
-            const headings = Activity.shuffleQuestions( content?.heading );
-
-            const defaultCol = {
-                md : 4,
-                sm : 6,
-                om : 12
-            };
-            const col = {
-                md: content?.col?.md ?? defaultCol.md,
-                sm: content?.col?.sm ?? defaultCol.sm,
-                om: content?.col?.om ?? defaultCol.om
-            };
-
-            headings.forEach((item) => {
-                const html = `<div class="col-md-${col.md} col-sm-${col.sm} col-${col.om}">
-                                <div class="wh1">
-                                    ${(item.text != '' && item.text ) ? `<div class="headingsDND">${item.text}</div>` : ''}
-                                    <div class="dropSect" data-accept="${item.accept}"></div> 
-                                </div>
-                            </div>`;
-                // ..
-                head.push( html );
-            });
-            head.push( '</div>' );
-            $('.dropItems').html( head.join('') );
-
-            const opt     = [];
-            const options = Activity.shuffleQuestions( data?.content?.options );
-            options.forEach((item) => {
-                const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
-                opt.push( html );
-            });            
-            dragItems.innerHTML = opt.join('');            
-
-            makeDraggable(`#${containerId} .wordDrag`);
-            initDroppable(containerSelector);
-        } catch (e) {
-            console.error( 'DragAndDrop.renderDataDND :', e );
-        }
-    }
-
-    const makeDraggable = (selector) => {
-        try {
-            $(selector).draggable({
-                helper: "original",
-                revert: "invalid",
-                start: function () { $(this).addClass("dragging"); },
-                stop: function () { $(this).removeClass("dragging"); }
-            });
-
-            $(selector).on("touchstart", function (e) {
-                const touch = e.originalEvent.touches[0];
-                const $this = $(this);
-                $this.addClass("dragging");
-                $this.data("touchOffsetX", touch.pageX - $this.offset().left);
-                $this.data("touchOffsetY", touch.pageY - $this.offset().top);
-
-                $(document).on("touchmove.drag", function (e) {
-                    const moveTouch = e.originalEvent.touches[0];
-                    $this.css({
-                        position: "absolute",
-                        left: moveTouch.pageX - $this.data("touchOffsetX"),
-                        top: moveTouch.pageY - $this.data("touchOffsetY"),
-                        zIndex: 9999
-                    });
-                });
-
-                $(document).on("touchend.drag", function () {
-                    $(document).off(".drag");
-                    $this.removeClass("dragging");
-                });
-            });
-        } catch (e) {
-            console.error( 'DragAndDrop.makeDraggable :', e );
-        }
-    }
-
-    const initDroppable = () => {
-        try {
-            $(`${containerSelector} .dropSect`).droppable({
-                accept: ".wordDrag",
-                drop: function (event, ui) {
-                    const $dragged = ui.draggable;
-                    $dragged
-                        .removeClass("ui-draggable ui-draggable-handle dragging")
-                        .css({ top: "auto", left: "auto", position: "relative" })
-                        .draggable("disable");
-                    // ..
-                    $(this).append($dragged);
-                }
-            });
-        } catch (e) {
-            console.error( 'DragAndDrop.initDroppable :', e );
-        }
-    }
-
-    const checkAnswersDnd = () => {
-        try {
-            let correct = 0;
-            const total = $(`${containerSelector} .wordDrag`).length;
-
-            $(`${containerSelector} .dropSect`).each(function () {
-                const accept = $(this).attr( 'data-accept' );
-                const droppedItems = $(this).children('.wordDrag');
-                droppedItems.each(function() {
-                    let background = '#ffcdd2';
-                    if( $(this).attr( 'data-ans' ) == accept ) {
-                        background = '#c8e6c9';
-                        correct++;
-                    }
-                    $(this).css( 'background',  background);
-                });
-            });
-
-            Swal.fire({
-                title: correct === total ? "All Correct!" : "Check your answers",
-                text: `You got ${correct} out of ${total} correct!`,
-                icon: correct === total ? "success" : "info",
-                confirmButtonText: "OK"
-            });
-        } catch (e) {
-            console.error( 'DragAndDrop.checkAnswersDnd :', e );
-        }
-    }
-
-    const showAnswersDnd = () => {
-        try {
-            Activity.toggleCheckBtn( '.submit-btn', true );
-
-            const dragItems  = document.getElementById(containerId);
-            const questionId = dragItems.dataset.qid;
-
-            renderDataDND(dragItems.dataset.qid);
-
-            $(`${containerSelector} .dropSect`).empty();
-            const data = Activity.getData( questionId )?.content?.options;
-            
-            data.forEach((item) => {
-                const $clone = $(`<div class="wordDrag">${item.text}</div>`)
-                    .css({ background: "#c8e6c9", position: "relative" })
-                    .attr("data-ans", item.ans);
-                $(`${containerSelector} .dropSect[data-accept='${item.ans}']`).append($clone);
-            });
-        } catch (e) {
-            console.error( 'DragAndDrop.showAnswersDnd :', e );
-        }
-    }
-
-    const resetActivityDnd = () => {
-        try {
-            Activity.toggleCheckBtn( '.submit-btn', false );
-
-            const dragItems = document.getElementById(containerId);
-            renderDataDND(dragItems.dataset.qid);
-            $(`${containerSelector} .dropSect`).empty();
-            $(`${containerSelector} .wordDrag`);
-        } catch (e) {
-            console.error( 'DragAndDrop.resetActivityDnd :', e );
-        }
-    }
-
-    const toggleAudio = ( play=true ) => {
-        try {
-            const dragItems  = document.getElementById(containerId);
-            const questionId = dragItems.dataset.qid;
-
-            const src   = Activity.getData( questionId )?.content?.audio;           
-            const audio = new Audio(src);            
-            if( play ) {
-                $("#playSvg").hide();
-                $("#pauseSvg").show();
-                audio.play();
-            } else {
-                $("#playSvg").show();
-                $("#pauseSvg").hide();
-                audio.pause();
-            }
-        } catch (e) {
-            console.error( 'DragAndDrop.toggleAudio :', e );
-        }
-    }
-    
-    return {
-        render:renderDataDND,
-        toggleAudio,
-        makeDraggable,
-        initDroppable,
-        showAnswersDnd,
-        checkAnswersDnd,
-        resetActivityDnd
-    }
-
-})();
-
 const Mcq_PathKaSaar = (() => {
 
     Activity.css('mcq.css');
@@ -2629,14 +2350,14 @@ const Mcq_PathKaSaar = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        <div class="rowWithAudios">                                        
+                                        <div class="rowWithAudios">
                                             <span class="m-0 ${Define.get('head')}"></span> 
-                                            <span class="colorsDiff ${Define.get('subHead')}"></span>                                        
+                                            <span class="colorsDiff ${Define.get('subHead')}"></span>
                                         </div>
                                         <div class="mcq-context p-1"></div>
                                         <div id="${heading}"></div>
@@ -2675,9 +2396,9 @@ const Mcq_PathKaSaar = (() => {
             headingEl.dataset.qid = questionId;
 
             const activity = Activity.getData( questionId );
-            const content  = activity?.content || {};
-            const lang     = activity?.lang || 'en';
-            const data     = content?.mcq || [];
+            const content  = activity?.content ?? {};
+            const lang     = activity?.lang ?? 'en';
+            const data     = content?.mcq ?? [];
             
             if (userAnswers.length < data.length) {
                 for (let i = userAnswers.length; i < data.length; i++) userAnswers.push(null);
@@ -2685,8 +2406,8 @@ const Mcq_PathKaSaar = (() => {
                 userAnswers.length = data.length;
             }
 
-            const text = content?.text || {};
-            const img  = content?.img || {};
+            const text = content?.text ?? {};
+            const img  = content?.img ?? {};
 
             const mcqContextContainer = $('.mcq-context');
             mcqContextContainer.empty();
@@ -2698,7 +2419,7 @@ const Mcq_PathKaSaar = (() => {
             
             if (hasText || hasImg) {
                 const textDiv = $('<div class="mcq-text"></div>');
-                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');                
+                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
                 
                 mcqContextContainer.addClass('row g-0');
 
@@ -3251,8 +2972,7 @@ const Adaptiv = (() => {
             const submitWrapper = document.getElementById("submit-btn-wrapper");
             if (submitWrapper) submitWrapper.innerHTML = '';
             if (!container) return;
-
-            // Buttons now have IDs instead of inline onclicks
+            
             container.innerHTML = `
                 <div class="result-box">
                     <h4><strong class="fs-1">Level ${currentLevel} ${whenCompleteLevel}</strong></h4>
@@ -3266,8 +2986,7 @@ const Adaptiv = (() => {
                         ${(finished && showNextLevel) ? `<button class='btn btn-success mt-3 mx-3' id='btn-finish'>Finished</button>` : ''}
                     </div>
                 </div>`;
-
-            // Attach listeners to the new buttons (if they exist)
+            
             const btnNextLevel = document.getElementById('btn-next-level');
             const btnRetry = document.getElementById('btn-retry');
             const btnShowAnswers = document.getElementById('btn-show-answers');
@@ -3275,7 +2994,6 @@ const Adaptiv = (() => {
 
             if (btnNextLevel) {
                 btnNextLevel.addEventListener('click', (e) => {
-                    // keep original behaviour
                     loadNextLevel();
                 });
             }
@@ -3298,8 +3016,7 @@ const Adaptiv = (() => {
             showResultPending = false;
             $(".instruc").hide();
             $(".submit-info").hide();
-
-            // control visibility for back-compat with earlier logic
+            
             const hideBtn = document.getElementById("btn-next-level");
             if (finished && showNextLevel) {
                 if (hideBtn) hideBtn.style.display = 'none';
@@ -3307,7 +3024,7 @@ const Adaptiv = (() => {
                 if (hideBtn) hideBtn.style.display = 'inline-block';
             }
         } catch (e) {
-            console.error('showResult error:', e);
+            console.error('Adaptiv.showResult error:', e);
         }
     }
 
@@ -3315,7 +3032,7 @@ const Adaptiv = (() => {
         const levelTextEl = document.getElementById("levelText");
         if (levelTextEl) levelTextEl.style.display = 'block';
         currentLevel++;
-        // keep original logic references (quizDataLevelB / C might be global in your app)
+        
         if (currentLevel === 2 && typeof quizDataLevelB !== 'undefined') currentQuizData = quizDataLevelB;
         if (currentLevel === 3 && typeof quizDataLevelC !== 'undefined') currentQuizData = quizDataLevelC;
         currentQuestion = 0;
@@ -3326,7 +3043,7 @@ const Adaptiv = (() => {
         if (navButtonsEl) navButtonsEl.style.display = "block";
         const levelUpdateEl = document.querySelector(".levelUpdate");
         if (levelUpdateEl && typeof levelHeadings !== 'undefined') levelUpdateEl.textContent = levelHeadings[currentLevel];
-        // renderQuestion expects questionId param - we call with getQid()
+        
         renderQuestion(getQid());
         updateAttemptedCount();
         $(".instruc").show();
@@ -3354,7 +3071,7 @@ const Adaptiv = (() => {
     const retryQuiz = () => {
         currentQuestion = 0;
         submitted = false;
-        userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);        
+        userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);
         const navButtonsEl = document.getElementById("nav-buttons");
         if (navButtonsEl) navButtonsEl.style.display = "flex";
         renderQuestion(getQid());
@@ -3451,10 +3168,10 @@ const Adaptiv = (() => {
     }
 
     return {
-        render:renderQuestion,        
+        render:renderQuestion,
         userAnswersAdaptiv,
         currentLevel,
-        currentQuestion,        
+        currentQuestion,
         submitted,
         currentQuizData,
         attemptCount,
@@ -3594,7 +3311,7 @@ const OnlyAudio = (() => {
             $('.audio-container').css({ 'width': '90%', 'height': '90%' }).removeClass('mb-3');
             $('.audio-container').parent().addClass('d-flex justify-content-center align-items-center');
         } catch (e) {
-            console.error('Audio.renderUI error:', e);
+            console.error('OnlyAudio.renderUI error:', e);
         }
     };    
 
@@ -3765,7 +3482,7 @@ const OnlyAudio = (() => {
             createYouTubePlayer(pendingYouTubeVideoId);
             pendingYouTubeVideoId = null;
         } catch (e) {
-            console.error("onYouTubeIframeAPIReady error:", e);
+            console.error("OnlyAudio.onYouTubeIframeAPIReady error:", e);
         }
     };
 
@@ -3779,7 +3496,7 @@ const OnlyAudio = (() => {
             playerVars: { autoplay: 0, controls: 0, rel: 0 },
             events: {
                 onReady: (event) => {
-                    hideLoader();            
+                    hideLoader();
                     const waitForDuration = setInterval(() => {
                             try {
                                 const dur = ytPlayer.getDuration();
@@ -3804,7 +3521,7 @@ const OnlyAudio = (() => {
             }
             });
         } catch (e) {
-            console.error("createYouTubePlayer error:", e);
+            console.error("OnlyAudio.createYouTubePlayer error:", e);
         }
     };
     
@@ -3847,7 +3564,7 @@ const OnlyAudio = (() => {
             initialized = true;
             safeLog("Audio initialized in mode:", mode);
         } catch (err) {
-            console.error("Audio.init error:", err);
+            console.error("OnlyAudio.init error:", err);
         }
     };
     
@@ -3856,40 +3573,35 @@ const OnlyAudio = (() => {
             stopProgressLoop();
             clearInterval(loaderInterval);
             loaderInterval = null;
-
-            // audio element cleanup
+            
             if (audioEl) {
                 try {
                     audioEl.pause();
                 } catch (e) {}
-                // remove listeners by cloning node (simple way)
+                
                 const cloned = audioEl.cloneNode(true);
                 audioEl.parentNode && audioEl.parentNode.replaceChild(cloned, audioEl);
             }
-
-            // remove play button listener
+            
             if (playPauseBtn) {
                 try { playPauseBtn.removeEventListener("click", togglePlay); } catch (e) {}
             }
 
-            // destroy YT player
             if (ytPlayer && typeof ytPlayer.destroy === "function") {
                 try { ytPlayer.destroy(); } catch (e) {}
                 ytPlayer = null;
             }
-
-            // clear UI
+            
             const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
             const parent = container ? document.querySelector(container) : null;
             if (parent) parent.innerHTML = "";
-
-            // reset refs
+            
             audioEl = seekSlider = currentTimeEl = durationEl = loader = playPauseBtn = replayBtn = youtubeContainer = null;
             pendingYouTubeVideoId = null;
             mode = "";
             initialized = false;
         } catch (e) {
-            console.error("Audio.destroy error:", e);
+            console.error("OnlyAudio.destroy error:", e);
         }
     };
 
@@ -3903,7 +3615,7 @@ const DropDown = (() => {
 
     Activity.css('dd.css');
 
-    const quesClass = 'questionSections';    
+    const quesClass = 'questionSections';
 
     const getQid = () => {
         return  $(`.${quesClass}`)[0].dataset.qid;
@@ -3918,8 +3630,8 @@ const DropDown = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -3960,13 +3672,13 @@ const DropDown = (() => {
             if( showBtn ) showBtn.addEventListener("click", showAnswersDD );
             if( resetBtn ) resetBtn.addEventListener("click", resetActivityDD );
         } catch (e) {
-            console.error( 'FillInTheBlanksHindiKb.ui :', e );
+            console.error( 'DropDown.ui :', e );
         }
     }
 
     const renderQuestions = (questionId) => {
         ui(questionId);
-        Activity.setQuestionDetails( questionId );        
+        Activity.setQuestionDetails( questionId );
 
         const container     = document.querySelector(`.${quesClass}`);
         container.innerHTML = "";
@@ -4005,7 +3717,7 @@ const DropDown = (() => {
 
     const makeSelect = (qIndex, blankIndex, optionsArr) => {
         const select = document.createElement("select");
-        select.setAttribute("data-index", qIndex);        
+        select.setAttribute("data-index", qIndex);
         if( blankIndex !== null ) select.setAttribute("data-blank", blankIndex);
 
         const lang = Activity.getData(getQid())?.lang;
@@ -4041,7 +3753,7 @@ const DropDown = (() => {
         const content = Activity.getData(getQid())?.content;
         const lang    = content?.lang;
         const data    = content?.questions;
-        const isHindi = lang == 'hi' ? true : false;        
+        const isHindi = lang == 'hi' ? true : false;
 
         const headings = isHindi
             ? { yourAns: "आपका उत्तर", correctAns: "सही उत्तर", status: "स्थिति", correct: "✔ सही", incorrect: "❌ गलत", unattempted: "उत्तर नहीं दिया", statusText: "सही उत्तर" }
@@ -4130,7 +3842,7 @@ const DropDown = (() => {
             if (submitBtn) submitBtn.classList.add("disable");
         }
 
-        const data = Activity.getData(getQid())?.content?.questions;        
+        const data = Activity.getData(getQid())?.content?.questions;
         const selects = document.querySelectorAll(`select`);
         selects.forEach(sel => {
             const qIdx     = parseInt(sel.getAttribute("data-index"), 10) || 0;
@@ -4198,8 +3910,8 @@ const Circle = (() => {
                 return;
             }
             
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -4263,7 +3975,7 @@ const Circle = (() => {
 
         const activity = Activity.getData(questionId);
         const content  = activity?.content;
-        const lang     = activity?.lang || 'en';
+        const lang     = activity?.lang ?? 'en';
 
         if (!Array.isArray(content)) {
             console.error("renderQuestions: activity content should be an array", content);
@@ -4499,7 +4211,7 @@ const ShravanKaushal = (() => {
     const getQid = () => {
         const el = document.querySelector(`#${inputDataId}`);
         return el ? el.dataset.qid : undefined;
-    };    
+    };
 
     const ui = (questionId) => {
         try {
@@ -4511,9 +4223,9 @@ const ShravanKaushal = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
-            const buttonLabel = Activity.getBtnLabels(lang);           
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <audio id="audioPlayer" preload="auto"></audio>
@@ -4526,7 +4238,7 @@ const ShravanKaushal = (() => {
                                         <div class="container">
                                             <div class="bigHeadingS ${Define.get('head')}"></div>
                                             <div class="runingHead ${Define.get('subHead')}"></div>
-                                            <div id="${inputDataId}" class="rowInputsData"></div>                     
+                                            <div id="${inputDataId}" class="rowInputsData"></div>
                                             <div class="secondRowaBB">
                                                 <div class="nextPreviRow">
                                                     <button class="buttShar" id="prevBtns">Previous</button>
@@ -4539,7 +4251,7 @@ const ShravanKaushal = (() => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div id="clickActShravan" style="display:none;">
                                     <div class="baseFixeds">
@@ -4558,7 +4270,7 @@ const ShravanKaushal = (() => {
             const closeBtn = document.getElementById(btnid);
             if (closeBtn) {
                 closeBtn.addEventListener('click', closeReportShravan);
-            }            
+            }
             
             const inputEl = document.getElementById(inputDataId);
             if (inputEl) inputEl.dataset.qid = questionId;
@@ -4589,7 +4301,7 @@ const ShravanKaushal = (() => {
             }            
             updateButtons();
         } catch (e) {
-            console.error('Shravan.ui :', e);
+            console.error('ShravanKaushal.ui :', e);
         }
     };    
 
@@ -4622,7 +4334,7 @@ const ShravanKaushal = (() => {
 
     const startShravan = () => {
         if (!audioPlayer) {
-            // Try to find player again in case ui wasn't fully initialized earlier
+            
             audioPlayer = document.getElementById('audioPlayer');
             if (!audioPlayer) {
                 console.error('audioPlayer not found');
@@ -4631,19 +4343,18 @@ const ShravanKaushal = (() => {
         }
 
         const src = Activity.getData(getQid())?.content?.audio?.headsrc
-            ?? Activity.getData(getQid())?.content?.audio?.options?.[0]; // fallback
+            ?? Activity.getData(getQid())?.content?.audio?.options?.[0];
         if (src) {
             audioPlayer.src = src;
             audioPlayer.currentTime = 0;
             audioPlayer.play().catch(err => {
-                // Some browsers block autoplay; handle gracefully
+                
                 console.warn('Audio play failed (user gesture required?):', err);
             });
         } else {
             console.warn('No audio source found for this activity.');
         }
-
-        // show/hide UI blocks (use DOM API to avoid jQuery dependency)
+        
         const startBlock = document.querySelector('.startActBtns');
         const afterBlock = document.querySelector('.afterClicks');
         if (startBlock) startBlock.style.display = 'none';
@@ -4687,7 +4398,7 @@ const ShravanKaushal = (() => {
 
             audioPlayer.src = audioList[curntInd].src;
             audioPlayer.currentTime = 0;
-            audioPlayer.play().catch(() => {});            
+            audioPlayer.play().catch(() => {});
         }
         updateButtons();
     };
@@ -4734,10 +4445,10 @@ const ShravanKaushal = (() => {
         dataSet.forEach((q, i) => {
             const inputEl = document.getElementById(`f${inputDataId}_${q.id}`);
             const userAns = parseInt( inputEl.value );
-            const correctAnswers = Array.isArray(q.ans) ? q.ans : [q.ans];            
+            const correctAnswers = Array.isArray(q.ans) ? q.ans : [q.ans];
             
             const isCorrect = userAns && correctAnswers.includes(userAns);
-            if (isCorrect) correctCount++;            
+            if (isCorrect) correctCount++;
 
             const userAnswerText =
                 userAns.length > 0 ? userAns : (isHindi ? "प्रयास नहीं किया" : "Not Attempted");
@@ -4814,7 +4525,7 @@ const TrueAndFalse = (() => {
     const getQid = () => {
         const el = document.querySelector(`#${inputDataId}`);
         return el ? el.dataset.qid : undefined;
-    };    
+    };
 
     const ui = (questionId) => {
         try {
@@ -4825,8 +4536,8 @@ const TrueAndFalse = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.getBtnLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -4860,12 +4571,12 @@ const TrueAndFalse = (() => {
             // ..
             
             const inputEl = document.getElementById(inputDataId);
-            if (inputEl) inputEl.dataset.qid = questionId;            
+            if (inputEl) inputEl.dataset.qid = questionId;
             
             const submiBtn = parent.querySelector('.submit-btn');
             const showBtn  = parent.querySelector('.show-btn');
             const resetBtn = parent.querySelector('.reset-btn');
-            const closePopUpBtn = parent.querySelector('.popUp-close-btn');            
+            const closePopUpBtn = parent.querySelector('.popUp-close-btn');
            
             if (submiBtn) submiBtn.addEventListener('click', showPopUp );
             if (showBtn) showBtn.addEventListener('click', showAnswersTandF );
@@ -4883,13 +4594,13 @@ const TrueAndFalse = (() => {
             document.querySelector('hr').remove();
         }
 
-        const activity = Activity.getData(getQid()) || {};
-        const lang     = activity?.lang || 'en';
-        const dataSet  = activity?.content || [];
+        const activity = Activity.getData(getQid()) ?? {};
+        const lang     = activity?.lang ?? 'en';
+        const dataSet  = activity?.content ?? [];
 
         userAns = new Array(dataSet.length).fill(null);
 
-        const btnLabels  = Activity.getBooleanLabels(lang);        
+        const btnLabels  = Activity.getBooleanLabels(lang);
         
         const rowDiv     = document.getElementById(inputDataId);
         rowDiv.innerHTML = "";
@@ -4921,7 +4632,7 @@ const TrueAndFalse = (() => {
             tnfBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => selectAnswer(e.currentTarget));
             });
-        }        
+        }
     }
 
     const selectAnswer = (thisObj) => {
@@ -4936,7 +4647,7 @@ const TrueAndFalse = (() => {
     }
 
     const checkIfAllAttempt = () => {
-        const allAnswered = userAns.every(ans => ans !== null);        
+        const allAnswered = userAns.every(ans => ans !== null);
         const submitBtn   = document.getElementById(`submit4`);
         if( allAnswered ) {
             submitBtn.classList.remove("disable");
@@ -4944,14 +4655,14 @@ const TrueAndFalse = (() => {
     }
 
     const showAnswersTandF = () => {
-        const questions = Activity.getData(getQid())?.content || [];        
+        const questions = Activity.getData(getQid())?.content || [];
         $(`.options`).css('pointer-events', 'none');
         $(`#submit4`).addClass('disable');
         questions.map((item, index) => {
             const opt1 = $(`.options`).eq(index).children().eq(0);
             const opt2 = $(`.options`).eq(index).children().eq(1);
 
-            const opt1ans = opt1.attr( 'data-answer' );            
+            const opt1ans = opt1.attr( 'data-answer' );
             
             $(`.options`).eq(index).children('button').removeClass('active');
             
@@ -4972,8 +4683,8 @@ const TrueAndFalse = (() => {
     }
 
     const showPopUp = () => {
-        const activity   = Activity.getData(getQid()) || {};
-        const lang       = activity?.lang || 'en';
+        const activity   = Activity.getData(getQid()) ?? {};
+        const lang       = activity?.lang ?? 'en';
         const headLabels = Activity.getAnswerTableHeads(lang);
         const questions  = activity?.content;
 
@@ -4993,7 +4704,7 @@ const TrueAndFalse = (() => {
                                     </thead>
                                 <tbody>`;
         // ..
-        table.push( tableBodyF );        
+        table.push( tableBodyF );
 
         questions.forEach((item, i) => {
             const userAnswer = userAns[i];
@@ -5044,8 +4755,287 @@ const TrueAndFalse = (() => {
     }
 
     return {
-        render: renderQues        
+        render: renderQues
     };
+
+})();
+
+const DragAndDrop = (() => {
+
+    Activity.css('dnd.css');
+
+    const containerId       = 'dragItemsQ1';
+    const containerSelector = '#question1';
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            
+            const buttonLabel = Activity.getBtnLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                <div class="container">
+                                    <div class="rowWithAudios">
+                                        <p class="questLine"> 
+                                            <span class="${Define.get('head')}"></span> 
+                                            <span class="hindTrans ${Define.get('subHead')}"></span>
+                                        </p>
+                                        <div class="playsBtns">
+                                            <svg fill="currentColor" id="playSvg" class="bi bi-play-fill btnSounds" viewBox="0 0 16 16">
+                                                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
+                                            </svg>
+                                            <svg fill="currentColor" id="pauseSvg" class="bi bi-pause btnSounds" viewBox="0 0 16 16">
+                                                <path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div id="question1" class="question-block">
+                                        <div class="dragItems" id="${containerId}"></div>
+                                        <div class="dropItems"></div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn">${buttonLabel.check}</button>
+                                            <button class="show-btn">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..       
+			
+			const checkBtn = parent.querySelector( '.submit-btn' );
+			const showBtn  = parent.querySelector( '.show-btn' );
+			const resetBtn = parent.querySelector( '.reset-btn' );
+            const playSvg  = parent.querySelector( '#playSvg' );
+            const pauseSvg = parent.querySelector( '#pauseSvg' );
+
+			if (checkBtn) checkBtn.addEventListener("click", checkAnswersDnd);
+			if (showBtn) showBtn.addEventListener("click", showAnswersDnd);
+			if (resetBtn) resetBtn.addEventListener("click", resetActivityDnd);
+
+			if (playSvg)  playSvg.addEventListener("click", () => toggleAudio(true));
+            if (pauseSvg) pauseSvg.addEventListener("click", () => toggleAudio(false));
+		} catch (e) {
+            console.error( 'DragAndDrop.ui :', e );
+        }
+    }
+    
+    const renderDataDND = (questionId) => {
+        try {
+            ui(questionId);
+            const data    = Activity.getData( questionId );
+            const content = data?.content || {};
+
+            const hasAudio = content?.audio;
+            if( !hasAudio ) $('.playsBtns').remove();
+
+            const headElem       = Activity.setQuestionDetails( questionId );
+            const audioBtnExists = document.contains(document.querySelector('.playsBtns'));
+            if( !headElem.head && !headElem.subhead && !audioBtnExists ) {
+                document.querySelector('.rowWithAudios').remove();
+            }
+
+            const dragItems = document.getElementById(containerId);
+            dragItems.dataset.qid = questionId;
+            
+            const head     = [ '<div class="row w-100 justify-content-center">' ];
+            const headings = Activity.shuffleQuestions( content?.heading );
+
+            const defaultCol = {
+                md : 4,
+                sm : 6,
+                om : 12
+            };
+            const col = {
+                md: content?.col?.md ?? defaultCol.md,
+                sm: content?.col?.sm ?? defaultCol.sm,
+                om: content?.col?.om ?? defaultCol.om
+            };
+
+            headings.forEach((item) => {
+                const html = `<div class="col-md-${col.md} col-sm-${col.sm} col-${col.om}">
+                                <div class="wh1">
+                                    ${(item.text != '' && item.text ) ? `<div class="headingsDND">${item.text}</div>` : ''}
+                                    <div class="dropSect" data-accept="${item.accept}"></div> 
+                                </div>
+                            </div>`;
+                // ..
+                head.push( html );
+            });
+            head.push( '</div>' );
+            $('.dropItems').html( head.join('') );
+
+            const opt     = [];
+            const options = Activity.shuffleQuestions( data?.content?.options );
+            options.forEach((item) => {
+                const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
+                opt.push( html );
+            });            
+            dragItems.innerHTML = opt.join('');
+
+            makeDraggable(`#${containerId} .wordDrag`);
+            initDroppable(containerSelector);
+        } catch (e) {
+            console.error( 'DragAndDrop.renderDataDND :', e );
+        }
+    }
+
+    const makeDraggable = (selector) => {
+        try {
+            $(selector).draggable({
+                helper: "original",
+                revert: "invalid",
+                start: function () { $(this).addClass("dragging"); },
+                stop: function () { $(this).removeClass("dragging"); }
+            });
+
+            $(selector).on("touchstart", function (e) {
+                const touch = e.originalEvent.touches[0];
+                const $this = $(this);
+                $this.addClass("dragging");
+                $this.data("touchOffsetX", touch.pageX - $this.offset().left);
+                $this.data("touchOffsetY", touch.pageY - $this.offset().top);
+
+                $(document).on("touchmove.drag", function (e) {
+                    const moveTouch = e.originalEvent.touches[0];
+                    $this.css({
+                        position: "absolute",
+                        left: moveTouch.pageX - $this.data("touchOffsetX"),
+                        top: moveTouch.pageY - $this.data("touchOffsetY"),
+                        zIndex: 9999
+                    });
+                });
+
+                $(document).on("touchend.drag", function () {
+                    $(document).off(".drag");
+                    $this.removeClass("dragging");
+                });
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.makeDraggable :', e );
+        }
+    }
+
+    const initDroppable = () => {
+        try {
+            $(`${containerSelector} .dropSect`).droppable({
+                accept: ".wordDrag",
+                drop: function (event, ui) {
+                    const $dragged = ui.draggable;
+                    $dragged
+                        .removeClass("ui-draggable ui-draggable-handle dragging")
+                        .css({ top: "auto", left: "auto", position: "relative" })
+                        .draggable("disable");
+                    // ..
+                    $(this).append($dragged);
+                }
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.initDroppable :', e );
+        }
+    }
+
+    const checkAnswersDnd = () => {
+        try {
+            let correct = 0;
+            const total = $(`${containerSelector} .wordDrag`).length;
+
+            $(`${containerSelector} .dropSect`).each(function () {
+                const accept = $(this).attr( 'data-accept' );
+                const droppedItems = $(this).children('.wordDrag');
+                droppedItems.each(function() {
+                    let background = '#ffcdd2';
+                    if( $(this).attr( 'data-ans' ) == accept ) {
+                        background = '#c8e6c9';
+                        correct++;
+                    }
+                    $(this).css( 'background',  background);
+                });
+            });
+
+            Swal.fire({
+                title: correct === total ? "All Correct!" : "Check your answers",
+                text: `You got ${correct} out of ${total} correct!`,
+                icon: correct === total ? "success" : "info",
+                confirmButtonText: "OK"
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.checkAnswersDnd :', e );
+        }
+    }
+
+    const showAnswersDnd = () => {
+        try {
+            Activity.toggleCheckBtn( '.submit-btn', true );
+
+            const dragItems  = document.getElementById(containerId);
+            const questionId = dragItems.dataset.qid;
+
+            renderDataDND(dragItems.dataset.qid);
+
+            $(`${containerSelector} .dropSect`).empty();
+            const data = Activity.getData( questionId )?.content?.options;
+            
+            data.forEach((item) => {
+                const $clone = $(`<div class="wordDrag">${item.text}</div>`)
+                    .css({ background: "#c8e6c9", position: "relative" })
+                    .attr("data-ans", item.ans);
+                $(`${containerSelector} .dropSect[data-accept='${item.ans}']`).append($clone);
+            });
+        } catch (e) {
+            console.error( 'DragAndDrop.showAnswersDnd :', e );
+        }
+    }
+
+    const resetActivityDnd = () => {
+        try {
+            Activity.toggleCheckBtn( '.submit-btn', false );
+
+            const dragItems = document.getElementById(containerId);
+            renderDataDND(dragItems.dataset.qid);
+            $(`${containerSelector} .dropSect`).empty();
+            $(`${containerSelector} .wordDrag`);
+        } catch (e) {
+            console.error( 'DragAndDrop.resetActivityDnd :', e );
+        }
+    }
+
+    const toggleAudio = ( play=true ) => {
+        try {
+            const dragItems  = document.getElementById(containerId);
+            const questionId = dragItems.dataset.qid;
+
+            const src   = Activity.getData( questionId )?.content?.audio;
+            const audio = new Audio(src);
+            if( play ) {
+                $("#playSvg").hide();
+                $("#pauseSvg").show();
+                audio.play();
+            } else {
+                $("#playSvg").show();
+                $("#pauseSvg").hide();
+                audio.pause();
+            }
+        } catch (e) {
+            console.error( 'DragAndDrop.toggleAudio :', e );
+        }
+    }
+    
+    return {
+        render:renderDataDND,
+        toggleAudio,
+        makeDraggable,
+        initDroppable,
+        showAnswersDnd,
+        checkAnswersDnd,
+        resetActivityDnd
+    }
 
 })();
 
@@ -5074,8 +5064,8 @@ const DragAndDropMulti = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.getBtnLabels(lang);
 
@@ -5116,20 +5106,20 @@ const DragAndDropMulti = (() => {
 			if (resetBtn) resetBtn.addEventListener("click", resetDropBox);
 			if (popUpCloseBtn) popUpCloseBtn.addEventListener("click", closePopUp);
 		} catch (e) {
-            console.error( 'DragAndDrop.ui :', e );
+            console.error( 'DragAndDropMulti.ui :', e );
         }
     }
 
     const showPopUp = () => {
-        const activity   = Activity.getData(getQid()) || {};
-        const lang       = activity?.lang || 'en';
-        const questions  = activity?.content?.questions || [];
+        const activity   = Activity.getData(getQid()) ?? {};
+        const lang       = activity?.lang ?? 'en';
+        const questions  = activity?.content?.questions ?? [];
         const headLabels = Activity.getAnswerTableHeads(lang);
 
         const strictMatch = activity?.content?.strictMatch;
-        const option_side = activity?.content?.option_side || 'top';
+        const option_side = activity?.content?.option_side ?? 'top';
 
-        const type_set    = activity?.content?.set || {};
+        const type_set    = activity?.content?.set ?? {};
         const hasTypeSet  = Object.keys(type_set).length > 0;
 
         let correctCount = 0;
@@ -5286,7 +5276,7 @@ const DragAndDropMulti = (() => {
             for (let i = 0; i < $(`.dropBox_2`).length; i++) {
                 $(`.dropBox_2`).eq(i).html($(`.dropBox_2`).eq(i).attr('data-ans'));
             }
-        }        
+        }
     }
 
     const resetDropBox = () => {
@@ -5301,7 +5291,7 @@ const DragAndDropMulti = (() => {
             Activity.setQuestionDetails( questionId );
 
             const data = Activity.getData( questionId );
-            const lang = data?.lang || 'en';
+            const lang = data?.lang ?? 'en';
 
             const dragItems = document.getElementById(containerId);
             dragItems.dataset.qid = questionId;
@@ -5333,7 +5323,7 @@ const DragAndDropMulti = (() => {
 
             if( hasTypeSet ) {
                 const options       = Activity.shuffleQuestions( type_set?.options || [] ) || [];
-                const uniqueOptions = [...new Set(options)];                
+                const uniqueOptions = [...new Set(options)];
                 uniqueOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
                     optionHtml.push( html );
@@ -5420,7 +5410,7 @@ const DragAndDropMulti = (() => {
             initDroppable('.dropBox_2');
             DragEnabled = true;
         } catch (e) {
-            console.error( 'DragAndDrop.renderDataDND :', e );
+            console.error( 'DragAndDropMulti.renderDataDND :', e );
         }
     }
 
@@ -5436,7 +5426,7 @@ const DragAndDropMulti = (() => {
                 }
             });
         } catch (e) {
-            console.error( 'DragAndDrop.makeDraggable :', e );
+            console.error( 'DragAndDropMulti.makeDraggable :', e );
         }
     }
 
@@ -5465,10 +5455,10 @@ const DragAndDropMulti = (() => {
                     if (enableDragCheckSubmitBtn() == $(selector).length) {
                         $(`#submit2`).removeClass('disable');
                     }
-                }                
-            })
+                }
+            });
         } catch (e) {
-            console.error( 'DragAndDrop.initDroppable :', e );
+            console.error( 'DragAndDropMulti.initDroppable :', e );
         }
     }
 
@@ -5480,7 +5470,7 @@ const DragAndDropMulti = (() => {
             }
         }
         return count;
-    }    
+    }
     
     return {
         render:renderDataDND,
@@ -5510,8 +5500,8 @@ const Sorting = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.getBtnLabels(lang);
 
@@ -5547,8 +5537,8 @@ const Sorting = (() => {
             ui(questionId);
             Activity.setQuestionDetails( questionId );
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity?.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity?.lang ?? 'en';
 
             const dragContainer = document.getElementById(containerId);
             dragContainer.dataset.qid = questionId;
@@ -5584,7 +5574,7 @@ const Sorting = (() => {
 
             $('.'+sequenceClass).html( seqHtml.join( '' ) );
         } catch( e ) {
-            console.error( 'Sorting.renderQuestion :', e );
+            console.error( 'Sorting.renderSequence :', e );
         }
     }
 
@@ -5711,8 +5701,8 @@ const Pdf = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.getBtnLabels(lang);
 
@@ -5769,8 +5759,8 @@ const Pdf = (() => {
         try {
             ui(questionId);
             
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity?.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity?.lang ?? 'en';
             const path     = activity?.content?.pdf ? Activity.globalImagePath()+activity?.content?.pdf : '';
 
             if( !path ) {
@@ -5811,7 +5801,7 @@ const Pdf = (() => {
 
             const loadingTask = pdfjsLib.getDocument(path);
             loadingTask.onProgress = (data) => {
-                if( data.total && data.loaded === data.total ) toggle_loader(false);                
+                if( data.total && data.loaded === data.total ) toggle_loader(false);
             };
 
             try {
@@ -5874,7 +5864,7 @@ const Pdf = (() => {
                     if( err && err.name === 'RenderingCancelledException' ) {
                         console.info('render cancelled');
                     } else {
-                        console.error('Error rendering page:', err);                        
+                        console.error('Error rendering page:', err);
                     }
                 } finally {
                     isRendering = false;
@@ -5943,8 +5933,8 @@ const Shabdkosh = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) || {};
-            const lang     = activity.lang || 'en';
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.getBtnLabels(lang);
 
@@ -6002,7 +5992,7 @@ const Shabdkosh = (() => {
             });
 
         } catch (e) {
-            console.error( 'Shabdkosh.renderPdf :', e );
+            console.error( 'Shabdkosh.renderQuestion :', e );
         }
     };
 

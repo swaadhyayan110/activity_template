@@ -120,7 +120,7 @@ const UI = (() => {
         try {            
             const container = document.getElementById(selector);
             if( !container ) {
-                console.warn("ActUI.buttons: container not found:", selector);
+                console.warn("UI.buttons: container not found:", selector);
                 return;
             }            
 
