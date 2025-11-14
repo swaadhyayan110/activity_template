@@ -525,7 +525,7 @@ const MatchLeftToRight = (() => {
                 const div       = document.createElement('div');
                 div.className   = 'item';
                 div.dataset.id  = d.id;
-                div.textContent = d.left;
+                div.innerHTML   = d.left;
 
                 div.addEventListener('click', (ev) => {
                     leftContainer.querySelectorAll('.item.selected').forEach(i => i.classList.remove('selected'));
@@ -537,10 +537,10 @@ const MatchLeftToRight = (() => {
             });
             
             rightShuffled.forEach(d => {
-                const div = document.createElement('div');
-                div.className = 'item';
+                const div      = document.createElement('div');
+                div.className  = 'item';
                 div.dataset.id = d.id;
-                div.textContent = d.right;
+                div.innerHTML  = d.right;
 
                 div.addEventListener('click', (ev) => {
                     const activity = activities[activityId];

@@ -47,7 +47,7 @@
                 head    : 'Module : 1',
                 subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
                 content : [
-                    { id: 1, left: 'Bird\'s eye view', right: 'Seen from above, as a bird does' },
+                    { id: 1, left: 'Bird\'s&nbsp;<u>eye</u>&nbsp;view', right: 'Seen from above, as a bird does' },
                     { id: 2, left: 'Feast for the eyes', right: 'To look with great enjoyment' },
                     { id: 3, left: 'All eyes and ears', right: 'To be very attentive' },
                     { id: 4, left: 'Apple of someone\'s eye', right: 'To be a favourite or loved one of someone' },
