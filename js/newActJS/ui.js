@@ -163,6 +163,7 @@ const UI = (() => {
                 frag.appendChild(div);
             });
 
+            container.style.overflow = 'auto';
             container.replaceChildren(frag);
             container.firstElementChild?.click();
 

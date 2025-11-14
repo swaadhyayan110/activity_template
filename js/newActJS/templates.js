@@ -71,19 +71,18 @@ const Activity = (() => {
             const data = getData( questionID );
             const container = document.querySelector(Define.get('questionContainer'));
             if( !container ) {
-                console.warn('matchLeftToRight: container not found:', container);
+                console.warn('setQuestionDetails: container not found:', container);
                 return;
             }
 
             const head    = Define.get('head');
             const subHead = Define.get('subHead');
-
-            const arr = [ head, subHead ].map(item => `.${item}`);
+            const eleArr  = [ head, subHead ].map(item => `.${item}`);
 
             const elements = {};
             
-            const elHead = container.querySelector(arr[0]);
-            const elSub  = container.querySelector(arr[1]);
+            const elHead = container.querySelector(eleArr[0]);
+            const elSub  = container.querySelector(eleArr[1]);
 
             if (elHead) elHead.innerHTML = data.head || elHead.remove();
             if (elSub) elSub.innerHTML   = data.subhead || elSub.remove();
@@ -111,7 +110,7 @@ const Activity = (() => {
         }
     };
 
-    const translateBulletLabels = (lang='en', ind, upperCase=true) => {
+    const translateBulletLabels = ({ lang='en', ind=0, upperCase=true } = {}) => {
         const alphabets = {
             en: [...'abcdefghijklmnopqrstuvwxyz'],
             hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय']
@@ -457,8 +456,8 @@ const MatchLeftToRight = (() => {
                     </div>
                     <hr/>
                     <div class="forLevelAB">
-                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels(lang, 0)}</div>
-                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels(lang, 1)}</div>
+                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels({lang:lang, ind:0})}</div>
+                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels({lang:lang, ind:1})}</div>
                     </div>
                     <div class="content user-select-none">
                         <div class="instructions">
@@ -2511,7 +2510,7 @@ const Mcq_PathKaSaar = (() => {
                         <div class="col-md-6 col-sm-12 mb-2">
                         <label class="option-btn ${isSelected} mcq-type" data-oi="${oi}" data-qi="${ind}" >
                             <input type="radio" name="question-${ind}" ${userAnswers[ind] === oi ? "checked" : ""}>
-                            <strong>(${Activity.translateBulletLabels(lang, oi)})</strong> 
+                            <strong>(${Activity.translateBulletLabels({lang:lang, ind:oi})})</strong> 
                             ${optionText}
                         </label>
                         </div>
@@ -4002,7 +4001,7 @@ const Circle = (() => {
             }).join("");
             renderDiv.innerHTML += `
             <div class="questInC" data-id="${item.id}">
-                <span class="label">(${Activity.translateBulletLabels(lang, ind)})</span> ${html}
+                <span class="label">(${Activity.translateBulletLabels({lang:lang, ind:ind})})</span> ${html}
             </div>`;
         });
         
@@ -4612,7 +4611,7 @@ const TrueAndFalse = (() => {
         dataSet.forEach( (item, ind) => {
             const html = `
                 <div class="row m-0 mb-3 question-block">
-                    <div style="width:40px">(${Activity.translateBulletLabels(lang, ind)})</div>
+                    <div style="width:40px">(${Activity.translateBulletLabels({lang:lang, ind:ind})})</div>
                     <div class="col p-0">
                         <div class="row m-0">
                             <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${item.question}</div>
@@ -4731,7 +4730,7 @@ const TrueAndFalse = (() => {
             
             const body = `
                 <tr clsss='trData'>
-                    <th>(${Activity.translateBulletLabels( lang, i )})</th>
+                    <th>(${Activity.translateBulletLabels({lang:lang, ind:i})})</th>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${tempUserAnswer}</td>
                     <td class="text-success">${tempCorrectAnswer}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
@@ -5170,7 +5169,7 @@ const DragAndDropMulti = (() => {
 
                     const body = `
                         <tr clsss='trData'>
-                            <th>(${Activity.translateBulletLabels( lang, key )})</th>
+                            <th>(${Activity.translateBulletLabels({lang:lang, key:key})})</th>
                             <td class="${isCorrect ? 'text-success' : 'text-danger'}">${ans.toString()}</td>
                             <td></td>
                             <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
@@ -5221,7 +5220,7 @@ const DragAndDropMulti = (() => {
 
                 const body = `
                     <tr clsss='trData'>
-                        <th>(${Activity.translateBulletLabels( lang, i )})</th>
+                        <th>(${Activity.translateBulletLabels({lang:lang, ind:i})})</th>
                         <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
                         <td class="text-success">${correctAnswerText.toString()}</td>
                         <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
@@ -5341,7 +5340,7 @@ const DragAndDropMulti = (() => {
                     const html = `
                         <div class="row g-0 my-3">
                             <div class="col-auto me-2">
-                                (${Activity.translateBulletLabels(lang, ind)})
+                                (${Activity.translateBulletLabels({lang:lang, ind:ind})})
                             </div>
                             <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
                                 <div class="drop-Box dropBox_2 ui-droppable"></div>
@@ -5378,7 +5377,7 @@ const DragAndDropMulti = (() => {
                         const html = `
                             <div class="row g-0 my-3 align-items-center">
                                 <div class="col-auto me-1">
-                                    (${Activity.translateBulletLabels(lang, ind)})
+                                    (${Activity.translateBulletLabels({lang:lang, ind:ind})})
                                 </div>
                                 <div class="col d-flex flex-wrap align-items-center question-container_2" data-queindex="${ind}">
                                     ${image.join( '' )}
@@ -5394,7 +5393,7 @@ const DragAndDropMulti = (() => {
                         const html = `
                             <div class="row g-0 my-3">
                                 <div class="col-auto me-1">
-                                    (${Activity.translateBulletLabels(lang, ind)})
+                                    (${Activity.translateBulletLabels({lang:lang, ind:ind})})
                                 </div>
                                 <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
                                     ${image.join( '' )}
@@ -6161,17 +6160,12 @@ const Shrutlekh = (() => {
         }
     }
 
-    const renderShrutlekh = async (questionId) => {
+    const renderShrutlekh = (questionId) => {
         try {
             ui(questionId);
             Activity.setQuestionDetails( questionId );
                         
             if( !setQid(questionId) ) return false;
-
-            const activity  = Activity.getData( questionId );
-            const lang      = activity?.lang ?? 'en';
-            const content   = activity?.content ?? {};
-            const questions = content?.questions ?? [];
 
             setResponseAudio();
         } catch (e) {
@@ -6523,6 +6517,352 @@ const Shrutlekh = (() => {
         render:renderShrutlekh
     }
 
+})();
+
+const WordSearch = (() => {
+
+    Activity.css('wordSearch.css');
+
+    const containerId  = 'word-search-container';
+    const puzzleTextId = 'puzzle-text';
+    const puzzleAnsId  = 'answer';
+    const puzzleContId = 'puzzle';
+
+    const color_blue   = '#31cde2';
+
+    let _grid;
+
+    const getQid = () => {
+        const el = document.querySelector(`#${containerId}`);
+        return el ? el.dataset.qid : undefined;
+    };
+
+    const setQid = (questionId) => {
+        const dragItems = document.getElementById(containerId);
+        if( dragItems ) {
+            dragItems.dataset.qid = questionId;
+            return true;
+        } else {
+            console.warn( '[WARNING]', 'Unable to set qid' );
+            return false;
+        }
+    };
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container" id="${containerId}">
+                                        <div class="${Define.get('head')}"></div>
+                                        <div class="ps-2 hints">Hints</div>
+                                        <div class="divDisplay">
+                                            <ol id="${puzzleTextId}" class="text"></ol>
+                                            <div id="${puzzleContId}"></div>
+                                        </div>
+                                        <div class="machiNgs">
+                                            <button class="submit-btn" id="c-check">${buttonLabel.check}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                            <button class="show-btn">${buttonLabel.show}</button>
+                                        </div>
+                                        <div class="note" id="${puzzleAnsId}" style="display:none;"></div>
+                                    </div>
+                                </div>`;
+            // ..
+			
+			const resetBtn  = parent.querySelector( '.reset-btn' );
+			const showBtn   = parent.querySelector( '.show-btn' );
+			const submitBtn = parent.querySelector( '.submit-btn' );
+
+			if(resetBtn) resetBtn.addEventListener("click", clearGrid);
+			if(showBtn) showBtn.addEventListener("click", showAnswer);
+			if(submitBtn) submitBtn.addEventListener("click", checkAnswer);
+		} catch (err) {
+            console.error( 'WordSearch.ui :', err );
+        }
+    };
+
+    const render = (questionId) => {
+        try {
+            ui(questionId);
+            Activity.setQuestionDetails( questionId );
+                        
+            if( !setQid(questionId) ) return false;
+
+            const activity = Activity.getData( questionId );
+            const lang     = activity?.lang ?? 'en';
+            const content  = Activity.shuffleQuestions( activity?.content ?? [] ) ?? [];
+
+            const puzzle = [];
+            const words  = [];
+            content.forEach( (item, ind) => {
+                puzzle.push( `<li class="hint-item">${item.text}</li>` );
+                words.push( `<div>${Number(ind+1)}. ${item.answer}</div>` );
+            });
+            $('#'+puzzleTextId).html( puzzle.join( '' ) );
+            $('#'+puzzleAnsId).html( words.join( '' ) );
+
+            renderGrid(content, lang);
+        } catch (e) {
+            console.error( 'WordSearch.render :', e );
+        }
+    }
+
+    const renderGrid = () => {
+        try {
+            const activity = Activity.getData( getQid() );
+            const content  = activity?.content ?? [];
+
+            const words     = content.filter( puz => puz?.answer ).map( puz => puz.answer.toUpperCase() );            
+            const longest   = Math.max(...words.map(w => w.length));
+            const maxRow    = Math.max(...content.map(p => p.direction === 'h' ? p.row : p.row + (p.answer?.length || 0) - 1));
+            const maxCol    = Math.max(...content.map(p => p.direction === 'v' ? p.col : p.col + (p.answer?.length || 0) - 1));
+            const size      = Math.max(longest + 4, maxRow + 1, maxCol + 1, 15);
+            const grid      = Array.from({ length: size }, () => Array.from({ length: size }, () => ''));            
+            const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            content.forEach((item, index) => {
+                const { row, col, answer, direction } = item;
+                if( !answer || (direction !== 'h' && direction !== 'v') ) return;
+
+                const up = answer.toUpperCase();
+                [...up].forEach( (ch, i) => {
+                    const r = direction === 'h' ? row : row + i;
+                    const c = direction === 'h' ? col + i : col;
+                    const cell = grid[r][c];
+                    if( cell === '' || cell === ch ) grid[r][c] = ch;
+                });
+            });
+
+            const pool = alphabets.toUpperCase();
+            for( let r = 0; r < size; r++ ) {
+                for( let c = 0; c < size; c++ ) {
+                    if( grid[r][c] === '' ) {
+                        const rand = Math.floor( Math.random() * pool.length );
+                        grid[r][c] = pool[rand];
+                    }
+                }
+            }
+
+            const gridHtml = [ '<table>' ];
+            grid.forEach((rowArr, row) => {
+                gridHtml.push('<tr>');
+                rowArr.forEach((cell, col) => {
+                    const data = `<td><input type="button" value="${cell}" data-row="${row}" data-col="${col}" data-selected="0"></td>`;
+                    gridHtml.push( data );
+                })
+                gridHtml.push('</tr>');
+            });
+            gridHtml.push('</table>');
+
+            const puzzleCont     = document.getElementById(puzzleContId);
+            puzzleCont.innerHTML = gridHtml.join('');
+            
+            puzzleCont.querySelectorAll('input[type="button"]').forEach(btn => {
+                btn.addEventListener('click', selectCell);
+            });
+
+            _grid = grid.map(row => [...row]);
+
+        } catch( err ) {
+            console.log( 'WordSearch.renderGrid', err );
+        }
+    }
+
+    const selectCell = (e) => {
+        const btn = e.currentTarget;
+
+        if( btn.dataset.selected == 2 ) return;
+        btn.dataset.selected = btn.dataset.selected == 0 ? 1 : 0;
+        btn.style.background = btn.dataset.selected == 1 ? 'yellow' : color_blue;
+    }
+
+    const clearGrid = () => {
+
+        document.querySelectorAll('input[type="button"]').forEach(btn => {
+            btn.dataset.selected = 0;
+            btn.style.color      = 'black';
+            btn.style.background = color_blue;
+        });
+
+        const checkBtn    = document.getElementById('c-check');
+        checkBtn.disabled = false;
+        checkBtn.style.opacity = 1;
+    }
+
+    const showAnswer = () => {
+        try {
+            const activity = Activity.getData(getQid());
+            const content  = activity?.content ?? [];
+            const puzzleCont = document.getElementById(puzzleContId);
+
+            if (!puzzleCont) return;
+            
+            puzzleCont.querySelectorAll('input[type="button"]').forEach(btn => {
+                btn.dataset.selected = 0;
+                btn.style.background = color_blue;
+                btn.style.color = 'black';
+            });
+            
+            content.forEach(item => {
+                const { row, col, answer, direction } = item;
+                if (!answer || (direction !== 'h' && direction !== 'v')) return;
+
+                const up = answer.toUpperCase();
+                [...up].forEach((ch, i) => {
+                    const r = direction === 'h' ? row : row + i;
+                    const c = direction === 'h' ? col + i : col;
+                    
+                    const selector = `input[type="button"][data-row="${r}"][data-col="${c}"]`;
+                    const btn = puzzleCont.querySelector(selector);
+                    if (!btn) return;
+
+                    btn.dataset.selected = 1;
+                    btn.style.background = 'green';
+                    btn.style.color      = 'white';
+                });
+            });
+            
+            const checkBtn = document.getElementById('c-check');
+            if (checkBtn) {
+                checkBtn.disabled = true;
+                checkBtn.style.opacity = '0.5';
+            }
+
+        } catch (err) {
+            console.error('WordSearch.showAnswer', err);
+        }
+    }
+    
+    const checkAnswer = () => {
+        try {
+
+            const activity = Activity.getData( getQid() );
+            const lang     = activity?.lang ?? 'en';
+            const content  = activity?.content ?? [];
+
+            const checkBtn = document.getElementById("c-check");
+            
+            const selected = [...document.querySelectorAll('input[data-selected="1"]')];
+            if (selected.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Choose a word!',
+                    text: 'Please choose a word from the box before checking your answer.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6'
+                });
+                checkBtn.disabled      = false;
+                checkBtn.style.opacity = 1;
+                return;
+            }
+            
+            const matchedButtons = new Set();
+
+            let correct      = false;
+            let correctCount = 0;
+            const totalCount = content.length;
+
+            content.forEach((item, index) => {
+                let formed  = '';
+                let buttons = [];
+
+                const { row, col, answer, direction } = item;
+                if( !answer || (direction !== 'h' && direction !== 'v') ) return;
+
+                const up = answer.toUpperCase();
+                [...up].forEach( (ch, i) => {
+                    const r = direction === 'h' ? row : row + i;
+                    const c = direction === 'h' ? col + i : col;
+                    const btn = document.querySelector(`input[data-row="${r}"][data-col="${c}"]`);
+                    if ( btn ) buttons.push( btn );
+                    if (btn && btn.dataset.selected == 1 ) formed += btn.value;
+                });
+
+                if( formed === up ) {
+                    correct = true;
+                    correctCount++;
+                    buttons.forEach(btn => {
+                        if( btn.dataset.selected == 1 ) {
+                            btn.style.background = 'limegreen';
+                            btn.style.color      = 'white';
+                            btn.dataset.selected = 2;
+                            matchedButtons.add(btn);
+                        }
+                    });
+                }
+            });
+
+            selected.forEach(btn => {
+                if( !matchedButtons.has(btn) ) {
+                    btn.style.background = 'red';
+                    btn.style.color      = 'white';
+                    btn.dataset.selected = 3;
+                }
+            });
+
+            let complete = false;
+            if( correctCount === totalCount ) {
+                complete = true;
+                if (checkBtn) {
+                    checkBtn.disabled = true;
+                    checkBtn.style.opacity = '0.5';
+                }
+            }
+
+            popup({ complete:complete, correct:correctCount, total:totalCount, lang:lang });
+            
+        } catch (err) {
+            console.error('WordSearch.checkAnswer', err);
+        }
+    };
+
+    const popup = ({complete=false, correct=0, total=0, lang='en'} = {}) => {
+        if( complete ) {
+            Swal.fire({
+                title: lang == 'en' ? '🎉 Well Done!' : '🎉बहुत बढ़िया!',
+                text: lang == 'en' ? 'You found all the words!' : 'आपने सारे शब्द ढूँढ लिए!',
+                icon: 'success',
+                confirmButtonText: lang == 'en' ? 'Replay' : 'दुबारा खेलें',
+                confirmButtonColor: '#28a745',
+                allowOutsideClick: false
+            }).then( (res) => {
+                if( res.isConfirmed ) {
+                    clearGrid();
+                }
+            });
+        } else {
+            const en = `You found <strong>${correct}</strong> words out of <strong>${total}</strong>.`;
+            const hi = `आपने <strong>${total}</strong> में से <strong>${correct}</strong> शब्द ढूँढ लिए हैं.`;
+            Swal.fire({
+                title: lang == 'en' ? 'Result' : 'परिणाम',
+                html: lang == 'en' ? en : hi,
+                icon: 'info',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6'
+            }).then( (res) => {
+                if( res.isConfirmed ) {
+                    clearGrid();
+                }
+            });
+        }
+    }
+
+    return {
+        render
+    }
+    
 })();
 
 Modules.get().map(({ module }) => {

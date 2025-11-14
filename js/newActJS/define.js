@@ -36,6 +36,7 @@
             { qid : 23, text : ['Q-23', 'PDF'], module : 18 },
             { qid : 24, text : ['Q-24', 'Shabdkosh'], module : 19 },
             { qid : 25, text : ['Q-25', 'Shrutlekh'], module : 20 },
+            { qid : 26, text : ['Q-26', 'WordSearch'], module : 21 },
         ];
 
         // DEFINE QUESTIONS
@@ -599,6 +600,83 @@
                         { audio : './audio/6.mp3', answer: '6', description: 'जो कपड़े सिलता है' }
                     ]
                 }
+            },
+            {
+                id      : 26,
+                lang    : 'en',
+                head    : 'Module : 21',
+                content : [
+                    { 
+                        text   : 'A drawing of Earth on a flat surface (3 letters)',
+                        answer : 'Map',
+                        row    : 0, 
+                        col    : 0,
+                        direction : 'h'
+                    },
+                    { 
+                        text   : 'Spherical model of Earth (5 letters)',
+                        answer : 'Globe',
+                        row    : 15,
+                        col    : 6,
+                        direction : 'h'
+                    },
+                    { 
+                        text   : 'Ratio between map & ground distance (5 letters)',
+                        answer : 'Scale',
+                        row    : 4, 
+                        col    : 0,
+                        direction : 'h'
+                    },
+                    { 
+                        text   : 'Angular distance north or south of Equator (8 letters)',
+                        answer : 'Latitude',
+                        row    : 0, 
+                        col    : 8,
+                        direction : 'v'
+                    },
+                    { 
+                        text   : 'Angular distance east or west of Prime Meridian (9 letters)',
+                        answer : 'Longitude',
+                        row    : 0, 
+                        col    : 12,
+                        direction : 'v'
+                    },
+                    { 
+                        text   : 'Network of latitude & longitude (4 letters)',
+                        answer : 'Grid',
+                        row    : 8, 
+                        col    : 0,
+                        direction : 'h'
+                    },
+                    { 
+                        text   : 'Magnetic needle tool (7 letters)',
+                        answer : 'Compass',
+                        row    : 10, 
+                        col    : 0,
+                        direction : 'h'
+                    },
+                    { 
+                        text   : 'A conventional sign (6 letters)',
+                        answer : 'Symbol',
+                        row    : 12, 
+                        col    : 0,
+                        direction : 'h'
+                    },
+                    { 
+                        text   : '0° latitude dividing hemispheres (7 letters)',
+                        answer : 'Equator',
+                        row    : 6, 
+                        col    : 0,
+                        direction : 'h'
+                    },
+                    { 
+                        text   : 'North-south line measuring longitude (8 letters)',
+                        answer : 'Meridian',
+                        row    : 2, 
+                        col    : 14,
+                        direction : 'v'
+                    },
+                ]
             },
         ];
 

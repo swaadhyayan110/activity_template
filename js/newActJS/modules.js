@@ -22,6 +22,7 @@ const Modules = (() => {
         { id : 18, module : 'Pdf' },
         { id : 19, module : 'Shabdkosh' },
         { id : 20, module : 'Shrutlekh' },
+        { id : 21, module : 'WordSearch' },
     ];
 
     const get = () => modules;
