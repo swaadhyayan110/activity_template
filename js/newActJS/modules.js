@@ -21,6 +21,7 @@ const Modules = (() => {
         { id : 17, module : 'Sorting' },
         { id : 18, module : 'Pdf' },
         { id : 19, module : 'Shabdkosh' },
+        { id : 20, module : 'Shrutlekh' },
     ];
 
     const get = () => modules;

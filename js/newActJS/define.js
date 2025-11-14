@@ -35,6 +35,7 @@
             { qid : 22, text : ['Q-22', 'DND-6'], module : 17 },
             { qid : 23, text : ['Q-23', 'PDF'], module : 18 },
             { qid : 24, text : ['Q-24', 'Shabdkosh'], module : 19 },
+            { qid : 25, text : ['Q-25', 'Shrutlekh'], module : 20 },
         ];
 
         // DEFINE QUESTIONS
@@ -577,19 +578,25 @@
                 ]
             },
             {
-                id      : 250,
-                lang    : 'hi',
-                head    : 'अनोखा जादू का खेल',
-                subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
+                id      : 25,
+                lang    : 'en',
                 content : {
-                    mainaudio : './audio/heading.mp3',
+                    image     : {
+                        correct : './img/right1.png'
+                    },
+                    audio     : {
+                        heading   : './audio/heading.mp3',
+                        correct   : './audio/correct.mp3',
+                        incorrect : './audio/ohGalat.mp3',
+                        excellent : './audio/excellent_hindi.mp3'
+                    },
                     questions : [
-                        { audio : './audio/4.mp3', text: 'लेखक', description: 'जो पुस्तकें लिखता है' },
-                        { audio : './audio/3.mp3', text: 'चिकित्सक', description: 'जो मरीज़ों का इलाज़ करता है' },
-                        { audio : './audio/1.mp3', text: 'अध्यापक', description: 'जो पढ़ाता है' },
-                        { audio : './audio/6.mp3', text: 'धोबी', description: 'जो कपड़े धोता है' },
-                        { audio : './audio/2.mp3', text: 'कुम्हार', description: 'जो मिट्टी के बर्तन बनाता है' },
-                        { audio : './audio/5.mp3', text: 'दरज़ी', description: 'जो कपड़े सिलता है' }
+                        { audio : './audio/1.mp3', answer: '1', bkp : 'अध्यापक', description: 'जो पढ़ाता है' },
+                        { audio : './audio/2.mp3', answer: '2', description: 'जो मरीज़ों का इलाज़ करता है' },
+                        { audio : './audio/3.mp3', answer: '3', description: 'जो पुस्तकें लिखता है' },
+                        { audio : './audio/4.mp3', answer: '4', description: 'जो कपड़े धोता है' },
+                        { audio : './audio/5.mp3', answer: '5', description: 'जो मिट्टी के बर्तन बनाता है' },
+                        { audio : './audio/6.mp3', answer: '6', description: 'जो कपड़े सिलता है' }
                     ]
                 }
             },

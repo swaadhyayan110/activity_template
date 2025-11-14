@@ -47,7 +47,7 @@ const Activity = (() => {
             console.error( 'Activity.shuffleQuestions : ', err );
             return [];
         }
-    }
+    };
 
     const shuffleWords = (words) => {
         try {
@@ -64,7 +64,7 @@ const Activity = (() => {
         } catch ( err ) {
             console.error( 'Activity.shuffleWords : ', err );
         }
-    }
+    };
 
     const setQuestionDetails = ( questionID ) => {
         try {
@@ -96,7 +96,7 @@ const Activity = (() => {
         } catch( err ) {
             console.error( 'Activity.setQuestionDetails :- ', err );
         }
-    }
+    };
 
     const toggleCheckBtn = (selector, disable) => {
         try {
@@ -109,9 +109,9 @@ const Activity = (() => {
         } catch ( err ) {
             console.error( 'Activity.toggleCheckBtn : ', err );
         }
-    }
+    };
 
-    const getBulletLabels = (lang='en', ind, upperCase=true) => {
+    const translateBulletLabels = (lang='en', ind, upperCase=true) => {
         const alphabets = {
             en: [...'abcdefghijklmnopqrstuvwxyz'],
             hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय']
@@ -121,9 +121,9 @@ const Activity = (() => {
         const casedList  = upperCase ? characters.map(ch => ch.toUpperCase()) : characters;
 
         return (ind !== undefined && casedList[ind] !== undefined) ? casedList[ind] : '-';
-    }
+    };
 
-    const getBtnLabels = (lang='en') => {
+    const translateButtonLabels = (lang='en') => {
         if( lang == 'en' ) {
             return { 
                 check : 'Check Answers',
@@ -137,17 +137,9 @@ const Activity = (() => {
                 try   : 'पुनः प्रयास करें'
             };
         }
-    }
+    };
 
-    const getBooleanLabels = (lang='en') => lang == 'en' ? ['True', 'False'] : ['सही', 'गलत'];
-
-    const translateWordLabel = (lang='en') => lang == 'en' ? 'word' : 'शब्द';
-
-    const translateSentenceLabel = (lang='en') => lang == 'en' ? 'sentence' : 'वाक्य';
-
-    const getSectionLabels = (lang='en') => lang == 'en' ? 'column' : 'खंड';
-
-    const getAnswerTableHeads = (lang='en') => {
+    const translateAnswerTableHeads = (lang='en') => {
         if( lang == 'en' ) {
             return {
                 sequence  : 'Question No.',
@@ -163,7 +155,39 @@ const Activity = (() => {
                 result    : 'परिणाम'
             };
         }
-    }
+    };
+
+    const hindiKeyboard = () => {
+        return {
+            "default": [
+                "` १ २ ३ ४ ५ ६ ७ ८ ९ ० - = {bksp}",
+                "{tab} क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण",
+                "{lock} त थ द ध न प फ ब भ म य र ल व {enter}",
+                "{shift} श ष स ह क्ष त्र ज्ञ ़ ं ँ ः {shift}",
+                "{accept} {space} {alt}"
+            ],
+            "shift": [
+                "~ ! @ # ₹ % ^ & * ( ) _ + {bksp}",
+                "{tab} औ ऐ आ ई ऊ ए ओ ऋ ॠ ऌ ॡ { } |",
+                "{lock} ा ि ी ु ू ृ े ै ो ौ ् {enter}",
+                "{shift} ॐ ॰ ऽ ‘ ’ “ ” < > ? {shift}",
+                "{accept} {space} {alt}"
+            ],
+            "alt": [
+                "` ॑ ॒ ॓ ॔ ॕ ॖ ॗ क़ ख़ ग़ ज़ ड़ ढ़ फ़ {bksp}",
+                "{tab} ॲ ऑ ऒ अ इ उ ए ओ औ ॠ ॡ { } |",
+                "{lock} ँ ं ः ऽ ॐ ॰ ॠ ॡ ॲ {enter}",
+                "{shift} ऍ ॅ ॉ ॊ ॴ ॵ ॶ ॷ ॸ ॹ {shift}",
+                "{accept} {space} {default}"
+            ]
+        };
+    };
+
+    const translateBooleanLabels = (lang='en') => lang == 'en' ? ['True', 'False'] : ['सही', 'गलत'];
+    const translateWordLabel     = (lang='en') => lang == 'en' ? 'word' : 'शब्द';
+    const translateSentenceLabel = (lang='en') => lang == 'en' ? 'sentence' : 'वाक्य';
+    const translateColumnLabel   = (lang='en') => lang == 'en' ? 'column' : 'खंड';
+    const translateBoxLabel      = (lang='en') => lang == 'en' ? 'box' : 'बॉक्स';    
 
     const globalImagePath = () => assets_url;
 
@@ -214,18 +238,20 @@ const Activity = (() => {
         render,
         getData,
         register,
-        getBtnLabels,
         shuffleWords,
+        hindiKeyboard,
         toggleCheckBtn,
         globalImagePath,
-        getBulletLabels,
         shuffleQuestions,
-        getSectionLabels,
-        getBooleanLabels,
+        translateBoxLabel,
         setQuestionDetails,
         translateWordLabel,
-        getAnswerTableHeads,
+        translateColumnLabel,
+        translateButtonLabels,
+        translateBulletLabels,
         translateSentenceLabel,
+        translateBooleanLabels,
+        translateAnswerTableHeads,
     };    
 })();
 
@@ -420,8 +446,8 @@ const MatchLeftToRight = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
-            const columnLabel = Activity.getSectionLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
+            const columnLabel = Activity.translateColumnLabel(lang);
 
             const html = `<div class="question">
                 <div class="container">
@@ -431,8 +457,8 @@ const MatchLeftToRight = (() => {
                     </div>
                     <hr/>
                     <div class="forLevelAB">
-                        <div class="levelText">${columnLabel}-${Activity.getBulletLabels(lang, 0)}</div>
-                        <div class="levelText">${columnLabel}-${Activity.getBulletLabels(lang, 1)}</div>
+                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels(lang, 0)}</div>
+                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels(lang, 1)}</div>
                     </div>
                     <div class="content user-select-none">
                         <div class="instructions">
@@ -889,7 +915,7 @@ const MatchLeftRightToCenter = (() => {
             const content = data.content;
             const lang    = data?.lang ?? 'en';
 
-            const btnLabels = Activity.getBtnLabels( lang );
+            const btnLabels = Activity.translateButtonLabels( lang );
 
             activities[activityId]                  = activities[activityId] || {};
             activities[activityId].correctLeft      = content.correctLeft || {};
@@ -1261,7 +1287,7 @@ const MatchTopToBottom = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
 
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             cont.innerHTML = `<div class="question">
                 <div class="container">
@@ -1419,7 +1445,7 @@ const FillInTheBlanksWithImage = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
             
             parent.innerHTML= `<div class="question user-select-none">
                 <div class="container-fluid">
@@ -1633,7 +1659,7 @@ const FillInTheBlanksHindiKb = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -1691,29 +1717,7 @@ const FillInTheBlanksHindiKb = (() => {
             });
 
             $(function () {
-                $.keyboard.layouts["hindiQuiz"] = {
-                    "default": [
-                        "` १ २ ३ ४ ५ ६ ७ ८ ९ ० - = {bksp}",
-                        "{tab} क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण",
-                        "{lock} त थ द ध न प फ ब भ म य र ल व {enter}",
-                        "{shift} श ष स ह क्ष त्र ज्ञ ़ ं ँ ः {shift}",
-                        "{accept} {space} {alt}"
-                    ],
-                    "shift": [
-                        "~ ! @ # ₹ % ^ & * ( ) _ + {bksp}",
-                        "{tab} औ ऐ आ ई ऊ ए ओ ऋ ॠ ऌ ॡ { } |",
-                        "{lock} ा ि ी ु ू ृ े ै ो ौ ् {enter}",
-                        "{shift} ॐ ॰ ऽ ‘ ’ “ ” < > ? {shift}",
-                        "{accept} {space} {alt}"
-                    ],
-                    "alt": [
-                        "` ॑ ॒ ॓ ॔ ॕ ॖ ॗ क़ ख़ ग़ ज़ ड़ ढ़ फ़ {bksp}",
-                        "{tab} ॲ ऑ ऒ अ इ उ ए ओ औ ॠ ॡ { } |",
-                        "{lock} ँ ं ः ऽ ॐ ॰ ॠ ॡ ॲ {enter}",
-                        "{shift} ऍ ॅ ॉ ॊ ॴ ॵ ॶ ॷ ॸ ॹ {shift}",
-                        "{accept} {space} {default}"
-                    ]
-                };
+                $.keyboard.layouts["hindiQuiz"] = Activity.hindiKeyboard();
                 
                 $(".hindiInput")
                 .keyboard({
@@ -1840,7 +1844,7 @@ const JumbleLetters = (() => {
 
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                 <div class="container">
@@ -2075,7 +2079,7 @@ const JumbleWords = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -2507,7 +2511,7 @@ const Mcq_PathKaSaar = (() => {
                         <div class="col-md-6 col-sm-12 mb-2">
                         <label class="option-btn ${isSelected} mcq-type" data-oi="${oi}" data-qi="${ind}" >
                             <input type="radio" name="question-${ind}" ${userAnswers[ind] === oi ? "checked" : ""}>
-                            <strong>(${Activity.getBulletLabels(lang, oi)})</strong> 
+                            <strong>(${Activity.translateBulletLabels(lang, oi)})</strong> 
                             ${optionText}
                         </label>
                         </div>
@@ -2622,7 +2626,7 @@ const Mcq_PathKaSaar = (() => {
             const data     = activity?.content;
             const lang     = activity?.lang;
             const mcq      = data?.mcq || [];
-            const headLabels = Activity.getAnswerTableHeads(lang);
+            const headLabels = Activity.translateAnswerTableHeads(lang);
 
             let totalQues = mcq.length;
 
@@ -3632,7 +3636,7 @@ const DropDown = (() => {
 
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -3912,7 +3916,7 @@ const Circle = (() => {
             
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container" id="${dataKey}">
@@ -3998,7 +4002,7 @@ const Circle = (() => {
             }).join("");
             renderDiv.innerHTML += `
             <div class="questInC" data-id="${item.id}">
-                <span class="label">(${Activity.getBulletLabels(lang, ind)})</span> ${html}
+                <span class="label">(${Activity.translateBulletLabels(lang, ind)})</span> ${html}
             </div>`;
         });
         
@@ -4225,7 +4229,7 @@ const ShravanKaushal = (() => {
 
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <audio id="audioPlayer" preload="auto"></audio>
@@ -4538,7 +4542,7 @@ const TrueAndFalse = (() => {
 
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -4600,7 +4604,7 @@ const TrueAndFalse = (() => {
 
         userAns = new Array(dataSet.length).fill(null);
 
-        const btnLabels  = Activity.getBooleanLabels(lang);
+        const btnLabels  = Activity.translateBooleanLabels(lang);
         
         const rowDiv     = document.getElementById(inputDataId);
         rowDiv.innerHTML = "";
@@ -4608,7 +4612,7 @@ const TrueAndFalse = (() => {
         dataSet.forEach( (item, ind) => {
             const html = `
                 <div class="row m-0 mb-3 question-block">
-                    <div style="width:40px">(${Activity.getBulletLabels(lang, ind)})</div>
+                    <div style="width:40px">(${Activity.translateBulletLabels(lang, ind)})</div>
                     <div class="col p-0">
                         <div class="row m-0">
                             <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${item.question}</div>
@@ -4685,7 +4689,7 @@ const TrueAndFalse = (() => {
     const showPopUp = () => {
         const activity   = Activity.getData(getQid()) ?? {};
         const lang       = activity?.lang ?? 'en';
-        const headLabels = Activity.getAnswerTableHeads(lang);
+        const headLabels = Activity.translateAnswerTableHeads(lang);
         const questions  = activity?.content;
 
         let correctCount = 0;
@@ -4720,14 +4724,14 @@ const TrueAndFalse = (() => {
 
             const userAnswerText = (userAnswer !== undefined && userAnswer !== null) ? `${userAnswer}` : lang == 'hi' ? "उत्तर नहीं दिया" : "Not Attempted";
 
-            const textLabels = Activity.getBooleanLabels(lang);
+            const textLabels = Activity.translateBooleanLabels(lang);
 
             const tempUserAnswer    = userAnswer == 'true' ? textLabels[0] : ( userAnswer == 'false' ? textLabels[1] : userAnswerText );
             const tempCorrectAnswer = correctAnswerText == true ? textLabels[0] : textLabels[1];
             
             const body = `
                 <tr clsss='trData'>
-                    <th>(${Activity.getBulletLabels( lang, i )})</th>
+                    <th>(${Activity.translateBulletLabels( lang, i )})</th>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${tempUserAnswer}</td>
                     <td class="text-success">${tempCorrectAnswer}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
@@ -4779,7 +4783,7 @@ const DragAndDrop = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                 <div class="container">
@@ -5067,7 +5071,7 @@ const DragAndDropMulti = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -5114,7 +5118,7 @@ const DragAndDropMulti = (() => {
         const activity   = Activity.getData(getQid()) ?? {};
         const lang       = activity?.lang ?? 'en';
         const questions  = activity?.content?.questions ?? [];
-        const headLabels = Activity.getAnswerTableHeads(lang);
+        const headLabels = Activity.translateAnswerTableHeads(lang);
 
         const strictMatch = activity?.content?.strictMatch;
         const option_side = activity?.content?.option_side ?? 'top';
@@ -5166,7 +5170,7 @@ const DragAndDropMulti = (() => {
 
                     const body = `
                         <tr clsss='trData'>
-                            <th>(${Activity.getBulletLabels( lang, key )})</th>
+                            <th>(${Activity.translateBulletLabels( lang, key )})</th>
                             <td class="${isCorrect ? 'text-success' : 'text-danger'}">${ans.toString()}</td>
                             <td></td>
                             <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
@@ -5217,7 +5221,7 @@ const DragAndDropMulti = (() => {
 
                 const body = `
                     <tr clsss='trData'>
-                        <th>(${Activity.getBulletLabels( lang, i )})</th>
+                        <th>(${Activity.translateBulletLabels( lang, i )})</th>
                         <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
                         <td class="text-success">${correctAnswerText.toString()}</td>
                         <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
@@ -5337,7 +5341,7 @@ const DragAndDropMulti = (() => {
                     const html = `
                         <div class="row g-0 my-3">
                             <div class="col-auto me-2">
-                                (${Activity.getBulletLabels(lang, ind)})
+                                (${Activity.translateBulletLabels(lang, ind)})
                             </div>
                             <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
                                 <div class="drop-Box dropBox_2 ui-droppable"></div>
@@ -5374,7 +5378,7 @@ const DragAndDropMulti = (() => {
                         const html = `
                             <div class="row g-0 my-3 align-items-center">
                                 <div class="col-auto me-1">
-                                    (${Activity.getBulletLabels(lang, ind)})
+                                    (${Activity.translateBulletLabels(lang, ind)})
                                 </div>
                                 <div class="col d-flex flex-wrap align-items-center question-container_2" data-queindex="${ind}">
                                     ${image.join( '' )}
@@ -5390,7 +5394,7 @@ const DragAndDropMulti = (() => {
                         const html = `
                             <div class="row g-0 my-3">
                                 <div class="col-auto me-1">
-                                    (${Activity.getBulletLabels(lang, ind)})
+                                    (${Activity.translateBulletLabels(lang, ind)})
                                 </div>
                                 <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
                                     ${image.join( '' )}
@@ -5503,7 +5507,7 @@ const Sorting = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container contAdapt shadow-lg" id="${containerId}">
@@ -5704,7 +5708,7 @@ const Pdf = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container contAdapt py-0 shadow-lg" id="${containerId}">
@@ -5936,7 +5940,7 @@ const Shabdkosh = (() => {
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
-            const buttonLabel = Activity.getBtnLabels(lang);
+            const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="pt-3" id="${containerId}">
@@ -6048,6 +6052,477 @@ const Shabdkosh = (() => {
     };
 
     return { render : renderQuestion }
+})();
+
+const Shrutlekh = (() => {
+
+    Activity.css('shrutlekh.css');
+
+    const containerId            = 'shrutlekh-container';
+    const responseAudioContId    = 'response-audio-cont';
+    const correctionBoxContId    = 'correct-box-cont';
+    const questionBtnContId      = 'question-button';
+    const textInputId            = 'singleInput';
+    const textInputParenId       = 'singleSection';
+    const correctionBoxSectionId = 'correctionSection';
+    const correctWordHintId      = 'correctWordDisplay';
+    
+    let questionIndex    = 0;
+    const currentAudio   = new Audio();
+    const correctAudio   = new Audio();
+    const incorrectAudio = new Audio();
+    const excellentAudio = new Audio();
+
+    const pauseAllAudio = () => {
+        currentAudio.currentTime = 0;
+        correctAudio.currentTime = 0;
+        incorrectAudio.currentTime = 0;
+        excellentAudio.currentTime = 0;
+
+        currentAudio.pause();
+        correctAudio.pause();
+        incorrectAudio.pause();
+        excellentAudio.pause();
+    }
+
+    const getQid = () => {
+        const el = document.querySelector(`#${containerId}`);
+        return el ? el.dataset.qid : undefined;
+    };
+
+    const setQid = (questionId) => {
+        const dragItems = document.getElementById(containerId);
+        if( dragItems ) {
+            dragItems.dataset.qid = questionId;
+            return true;
+        } else {
+            console.warn( '[WARNING]', 'Unable to set qid' );
+            return false;
+        }
+    }
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getData(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';            
+            
+            const btnLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="qq-Box" id="${containerId}">
+                                        <div class="play-btn">
+                                            <div class="icon"></div>
+                                        </div>
+                                    </div>
+                                    <div class="question-section">
+                                        <div class="box-border">
+                                            <div class="content-box">
+                                                <div id="${questionBtnContId}" class="number-buttons ui-keyboard-keyset ui-keyboard-keyset-normal"></div>
+                                            </div>
+                                            <div id="${textInputParenId}" class="input-single">
+                                                <input id="${textInputId}" class="word-input dictationInput hindiInput" autocomplete="off" />
+                                                <div class="machiz">
+                                                    <button id="checkSingleBtn" class="submit-btn d-block">Check Answer</button>
+                                                    <p id="message"></p>
+                                                </div>
+                                            </div>
+                                            <div id="${correctionBoxSectionId}" class="input-box correction">
+                                                <div class="correct-spell">
+                                                    <span id="${correctWordHintId}"></span>
+                                                </div>
+                                                <div class="box-row row" id="${correctionBoxContId}"></div>
+                                                <div class="machiz">
+                                                    <button id="checkPracticeBtn" class="submit-btn">${btnLabel.check}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="${responseAudioContId}"></div>
+                                    </div>
+                                </div>`;
+            // ..
+			
+			const playBtn  = parent.querySelector( '.play-btn' );
+            const checkBtn = parent.querySelector( '#checkSingleBtn' );
+            const checkPracBtn = parent.querySelector( '#checkPracticeBtn' );
+            
+			if (playBtn) playBtn.addEventListener("click", openQuestions);
+			if (checkBtn) checkBtn.addEventListener("click", checkAnswer);
+			if (checkPracBtn) checkPracBtn.addEventListener("click", checkPracAnswer);
+		} catch (err) {
+            console.error( 'Shrutlekh.ui :', err );
+        }
+    }
+
+    const renderShrutlekh = async (questionId) => {
+        try {
+            ui(questionId);
+            Activity.setQuestionDetails( questionId );
+                        
+            if( !setQid(questionId) ) return false;
+
+            const activity  = Activity.getData( questionId );
+            const lang      = activity?.lang ?? 'en';
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+
+            setResponseAudio();
+        } catch (e) {
+            console.error( 'Shrutlekh.renderShrutlekh :', e );
+        }
+    }
+
+    const setResponseAudio = () => {
+        const activity = Activity.getData(getQid()) ?? {};
+        const content  = activity?.content ?? {};
+        const audio    = content?.audio ?? {};
+
+        if( !Object.keys( audio ).length ) return;
+        
+        if( audio.correct != '' ) {
+            correctAudio.src = audio.correct;
+            correctAudio.currentTime = 0;
+        }
+
+        if( audio.incorrect != '' ) {
+            incorrectAudio.src = audio.incorrect;
+            incorrectAudio.currentTime = 0;
+        }
+        
+        if( audio.excellent != '' ) {
+            excellentAudio.src = audio.excellent;
+            excellentAudio.currentTime = 0;
+        }
+    }
+
+    const openQuestions = () => {
+        try {
+            $(".qq-Box").hide();
+            $(".question-section").show();
+            
+            renderWordButton();
+        } catch( e ) {
+            console.log( 'Shrutlekh.openQuestions', err );
+        }
+    }
+
+    const renderWordButton = () => {
+        try {
+            const activity  = Activity.getData(getQid()) ?? {};
+            const lang      = activity?.lang ?? 'en';
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+            const label     = Activity.translateWordLabel(lang);
+
+            if( questionIndex < questions.length ) {
+                const btn = `<div class="word-btn active" data-index="${questionIndex}">
+                                ${label} ${Number( questionIndex + 1 )}
+                            </div>`;
+                // ..
+                $('#'+questionBtnContId).append(btn);
+                $(`.word-btn[data-index='${questionIndex}']`)[0].addEventListener('click', playAudio_focusInput );
+            } else {
+                if( $('.word-btn.done').length == questionIndex ) {
+                    showFinalCongrats();
+                }
+            }
+        } catch( err ) {
+            console.log( 'Shrutlekh.renderWordButton', err );
+        }
+    }    
+    
+    const playAudio_focusInput = () => {
+        try {
+            const activity  = Activity.getData( getQid() ) ?? {};
+            const lang      = activity?.lang ?? 'en';
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+            const curQues   = questions[questionIndex] ?? {};
+
+            if( !Object.keys(curQues).length ) return;
+            
+            $('#'+textInputParenId).css('display','block');
+
+            pauseAllAudio();
+            
+            currentAudio.src = curQues.audio;
+            currentAudio.currentTime = 0;
+            currentAudio.play();
+
+            if( lang == 'hi' ) {
+                $.keyboard.layouts["hindi"] = Activity.hindiKeyboard();
+                
+                $('#'+textInputId)
+                .keyboard({
+                    layout     : "hindi",
+                    usePreview : false,
+                    autoAccept : true,
+                })
+                .addTyping({ showTyping: true, delay: 70 })
+                .on('keydown', e => e.preventDefault());
+            }
+
+            $('#'+textInputId).focus().val('');
+
+        } catch( err ) {
+            console.log( 'Shrutlekh.playAudio_focusInput', err );
+        }
+    }
+
+    const checkAnswer = () => {
+        try {
+            const activity  = Activity.getData( getQid() ) ?? {};
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+            const curQues   = questions[questionIndex] ?? {};
+            
+            const userInput = $('#'+textInputId)[0].value.trim();
+            if( userInput === curQues?.answer ) correctPopUp();
+            else wrongPopUp();
+        } catch( err ) {
+            console.log( 'Shrutlekh.checkAnswer', err );
+        }
+    }
+
+    const checkPracAnswer = () => {
+        try {
+            const activity  = Activity.getData( getQid() ) ?? {};
+            const lang      = activity?.lang ?? 'en';
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+            const curQues   = questions[questionIndex] ?? {};
+            const answer    = curQues?.answer;
+
+            let correctCount = 0;
+            $('.correction-input').each( (ind, item) => {
+                let borderColor = 'red';
+                if( item.value == answer ) {                    
+                    correctCount++;
+                    borderColor = 'green';
+                }
+                item.style.borderColor = borderColor;
+            });
+
+            if( $('.correction-input').length == correctCount && correctCount > 1 ) {
+                pauseAllAudio();
+
+                correctAudio.currentTime = 0;
+                correctAudio.play();
+                
+                Swal.fire({
+                    iconHtml: '😄',
+                    title: lang == 'hi' ? 'बहुत बढ़िया! सही उत्तर 👏' : 'Very good! Correct answer 👏',
+                    color: '#2e7d32',
+                    timer: 1000,
+                    showConfirmButton: false,
+                    background: '#fff',
+                    backdrop: false,    
+                    customClass: { icon: 'no-border-icon', popup: 'simple-popup' }
+                }).then((res) => {
+                    if( res.isDismissed ) {
+                        $('#'+correctionBoxSectionId).css( 'display', 'none' );
+                        correctPopUp(true);
+                    }
+                });
+            } else {
+                pauseAllAudio();
+
+                incorrectAudio.currentTime = 0;
+                incorrectAudio.play();                
+
+                Swal.fire({
+                    iconHtml: '❌',
+                    title: lang == 'hi' ? 'फिर से कोशिश करें!' : 'Try Again!',
+                    color: '#c62828',
+                    timer: 1200,
+                    showConfirmButton: false,
+                    background: '#fff',
+                    backdrop: false,
+                    customClass: { icon: 'no-border-icon', popup: 'simple-popup' }
+                });
+            }
+        } catch( err ) {
+            console.log( 'Shrutlekh.checkPracAnswer', err );
+        }
+    }
+
+    const correctPopUp = (skipAlert=false) => {
+        const activity  = Activity.getData( getQid() ) ?? {};
+        const lang      = activity?.lang ?? 'en';
+        const content   = activity?.content ?? {};
+        const image     = content?.image ?? {};
+        const icon      = image?.correct ?? '';
+        const questions = content?.questions ?? [];
+        const curQues   = questions[questionIndex] ?? {};
+
+        const btnHtml = `${curQues?.answer}
+                        <span class="right-icon">
+                            <img src="${icon}" alt="correct" class="icon-img">
+                        </span>`;
+        // ..
+
+        $(`.word-btn[data-index='${questionIndex}']`).addClass('done').html( btnHtml );
+        $(`.word-btn[data-index='${questionIndex}']`)[0].removeEventListener('click', playAudio_focusInput );
+
+        $('#'+textInputParenId)[0].style.display = "none";
+
+        if( !skipAlert ) {
+            pauseAllAudio();
+
+            correctAudio.currentTime = 0;
+            correctAudio.play();
+
+            const timeout = Math.round( correctAudio.duration ) * 1000;
+            Swal.fire({
+                iconHtml: "😄",
+                title: lang == 'hi' ? 'शाबाश! सही उत्तर 👏' : 'Well done! Correct answer.👏',
+                color: "#2e7d32",
+                timer: timeout,
+                showConfirmButton: false,
+                background: "#fff",
+                backdrop: false,
+                customClass: { icon: "no-border-icon", popup: "simple-popup" }
+            }).then( (res) => {
+                if( res.isDismissed ) {
+                    questionIndex++;
+                    renderWordButton();
+                }
+            });
+        } else {
+            questionIndex++;
+            renderWordButton();
+        }
+    }
+
+    const wrongPopUp = () => {
+        const activity  = Activity.getData( getQid() ) ?? {};
+        const lang      = activity?.lang ?? 'en';
+        const content   = activity?.content ?? {};
+        const image     = content?.image ?? {};
+        const icon      = image?.correct ?? '';
+        const questions = content?.questions ?? [];
+        const curQues   = questions[questionIndex] ?? {};
+
+        pauseAllAudio();
+
+        incorrectAudio.currentTime = 0;
+        incorrectAudio.play();
+
+        const timeout = Math.round( incorrectAudio.duration ) * 1000;
+        Swal.fire({
+            iconHtml: "❌",
+            title: lang == 'hi' ? 'गलत उत्तर!' : 'Wrong Answer',
+            html: lang == 'hi' ? '<small>फिर से कोशिश करें।</small>' : '<small>Try Again</small>',
+            color: "#c62828",
+            timer: 1200,
+            showConfirmButton: false,
+            background: "#fff",
+            backdrop: false,
+            customClass: { icon: "no-border-icon", popup: "simple-popup" }
+        }).then((res) => {
+            if( res.isDismissed ) {
+                renderCorrectionBox();
+            }
+        });
+
+        // setTimeout(() => {
+        //     correctionSection.style.display = "block";
+        //     correctWordDisplay.textContent = correctWord;
+        //     singleSection.style.display = "none";
+        //     boxEls.forEach(b => (b.value = ""));
+        //     checkSingleBtn.style.display = "none";
+        //     checkPracticeBtn.focus();
+        // }, 1000);
+    }
+
+    const showFinalCongrats = () => {
+        const activity  = Activity.getData( getQid() ) ?? {};
+        const lang      = activity?.lang ?? 'en';
+
+        pauseAllAudio();
+        excellentAudio.play();
+
+        Swal.fire({
+            iconHtml: "🎉",
+            title: lang == 'hi' ? 'बहुत बढ़िया! 🏆' : 'Excellent 🏆',
+            html: lang == 'hi' ? '<b>आपने सभी शब्द सही लिखे!</b><br><small>शानदार प्रदर्शन!</small>' : '<b>You wrote all the words correctly!</b><br><small>Excellent performance!</small>',
+            confirmButtonText: lang == 'hi' ? 'फिर से खेलें' : 'Play again',
+            color: "#333",
+            confirmButtonColor: "#3085d6",
+            background: "#fff",
+            backdrop: `
+                linear-gradient(145deg, rgb(17, 95, 151), rgb(2, 148, 222))
+                url("./images/confetti.gif")
+                center top
+                no-repeat
+            `,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            customClass: {
+                icon: 'no-border-icon',
+                popup: 'simple-popup'
+            }
+        }).then( (res) => {            
+            if( res.isConfirmed && res.value ) {
+                $('#'+questionBtnContId).html( '' );
+                questionIndex = 0;
+                renderWordButton();
+            }
+        });
+    }
+
+    const renderCorrectionBox = () => {
+        const activity  = Activity.getData(getQid()) ?? {};
+        const lang      = activity.lang ?? 'en';
+        const content   = activity?.content ?? {};
+        const questions = content?.questions ?? [];
+        const curQues   = questions[questionIndex] ?? {};
+            
+        const boxLabel = Activity.translateBoxLabel(lang);
+
+        $('#'+textInputParenId).css( 'display', 'none' ).val('');
+        $('#'+correctionBoxSectionId).css( 'display', 'block' );
+
+        $('#'+correctWordHintId).html( curQues?.answer );
+
+        const box = [];
+        for( let i=1; i<=3; i++ ) {
+            const html = `<div class="col-sm-4">
+                            <div class="box-wrap">
+                                <label class="box-label">${boxLabel} 1</label>
+                                <input id="box1" class="word-input correction-input dictationInput hindiInput" autocomplete="off" />
+                            </div>
+                        </div>`;
+            // ..
+            box.push( html );
+        }
+        $('#'+correctionBoxContId).html( box.join('') );
+
+        if( lang == 'hi' ) {
+            $.keyboard.layouts["hindi"] = Activity.hindiKeyboard();
+            
+            $('.correction-input')
+            .keyboard({
+                layout     : "hindi",
+                usePreview : false,
+                autoAccept : true,
+            })
+            .addTyping({ showTyping: true, delay: 70 })
+            .on('keydown', e => e.preventDefault());
+        }
+    }
+    
+    return {
+        render:renderShrutlekh
+    }
+
 })();
 
 Modules.get().map(({ module }) => {
