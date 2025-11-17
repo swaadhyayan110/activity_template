@@ -2959,6 +2959,11 @@ const Adaptiv = (() => {
 
     const showResult = () => {
         try {
+            const activity   = Activity.getData(getQid()) ?? {};
+            const content    = activity?.content ?? {};
+            const levels     = content?.levels ?? [];
+            const skiplevels = content?.skiplevels ?? false;
+
             const levelTextEl = document.getElementById("levelText");
             if (levelTextEl) levelTextEl.style.display = 'none';
             const container = document.getElementById("quizContainerAdaptiv");
@@ -2968,7 +2973,7 @@ const Adaptiv = (() => {
             const showAnswerBtn = attemptCount >= 5;
             const showRetryBtn = correct < (currentQuizData?.length || 0);
             const showNextLevel = correct === (currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0;
-            const finished = currentLevel === 3;
+            const finished = currentLevel === levels.length;
             const whenCompleteLevel = showNextLevel ? "completed." : "";
             const navButtonsEl = document.getElementById("nav-buttons");
             if (navButtonsEl) navButtonsEl.style.display = "none";
@@ -2983,7 +2988,7 @@ const Adaptiv = (() => {
                     <p class="text-success my-3">Correct Answers: ${correct}</p>
                     <p class="text-success my-3">Attempt No: ${attemptCount}</p>
                     <div class="rowBtns">
-                        ${showNextLevel ? `<button class='btn btn-success mt-3 mx-3' id='btn-next-level'>Go To Level ${currentLevel + 1}</button>` : ''}
+                        ${( showNextLevel || skiplevels ) ? `<button class='btn btn-success mt-3 mx-3' id='btn-next-level'>Go To Level ${currentLevel + 1}</button>` : ''}
                         ${(showRetryBtn || showNextLevel) ? `<button class='btn btn-primary mt-3 mx-3' id='btn-retry'>दोबारा प्रयास करें</button>` : ''}
                         ${(showAnswerBtn || showNextLevel) ? `<button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>Show Answers</button>` : ''}
                         ${(finished && showNextLevel) ? `<button class='btn btn-success mt-3 mx-3' id='btn-finish'>Finished</button>` : ''}
