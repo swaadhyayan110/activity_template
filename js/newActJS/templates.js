@@ -6065,6 +6065,8 @@ const Shrutlekh = (() => {
     const textInputParenId       = 'singleSection';
     const correctionBoxSectionId = 'correctionSection';
     const correctWordHintId      = 'correctWordDisplay';
+
+    const tickIconPath = './img/right1.png';
     
     let questionIndex  = 0;
     const currentAudio = new Audio();
@@ -6388,14 +6390,12 @@ const Shrutlekh = (() => {
         const activity  = Activity.getData( getQid() ) ?? {};
         const lang      = activity?.lang ?? 'en';
         const content   = activity?.content ?? {};
-        const image     = content?.image ?? {};
-        const icon      = image?.correct ?? '';
         const questions = content?.questions ?? [];
         const curQues   = questions[questionIndex] ?? {};
 
         const btnHtml = `${curQues?.answer}
                         <span class="right-icon">
-                            <img src="${icon}" alt="correct" class="icon-img">
+                            <img src="${tickIconPath}" alt="correct" class="icon-img">
                         </span>`;
         // ..
 

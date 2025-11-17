@@ -580,17 +580,8 @@
             },
             {
                 id      : 25,
-                lang    : 'hi',
+                lang    : 'en',
                 content : {
-                    image     : {
-                        correct : './img/right1.png'
-                    },
-                    audio     : {
-                        heading   : './audio/heading.mp3',
-                        correct   : './audio/correct.mp3',
-                        incorrect : './audio/ohGalat.mp3',
-                        excellent : './audio/excellent_hindi.mp3'
-                    },
                     questions : [
                         { audio : './audio/1.mp3', answer: '1' },
                         { audio : './audio/2.mp3', answer: '2' },
