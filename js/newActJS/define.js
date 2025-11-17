@@ -562,9 +562,9 @@
                 content : [
                     {
                         id       : 1,
-                        tabtitle : 'फुदक-फुदककर',
+                        tabtitle : 'apple',
                         meaning  : 'कूद-कूदकर',
-                        sentence : 'छोटी चिड़ियाँ फुदक-फुदककर चलना सीखती हैं।',
+                        sentence : 'छोटी चिड़ियाँ apples चलना सीखती हैं।',
                         image    : {
                             path  : 'img/1.png',
                             width : '20%'
@@ -572,15 +572,15 @@
                     },
                     {
                         id       : 2,
-                        tabtitle : 'फुक-फुककर',
+                        tabtitle : 'कूद-कूदकर',
                         meaning  : 'कूद-कूदकर',
-                        sentence : 'छोटी चिड़ियाँ फुक-फुककर चलना सीखती हैं।'
+                        sentence : 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।'
                     }
                 ]
             },
             {
                 id      : 25,
-                lang    : 'en',
+                lang    : 'hi',
                 content : {
                     image     : {
                         correct : './img/right1.png'
@@ -592,12 +592,12 @@
                         excellent : './audio/excellent_hindi.mp3'
                     },
                     questions : [
-                        { audio : './audio/1.mp3', answer: '1', bkp : 'अध्यापक', description: 'जो पढ़ाता है' },
-                        { audio : './audio/2.mp3', answer: '2', description: 'जो मरीज़ों का इलाज़ करता है' },
-                        { audio : './audio/3.mp3', answer: '3', description: 'जो पुस्तकें लिखता है' },
-                        { audio : './audio/4.mp3', answer: '4', description: 'जो कपड़े धोता है' },
-                        { audio : './audio/5.mp3', answer: '5', description: 'जो मिट्टी के बर्तन बनाता है' },
-                        { audio : './audio/6.mp3', answer: '6', description: 'जो कपड़े सिलता है' }
+                        { audio : './audio/1.mp3', answer: '1' },
+                        { audio : './audio/2.mp3', answer: '2' },
+                        { audio : './audio/3.mp3', answer: '3' },
+                        { audio : './audio/4.mp3', answer: '4' },
+                        { audio : './audio/5.mp3', answer: '5' },
+                        { audio : './audio/6.mp3', answer: '6' }
                     ]
                 }
             },

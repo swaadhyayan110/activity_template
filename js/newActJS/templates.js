@@ -188,7 +188,7 @@ const Activity = (() => {
     const translateColumnLabel   = (lang='en') => lang == 'en' ? 'column' : 'खंड';
     const translateBoxLabel      = (lang='en') => lang == 'en' ? 'box' : 'बॉक्स';    
 
-    const globalImagePath = () => assets_url;
+    const pathToCWD = () => assets_url;
 
     const get = (key) => store[key];
 
@@ -240,7 +240,7 @@ const Activity = (() => {
         shuffleWords,
         hindiKeyboard,
         toggleCheckBtn,
-        globalImagePath,
+        pathToCWD,
         shuffleQuestions,
         translateBoxLabel,
         setQuestionDetails,
@@ -989,7 +989,7 @@ const MatchLeftRightToCenter = (() => {
                 const image_width = item.width ?? '65%';
                 const html = item.text ? 
                     `<div class="centerItems shadow-sm" data-col="${colSeq}" data-id="${item.id}">${item.text}</div>` : 
-                    `<div class="imgBoxes shadow" data-col="${colSeq}" data-id="${item.id}"><img src="${Activity.globalImagePath()}${item.img}" alt="" ondragstart="return false"; style="width:${image_width};"></div>`;
+                    `<div class="imgBoxes shadow" data-col="${colSeq}" data-id="${item.id}"><img src="${Activity.pathToCWD()}${item.img}" alt="" ondragstart="return false"; style="width:${image_width};"></div>`;
                 // ..
                 return html;
             }
@@ -1509,14 +1509,14 @@ const FillInTheBlanksWithImage = (() => {
             });
             document.querySelector('.wordRows').appendChild(textFrag);
 
-            document.querySelector('.imgBoxFill').innerHTML = `<img src="${Activity.globalImagePath()}${data?.content?.hintimage}" ondragstart="return false";/>`;
+            document.querySelector('.imgBoxFill').innerHTML = `<img src="${Activity.pathToCWD()}${data?.content?.hintimage}" ondragstart="return false";/>`;
             
             let blanksBlock = '';
             data?.content?.blanks.forEach((item, i) => {
                 if( item.img ) {
                     blanksBlock += `<div class="col-md-4">
                             <div class="fillBox shadow-sm">
-                            <img class="imgInboxFill" src="${Activity.globalImagePath()}${item.img}" alt="feature-${i + 1}" ondragstart="return false;"/>
+                            <img class="imgInboxFill" src="${Activity.pathToCWD()}${item.img}" alt="feature-${i + 1}" ondragstart="return false;"/>
                             <input class="inputsFills form-control" 
                                     type="text" 
                                     placeholder="Fill Answer" 
@@ -2449,7 +2449,7 @@ const Mcq_PathKaSaar = (() => {
 
                     imgDiv.addClass(mcq_img_cont_class)
                         .find('img')
-                        .attr('src', Activity.globalImagePath() + img.path)
+                        .attr('src', Activity.pathToCWD() + img.path)
                         .css({ 'border-radius' : '20px', 'width' : image_width });
                 }
 
@@ -2494,7 +2494,7 @@ const Mcq_PathKaSaar = (() => {
                 
                 const path  = question?.image ?? undefined;
                 const image = path != undefined ? 
-                    question_image(Activity.globalImagePath()+path)
+                    question_image(Activity.pathToCWD()+path)
                     : undefined;
                 // ..
                 const replacement  = question?.replacement ?? '#_#';
@@ -2520,7 +2520,7 @@ const Mcq_PathKaSaar = (() => {
 
                 const imageAboveOption = mcq?.imageaboveoption ?
                     `<div class="text-center my-1">
-                        <img src="${Activity.globalImagePath()}${mcq?.imageaboveoption.image}" style="width :${mcq?.imageaboveoption.width ?? '30%'};">
+                        <img src="${Activity.pathToCWD()}${mcq?.imageaboveoption.image}" style="width :${mcq?.imageaboveoption.width ?? '30%'};">
                     </div>` : '';
                 // ..
 
@@ -2558,7 +2558,7 @@ const Mcq_PathKaSaar = (() => {
     const option_text = (option) => {
         const path  = option?.image ?? undefined;
         const image = path != undefined ? 
-            option_image(Activity.globalImagePath()+path) :
+            option_image(Activity.pathToCWD()+path) :
             undefined;
         // ..
         const optionText = path != undefined ? image : option?.text ?? '';
@@ -5365,7 +5365,7 @@ const DragAndDropMulti = (() => {
                     const image = [];
                     if( item.image != undefined ) {
                         const image_width = item.width ?? '200px';
-                        const img = `<img class="" style="width: ${image_width};" src="${Activity.globalImagePath()}${item.image}" ondragstart="return false;"></img>`
+                        const img = `<img class="" style="width: ${image_width};" src="${Activity.pathToCWD()}${item.image}" ondragstart="return false;"></img>`
                         image.push( img );
                     }
                         
@@ -5764,7 +5764,7 @@ const Pdf = (() => {
             
             const activity = Activity.getData(questionId) ?? {};
             const lang     = activity?.lang ?? 'en';
-            const path     = activity?.content?.pdf ? Activity.globalImagePath()+activity?.content?.pdf : '';
+            const path     = activity?.content?.pdf ? Activity.pathToCWD()+activity?.content?.pdf : '';
 
             if( !path ) {
                 console.warn('No PDF path found');
@@ -6035,7 +6035,7 @@ const Shabdkosh = (() => {
             }
             ${item?.image && item?.image?.path ?
                 `<div class="img-box">
-                    <img style="width:${ item?.image?.width ?? '40%' };" src="${item.image.path}" class="photo animate__animated animate__bounceInRight">
+                    <img style="width:${ item?.image?.width ?? '40%' };" src="${item?.image?.path}" class="photo animate__animated animate__bounceInRight">
                 </div>` 
                 : ''
             }
@@ -6066,23 +6066,63 @@ const Shrutlekh = (() => {
     const correctionBoxSectionId = 'correctionSection';
     const correctWordHintId      = 'correctWordDisplay';
     
-    let questionIndex    = 0;
-    const currentAudio   = new Audio();
-    const correctAudio   = new Audio();
-    const incorrectAudio = new Audio();
-    const excellentAudio = new Audio();
+    let questionIndex  = 0;
+    const currentAudio = new Audio();
+    
+    const audioBasePath = './audio/commonDictationSong/';
+    const audioBundle   = {
+        clickBtn:          { hi: `${audioBasePath}clickOnbtn-Hn.mp3`, en: `${audioBasePath}clickOnbtn.mp3` },
+        clickNextBtn:      { hi: `${audioBasePath}clickOnNextbtn-Hn.mp3`, en: `${audioBasePath}clickOnNextbtn.mp3` },
+        box1:              { hi: `${audioBasePath}correctInbox1-Hn.mp3`, en: `${audioBasePath}correctInbox1.mp3` },
+        box2:              { hi: `${audioBasePath}correctInbox2-Hn.mp3`, en: `${audioBasePath}correctInbox2.mp3` },
+        box3:              { hi: `${audioBasePath}correctInbox3-Hn.mp3`, en: `${audioBasePath}correctInbox3.mp3` },
+        correct:           { hi: `${audioBasePath}right_ans-Hn.mp3`, en: `${audioBasePath}right_ans.mp3` },
+        incorrect:         { hi: `${audioBasePath}wrong_ans-Hn.mp3`, en: `${audioBasePath}wrong_ans.mp3` },
+        writeCorrectBelow: { hi: `${audioBasePath}secondAttemptStatement-Hn.mp3`, en: `${audioBasePath}secondAttemptStatement.mp3` }
+    };
+    const _constructAudio = () => {
+        for( const key in audioBundle ) {
+            for( const lang in audioBundle[key] ) {
+                const audio = new Audio(audioBundle[key][lang]);
+                audioBundle[key][lang] = audio;
+            }
+        }
+    };
+
+    const playAudio = async (key, lang='en') => {
+        await pauseAllAudio();
+        const audio = audioBundle[key]?.[lang];        
+        if( audio instanceof HTMLAudioElement ) {
+            try {
+                await audio.play();
+            } catch (err) {
+                console.warn('audio play blocked:', err);
+            }
+        }
+        return audio;
+    };
 
     const pauseAllAudio = () => {
-        currentAudio.currentTime = 0;
-        correctAudio.currentTime = 0;
-        incorrectAudio.currentTime = 0;
-        excellentAudio.currentTime = 0;
+        return new Promise(resolve => {
 
-        currentAudio.pause();
-        correctAudio.pause();
-        incorrectAudio.pause();
-        excellentAudio.pause();
-    }
+            if (currentAudio) {
+                currentAudio.currentTime = 0;
+                currentAudio.pause();
+            }
+            
+            for (const key in audioBundle) {
+                for (const lang in audioBundle[key]) {
+                    const audio = audioBundle[key][lang];
+                    if( audio instanceof HTMLAudioElement ) {
+                        audio.currentTime = 0;
+                        audio.pause();
+                    }
+                }
+            }
+
+            resolve();
+        });
+    };
 
     const getQid = () => {
         const el = document.querySelector(`#${containerId}`);
@@ -6098,10 +6138,12 @@ const Shrutlekh = (() => {
             console.warn( '[WARNING]', 'Unable to set qid' );
             return false;
         }
-    }
+    };
 
     const ui = (questionId) => {
         try {
+            _constructAudio();
+
             const container = Define.get('questionContainer');
             const parent    = document.querySelector(container);
 
@@ -6147,6 +6189,8 @@ const Shrutlekh = (() => {
                                     </div>
                                 </div>`;
             // ..
+            Activity.setQuestionDetails( questionId );
+            if( !setQid(questionId) ) return false;
 			
 			const playBtn  = parent.querySelector( '.play-btn' );
             const checkBtn = parent.querySelector( '#checkSingleBtn' );
@@ -6158,54 +6202,23 @@ const Shrutlekh = (() => {
 		} catch (err) {
             console.error( 'Shrutlekh.ui :', err );
         }
-    }
-
-    const renderShrutlekh = (questionId) => {
-        try {
-            ui(questionId);
-            Activity.setQuestionDetails( questionId );
-                        
-            if( !setQid(questionId) ) return false;
-
-            setResponseAudio();
-        } catch (e) {
-            console.error( 'Shrutlekh.renderShrutlekh :', e );
-        }
-    }
-
-    const setResponseAudio = () => {
-        const activity = Activity.getData(getQid()) ?? {};
-        const content  = activity?.content ?? {};
-        const audio    = content?.audio ?? {};
-
-        if( !Object.keys( audio ).length ) return;
-        
-        if( audio.correct != '' ) {
-            correctAudio.src = audio.correct;
-            correctAudio.currentTime = 0;
-        }
-
-        if( audio.incorrect != '' ) {
-            incorrectAudio.src = audio.incorrect;
-            incorrectAudio.currentTime = 0;
-        }
-        
-        if( audio.excellent != '' ) {
-            excellentAudio.src = audio.excellent;
-            excellentAudio.currentTime = 0;
-        }
-    }
+    };
 
     const openQuestions = () => {
         try {
-            $(".qq-Box").hide();
-            $(".question-section").show();
+            const activity = Activity.getData(getQid()) ?? {};
+            const lang     = activity?.lang ?? 'en';
+
+            playAudio('clickBtn', lang);
+            
+            $('.qq-Box').hide();
+            $('.question-section').show();
             
             renderWordButton();
-        } catch( e ) {
+        } catch( err ) {
             console.log( 'Shrutlekh.openQuestions', err );
         }
-    }
+    };
 
     const renderWordButton = () => {
         try {
@@ -6222,15 +6235,29 @@ const Shrutlekh = (() => {
                 // ..
                 $('#'+questionBtnContId).append(btn);
                 $(`.word-btn[data-index='${questionIndex}']`)[0].addEventListener('click', playAudio_focusInput );
-            } else {
-                if( $('.word-btn.done').length == questionIndex ) {
-                    showFinalCongrats();
-                }
             }
         } catch( err ) {
             console.log( 'Shrutlekh.renderWordButton', err );
         }
-    }    
+    };
+
+    const toggleNextWord = () => {
+        const activity  = Activity.getData( getQid() ) ?? {};
+        const lang      = activity?.lang ?? 'en';
+        const content   = activity?.content ?? {};
+        const questions = content?.questions ?? [];
+
+        questionIndex++;
+
+        if( questionIndex != questions.length ) {
+            playAudio('clickNextBtn',lang);
+            renderWordButton();
+        }
+
+        if( $('.word-btn.done').length == questionIndex && questions.length == questionIndex ) {
+            showFinalCongrats();
+        }
+    };
     
     const playAudio_focusInput = () => {
         try {
@@ -6246,16 +6273,18 @@ const Shrutlekh = (() => {
 
             pauseAllAudio();
             
-            currentAudio.src = curQues.audio;
-            currentAudio.currentTime = 0;
-            currentAudio.play();
+            if( currentAudio instanceof HTMLAudioElement ) {
+                currentAudio.src = Activity.pathToCWD()+curQues.audio;
+                currentAudio.currentTime = 0;
+                currentAudio.play();
+            }
 
             if( lang == 'hi' ) {
-                $.keyboard.layouts["hindi"] = Activity.hindiKeyboard();
+                $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
                 
                 $('#'+textInputId)
                 .keyboard({
-                    layout     : "hindi",
+                    layout     : 'hindi',
                     usePreview : false,
                     autoAccept : true,
                 })
@@ -6268,7 +6297,7 @@ const Shrutlekh = (() => {
         } catch( err ) {
             console.log( 'Shrutlekh.playAudio_focusInput', err );
         }
-    }
+    };
 
     const checkAnswer = () => {
         try {
@@ -6283,9 +6312,9 @@ const Shrutlekh = (() => {
         } catch( err ) {
             console.log( 'Shrutlekh.checkAnswer', err );
         }
-    }
+    };
 
-    const checkPracAnswer = () => {
+    const checkPracAnswer = async () => {
         try {
             const activity  = Activity.getData( getQid() ) ?? {};
             const lang      = activity?.lang ?? 'en';
@@ -6294,60 +6323,68 @@ const Shrutlekh = (() => {
             const curQues   = questions[questionIndex] ?? {};
             const answer    = curQues?.answer;
 
+            let boxID;
+            let boxInput;
             let correctCount = 0;
             $('.correction-input').each( (ind, item) => {
-                let borderColor = 'red';
-                if( item.value == answer ) {                    
-                    correctCount++;
-                    borderColor = 'green';
+                if( item.value == answer ) {
+                    correctCount++;                    
+                    item.style.borderColor = 'green';
+                } else {
+                    item.style.borderColor = 'red';
+                    boxID = `box${ind+1}`;
+                    boxInput = item;
+                    return false;
                 }
-                item.style.borderColor = borderColor;
             });
 
             if( $('.correction-input').length == correctCount && correctCount > 1 ) {
-                pauseAllAudio();
 
-                correctAudio.currentTime = 0;
-                correctAudio.play();
-                
+                const correctAudio = await playAudio('correct', lang);
+                const timeout      = Math.round( correctAudio.duration * 1000 );
+
                 Swal.fire({
-                    iconHtml: '😄',
+                    icon: 'success',
                     title: lang == 'hi' ? 'बहुत बढ़िया! सही उत्तर 👏' : 'Very good! Correct answer 👏',
                     color: '#2e7d32',
-                    timer: 1000,
+                    timer: timeout,
                     showConfirmButton: false,
-                    background: '#fff',
-                    backdrop: false,    
-                    customClass: { icon: 'no-border-icon', popup: 'simple-popup' }
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
                 }).then((res) => {
                     if( res.isDismissed ) {
                         $('#'+correctionBoxSectionId).css( 'display', 'none' );
-                        correctPopUp(true);
+                        correctPopUp({skipAlert:true});
                     }
                 });
+
             } else {
-                pauseAllAudio();
-
-                incorrectAudio.currentTime = 0;
-                incorrectAudio.play();                
-
+                const boxAudio = await playAudio(boxID,lang);
+                const duration = boxAudio instanceof HTMLAudioElement ? boxAudio.duration : 2;                
+                const timeout  = Math.round( duration * 1000 );
                 Swal.fire({
-                    iconHtml: '❌',
+                    icon: 'error',
                     title: lang == 'hi' ? 'फिर से कोशिश करें!' : 'Try Again!',
                     color: '#c62828',
-                    timer: 1200,
+                    timer: timeout,
                     showConfirmButton: false,
-                    background: '#fff',
-                    backdrop: false,
-                    customClass: { icon: 'no-border-icon', popup: 'simple-popup' }
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                }).then((res) => {
+                    if( res.isDismissed ) {
+                        boxInput.focus();
+                    }
                 });
             }
+
         } catch( err ) {
             console.log( 'Shrutlekh.checkPracAnswer', err );
         }
-    }
+    };
 
-    const correctPopUp = (skipAlert=false) => {
+    const correctPopUp = async ({skipAlert=false}={}) => {
         const activity  = Activity.getData( getQid() ) ?? {};
         const lang      = activity?.lang ?? 'en';
         const content   = activity?.content ?? {};
@@ -6368,116 +6405,88 @@ const Shrutlekh = (() => {
         $('#'+textInputParenId)[0].style.display = "none";
 
         if( !skipAlert ) {
-            pauseAllAudio();
+            const correctAudio = await playAudio('correct',lang);
+            const timeout      = Math.round( correctAudio.duration ) * 1000;
 
-            correctAudio.currentTime = 0;
-            correctAudio.play();
-
-            const timeout = Math.round( correctAudio.duration ) * 1000;
             Swal.fire({
-                iconHtml: "😄",
+                icon: 'success',
                 title: lang == 'hi' ? 'शाबाश! सही उत्तर 👏' : 'Well done! Correct answer.👏',
-                color: "#2e7d32",
+                color: '#2e7d32',
                 timer: timeout,
                 showConfirmButton: false,
-                background: "#fff",
-                backdrop: false,
-                customClass: { icon: "no-border-icon", popup: "simple-popup" }
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
             }).then( (res) => {
                 if( res.isDismissed ) {
-                    questionIndex++;
-                    renderWordButton();
+                    toggleNextWord();
                 }
             });
         } else {
-            questionIndex++;
-            renderWordButton();
+            toggleNextWord();
         }
-    }
+    };
 
-    const wrongPopUp = () => {
+    const wrongPopUp = async () => {
         const activity  = Activity.getData( getQid() ) ?? {};
         const lang      = activity?.lang ?? 'en';
-        const content   = activity?.content ?? {};
-        const image     = content?.image ?? {};
-        const icon      = image?.correct ?? '';
-        const questions = content?.questions ?? [];
-        const curQues   = questions[questionIndex] ?? {};
 
-        pauseAllAudio();
-
-        incorrectAudio.currentTime = 0;
-        incorrectAudio.play();
+        const incorrectAudio = await playAudio('incorrect',lang);
 
         const timeout = Math.round( incorrectAudio.duration ) * 1000;
         Swal.fire({
-            iconHtml: "❌",
+            icon: "error",
             title: lang == 'hi' ? 'गलत उत्तर!' : 'Wrong Answer',
             html: lang == 'hi' ? '<small>फिर से कोशिश करें।</small>' : '<small>Try Again</small>',
-            color: "#c62828",
-            timer: 1200,
+            timer: timeout,            
             showConfirmButton: false,
-            background: "#fff",
-            backdrop: false,
-            customClass: { icon: "no-border-icon", popup: "simple-popup" }
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
         }).then((res) => {
             if( res.isDismissed ) {
                 renderCorrectionBox();
             }
         });
-
-        // setTimeout(() => {
-        //     correctionSection.style.display = "block";
-        //     correctWordDisplay.textContent = correctWord;
-        //     singleSection.style.display = "none";
-        //     boxEls.forEach(b => (b.value = ""));
-        //     checkSingleBtn.style.display = "none";
-        //     checkPracticeBtn.focus();
-        // }, 1000);
-    }
+    };
 
     const showFinalCongrats = () => {
         const activity  = Activity.getData( getQid() ) ?? {};
         const lang      = activity?.lang ?? 'en';
 
-        pauseAllAudio();
-        excellentAudio.play();
+        const hiHtml = '<b>आपने सभी शब्द सही लिखे!</b><br><small>शानदार प्रदर्शन!</small>';
+        const enHtml = '<b>You wrote all the words correctly!</b><br><small>Excellent performance!</small>';
 
         Swal.fire({
-            iconHtml: "🎉",
+            icon: 'success',
             title: lang == 'hi' ? 'बहुत बढ़िया! 🏆' : 'Excellent 🏆',
-            html: lang == 'hi' ? '<b>आपने सभी शब्द सही लिखे!</b><br><small>शानदार प्रदर्शन!</small>' : '<b>You wrote all the words correctly!</b><br><small>Excellent performance!</small>',
+            html: lang == 'hi' ? hiHtml : enHtml,
             confirmButtonText: lang == 'hi' ? 'फिर से खेलें' : 'Play again',
-            color: "#333",
-            confirmButtonColor: "#3085d6",
-            background: "#fff",
-            backdrop: `
-                linear-gradient(145deg, rgb(17, 95, 151), rgb(2, 148, 222))
-                url("./images/confetti.gif")
-                center top
-                no-repeat
-            `,
+            color: '#333',
+            confirmButtonColor: '#3085d6',
+            showConfirmButton: true,
             allowOutsideClick: false,
             allowEscapeKey: false,
-            customClass: {
-                icon: 'no-border-icon',
-                popup: 'simple-popup'
-            }
-        }).then( (res) => {            
+            allowEnterKey: false,
+        }).then( (res) => {
             if( res.isConfirmed && res.value ) {
+                playAudio('clickBtn', lang);
+
                 $('#'+questionBtnContId).html( '' );
                 questionIndex = 0;
                 renderWordButton();
             }
         });
-    }
+    };
 
-    const renderCorrectionBox = () => {
+    const renderCorrectionBox = async () => {
         const activity  = Activity.getData(getQid()) ?? {};
         const lang      = activity.lang ?? 'en';
         const content   = activity?.content ?? {};
         const questions = content?.questions ?? [];
         const curQues   = questions[questionIndex] ?? {};
+
+        await playAudio('writeCorrectBelow',lang);
             
         const boxLabel = Activity.translateBoxLabel(lang);
 
@@ -6490,7 +6499,7 @@ const Shrutlekh = (() => {
         for( let i=1; i<=3; i++ ) {
             const html = `<div class="col-sm-4">
                             <div class="box-wrap">
-                                <label class="box-label">${boxLabel} 1</label>
+                                <label class="box-label">${boxLabel} ${i}</label>
                                 <input id="box1" class="word-input correction-input dictationInput hindiInput" autocomplete="off" />
                             </div>
                         </div>`;
@@ -6511,10 +6520,10 @@ const Shrutlekh = (() => {
             .addTyping({ showTyping: true, delay: 70 })
             .on('keydown', e => e.preventDefault());
         }
-    }
+    };
     
     return {
-        render:renderShrutlekh
+        render:ui
     }
 
 })();
@@ -6761,7 +6770,11 @@ const WordSearch = (() => {
                     title: 'Choose a word!',
                     text: 'Please choose a word from the box before checking your answer.',
                     confirmButtonText: 'OK',
-                    confirmButtonColor: '#3085d6'
+                    confirmButtonColor: '#3085d6',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
                 });
                 checkBtn.disabled      = false;
                 checkBtn.style.opacity = 1;
@@ -6836,7 +6849,9 @@ const WordSearch = (() => {
                 icon: 'success',
                 confirmButtonText: lang == 'en' ? 'Replay' : 'दुबारा खेलें',
                 confirmButtonColor: '#28a745',
-                allowOutsideClick: false
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
             }).then( (res) => {
                 if( res.isConfirmed ) {
                     clearGrid();
@@ -6850,7 +6865,10 @@ const WordSearch = (() => {
                 html: lang == 'en' ? en : hi,
                 icon: 'info',
                 confirmButtonText: 'OK',
-                confirmButtonColor: '#3085d6'
+                confirmButtonColor: '#3085d6',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
             }).then( (res) => {
                 if( res.isConfirmed ) {
                     clearGrid();
