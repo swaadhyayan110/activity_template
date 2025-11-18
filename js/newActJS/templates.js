@@ -27,15 +27,15 @@ const Activity = (() => {
         }
     };
     
-    const getData = (questionId) => {
+    const getDefine = (questionId) => {
         try {
             return Define.get('questions')?.find(q => q.id == questionId);
         } catch ( err ) {
-            console.error( 'Activity.getData : ', err );
+            console.error( 'Activity.getDefine : ', err );
         }
     };
 
-    const shuffleQuestions = (array) => {
+    const shuffleArray = (array) => {
         try {
             const arr = [...array];
             for (let i = arr.length - 1; i > 0; i--) {
@@ -44,7 +44,7 @@ const Activity = (() => {
             }
             return arr;
         } catch ( err ) {
-            console.error( 'Activity.shuffleQuestions : ', err );
+            console.error( 'Activity.shuffleArray : ', err );
             return [];
         }
     };
@@ -66,12 +66,28 @@ const Activity = (() => {
         }
     };
 
-    const setQuestionDetails = ( questionID ) => {
+    const getQid = (selector) => {
+        const el = document.querySelector(selector);
+        return el ? el.dataset.qid : undefined;
+    };
+
+    const setQid = (selector, questionId) => {
+        const ele = document.querySelector(selector);
+        if( ele ) {
+            ele.dataset.qid = questionId;
+            return true;
+        } else {
+            console.warn( '[WARNING]', 'Unable to set qid' );
+            return false;
+        }
+    };
+
+    const setHeader = ( questionID ) => {
         try {
-            const data = getData( questionID );
+            const data = getDefine( questionID );
             const container = document.querySelector(Define.get('questionContainer'));
             if( !container ) {
-                console.warn('setQuestionDetails: container not found:', container);
+                console.warn('setHeader: container not found:', container);
                 return;
             }
 
@@ -93,7 +109,7 @@ const Activity = (() => {
             return elements;
 
         } catch( err ) {
-            console.error( 'Activity.setQuestionDetails :- ', err );
+            console.error( 'Activity.setHeader :- ', err );
         }
     };
 
@@ -110,13 +126,14 @@ const Activity = (() => {
         }
     };
 
-    const translateBulletLabels = ({ lang='en', ind=0, upperCase=true } = {}) => {
+    const translateBulletLabels = ({ lang='mt', ind=0, upperCase=true } = {}) => {
         const alphabets = {
             en: [...'abcdefghijklmnopqrstuvwxyz'],
-            hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय']
+            hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय'],
+            mt: Array.from({ length: 26 }, (_, i) => (i + 1).toString())
         }
 
-        const characters = alphabets[lang] ?? alphabets.en;
+        const characters = alphabets[lang] ?? alphabets.mt;
         const casedList  = upperCase ? characters.map(ch => ch.toUpperCase()) : characters;
 
         return (ind !== undefined && casedList[ind] !== undefined) ? casedList[ind] : '-';
@@ -138,7 +155,7 @@ const Activity = (() => {
         }
     };
 
-    const translateAnswerTableHeads = (lang='en') => {
+    const translateTableHeads = (lang='en') => {
         if( lang == 'en' ) {
             return {
                 sequence  : 'Question No.',
@@ -185,6 +202,7 @@ const Activity = (() => {
     const translateBooleanLabels = (lang='en') => lang == 'en' ? ['True', 'False'] : ['सही', 'गलत'];
     const translateWordLabel     = (lang='en') => lang == 'en' ? 'word' : 'शब्द';
     const translateSentenceLabel = (lang='en') => lang == 'en' ? 'sentence' : 'वाक्य';
+    const translateMeaningLabel  = (lang='en') => lang == 'en' ? 'meaning' : 'अर्थ';
     const translateColumnLabel   = (lang='en') => lang == 'en' ? 'column' : 'खंड';
     const translateBoxLabel      = (lang='en') => lang == 'en' ? 'box' : 'बॉक्स';    
 
@@ -214,7 +232,7 @@ const Activity = (() => {
                 return;
             }
 
-            const qObj = getData( questionId );
+            const qObj = getDefine( questionId );
             if( !qObj ) {
                 console.error('Activity.render: no question found for', questionId );
                 return;
@@ -233,24 +251,27 @@ const Activity = (() => {
     return {
         get,
         css,
-        module,
         render,
-        getData,
+        module,
+        getQid,
+        setQid,
         register,
+        setHeader,
+        getDefine,
+        pathToCWD,
+        shuffleArray,
         shuffleWords,
         hindiKeyboard,
         toggleCheckBtn,
-        pathToCWD,
-        shuffleQuestions,
         translateBoxLabel,
-        setQuestionDetails,
         translateWordLabel,
+        translateTableHeads,
         translateColumnLabel,
+        translateMeaningLabel,
         translateButtonLabels,
         translateBulletLabels,
         translateSentenceLabel,
-        translateBooleanLabels,
-        translateAnswerTableHeads,
+        translateBooleanLabels
     };    
 })();
 
@@ -442,7 +463,7 @@ const MatchLeftToRight = (() => {
 
     const ui = (activityId="m1", questionId) => {
         try {
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -493,12 +514,12 @@ const MatchLeftToRight = (() => {
     
     const matchLeftToRight = (questionId, activityId="m1") => {
         try {
-            const data = Activity.getData( questionId );
+            const data = Activity.getDefine( questionId );
             if( !Object.entries(data).length ) return;
 
             ui(activityId, questionId);
 
-            const headElem = Activity.setQuestionDetails( questionId );
+            const headElem = Activity.setHeader( questionId );
             if( !headElem.head && !headElem.subhead ) {
                 document.querySelector('hr').remove();
             }
@@ -514,8 +535,8 @@ const MatchLeftToRight = (() => {
             const questions      = data.content;
             const correctMatches = Object.fromEntries(questions.map(q => [String(q.id), String(q.id)]));
 
-            const leftShuffled  = Activity.shuffleQuestions(questions);
-            const rightShuffled = Activity.shuffleQuestions(questions);
+            const leftShuffled  = Activity.shuffleArray(questions);
+            const rightShuffled = Activity.shuffleArray(questions);
             
             activities[activityId] = activities[activityId] || { userMatches: {}, selectedLeftItem: null, correctMatches: {} };
             activities[activityId].correctMatches = correctMatches || {};
@@ -910,7 +931,7 @@ const MatchLeftRightToCenter = (() => {
 
     const matchLeftRightToCenter = (questionId, activityId="act1") => {
         try {
-            const data    = Activity.getData( questionId );
+            const data    = Activity.getDefine( questionId );
             const content = data.content;
             const lang    = data?.lang ?? 'en';
 
@@ -981,9 +1002,9 @@ const MatchLeftRightToCenter = (() => {
             matchItems2.innerHTML = "";
             matchItems3.innerHTML = "";
 
-            const col1 = Array.isArray(content.col1) ? Activity.shuffleQuestions(content.col1) : [];
-            const col2 = Array.isArray(content.col2) ? Activity.shuffleQuestions(content.col2) : [];
-            const col3 = Array.isArray(content.col3) ? Activity.shuffleQuestions(content.col3) : [];
+            const col1 = Array.isArray(content.col1) ? Activity.shuffleArray(content.col1) : [];
+            const col2 = Array.isArray(content.col2) ? Activity.shuffleArray(content.col2) : [];
+            const col3 = Array.isArray(content.col3) ? Activity.shuffleArray(content.col3) : [];
 
             const returnHtml = (colSeq, item) => {
                 const image_width = item.width ?? '65%';
@@ -1054,7 +1075,7 @@ const MatchLeftRightToCenter = (() => {
                 });
             });            
             
-            const headElem = Activity.setQuestionDetails( questionId );
+            const headElem = Activity.setHeader( questionId );
             if( !headElem.head && !headElem.subhead ) {
                 document.querySelector('hr').remove();
             }
@@ -1283,7 +1304,7 @@ const MatchTopToBottom = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
 
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -1324,7 +1345,7 @@ const MatchTopToBottom = (() => {
 
     const matchTopToBottom = (questionId, activityId = "m3_1") => {
         try {
-            const data = Activity.getData( questionId );
+            const data = Activity.getDefine( questionId );
             if (!data || !Array.isArray(data.content) || data.content.length === 0) return;
             
             const questions = data.content.map(q => ({
@@ -1341,7 +1362,7 @@ const MatchTopToBottom = (() => {
             activities[activityId].userMatches = {};
             
             ui(activityId, questionId);
-            Activity.setQuestionDetails( questionId );
+            Activity.setHeader( questionId );
             
             const area            = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
             const topContainer    = area.querySelector("[data-top]");
@@ -1350,8 +1371,8 @@ const MatchTopToBottom = (() => {
             topContainer.innerHTML    = "";
             bottomContainer.innerHTML = "";
             
-            const topList    = Activity.shuffleQuestions(questions);
-            const bottomList = Activity.shuffleQuestions(questions);
+            const topList    = Activity.shuffleArray(questions);
+            const bottomList = Activity.shuffleArray(questions);
             
             topList.forEach(item => {
                 const div         = document.createElement("div");
@@ -1441,7 +1462,7 @@ const FillInTheBlanksWithImage = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -1486,10 +1507,10 @@ const FillInTheBlanksWithImage = (() => {
 	
 	const fillInTheBlanks = (questionId) => {
         try {
-            const data = Activity.getData( questionId );
+            const data = Activity.getDefine( questionId );
 
             ui(questionId);
-            Activity.setQuestionDetails( questionId );
+            Activity.setHeader( questionId );
 
             document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid = data?.id;
 
@@ -1571,7 +1592,7 @@ const FillInTheBlanksWithImage = (() => {
             });
 
             const questionId = document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid;
-            const dataFills  = Activity.getData( questionId )?.content?.blanks;
+            const dataFills  = Activity.getDefine( questionId )?.content?.blanks;
 
             Swal.fire({
                 icon: correct === (dataFills || []).length ? "success" : "info",
@@ -1655,7 +1676,7 @@ const FillInTheBlanksHindiKb = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -1690,12 +1711,12 @@ const FillInTheBlanksHindiKb = (() => {
         try {
 
             ui(questionId);
-            Activity.setQuestionDetails( questionId );
+            Activity.setHeader( questionId );
 
             const container = $('#'+quizContainerID)[0];
 
             container.dataset.qid = questionId;
-            const data        = Activity.getData(questionId)?.content;
+            const data        = Activity.getDefine(questionId)?.content;
             const replacement = data?.replacement;
 
             data?.questions.forEach((item, qIndex) => {
@@ -1747,7 +1768,7 @@ const FillInTheBlanksHindiKb = (() => {
         const inputs = document.querySelectorAll(".inPutHindiNew");
 
         const questionId = $('#'+quizContainerID)[0].dataset.qid;
-        const questions  = Activity.getData(questionId)?.content?.questions;
+        const questions  = Activity.getDefine(questionId)?.content?.questions;
 
         inputs.forEach(el => {
             const qIndex = el.dataset.qindex;
@@ -1778,7 +1799,7 @@ const FillInTheBlanksHindiKb = (() => {
 
     const showAnswersHandler = () => {
         const questionId = $('#'+quizContainerID)[0].dataset.qid;
-        const questions  = Activity.getData(questionId)?.content?.questions;
+        const questions  = Activity.getDefine(questionId)?.content?.questions;
 
         $(".check_1").addClass("disable");
         const inputs = document.querySelectorAll(".inPutHindiNew");
@@ -1841,7 +1862,7 @@ const JumbleLetters = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -1875,10 +1896,10 @@ const JumbleLetters = (() => {
     const loadAllQuestions = (questionId) => {
         try {
 
-            const data = Activity.getData( questionId );
+            const data = Activity.getDefine( questionId );
 
             ui(questionId);        
-            const headElem = Activity.setQuestionDetails( questionId );
+            const headElem = Activity.setHeader( questionId );
             if( !headElem.head && !headElem.subhead ) {
                 document.querySelector('hr').remove();
             }
@@ -1990,7 +2011,7 @@ const JumbleLetters = (() => {
             let score = 0;
 
             const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
-            const jumbleData = Activity.getData( questionId )?.content;
+            const jumbleData = Activity.getDefine( questionId )?.content;
 
             jumbleData.forEach((word, index) => {
                 let isCorrect = true;
@@ -2032,7 +2053,7 @@ const JumbleLetters = (() => {
             Activity.toggleCheckBtn( '#submit', true );
 
             const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
-            const jumbleData = Activity.getData( questionId )?.content;
+            const jumbleData = Activity.getDefine( questionId )?.content;
 
             jumbleData.forEach((word, index) => {
                 const letterRow = $(`#letters-${index}`);
@@ -2075,7 +2096,7 @@ const JumbleWords = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -2116,9 +2137,9 @@ const JumbleWords = (() => {
 
             $container[0].dataset.qid = questionId;
 
-            Activity.setQuestionDetails( questionId );
+            Activity.setHeader( questionId );
 
-            const idioms = Activity.shuffleQuestions( Activity.getData( questionId )?.content );
+            const idioms = Activity.shuffleArray( Activity.getDefine( questionId )?.content );
 
             $container[0].dataset.shuffledIdioms = JSON.stringify(idioms);
 
@@ -2272,7 +2293,7 @@ const JumbleWords = (() => {
     const showAnswersWORD = () => {
         try {
             const questionId = $(idiomContainer)[0].dataset.qid;
-            const idioms = Activity.getData( questionId )?.content;
+            const idioms = Activity.getDefine( questionId )?.content;
 
             Activity.toggleCheckBtn( '.submit-btn', true );
 
@@ -2353,7 +2374,7 @@ const Mcq_PathKaSaar = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
 
             parent.innerHTML = `<div class="question">
@@ -2390,7 +2411,7 @@ const Mcq_PathKaSaar = (() => {
         try {
             ui(questionId);
 
-            const headElem = Activity.setQuestionDetails( questionId );
+            const headElem = Activity.setHeader( questionId );
             if( !headElem.head && !headElem.subhead ) {
                 document.querySelector( '.rowWithAudios' ).remove();
             }
@@ -2398,7 +2419,7 @@ const Mcq_PathKaSaar = (() => {
             const headingEl = document.getElementById(heading);
             headingEl.dataset.qid = questionId;
 
-            const activity = Activity.getData( questionId );
+            const activity = Activity.getDefine( questionId );
             const content  = activity?.content ?? {};
             const lang     = activity?.lang ?? 'en';
             const data     = content?.mcq ?? [];
@@ -2439,10 +2460,11 @@ const Mcq_PathKaSaar = (() => {
                 }
 
                 if (hasImg) {
+                    const imageclass = img?.imageclass ?? '';
                     mcqContextContainer.append(imgDiv);
                     const mcq_img_cont_class = hasText 
                         ? commonClassImg
-                        : 'col';
+                        : `col ${imageclass}`;
                     // ..
 
                     const image_width = img.width ?? '40%';
@@ -2573,7 +2595,7 @@ const Mcq_PathKaSaar = (() => {
             const headingEl  = document.getElementById(heading);
             const questionId = headingEl.dataset.qid;
             
-            const data = Activity.getData( questionId )?.content?.mcq || [];
+            const data = Activity.getDefine( questionId )?.content?.mcq || [];
             if( userAnswers.length < data.length ) {
                 for( let i = userAnswers.length; i < data.length; i++ ) userAnswers.push(null);
             }
@@ -2621,11 +2643,11 @@ const Mcq_PathKaSaar = (() => {
             let correctCount = 0;
 
             const questionId = document.getElementById(heading)?.dataset.qid;
-            const activity = Activity.getData( questionId );
+            const activity = Activity.getDefine( questionId );
             const data     = activity?.content;
             const lang     = activity?.lang;
             const mcq      = data?.mcq || [];
-            const headLabels = Activity.translateAnswerTableHeads(lang);
+            const headLabels = Activity.translateTableHeads(lang);
 
             let totalQues = mcq.length;
 
@@ -2718,12 +2740,7 @@ const Adaptiv = (() => {
     let submitted       = false;
     let currentQuizData    = undefined;
     let userAnswersAdaptiv = undefined;
-    let showResultPending  = false;
-
-    const getQid = () => {
-        const el = document.querySelector('.' + headerContainer);
-        return el ? el.dataset.qid : undefined;
-    }
+    let showResultPending  = false;    
 
     const ui = ( questionId, totalQues ) => {
         try {
@@ -2734,7 +2751,7 @@ const Adaptiv = (() => {
                 return;
             }
 
-            const data = Activity.getData(questionId)?.content;
+            const data = Activity.getDefine(questionId)?.content;
 
             const instructions = [];
             (data?.headings?.right?.instruction || []).forEach((item) => {
@@ -2820,7 +2837,7 @@ const Adaptiv = (() => {
 
     const renderQuestion = (questionId, direction) => {
         const level = currentLevel;
-        const data  = Activity.getData(questionId)?.content?.levels;
+        const data  = Activity.getDefine(questionId)?.content?.levels;
         const found = (data || []).find( lvl => lvl.level === level );
         const questLen  = found?.questions?.length || 0;
         const q         = found?.questions?.[currentQuestion];
@@ -2924,7 +2941,7 @@ const Adaptiv = (() => {
 
         if( currentQuestion < (currentQuizData?.length || 0) - 1 ) {
             currentQuestion++;
-            renderQuestion(getQid(), 'next');
+            renderQuestion(Activity.getQid( `.${headerContainer}` ), 'next');
         }
         updateNavButtons();
     }
@@ -2932,7 +2949,7 @@ const Adaptiv = (() => {
     const prevQuestion = () => {
         if( currentQuestion > 0 ) {
             currentQuestion--;
-            renderQuestion(getQid(), 'prev');
+            renderQuestion(Activity.getQid( `.${headerContainer}` ), 'prev');
         }
         updateNavButtons();
     }
@@ -2959,7 +2976,7 @@ const Adaptiv = (() => {
 
     const showResult = () => {
         try {
-            const activity   = Activity.getData(getQid()) ?? {};
+            const activity   = Activity.getDefine(Activity.getQid( `.${headerContainer}` )) ?? {};
             const content    = activity?.content ?? {};
             const levels     = content?.levels ?? [];
             const skiplevels = content?.skiplevels ?? false;
@@ -3052,7 +3069,7 @@ const Adaptiv = (() => {
         const levelUpdateEl = document.querySelector(".levelUpdate");
         if (levelUpdateEl && typeof levelHeadings !== 'undefined') levelUpdateEl.textContent = levelHeadings[currentLevel];
         
-        renderQuestion(getQid());
+        renderQuestion(Activity.getQid( `.${headerContainer}` ));
         updateAttemptedCount();
         $(".instruc").show();
         $(".submit-info").show();
@@ -3082,7 +3099,7 @@ const Adaptiv = (() => {
         userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);
         const navButtonsEl = document.getElementById("nav-buttons");
         if (navButtonsEl) navButtonsEl.style.display = "flex";
-        renderQuestion(getQid());
+        renderQuestion(Activity.getQid( `.${headerContainer}` ));
         updateAttemptedCount();
         $(".instruc").show();
         $(".submit-info").show();
@@ -3265,7 +3282,7 @@ const OnlyAudio = (() => {
 
     const renderUI = (questionId) => {
         try {
-            const description = Activity.getData(questionId)?.content?.desc;
+            const description = Activity.getDefine(questionId)?.content?.desc;
 
             const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
             const parent = container ? document.querySelector(container) : null;
@@ -3535,7 +3552,7 @@ const OnlyAudio = (() => {
     
     const init = (questionId) => {
         try {
-            const source = Activity.getData(questionId)?.content?.src;
+            const source = Activity.getDefine(questionId)?.content?.src;
 
             if (!source || typeof source !== "string") {
                 alert("Audio.init requires a source string (audio file URL or YouTube URL).");
@@ -3623,11 +3640,7 @@ const DropDown = (() => {
 
     Activity.css('dd.css');
 
-    const quesClass = 'questionSections';
-
-    const getQid = () => {
-        return  $(`.${quesClass}`)[0].dataset.qid;
-    }
+    const quesClass = 'questionSections';    
 
     const ui = (questionId) => {
         try {
@@ -3638,7 +3651,7 @@ const DropDown = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -3686,14 +3699,14 @@ const DropDown = (() => {
 
     const renderQuestions = (questionId) => {
         ui(questionId);
-        Activity.setQuestionDetails( questionId );
+        Activity.setHeader( questionId );
 
         const container     = document.querySelector(`.${quesClass}`);
         container.innerHTML = "";
 
         $(`.${quesClass}`)[0].dataset.qid = questionId;
         
-        const content     = Activity.getData(questionId)?.content;
+        const content     = Activity.getDefine(questionId)?.content;
         const questions   = content?.questions;
         const replacement = content?.replacement;
 
@@ -3728,7 +3741,7 @@ const DropDown = (() => {
         select.setAttribute("data-index", qIndex);
         if( blankIndex !== null ) select.setAttribute("data-blank", blankIndex);
 
-        const lang = Activity.getData(getQid())?.lang;
+        const lang = Activity.getDefine(Activity.getQid( `.${quesClass}` ))?.lang;
         const optionSelect = lang == 'hi' ? 'चुनें' : 'choose';
 
         const def = document.createElement("option");
@@ -3758,7 +3771,7 @@ const DropDown = (() => {
         document.getElementById("commonReport").style.display = "block";
         const selects = document.querySelectorAll(`select`);
 
-        const content = Activity.getData(getQid())?.content;
+        const content = Activity.getDefine(Activity.getQid( `.${quesClass}` ))?.content;
         const lang    = content?.lang;
         const data    = content?.questions;
         const isHindi = lang == 'hi' ? true : false;
@@ -3850,7 +3863,7 @@ const DropDown = (() => {
             if (submitBtn) submitBtn.classList.add("disable");
         }
 
-        const data = Activity.getData(getQid())?.content?.questions;
+        const data = Activity.getDefine(Activity.getQid( `.${quesClass}` ))?.content?.questions;
         const selects = document.querySelectorAll(`select`);
         selects.forEach(sel => {
             const qIdx     = parseInt(sel.getAttribute("data-index"), 10) || 0;
@@ -3904,11 +3917,6 @@ const Circle = (() => {
     let activitiesClicked = {};
     let userSelections    = {};
     
-    const getQid = () => {
-        const el = document.querySelector(`.${quesClass}`);
-        return el ? el.dataset.qid : undefined;
-    };
-    
     const ui = (questionId) => {
         try {
             const containerSelector = Define.get('questionContainer');
@@ -3918,7 +3926,7 @@ const Circle = (() => {
                 return;
             }
             
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -3965,7 +3973,7 @@ const Circle = (() => {
     
     const renderQuestions = (questionId) => {
         ui(questionId);
-        Activity.setQuestionDetails(questionId);
+        Activity.setHeader(questionId);
 
         const heading = document.querySelector(`.${quesClass}`);
         if (!heading) {
@@ -3981,7 +3989,7 @@ const Circle = (() => {
         }
         renderDiv.innerHTML = "";
 
-        const activity = Activity.getData(questionId);
+        const activity = Activity.getDefine(questionId);
         const content  = activity?.content;
         const lang     = activity?.lang ?? 'en';
 
@@ -4021,8 +4029,8 @@ const Circle = (() => {
 
                     const activityMeta = activitiesClicked[act];
                     if (!activityMeta) {                    
-                        const qid = getQid();
-                        const actActivity = Activity.getData(qid);
+                        const qid = Activity.getQid( `.${quesClass}` );
+                        const actActivity = Activity.getDefine(qid);
                         const mode = actActivity?.mode || 'multi';
                         activitiesClicked[act] = activitiesClicked[act] || { mode, questions: actActivity?.content || [], lang: actActivity?.lang || 'en' };
                     }
@@ -4216,11 +4224,6 @@ const ShravanKaushal = (() => {
     let curntInd = -1;
     let audioPlayer = null;
 
-    const getQid = () => {
-        const el = document.querySelector(`#${inputDataId}`);
-        return el ? el.dataset.qid : undefined;
-    };
-
     const ui = (questionId) => {
         try {
             const containerSelector = Define.get('questionContainer');
@@ -4231,7 +4234,7 @@ const ShravanKaushal = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -4315,9 +4318,9 @@ const ShravanKaushal = (() => {
 
     const renderQues = (questionId) => {
         ui(questionId);
-        Activity.setQuestionDetails(questionId);
+        Activity.setHeader(questionId);
         
-        const dataSet = Activity.getData(getQid())?.content?.questions || [];
+        const dataSet = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.questions || [];
 
         const rowDiv = document.getElementById(inputDataId);
         rowDiv.innerHTML = "";
@@ -4350,8 +4353,9 @@ const ShravanKaushal = (() => {
             }
         }
 
-        const src = Activity.getData(getQid())?.content?.audio?.headsrc
-            ?? Activity.getData(getQid())?.content?.audio?.options?.[0];
+        const qid = Activity.getQid( `#${inputDataId}` );
+        const src = Activity.getDefine(qid)?.content?.audio?.headsrc
+            ?? Activity.getDefine(qid)?.content?.audio?.options?.[0];
         if (src) {
             audioPlayer.src = src;
             audioPlayer.currentTime = 0;
@@ -4372,7 +4376,7 @@ const ShravanKaushal = (() => {
     };
 
     const updateButtons = () => {
-        const audioList = Activity.getData(getQid())?.content?.audio?.options || [];
+        const audioList = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.audio?.options || [];
         const prevBtn = document.getElementById('prevBtns');
         const nextBtn = document.getElementById('nextBtns');
 
@@ -4396,7 +4400,7 @@ const ShravanKaushal = (() => {
     };
 
     const nextStep = () => {
-        const audioList = Activity.getData(getQid())?.content?.audio?.options || [];
+        const audioList = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.audio?.options || [];
         if( curntInd < audioList.length ) {
             if (!audioPlayer) audioPlayer = document.getElementById('audioPlayer');
 
@@ -4412,7 +4416,7 @@ const ShravanKaushal = (() => {
     };
 
     const prevStep = () => {
-        const audioList = Activity.getData(getQid())?.content?.audio?.options || [];
+        const audioList = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.audio?.options || [];
         if( curntInd > 0 ) {
             if (!audioPlayer) audioPlayer = document.getElementById('audioPlayer');
             curntInd--;
@@ -4431,7 +4435,7 @@ const ShravanKaushal = (() => {
     };
 
     const checkAns = () => {
-        const data    = Activity.getData(getQid());
+        const data    = Activity.getDefine(Activity.getQid( `#${inputDataId}` ));
         const dataSet = data?.content?.questions || [];
         const isHindi = (data?.lang === 'hi');
 
@@ -4495,7 +4499,7 @@ const ShravanKaushal = (() => {
     };
 
     const showAns = () => {
-        const dataSet = Activity.getData(getQid())?.content?.questions || [];
+        const dataSet = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.questions || [];
         dataSet.forEach(q => {
             const inputEl = document.getElementById(`f${inputDataId}_${q.id}`);
             if (inputEl) {
@@ -4530,11 +4534,6 @@ const TrueAndFalse = (() => {
     const inputDataId = 'trueAndFalse4';
     let userAns = [];
 
-    const getQid = () => {
-        const el = document.querySelector(`#${inputDataId}`);
-        return el ? el.dataset.qid : undefined;
-    };
-
     const ui = (questionId) => {
         try {
             const containerSelector = Define.get('questionContainer');
@@ -4544,7 +4543,7 @@ const TrueAndFalse = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -4597,12 +4596,14 @@ const TrueAndFalse = (() => {
 
     const renderQues = (questionId) => {
         ui(questionId);
-        const headElem = Activity.setQuestionDetails( getQid() );
+
+        const qid      = Activity.getQid( `#${inputDataId}` );
+        const headElem = Activity.setHeader( qid );
         if( !headElem.head && !headElem.subhead ) {
             document.querySelector('hr').remove();
         }
 
-        const activity = Activity.getData(getQid()) ?? {};
+        const activity = Activity.getDefine(qid) ?? {};
         const lang     = activity?.lang ?? 'en';
         const dataSet  = activity?.content ?? [];
 
@@ -4663,7 +4664,7 @@ const TrueAndFalse = (() => {
     }
 
     const showAnswersTandF = () => {
-        const questions = Activity.getData(getQid())?.content || [];
+        const questions = Activity.getDefine( Activity.getQid( `#${inputDataId}` ) )?.content || [];
         $(`.options`).css('pointer-events', 'none');
         $(`#submit4`).addClass('disable');
         questions.map((item, index) => {
@@ -4683,7 +4684,7 @@ const TrueAndFalse = (() => {
     }
 
     const resetTrueFalse = () => {
-        const questions = Activity.getData(getQid())?.content || [];  
+        const questions = Activity.getDefine( Activity.getQid( `#${inputDataId}` ) )?.content || [];  
         $(".tnfBtn").removeClass('active');
         $(`.options`).css('pointer-events', 'all');
         userAns = new Array(questions.length).fill(null);
@@ -4691,9 +4692,9 @@ const TrueAndFalse = (() => {
     }
 
     const showPopUp = () => {
-        const activity   = Activity.getData(getQid()) ?? {};
+        const activity   = Activity.getDefine( Activity.getQid( `#${inputDataId}` ) ) ?? {};
         const lang       = activity?.lang ?? 'en';
-        const headLabels = Activity.translateAnswerTableHeads(lang);
+        const headLabels = Activity.translateTableHeads(lang);
         const questions  = activity?.content;
 
         let correctCount = 0;
@@ -4784,7 +4785,7 @@ const DragAndDrop = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -4837,13 +4838,13 @@ const DragAndDrop = (() => {
     const renderDataDND = (questionId) => {
         try {
             ui(questionId);
-            const data    = Activity.getData( questionId );
+            const data    = Activity.getDefine( questionId );
             const content = data?.content || {};
 
             const hasAudio = content?.audio;
             if( !hasAudio ) $('.playsBtns').remove();
 
-            const headElem       = Activity.setQuestionDetails( questionId );
+            const headElem       = Activity.setHeader( questionId );
             const audioBtnExists = document.contains(document.querySelector('.playsBtns'));
             if( !headElem.head && !headElem.subhead && !audioBtnExists ) {
                 document.querySelector('.rowWithAudios').remove();
@@ -4853,7 +4854,7 @@ const DragAndDrop = (() => {
             dragItems.dataset.qid = questionId;
             
             const head     = [ '<div class="row w-100 justify-content-center">' ];
-            const headings = Activity.shuffleQuestions( content?.heading );
+            const headings = Activity.shuffleArray( content?.heading );
 
             const defaultCol = {
                 md : 4,
@@ -4880,7 +4881,7 @@ const DragAndDrop = (() => {
             $('.dropItems').html( head.join('') );
 
             const opt     = [];
-            const options = Activity.shuffleQuestions( data?.content?.options );
+            const options = Activity.shuffleArray( data?.content?.options );
             options.forEach((item) => {
                 const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
                 opt.push( html );
@@ -4988,7 +4989,7 @@ const DragAndDrop = (() => {
             renderDataDND(dragItems.dataset.qid);
 
             $(`${containerSelector} .dropSect`).empty();
-            const data = Activity.getData( questionId )?.content?.options;
+            const data = Activity.getDefine( questionId )?.content?.options;
             
             data.forEach((item) => {
                 const $clone = $(`<div class="wordDrag">${item.text}</div>`)
@@ -5019,7 +5020,7 @@ const DragAndDrop = (() => {
             const dragItems  = document.getElementById(containerId);
             const questionId = dragItems.dataset.qid;
 
-            const src   = Activity.getData( questionId )?.content?.audio;
+            const src   = Activity.getDefine( questionId )?.content?.audio;
             const audio = new Audio(src);
             if( play ) {
                 $("#playSvg").hide();
@@ -5057,11 +5058,6 @@ const DragAndDropMulti = (() => {
     let DragEnabled = false;
     let userAns;
 
-    const getQid = () => {
-        const el = document.querySelector(`#${containerId}`);
-        return el ? el.dataset.qid : undefined;
-    };
-
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
@@ -5072,7 +5068,7 @@ const DragAndDropMulti = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -5119,10 +5115,10 @@ const DragAndDropMulti = (() => {
     }
 
     const showPopUp = () => {
-        const activity   = Activity.getData(getQid()) ?? {};
+        const activity   = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
         const lang       = activity?.lang ?? 'en';
         const questions  = activity?.content?.questions ?? [];
-        const headLabels = Activity.translateAnswerTableHeads(lang);
+        const headLabels = Activity.translateTableHeads(lang);
 
         const strictMatch = activity?.content?.strictMatch;
         const option_side = activity?.content?.option_side ?? 'top';
@@ -5264,7 +5260,7 @@ const DragAndDropMulti = (() => {
     }
 
     const showDropAnswers = () => {
-        const activity    = Activity.getData(getQid()) || {};
+        const activity    = Activity.getDefine(Activity.getQid( `#${containerId}` )) || {};
         const option_side = activity?.content?.option_side || 'top';
 
         const type_set    = activity?.content?.set || {};
@@ -5296,9 +5292,9 @@ const DragAndDropMulti = (() => {
     const renderDataDND = (questionId) => {
         try {
             ui(questionId);
-            Activity.setQuestionDetails( questionId );
+            Activity.setHeader( questionId );
 
-            const data = Activity.getData( questionId );
+            const data = Activity.getDefine( questionId );
             const lang = data?.lang ?? 'en';
 
             const dragItems = document.getElementById(containerId);
@@ -5314,14 +5310,14 @@ const DragAndDropMulti = (() => {
             const questions_temp = content?.questions || [];
 
             const optionHtml = [];
-            const questions  = isShuffle == true ? Activity.shuffleQuestions( questions_temp ) || [] : questions_temp;
+            const questions  = isShuffle == true ? Activity.shuffleArray( questions_temp ) || [] : questions_temp;
 
             const drag_option_html = (item, ind) => `<div class="drag_${ind} wordDrag font17" data-text="${item}" data-ans="${item}">${item}</div>`;
 
             if( option_side == 'top' && !hasTypeSet ) {
-                const options       = Activity.shuffleQuestions( questions || [] )?.flatMap( obj => obj.options ) || [];
-                const addOptions    = Activity.shuffleQuestions( content?.addOptions || [] ) || [];
-                const mergedOptions = Activity.shuffleQuestions( [...new Set([...options, ...addOptions])] || [] ) || [];
+                const options       = Activity.shuffleArray( questions || [] )?.flatMap( obj => obj.options ) || [];
+                const addOptions    = Activity.shuffleArray( content?.addOptions || [] ) || [];
+                const mergedOptions = Activity.shuffleArray( [...new Set([...options, ...addOptions])] || [] ) || [];
                 mergedOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
                     optionHtml.push( html );
@@ -5330,7 +5326,7 @@ const DragAndDropMulti = (() => {
             }
 
             if( hasTypeSet ) {
-                const options       = Activity.shuffleQuestions( type_set?.options || [] ) || [];
+                const options       = Activity.shuffleArray( type_set?.options || [] ) || [];
                 const uniqueOptions = [...new Set(options)];
                 uniqueOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
@@ -5493,11 +5489,6 @@ const Sorting = (() => {
     const sequenceClass    = 'sort-options';
     const quesHeadingClass = 'sort-ques-heading';
 
-    const getQid = () => {
-        const el = document.querySelector(`#${containerId}`);
-        return el ? el.dataset.qid : undefined;
-    };
-
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
@@ -5508,7 +5499,7 @@ const Sorting = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -5543,9 +5534,9 @@ const Sorting = (() => {
     const renderQuestion = (questionId) => {
         try {
             ui(questionId);
-            Activity.setQuestionDetails( questionId );
+            Activity.setHeader( questionId );
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity?.lang ?? 'en';
 
             const dragContainer = document.getElementById(containerId);
@@ -5553,7 +5544,7 @@ const Sorting = (() => {
 
             const content  = activity?.content ?? {};
             const quesHead = content?.question ?? '';
-            const sequence = Activity.shuffleQuestions(content?.sequence ?? [] ) ?? [];
+            const sequence = Activity.shuffleArray(content?.sequence ?? [] ) ?? [];
 
             renderSequence(sequence);
             
@@ -5611,7 +5602,7 @@ const Sorting = (() => {
     }
 
     const showAnswer = () => {
-        const activity = Activity.getData(getQid()) || {};
+        const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) || {};
         const content  = activity?.content ?? {};
         const sequence = content?.sequence ?? [];
 
@@ -5628,9 +5619,9 @@ const Sorting = (() => {
     }
 
     const tryAgain = () => {
-        const activity = Activity.getData(getQid()) || {};
+        const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) || {};
         const content  = activity?.content ?? {};
-        const sequence = Activity.shuffleQuestions( content?.sequence ?? [] ) ?? [];
+        const sequence = Activity.shuffleArray( content?.sequence ?? [] ) ?? [];
 
         renderSequence( sequence );
 
@@ -5653,7 +5644,7 @@ const Sorting = (() => {
     }
 
     const checkAnswer = () => {
-        const activity = Activity.getData(getQid()) || {};
+        const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) || {};
         const content  = activity?.content ?? {};
         const sequence = content?.sequence ?? [];
 
@@ -5692,12 +5683,7 @@ const Sorting = (() => {
 })();
 
 const Pdf = (() => {
-    const containerId = 'pdf-container';
-
-    const getQid = () => {
-        const el = document.querySelector(`#${containerId}`);
-        return el ? el.dataset.qid : undefined;
-    };
+    const containerId = 'pdf-container';    
 
     const ui = (questionId) => {
         try {
@@ -5709,7 +5695,7 @@ const Pdf = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -5767,7 +5753,7 @@ const Pdf = (() => {
         try {
             ui(questionId);
             
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity?.lang ?? 'en';
             const path     = activity?.content?.pdf ? Activity.pathToCWD()+activity?.content?.pdf : '';
 
@@ -5915,22 +5901,6 @@ const Shabdkosh = (() => {
 
     const containerId = 'shabdkosh-container';
 
-    const getQid = () => {
-        const el = document.querySelector(`#${containerId}`);
-        return el ? el.dataset.qid : undefined;
-    };
-
-    const setQid = (questionId) => {
-        const dragItems = document.getElementById(containerId);
-        if( dragItems ) {
-            dragItems.dataset.qid = questionId;
-            return true;
-        } else {
-            console.warn( '[WARNING]', 'Unable to set qid' );
-            return false;
-        }
-    }
-
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
@@ -5941,7 +5911,7 @@ const Shabdkosh = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -5967,11 +5937,11 @@ const Shabdkosh = (() => {
         try {
             ui(questionId);
             
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity?.lang ?? 'en';
-            const content  = Activity.shuffleQuestions( activity?.content ?? [] ) ?? [];
+            const content  = Activity.shuffleArray( activity?.content ?? [] ) ?? [];
 
-            if( !setQid(questionId) ) return false;
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
 
             const tabs = [];
             content.forEach((item, ind) => {
@@ -6011,7 +5981,7 @@ const Shabdkosh = (() => {
 
         const id = thisObj.target.dataset.id;
 
-        const activity = Activity.getData(getQid()) ?? {};
+        const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
         const lang     = activity?.lang ?? 'en';
         const content  = activity?.content ?? [];
         const tabitem  = content.filter( x => x.id == id );
@@ -6026,8 +5996,8 @@ const Shabdkosh = (() => {
 
         const tabpanecontent = `
             <div class="tab-pane active">
-            ${item?.tabtitle ? `<div class="over"><b>${item.tabtitle}</b></div>` : '' }
-            ${item?.meaning ? `<div class="meaning me-1"><b class="me-1">अर्थ :</b>${item.meaning}</div>` : ''}
+            ${item?.tabtitle ? `<div class="over my-3"><b>${item.tabtitle}</b></div>` : '' }
+            ${item?.meaning ? `<div class="meaning me-1"><b class="me-1 arth">${Activity.translateMeaningLabel(lang)} :</b>${item.meaning}</div>` : ''}
             ${item?.sentence ? 
                 `<div class="sentence-use">
                     <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
@@ -6071,7 +6041,7 @@ const Shrutlekh = (() => {
     const correctionBoxSectionId = 'correctionSection';
     const correctWordHintId      = 'correctWordDisplay';
 
-    const tickIconPath = './img/right1.png';
+    const tickIconPath = './images/right1.png';
     
     let questionIndex  = 0;
     const currentAudio = new Audio();
@@ -6129,23 +6099,7 @@ const Shrutlekh = (() => {
 
             resolve();
         });
-    };
-
-    const getQid = () => {
-        const el = document.querySelector(`#${containerId}`);
-        return el ? el.dataset.qid : undefined;
-    };
-
-    const setQid = (questionId) => {
-        const dragItems = document.getElementById(containerId);
-        if( dragItems ) {
-            dragItems.dataset.qid = questionId;
-            return true;
-        } else {
-            console.warn( '[WARNING]', 'Unable to set qid' );
-            return false;
-        }
-    };
+    };    
 
     const ui = (questionId) => {
         try {
@@ -6159,7 +6113,7 @@ const Shrutlekh = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';            
             
             const btnLabel = Activity.translateButtonLabels(lang);
@@ -6196,8 +6150,8 @@ const Shrutlekh = (() => {
                                     </div>
                                 </div>`;
             // ..
-            Activity.setQuestionDetails( questionId );
-            if( !setQid(questionId) ) return false;
+            Activity.setHeader( questionId );
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
 			
 			const playBtn  = parent.querySelector( '.play-btn' );
             const checkBtn = parent.querySelector( '#checkSingleBtn' );
@@ -6213,7 +6167,7 @@ const Shrutlekh = (() => {
 
     const openQuestions = () => {
         try {
-            const activity = Activity.getData(getQid()) ?? {};
+            const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
             const lang     = activity?.lang ?? 'en';
 
             playAudio('clickBtn', lang);
@@ -6229,7 +6183,7 @@ const Shrutlekh = (() => {
 
     const renderWordButton = () => {
         try {
-            const activity  = Activity.getData(getQid()) ?? {};
+            const activity  = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
             const lang      = activity?.lang ?? 'en';
             const content   = activity?.content ?? {};
             const questions = content?.questions ?? [];
@@ -6249,7 +6203,7 @@ const Shrutlekh = (() => {
     };
 
     const toggleNextWord = () => {
-        const activity  = Activity.getData( getQid() ) ?? {};
+        const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
         const lang      = activity?.lang ?? 'en';
         const content   = activity?.content ?? {};
         const questions = content?.questions ?? [];
@@ -6268,7 +6222,7 @@ const Shrutlekh = (() => {
     
     const playAudio_focusInput = () => {
         try {
-            const activity  = Activity.getData( getQid() ) ?? {};
+            const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
             const lang      = activity?.lang ?? 'en';
             const content   = activity?.content ?? {};
             const questions = content?.questions ?? [];
@@ -6308,7 +6262,7 @@ const Shrutlekh = (() => {
 
     const checkAnswer = () => {
         try {
-            const activity  = Activity.getData( getQid() ) ?? {};
+            const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
             const content   = activity?.content ?? {};
             const questions = content?.questions ?? [];
             const curQues   = questions[questionIndex] ?? {};
@@ -6323,7 +6277,7 @@ const Shrutlekh = (() => {
 
     const checkPracAnswer = async () => {
         try {
-            const activity  = Activity.getData( getQid() ) ?? {};
+            const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
             const lang      = activity?.lang ?? 'en';
             const content   = activity?.content ?? {};
             const questions = content?.questions ?? [];
@@ -6392,7 +6346,7 @@ const Shrutlekh = (() => {
     };
 
     const correctPopUp = async ({skipAlert=false}={}) => {
-        const activity  = Activity.getData( getQid() ) ?? {};
+        const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
         const lang      = activity?.lang ?? 'en';
         const content   = activity?.content ?? {};
         const questions = content?.questions ?? [];
@@ -6433,7 +6387,7 @@ const Shrutlekh = (() => {
     };
 
     const wrongPopUp = async () => {
-        const activity  = Activity.getData( getQid() ) ?? {};
+        const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
         const lang      = activity?.lang ?? 'en';
 
         const incorrectAudio = await playAudio('incorrect',lang);
@@ -6456,7 +6410,7 @@ const Shrutlekh = (() => {
     };
 
     const showFinalCongrats = () => {
-        const activity  = Activity.getData( getQid() ) ?? {};
+        const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
         const lang      = activity?.lang ?? 'en';
 
         const hiHtml = '<b>आपने सभी शब्द सही लिखे!</b><br><small>शानदार प्रदर्शन!</small>';
@@ -6485,7 +6439,7 @@ const Shrutlekh = (() => {
     };
 
     const renderCorrectionBox = async () => {
-        const activity  = Activity.getData(getQid()) ?? {};
+        const activity  = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
         const lang      = activity.lang ?? 'en';
         const content   = activity?.content ?? {};
         const questions = content?.questions ?? [];
@@ -6544,23 +6498,7 @@ const WordSearch = (() => {
 
     const color_blue   = '#31cde2';
 
-    let _grid;
-
-    const getQid = () => {
-        const el = document.querySelector(`#${containerId}`);
-        return el ? el.dataset.qid : undefined;
-    };
-
-    const setQid = (questionId) => {
-        const dragItems = document.getElementById(containerId);
-        if( dragItems ) {
-            dragItems.dataset.qid = questionId;
-            return true;
-        } else {
-            console.warn( '[WARNING]', 'Unable to set qid' );
-            return false;
-        }
-    };
+    let __grid;
 
     const ui = (questionId) => {
         try {
@@ -6572,7 +6510,7 @@ const WordSearch = (() => {
                 return;
             }
 
-            const activity = Activity.getData(questionId) ?? {};
+            const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -6610,13 +6548,13 @@ const WordSearch = (() => {
     const render = (questionId) => {
         try {
             ui(questionId);
-            Activity.setQuestionDetails( questionId );
+            Activity.setHeader( questionId );
                         
-            if( !setQid(questionId) ) return false;
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
 
-            const activity = Activity.getData( questionId );
+            const activity = Activity.getDefine( questionId );
             const lang     = activity?.lang ?? 'en';
-            const content  = Activity.shuffleQuestions( activity?.content ?? [] ) ?? [];
+            const content  = Activity.shuffleArray( activity?.content ?? [] ) ?? [];
 
             const puzzle = [];
             const words  = [];
@@ -6635,7 +6573,7 @@ const WordSearch = (() => {
 
     const renderGrid = () => {
         try {
-            const activity = Activity.getData( getQid() );
+            const activity = Activity.getDefine( Activity.getQid( `#${containerId}` ) );
             const content  = activity?.content ?? [];
 
             const words     = content.filter( puz => puz?.answer ).map( puz => puz.answer.toUpperCase() );            
@@ -6687,7 +6625,7 @@ const WordSearch = (() => {
                 btn.addEventListener('click', selectCell);
             });
 
-            _grid = grid.map(row => [...row]);
+            __grid = grid.map(row => [...row]);
 
         } catch( err ) {
             console.log( 'WordSearch.renderGrid', err );
@@ -6717,7 +6655,7 @@ const WordSearch = (() => {
 
     const showAnswer = () => {
         try {
-            const activity = Activity.getData(getQid());
+            const activity = Activity.getDefine(Activity.getQid( `#${containerId}` ));
             const content  = activity?.content ?? [];
             const puzzleCont = document.getElementById(puzzleContId);
 
@@ -6762,7 +6700,7 @@ const WordSearch = (() => {
     const checkAnswer = () => {
         try {
 
-            const activity = Activity.getData( getQid() );
+            const activity = Activity.getDefine( Activity.getQid( `#${containerId}` ) );
             const lang     = activity?.lang ?? 'en';
             const content  = activity?.content ?? [];
 
@@ -6888,8 +6826,229 @@ const WordSearch = (() => {
     
 })();
 
+const TextArea = (() => {
+
+    const containerId = 'text-area-container';
+    const quesContId  = 'question-container';
+
+    let shuffledQuestions;
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container" id="${containerId}">
+                                        <h5 class="questionHeading mt-3 border-bottom pb-2 ${Define.get('head')}"></h5>
+                                        <div id="short-answer-container" class="ps-1 pe-3">
+                                            <div id="${quesContId}" class="mb-2" style="font-size: 20px;"></div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="buttons machiNgs">
+                                                <button class="submit-btn">${buttonLabel.check}</button>
+                                                <button class="show-btn">${buttonLabel.show}</button>
+                                                <button class="reset-btn">${buttonLabel.try}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            Activity.setHeader( questionId );            
+			
+			const resetBtn  = parent.querySelector( '.reset-btn' );
+			const showBtn   = parent.querySelector( '.show-btn' );
+			const submitBtn = parent.querySelector( '.submit-btn' );
+
+			if(resetBtn) resetBtn.addEventListener("click", resetAnswers);
+			if(showBtn) showBtn.addEventListener("click", showAnswers);
+			if(submitBtn) submitBtn.addEventListener("click", checkAnswers);
+		} catch (err) {
+            console.error( 'TextArea.ui :', err );
+        }
+    };
+
+    const render = (questionId) => {
+        try {
+            ui(questionId);
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+            const activity    = Activity.getDefine( questionId );
+            const lang        = activity?.lang ?? 'en';
+            const content     = activity?.content ?? {};
+            const replacement = content?.replacement ?? '#_#';
+            shuffledQuestions = Activity.shuffleArray( content?.questions ?? [] ) ?? [];
+            
+            const textArea  = '<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="उत्तर लिखें" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px;" role="textbox"></textarea>';
+            const questions = [];
+            shuffledQuestions.forEach( (ques,index) => {
+                const questionText = ques?.text?.replace(replacement, textArea );
+                const html = `
+                        <div class="my-3">
+                            ${Activity.translateBulletLabels({ind:index})}. ${questionText}
+                        </div>
+                    `;
+                questions.push( html );
+            });
+            $('#'+quesContId).html( questions.join('') );
+
+            if( lang == 'hi' ) {
+                const inputs = $('#'+quesContId)[0].querySelectorAll( '.hindiInput' );
+                
+                $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
+                $(inputs)
+                .keyboard({
+                    layout     : 'hindi',
+                    usePreview : false,
+                    autoAccept : true,
+                })
+                .addTyping({ showTyping: true, delay: 70 })
+                .on('keydown', e => e.preventDefault());
+            }
+        } catch (err) {
+            console.error( 'TextArea.render :', err );
+        }
+    };
+
+    const resetAnswers = () => {
+        const input = document.querySelectorAll('textarea.hindiInput');
+        if( input ) input.forEach(input => input.value = '' );
+        $('.submit-btn').removeClass('disable');
+    };
+
+    const checkAnswers = () => {
+        const activity = Activity.getDefine( Activity.getQid(`#${containerId}`) );
+        const lang     = activity?.lang ?? 'en';
+        
+        const inputs = document.querySelectorAll('textarea.hindiInput');
+        if( inputs.length ) {
+            let correctCount = 0, wrongCount = 0, emptyCount = 0;            
+            let filled = false;
+
+            inputs.forEach(input => {
+                if (input.value.trim() !== "") {
+                    filled = true;
+                }
+            });
+
+            if( !filled ) {
+                Swal.fire({
+                    icon  : 'warning',
+                    title : lang == 'hi' ? 'कोई उत्तर नहीं लिखा गया' : 'No answer was written',
+                    text  : lang == 'hi' ? 'कृपया कम से कम एक उत्तर लिखें फिर उत्तर जाँचें।' : 'Please write at least one answer and then check the answer.',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+            
+            const tableData = [];
+            inputs.forEach((input,ind) => {
+
+                const { index, flag, correct, user } = getAnswer(input,ind);                
+
+                let resultIcon = '';
+                let userClass  = '';
+
+                if( user === '' ) {
+                    resultIcon = '⚠ खाली';
+                    userClass  = 'wrong';
+                    emptyCount++;
+                } else if( user === correct ) {
+                    resultIcon = '✔️';
+                    userClass  = 'correct';
+                    correctCount++;
+                } else {
+                    resultIcon = '❌';
+                    userClass  = 'wrong';
+                    wrongCount++;
+                }
+
+                const data = `
+                    <tr>
+                        <td style="text-align: center;">${parseInt(index) + 1}.</td>
+                        <td class="${userClass}">${user || "-"}</td>
+                        <td class="correct">${correct}</td>
+                        <td style="text-align: center;">${resultIcon}</td>
+                    </tr>
+                `;
+                tableData.push( data );
+            });
+            
+            const tableHead = Activity.translateTableHeads(lang);
+            Swal.fire({
+                html: `
+                    <div class="popup-header">
+                        <h2> ${lang == 'hi' ? 'उत्तर समीक्षा' : 'Answer review' }</h2>
+                        <button class="close-btn" onclick="Swal.close()">✘</button>
+                    </div>
+                    <table class="answerdiv table table-bordered w-100" style="font-size:20px">
+                        <thead class="text-light" style="white-space: nowrap;">
+                            <tr>
+                                <th style="width:50px">${tableHead.sequence}</th>
+                                <th style="width:250px">${tableHead.attempted}</th>
+                                <th style="width:250px">${tableHead.correct}</th>
+                                <th style="width:50px">${tableHead.result}</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        ${tableData.join('')}
+                    </tbody>
+                    </table>
+                    <div class="d-flex" style="padding:10px; text-align:left;">
+                        <p>${lang == 'hi' ? 'सही' : 'Correct' } :</p> &nbsp;${correctCount} &nbsp;| &nbsp;
+                        <p>${lang == 'hi' ? 'गलत' : 'Wrong' } :</p> &nbsp;${wrongCount} &nbsp;| &nbsp;
+                        <p>${lang == 'hi' ? 'खाली' : 'Empty' } :</p>&nbsp; ${emptyCount}
+                    </div>
+                `,
+                showConfirmButton: false,
+                customClass: { popup: 'custom-popup' }
+            });
+        }
+    }
+  
+    const showAnswers = () => {
+        const inputs = document.querySelectorAll('textarea.hindiInput');
+        if( inputs.length ) {
+            inputs.forEach((input,ind) => {
+                const { index, flag, correct, user } = getAnswer(input,ind);
+                input.value = correct;                
+            });
+            $('.submit-btn').addClass('disable');
+        }
+    }
+
+    const getAnswer = (input, qInd) => {
+        const correctAnswer = shuffledQuestions[qInd]?.answer;
+        const userAnswer    = input.value.trim();
+        let isCorrect       = false;
+
+        if( userAnswer == correctAnswer ) isCorrect = true;
+        return { 
+            index   : qInd, 
+            flag    : isCorrect, 
+            correct : correctAnswer, 
+            user    : userAnswer 
+        };
+    }
+
+    return {
+        render
+    }
+})();
+
 Modules.get().map(({ module }) => {
-    try {        
+    try {
         const mod = eval(module);
         if( !mod || (typeof mod !== 'function' && typeof mod !== 'object') ) {
             console.error(`FATAL :: Couldn't register ${module} :`, mod);

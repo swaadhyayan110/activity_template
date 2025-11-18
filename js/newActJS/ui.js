@@ -20,7 +20,7 @@ const UI = (() => {
             || el.msRequestFullscreen;
 
         if( !fn ) {
-            throw new Error("Fullscreen API not supported");
+            throw new Error('Fullscreen API not supported');
         }
         
         return fn.call(el);
@@ -40,24 +40,24 @@ const UI = (() => {
 
     const lockOrientation = async (mode) => {
         const orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
-        if (orientation && typeof orientation.lock === "function") {
+        if (orientation && typeof orientation.lock === 'function') {
             return orientation.lock(mode);
         }
-        throw new Error("Orientation lock not supported");
+        throw new Error('Orientation lock not supported');
     };
     
     const landscapeMode = async () => {
         const mobile = detectMobile();
-        const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+        const isPortrait = window.matchMedia('(orientation: portrait)').matches;
 
         if (!mobile || !isPortrait) return;
 
         try {
             await requestFullscreen();
-            await lockOrientation("landscape");
-            console.log("Screen locked in landscape");
+            await lockOrientation('landscape');
+            console.log('Screen locked in landscape');
         } catch (err) {            
-            console.warn("Landscape lock failed:", err?.message || err);
+            console.log('Landscape lock failed:', err?.message || err);
         }
     };
 
@@ -66,27 +66,27 @@ const UI = (() => {
             if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
                 await exitFullscreen();
                 try {
-                    await lockOrientation("portrait");
+                    await lockOrientation('portrait');
                 } catch (e) {                    
-                    console.warn("Portrait orientation lock not supported:", e?.message || e);
+                    console.log('Portrait orientation lock not supported:', e?.message || e);
                 }
-                console.log("Exited fullscreen and attempted portrait lock");
+                console.log('Exited fullscreen and attempted portrait lock');
             } else {                
                 try {
-                    await lockOrientation("portrait");
-                    console.log("Locked portrait");
+                    await lockOrientation('portrait');
+                    console.log('Locked portrait');
                 } catch (err) {
-                    console.warn("Portrait lock failed:", err?.message || err);
+                    console.log('Portrait lock failed:', err?.message || err);
                 }
             }
         } catch (err) {
-            console.warn("Exiting fullscreen failed:", err?.message || err);
+            console.log('Exiting fullscreen failed:', err?.message || err);
         }
     };
 
     const activity = (selector, id, moduleId, landscape=false) => {
-        document.querySelectorAll(".boxQ").forEach(btn =>
-            btn.classList.remove("activeBtns")
+        document.querySelectorAll('.boxQ').forEach(btn =>
+            btn.classList.remove('activeBtns')
         );
 
         document.querySelector('.question-container').innerHTML = '';       
@@ -99,7 +99,7 @@ const UI = (() => {
 
         const quesEle = document.getElementById(selector);        
         if( quesEle ) {
-            quesEle.classList.add("activeBtns");
+            quesEle.classList.add('activeBtns');
         }
         
         const moduleName = Activity.module(moduleId);        
@@ -109,18 +109,18 @@ const UI = (() => {
         } else {
             const qObj = Define.get('questions')?.find(q => q.id === id);
             if (!qObj) {
-                console.error('No question found for id:', id);
+                console.error('No data found for id:', id);
             } else {
                 Activity.render(moduleId, id);
             }
         }
     };
 
-    const buttons = (selector="qNumbers") => {
+    const buttons = (selector='qNumbers') => {
         try {            
             const container = document.getElementById(selector);
             if( !container ) {
-                console.warn("UI.buttons: container not found:", selector);
+                console.warn('UI.buttons: container not found:', selector);
                 return;
             }            
 
@@ -132,9 +132,9 @@ const UI = (() => {
                 const item         = definedBtn[0];
                 const itemId       = item.qid;
                 const itemSelector = `q${itemId}`;
-                const moduleId     = item.module ?? "";
+                const moduleId     = item.module ?? '';
                 const landscape    = item.landscape ?? false;                
-                container.style.display = "none";
+                container.style.display = 'none';
                 
                 activity(itemSelector, itemId, moduleId, landscape);
                 return;
@@ -143,20 +143,20 @@ const UI = (() => {
             const frag   = document.createDocumentFragment();
             definedBtn.forEach((item, index) => {
 
-                const div       = document.createElement("div");
+                const div       = document.createElement('div');
                 const [m, d]    = normalizeLabel(item.text);
-                div.className   = `boxQ ${index === 0 ? "activeBtns" : ""} user-select-none`;
+                div.className   = `boxQ ${index === 0 ? 'activeBtns' : ''} user-select-none`;
                 div.textContent = mobile ? m : (d || m);
 
                 const itemId       = item.qid;
                 const itemSelector = `q${itemId}`;
                 div.id             = itemSelector;
                 
-                const moduleId     = item.module ?? "";
+                const moduleId     = item.module ?? '';
                 div.dataset.module = moduleId;
 
                 const landscape = item.landscape ?? false;
-                div.addEventListener( "click", () => {
+                div.addEventListener( 'click', () => {
                     activity( itemSelector, itemId, moduleId, landscape )
                 });
 
@@ -182,7 +182,7 @@ const UI = (() => {
             console.error( 'Error :: UI.(buttons) -', err );
         }
     };
-    buttons();    
+    buttons();
 
     return { detectMobile, buttons }
 })();

@@ -5,8 +5,16 @@ body {
 }
 
 .container-sub {
-    margin: 16px auto;
-    padding: 0px 25px;
+margin:20px auto;
+}
+
+.qu_ {
+  display: block;
+  margin: 2vw;
+  border-radius: 15px;
+  background: #fff;
+  height: 93vh;
+  overflow: auto;
 }
 
 .divDisplay .text {
@@ -73,13 +81,13 @@ body {
     border-collapse: collapse;
 }
 .divDisplay{
-    display:flex;
-    justify-content:space-around;
+  display:flex;
+  justify-content: space-between;
 }
 #puzzle table td {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
+   width: 35px;
+  height: 35px;
+  font-size: 14px;
     position: relative;
 }
 
@@ -88,9 +96,9 @@ body {
     height: 100%;
     background: #31cde2;
     border: 1px solid #000;
-    font-weight: bold;
     text-transform: uppercase;
     text-align: center;
+    font-size: 14px;
 }
 
 .note {
@@ -100,8 +108,6 @@ body {
     border-radius: 10px;
     margin: 20px;
 }
-
-
 
 .popup-overlay {
     display: none;
@@ -154,9 +160,6 @@ body {
     cursor: pointer;
 }
 
-.hint-correct {
-  color:green;
-}
 @keyframes popupSlide {
     from {
         transform: scale(0.7);
@@ -168,11 +171,7 @@ body {
         opacity: 1;
     }
 }
-@media (min-width:300px) and (max-width: 768px){
-.divDisplay{
-    flex-direction:column;
-}
-}
+
 
 #puzzle input[type="button"] {
   width: 35px;
@@ -208,9 +207,7 @@ body {
   box-shadow: 0 6px 15px rgba(255, 65, 108, 0.45);
 }
 
-
-
-@media screen and (min-device-width: 481px) and (max-device-width: 768px) { 
+@media screen and (min-device-width: 481px) and (max-device-width: 767px) { 
 .divDisplay {
   flex-flow: column;
 }

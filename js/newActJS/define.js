@@ -37,6 +37,7 @@
             { qid : 24, text : ['Q-24', 'Shabdkosh'], module : 19 },
             { qid : 25, text : ['Q-25', 'Shrutlekh'], module : 20 },
             { qid : 26, text : ['Q-26', 'WordSearch'], module : 21 },
+            { qid : 27, text : ['Q-27', 'TextArea'], module : 22 },
         ];
 
         // DEFINE QUESTIONS
@@ -241,7 +242,8 @@
                 content : {
                     img  : {
                         width : '15%',
-                        path  : 'img/1.png'
+                        path  : 'img/1.png',
+                        imageclass : 'text-center'
                     },
                     mcq  : [
                         {
@@ -557,7 +559,7 @@
             },
             {
                 id      : 24,
-                lang    : 'hi',
+                lang    : 'en',
                 head    : 'Module : 19',
                 subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
                 content : [
@@ -669,6 +671,18 @@
                         direction : 'v'
                     },
                 ]
+            },
+            {
+                id      : 27,
+                lang    : 'hi',
+                head    : 'Module : 22',
+                content : {
+                    replacement : '#_#',
+                    questions   : [
+                        { text: 'किस महापुरुष के जन्मदिन को बाल-दिवस के रूप में मनाया जाता है? <br> #_#', answer: 'जछ' },
+                        { text: 'नेहरू जी ने अपने जन्मदिन को बच्चों के जन्मदिन के रूप में मनाना क्यों स्वीकार कर लिया था? <br> #_#', answer: 'ज' }
+                    ]
+                }
             },
         ];
 
