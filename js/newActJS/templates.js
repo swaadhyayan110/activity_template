@@ -2751,7 +2751,9 @@ const Adaptiv = (() => {
                 return;
             }
 
-            const data = Activity.getDefine(questionId)?.content;
+            const activity = Activity.getDefine(questionId);
+            const data     = activity?.content;
+            const lang     = activity?.lang ?? 'en';
 
             const instructions = [];
             (data?.headings?.right?.instruction || []).forEach((item) => {
@@ -2761,31 +2763,40 @@ const Adaptiv = (() => {
             parent.innerHTML = `<div class="question">
                                     <div class="container-fluid">
                                         <div class="${headerContainer}">
-                                            <div class="btnAdapt shadow-sm">
-                                                <span class="level-text">${data?.headings?.left ?? ''}</span>
-                                                - 
-                                                <span class="levelUpdate">${currentLevel}</span>
-                                            </div>
-                                            <div class="btnAdapt shadow-sm">
-                                                <span id="attempted-text">${data?.headings?.mid?.attempted ?? ''}</span> 
-                                                <span class="showD" id="attempted-count"> 0 </span> 
-                                                <span id="outof-text">${data?.headings?.mid?.outof ?? ''}</span>
-                                                <span class="showD" id="total-questions"> ${totalQues ?? 0} </span>
-                                            </div>
-                                            <div class="btnAdapt shadow-sm" id="nirdesh" style="cursor: pointer;">
-                                                <svg class="iconsIns" fill="currentColor" viewBox="0 0 16 16">
-                                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
-                                                </svg>
-                                                <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
-                                            </div>
+                                            ${data?.headings?.left ?
+                                                `<div class="btnAdapt shadow-sm">
+                                                    <span class="level-text">${data?.headings?.left ?? ''}</span>
+                                                    - 
+                                                    <span class="levelUpdate">${currentLevel}</span>
+                                                </div>`
+                                                : ''
+                                            }
+                                            ${data?.headings?.mid ?
+                                                `<div class="btnAdapt shadow-sm">
+                                                    <span id="attempted-text">${data?.headings?.mid?.attempted ?? ''}</span> 
+                                                    <span class="showD" id="attempted-count"> 0 </span> 
+                                                    <span id="outof-text">${data?.headings?.mid?.outof ?? ''}</span>
+                                                    <span class="showD" id="total-questions"> ${totalQues ?? 0} </span>
+                                                </div>`
+                                                : ''
+                                            }
+                                            ${data?.headings?.right ? 
+                                                `<div class="btnAdapt shadow-sm" id="nirdesh" style="cursor: pointer;">
+                                                    <svg class="iconsIns" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                                                    </svg>
+                                                    <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
+                                                </div>`
+                                                : ''
+                                            }
                                         </div>
                                         <div class="container my-5 contAdapt shadow-lg">
                                             <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
                                             <div class="buttonection" id="nav-buttons">
                                                 <div class="buttons machiNgs">
-                                                    <button class="submit-btn" id="prev-btn">Prev</button>
-                                                    <button class="show-btn" id="next-btn">Next</button>
-                                                    <button class="reset-btn" id="sub-btn" style="display: none;">Submit</button>
+                                                    <button class="submit-btn" id="prev-btn">${ lang == 'en' ? 'Prev' : 'पिछला' }</button>
+                                                    <button class="show-btn" id="next-btn">${ lang == 'en' ? 'Next' : 'अगला' }</button>
+                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${ lang == 'en' ? 'Submit' : 'सबमिट करें' }</button>
                                                 </div>
                                                 <div id="submit-btn-wrapper" class="text-center"></div>
                                             </div>
@@ -2836,9 +2847,12 @@ const Adaptiv = (() => {
     }
 
     const renderQuestion = (questionId, direction) => {
-        const level = currentLevel;
-        const data  = Activity.getDefine(questionId)?.content?.levels;
-        const found = (data || []).find( lvl => lvl.level === level );
+        const level     = currentLevel;
+        const activity  = Activity.getDefine(questionId);
+        const lang      = activity?.lang ?? 'en';
+        const content   = activity?.content;
+        const data      = content?.levels;
+        const found     = (data || []).find( lvl => lvl.level === level );
         const questLen  = found?.questions?.length || 0;
         const q         = found?.questions?.[currentQuestion];
         currentQuizData = found?.questions || [];
@@ -2871,28 +2885,28 @@ const Adaptiv = (() => {
         void container.offsetWidth;
 
         if (!q) {
-            container.innerHTML = `<div class="row m-0"><div class="col">Question not found.</div></div>`;
+            container.innerHTML = `<div class="row m-0"><div class="col">${ lang == 'hi' ? 'प्रश्न उपलब्ध नहीं है' : 'Question not found.' }</div></div>`;
             updateNavButtons();
             return;
         }
-
+        
         container.innerHTML = `<div class="row m-0" style="font-size:18px">
-                <div style="width:30px" class="questionHeadingMCQ"><strong>Q${currentQuestion + 1}. </strong></div>
+                <div style="width:30px" class="questionHeadingMCQ">
+                    <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${currentQuestion + 1}.</strong>
+                </div>
                 <div class="col questionHeadingMCQ">${q.question}</div>
             </div>
             <div class="row mt-3">
                 <div class="row mt-2 ml-4">
                 ${q.options.map((opt, i) => {
-                    const optionLabel = String.fromCharCode(65 + i);
-                    // check selected for this question index (not level)
-                    const isSelected = userAnswersAdaptiv[currentQuestion] === i;
-                    let extraClass = isSelected ? "selected" : "";
+                    const optionLabel = Activity.translateBulletLabels({lang:lang,ind:i,upperCase:true});
+                    const isSelected  = userAnswersAdaptiv[currentQuestion] === i;
+                    let extraClass    = isSelected ? "selected" : "";
                     if (submitted) {
                         if (i === q.answer) extraClass = "correct";
                         else if (isSelected && i !== q.answer) extraClass = "incorrect";
                     }
-                    // put data attributes so click handler can read index
-                    return `        
+                    return `
                         <div class="col-md-6 col-sm-12 mb-2">
                             <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
                                 <input type="radio" name="question-${currentQuestion}" ${isSelected ? "checked" : ""} />
@@ -2904,14 +2918,12 @@ const Adaptiv = (() => {
                 </div>
             </div>
         `;
-
-        // add handlers to labels
+        
         Array.from(document.querySelectorAll('.option-btnAdpt')).forEach((optionEl) => {
             optionEl.addEventListener("click", (ev) => {
                 const idxAttr = optionEl.getAttribute('data-option-index');
                 const idx = idxAttr !== null ? parseInt(idxAttr, 10) : 0;
                 selectOption(currentQuestion, idx);
-                // re-render current question to reflect classes/checked state
                 renderQuestion(questionId);
             });
         });
@@ -2930,11 +2942,14 @@ const Adaptiv = (() => {
     }
 
     const nextQuestion = () => {
+        const activity  = Activity.getDefine( Activity.getQid( `.${headerContainer}` ) );
+        const lang      = activity?.lang ?? 'en';
+
         if (userAnswersAdaptiv[currentQuestion] === null || userAnswersAdaptiv[currentQuestion] === undefined) {
             Swal.fire({
-                title: "Info",
-                text: "Please select an option before next.",
-                icon: "info"
+                title : lang == 'en' ? 'Info' : 'जानकारी',
+                text  : lang == 'en' ? 'Please select an option before next.' : 'अगले पर जाने से पहले कृपया एक विकल्प चुनें।',
+                icon  : 'info'
             });
             return;
         }
@@ -2976,10 +2991,13 @@ const Adaptiv = (() => {
 
     const showResult = () => {
         try {
-            const activity   = Activity.getDefine(Activity.getQid( `.${headerContainer}` )) ?? {};
-            const content    = activity?.content ?? {};
-            const levels     = content?.levels ?? [];
-            const skiplevels = content?.skiplevels ?? false;
+            const activity    = Activity.getDefine(Activity.getQid( `.${headerContainer}` )) ?? {};
+            const lang        = activity?.lang ?? 'en';
+            const content     = activity?.content ?? {};
+            const levels      = content?.levels ?? [];
+            const skiplevels  = content?.skiplevels ?? false;
+            const skipansbtn  = content?.skipanswerbutton ?? false;
+            const skipnextbtn = content?.skipnextlevel ?? false;
 
             const levelTextEl = document.getElementById("levelText");
             if (levelTextEl) levelTextEl.style.display = 'none';
@@ -2991,24 +3009,29 @@ const Adaptiv = (() => {
             const showRetryBtn = correct < (currentQuizData?.length || 0);
             const showNextLevel = correct === (currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0;
             const finished = currentLevel === levels.length;
-            const whenCompleteLevel = showNextLevel ? "completed." : "";
+            const whenCompleteLevel = showNextLevel ? ( lang == 'en' ? 'completed.' : 'पूरा हुआ' ) : "";
             const navButtonsEl = document.getElementById("nav-buttons");
             if (navButtonsEl) navButtonsEl.style.display = "none";
             const submitWrapper = document.getElementById("submit-btn-wrapper");
             if (submitWrapper) submitWrapper.innerHTML = '';
             if (!container) return;
             
+            const btnLabel = Activity.translateButtonLabels(lang);
             container.innerHTML = `
                 <div class="result-box">
-                    <h4><strong class="fs-1">Level ${currentLevel} ${whenCompleteLevel}</strong></h4>
-                    <p class="text-danger my-3">Total Questions: ${currentQuizData?.length || 0}</p>
-                    <p class="text-success my-3">Correct Answers: ${correct}</p>
-                    <p class="text-success my-3">Attempt No: ${attemptCount}</p>
+                    ${ !skipnextbtn ? `<h4><strong class="fs-1">${ lang == 'en' ? 'Level' : 'स्तर' } ${currentLevel} ${whenCompleteLevel}</strong></h4>` : '' }
+                    <p class="text-danger my-3">${ lang == 'en' ? 'Total Questions' : 'कुल प्रश्न' }: ${currentQuizData?.length || 0}</p>
+                    <p class="text-success my-3">${ lang == 'en' ? 'Correct Answers' : 'सही उत्तर' }: ${correct}</p>
+                    <p class="text-success my-3">${ lang == 'en' ? 'Attempt No' : 'प्रयास संख्या' }: ${attemptCount}</p>
                     <div class="rowBtns">
-                        ${( showNextLevel || skiplevels ) ? `<button class='btn btn-success mt-3 mx-3' id='btn-next-level'>Go To Level ${currentLevel + 1}</button>` : ''}
-                        ${(showRetryBtn || showNextLevel) ? `<button class='btn btn-primary mt-3 mx-3' id='btn-retry'>दोबारा प्रयास करें</button>` : ''}
-                        ${(showAnswerBtn || showNextLevel) ? `<button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>Show Answers</button>` : ''}
-                        ${(finished && showNextLevel) ? `<button class='btn btn-success mt-3 mx-3' id='btn-finish'>Finished</button>` : ''}
+                        ${( ( showNextLevel || skiplevels ) && !skipnextbtn ) ?
+                            `<button class='btn btn-success mt-3 mx-3' id='btn-next-level'>${ lang == 'en' ? `Go To Level ${currentLevel + 1}` : `स्तर ${currentLevel + 1} पर जाएँ` }</button>` : ''}
+                        ${(showRetryBtn || showNextLevel) ?
+                            `<button class='btn btn-primary mt-3 mx-3' id='btn-retry'>${btnLabel.try}</button>` : ''}
+                        ${( showAnswerBtn || showNextLevel || skipansbtn ) ?
+                            `<button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>${btnLabel.show}</button>` : ''}
+                        ${( finished && showNextLevel  && !skipnextbtn ) ?
+                            `<button class='btn btn-success mt-3 mx-3' id='btn-finish'>${ lang == 'en' ? 'Finished' : 'समाप्त' }</button>` : ''}
                     </div>
                 </div>`;
             
@@ -3109,6 +3132,9 @@ const Adaptiv = (() => {
     }
 
     const showAnswerPopup = () => {
+        const activity  = Activity.getDefine( Activity.getQid(`.${headerContainer}`)  );
+        const lang      = activity?.lang ?? 'en';
+
         let totalCorrect = 0;
         let totalQuestion = 0;
         let topData = ``;
@@ -3116,25 +3142,31 @@ const Adaptiv = (() => {
         let midData2 = ``;
         let midData3 = ``;
         const optionLabel = index => (typeof index === 'number' && index >= 0) ? String.fromCharCode(65 + index) : "";
-
-        // Build table rows safely
+        
+        const label = index => Activity.translateBulletLabels({lang:lang, ind:index, upperCase:true});
         (currentQuizData || []).forEach((q, i) => {
             const userIndex = userAnswersAdaptiv?.[i];
-            const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${optionLabel(userIndex)}. ${q.options[userIndex]}` : "Not attempted";
-            const correctAnswerText = `${optionLabel(q.answer)}. ${q.options[q.answer]}`;
+            const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}. ${q.options[userIndex]}` : "Not attempted";
+            const correctAnswerText = `${label(q.answer)}. ${q.options[q.answer]}`;
             if (userAnswerText === correctAnswerText) totalCorrect++;
             totalQuestion++;
             const status = (userAnswerText === correctAnswerText) ? '✔' : '✘';
             midData2 += `<tr class="trData">
-                <th>Q${totalQuestion}.</th>
+                <th>${ lang == 'hi' ? 'प्र' : 'Q' }${totalQuestion}.</th>
                 <td class="text-danger">${userAnswerText}</td>
                 <td class="text-success">${correctAnswerText}</td>
                 <td class="text-danger">${status}</td>
             </tr>`;
         });
 
+        const headLabel = Activity.translateTableHeads(lang);
         topData = `<div class="d-flex justify-content-between align-items-center">
-                    <h4 id="scoreTextQ1" class="text-center mb-3">You got : ${totalCorrect} out of ${totalQuestion}</h4>
+                    <h4 id="scoreTextQ1" class="text-center mb-3">
+                        ${ lang == 'hi'
+                            ? `आपको ${totalQuestion} में से ${totalCorrect} अंक मिले हैं`
+                            : `You scored ${totalCorrect} out of ${totalQuestion}`
+                        }
+                    </h4>
                     <button class="btn btn-secondary" id="btn-close-answers">X</button>
                 </div>`;
         midData1 = `<div id="" class="innerDIV">
@@ -3142,10 +3174,10 @@ const Adaptiv = (() => {
                         <table class="table table-bordered" style="font-size:20px">
                         <thead class="thead-light" style="white-space: nowrap;">
                             <tr>
-                            <th>Ques. No.</th>
-                            <th>Your Answer</th>
-                            <th>Correct Answer</th>
-                            <th>Status</th>
+                                <th>${headLabel.sequence}</th>
+                                <th>${headLabel.attempted}</th>
+                                <th>${headLabel.correct}</th>
+                                <th>${headLabel.result}</th>
                             </tr>
                         </thead>
                         <tbody>`;
