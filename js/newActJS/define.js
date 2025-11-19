@@ -38,6 +38,7 @@
             { qid : 25, text : ['Q-25', 'Shrutlekh'], module : 20 },
             { qid : 26, text : ['Q-26', 'WordSearch'], module : 21 },
             { qid : 27, text : ['Q-27', 'TextArea'], module : 22 },
+            { qid : 28, text : ['Q-28', 'CrossWord'], module : 23 },
         ];
 
         // DEFINE QUESTIONS
@@ -681,6 +682,25 @@
                     questions   : [
                         { text: 'किस महापुरुष के जन्मदिन को बाल-दिवस के रूप में मनाया जाता है? <br> #_#', answer: 'जछ' },
                         { text: 'नेहरू जी ने अपने जन्मदिन को बच्चों के जन्मदिन के रूप में मनाना क्यों स्वीकार कर लिया था? <br> #_#', answer: 'ज' }
+                    ]
+                }
+            },
+            {
+                id      : 28,
+                lang    : 'en',
+                head    : 'Module : 23',
+                content : {
+                    questions : [
+                        { sequence : 1, direction : 'v', row : [1, 15], col : [20], question: 'Fossil scientists', answer : 'paLEONTOLOGISTS' },
+                        { sequence : 2, direction : 'v', row : [3, 9], col : [6], question: 'Coins, tools, art', answer : 'SOURCES' },
+                        { sequence : 3, direction : 'h', row : [4], col : [1, 14], question: 'Scientist who studies humans', answer : 'ANTHROPOLOGIST' },
+                        { sequence : 4, direction : 'v', row : [4, 10], col : [13], question: 'Biographies, plays etc', answer : 'SECULAR' },
+                        { sequence : 5, direction : 'v', row : [4, 12], col : [22], question: 'Study of Earth\'s history', answer : 'GEOLOGIST' },
+                        { sequence : 6, direction : 'h', row : [6], col : [5, 15], question: 'Oral accounts from relatives', answer : 'ORALSOURCES' },
+                        { sequence : 7, direction : 'v', row : [8, 14], col : [9], question: 'Facts in time order', answer : 'HISTORY' },
+                        { sequence : 8, direction : 'v', row : [8, 16], col : [25], question: 'Legends & folk stories', answer : 'FOLKLORES' },
+                        { sequence : 9, direction : 'h', row : [9], col : [2, 11], question: 'Old handwritten record', answer : 'MANUSCRIPT' },
+                        { sequence : 10, direction : 'h', row : [10], col : [12, 25], question: 'Remains to study past life', answer : 'ARCHAEOLOGICAL' },
                     ]
                 }
             },

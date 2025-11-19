@@ -7047,6 +7047,378 @@ const TextArea = (() => {
     }
 })();
 
+const CrossWord = (() => {
+    const containerId  = 'cross-word-container';
+
+    const defaultColor = '#31cde2';
+    const correctColor = 'lightgreen';
+    
+    Activity.css('crossword-puzzle.css');
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            const uiHtml = `<div class="question">
+                            <div class="container" id="${containerId}">                                        
+                                <div class="crossword-content" style="text-align:left;">
+                                    <div class="${Define.get('head')}"></div>
+                                    <div class="cross-puzzle">
+                                        <div class="criss-cross"></div>
+                                        <div id="puzzle2" style="display:block;"></div>
+                                    </div>
+                                    <div id="answer" style="display:none;color:#000"></div>
+                                    <div class="machiNgs">
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn">${buttonLabel.check}</button>
+                                            <button class="show-btn">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="centerPopup" class="popup-overlay" role="dialog" aria-hidden="true">
+                                    <div class="popup-box">
+                                        <button class="close-btn">×</button>
+                                        <div style="font-weight:700;color:green;font-size:20px;">Correct!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+            // ..
+            parent.innerHTML = uiHtml;
+
+            Activity.setHeader( questionId );
+			
+			const resetBtn  = parent.querySelector( '.reset-btn' );
+			const showBtn   = parent.querySelector( '.show-btn' );
+			const submitBtn = parent.querySelector( '.submit-btn' );
+			// const closeBtn  = parent.querySelector( '.close-btn' );
+
+			if(resetBtn) resetBtn.addEventListener('click', clearAllInputs);
+			if(showBtn) showBtn.addEventListener('click', fillAllCorrect);
+			if(submitBtn) submitBtn.addEventListener('click', checkAnswers);
+			// if(closeBtn) closeBtn.addEventListener('click', closePopup);
+		} catch (err) {
+            console.error( 'TextArea.ui :', err );
+        }
+    };
+
+    const render = (questionId) => {
+        try {
+            ui(questionId);
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+            const activity  = Activity.getDefine( questionId );
+            const lang      = activity?.lang ?? 'en';
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+            
+            __renderGrid( questions, __renderQuestions(questions) );
+            
+        } catch (err) {
+            console.error( 'CrossWord.render :', err );
+        }
+    };
+
+    const __renderQuestions = (questions=[]) => {
+        const answers = [];
+        const ques    = { across : [], down : [] };
+
+        questions.map( item => {
+            answers.push( `<div>${item.sequence}. ${item.answer.toUpperCase()}</div>` );
+
+            if( item.direction === 'h' ) ques.across.push( item );
+            else ques.down.push( item );
+        });
+        $('#answer').html( answers.join( '' ) );
+
+        const hints = [];
+        if( ques?.across.length ) hints.push( `<div class="criss-item across">ACROSS</div>` );
+        ques?.across.map((item) => {
+            const html = `
+                <div class="criss-item clues-text">
+                    ${item.sequence}. ${item.question}
+                </div>
+            `;
+            hints.push( html );
+        });
+        
+        if( ques?.down.length ) hints.push( `<div class="criss-item across">DOWN</div>` );
+        ques?.down.map((item) => {
+            const html = `
+                <div class="criss-item clues-text">
+                    ${item.sequence}. ${item.question}
+                </div>
+            `;
+            hints.push( html );
+        });
+        $('.criss-cross').html( hints.join( '' ) );
+
+        return ques;
+    };
+    
+    const __renderGrid = (questions = [], renderedQuestion = {}) => {
+        try {            
+            const allRows = questions.flatMap(q => Array.isArray(q.row) ? q.row : (q.row ? [q.row] : []));
+            const allCols = questions.flatMap(q => Array.isArray(q.col) ? q.col : (q.col ? [q.col] : []));
+            const maxRow = allRows.length ? Math.max(...allRows) : 0;
+            const maxCol = allCols.length ? Math.max(...allCols) : 0;
+            
+            const horizontal = renderedQuestion?.across ?? [];
+            const vertical   = renderedQuestion?.down ?? [];
+
+            const startOf = arr => Array.isArray(arr) ? arr[0] : arr;
+            const endOf   = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
+
+            const table = ['<table cellspacing="1">'];
+            for (let r = 1; r <= maxRow; r++) {
+                table.push('<tr>');
+                for (let c = 1; c <= maxCol; c++) {
+                    let num = '';
+                    for (let i = 0; i < horizontal.length; i++) {
+                        const item = horizontal[i];
+                        const rowStart = startOf(item.row);
+                        const colStart = startOf(item.col);
+                        if (r === rowStart && c === colStart) { num = item.sequence; break; }
+                    }
+                    if (!num) {
+                        for (let i = 0; i < vertical.length; i++) {
+                            const item = vertical[i];
+                            const rowStart = startOf(item.row);
+                            const colStart = startOf(item.col);
+                            if (r === rowStart && c === colStart) { num = item.sequence; break; }
+                        }
+                    }
+
+                    table.push('<td>');
+                    if ( __isBox(r, c, renderedQuestion) ) {
+                        table.push(`<span class="num">${num || ''}</span><input type="text" class="box" maxlength="1" />`);
+                    } else {
+                        table.push('&nbsp;');
+                    }
+                    table.push('</td>');
+                }
+                table.push('</tr>');
+            }
+            table.push('</table>');
+            document.getElementById("puzzle2").innerHTML = table.join('');
+        } catch (err) {
+            console.log('CrossWord.__renderGrid', err);
+        }
+    };
+    
+    const __isBox = (row, col, renderedQuestion = {}) => {
+        const horizontal = renderedQuestion?.across ?? [];
+        const vertical   = renderedQuestion?.down ?? [];
+
+        const startOf = arr => Array.isArray(arr) ? arr[0] : arr;
+        const endOf   = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
+        
+        for (const item of horizontal) {
+            const rStart = startOf(item.row);
+            const cStart = startOf(item.col);
+            const cEnd   = endOf(item.col);
+            if (row === rStart && col >= cStart && col <= cEnd) return true;
+        }
+        
+        for (const item of vertical) {
+            const cStart = startOf(item.col);
+            const rStart = startOf(item.row);
+            const rEnd   = endOf(item.row);
+            if (col === cStart && row >= rStart && row <= rEnd) return true;
+        }
+
+        return false;
+    };
+
+    const clearAllInputs = () => {
+        document.querySelectorAll('.box').forEach(b => {
+            b.value = '';
+            b.style.background = defaultColor;
+        });
+
+        const checkBtn = document.querySelector('.submit-btn');
+        if( checkBtn ) {
+            checkBtn.disabled      = false;
+            checkBtn.style.opacity = '1';
+            checkBtn.style.cursor  = 'pointer';
+            checkBtn.classList.remove('disable');
+        }
+    };
+
+    const showCorrectPopup = () => {
+        Swal.fire({
+            iconHtml: "😄",
+            title: "बहुत बढ़िया! सारे उत्तर सही 👏",
+            color: "#2e7d32",
+            timer: 1500,
+            showConfirmButton: false,
+            background: "#fff",
+            backdrop: false,
+            customClass: {
+                icon: "no-border-icon",
+                popup: "simple-popup"
+            }
+        });
+    };
+
+    const fillAllCorrect = () => {
+        try {
+            const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+
+            questions?.forEach(q => {
+                const answer = q.answer.toUpperCase();
+                if (q.direction === 'h') {
+                    let r = q.row[0];
+                    let start = q.col[0];
+                    
+                    [...answer].forEach((ch, i) => {
+                        const cell = document.querySelector(
+                            `#puzzle2 table tr:nth-child(${r}) td:nth-child(${start + i}) input.box`
+                        );
+                        if (cell) {
+                            cell.value = ch;
+                            cell.style.background = correctColor;
+                        }
+                    });
+
+                } else {
+                    let c = q.col[0];
+                    let start = q.row[0];
+
+                    [...answer].forEach((ch, i) => {
+                        const cell = document.querySelector(
+                            `#puzzle2 table tr:nth-child(${start + i}) td:nth-child(${c}) input.box`
+                        );
+                        if (cell) {
+                            cell.value = ch;
+                            cell.style.background = correctColor;
+                        }
+                    });
+                }
+            });
+
+            const checkBtn = document.querySelector('.submit-btn');
+            if( checkBtn ) {
+                checkBtn.disabled      = true;
+                checkBtn.style.opacity = '1';
+                checkBtn.style.cursor  = 'pointer';
+                checkBtn.classList.add('disable');
+            }
+        } catch (err) {
+            console.error('CrossWord.fillAllCorrect:', err);
+        }
+    };
+    
+    const checkAnswers = () => {
+        try {
+            const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+
+            let allEmpty = true;
+            document.querySelectorAll(".box").forEach(b => {
+                if (b.value.trim() !== "") allEmpty = false;
+            });
+            if (allEmpty) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Result",
+                    text: "Please fill the crossword before checking!",
+                    confirmButtonColor: "#6c63ff"
+                });
+                return;
+            }
+            
+            let total = 0;
+            let correctCount = 0;
+            
+            const startOf = arr => Array.isArray(arr) ? arr[0] : arr;
+            const endOf   = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
+
+            questions?.forEach(q => {
+                const answer = (q.answer || '').toUpperCase().replace(/\s+/g, '');
+                if (!answer) return;
+
+                if (q.direction === 'h') {
+                    const r = startOf(q.row);
+                    const cStart = startOf(q.col);
+                    
+                    [...answer].forEach((ch, i) => {
+                        const c = cStart + i;
+                        const selector = `#puzzle2 table tr:nth-child(${r}) td:nth-child(${c}) input.box`;
+                        const input = document.querySelector(selector);
+                        if (!input) return;
+                        total++;
+                        const val = (input.value || '').toUpperCase().trim();
+                        input.value = val;
+                        if (val === ch) {
+                            input.style.background = correctColor;
+                            correctCount++;
+                        }
+                    });
+
+                } else {
+                    const c = startOf(q.col);
+                    const rStart = startOf(q.row);
+                    [...answer].forEach((ch, i) => {
+                        const r = rStart + i;
+                        const selector = `#puzzle2 table tr:nth-child(${r}) td:nth-child(${c}) input.box`;
+                        const input = document.querySelector(selector);
+                        if (!input) return;
+                        total++;
+                        const val = (input.value || '').toUpperCase().trim();
+                        input.value = val;
+                        if (val === ch) {
+                            input.style.background = correctColor;
+                            correctCount++;
+                        }
+                    });
+                }
+            });
+            
+            if (correctCount === total && total > 0) {
+                showCorrectPopup();                
+            } else {
+                Swal.fire({
+                    icon: "info",
+                    title: "Result",
+                    html: `You got <b>${correctCount}</b> out of <b>${total}</b> words correct.`,
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#6c63ff"
+                });
+            }
+        } catch (err) {
+            console.log('CrossWord.checkAnswers :', err);
+        }
+    };
+        
+    const closePopup = () => {
+        const popup = document.getElementById('centerPopup');
+        if (popup) {
+            popup.style.display = 'none';
+            popup.setAttribute('aria-hidden', 'true');
+        }
+    };
+
+    return {
+        render
+    }
+})();
+
 Modules.get().map(({ module }) => {
     try {
         const mod = eval(module);
