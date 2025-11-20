@@ -5972,7 +5972,7 @@ const Shabdkosh = (() => {
 
             parent.innerHTML = `<div class="question">
                                     <div class="pt-3" id="${containerId}">
-                                        <div class="tab-container">
+                                        <div class="tab-containerz">
                                             <div class="tab-content">
                                                 <div class="tab-buttons" id="tabButtons"></div>
                                                 <div class="content-bg" id="tabPanes"></div>
@@ -6181,29 +6181,31 @@ const Shrutlekh = (() => {
                                             <div class="icon"></div>
                                         </div>
                                     </div>
-                                    <div class="question-section">
-                                        <div class="box-border">
-                                            <div class="content-box">
-                                                <div id="${questionBtnContId}" class="number-buttons ui-keyboard-keyset ui-keyboard-keyset-normal"></div>
-                                            </div>
-                                            <div id="${textInputParenId}" class="input-single">
-                                                <input id="${textInputId}" class="word-input dictationInput hindiInput" autocomplete="off" />
-                                                <div class="machiz">
-                                                    <button id="checkSingleBtn" class="submit-btn d-block">Check Answer</button>
-                                                    <p id="message"></p>
+                                    <div class="shrutlekh">
+                                        <div class="question-section">
+                                            <div class="box-border">
+                                                <div class="content-box">
+                                                    <div id="${questionBtnContId}" class="number-buttons ui-keyboard-keyset ui-keyboard-keyset-normal"></div>
+                                                </div>
+                                                <div id="${textInputParenId}" class="input-single">
+                                                    <input id="${textInputId}" class="word-input dictationInput hindiInput" autocomplete="off" />
+                                                    <div class="machiz">
+                                                        <button id="checkSingleBtn" class="submit-btn d-block">Check Answer</button>
+                                                        <p id="message"></p>
+                                                    </div>
+                                                </div>
+                                                <div id="${correctionBoxSectionId}" class="input-box correction">
+                                                    <div class="correct-spell">
+                                                        <span id="${correctWordHintId}"></span>
+                                                    </div>
+                                                    <div class="box-row row" id="${correctionBoxContId}"></div>
+                                                    <div class="machiz">
+                                                        <button id="checkPracticeBtn" class="submit-btn">${btnLabel.check}</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div id="${correctionBoxSectionId}" class="input-box correction">
-                                                <div class="correct-spell">
-                                                    <span id="${correctWordHintId}"></span>
-                                                </div>
-                                                <div class="box-row row" id="${correctionBoxContId}"></div>
-                                                <div class="machiz">
-                                                    <button id="checkPracticeBtn" class="submit-btn">${btnLabel.check}</button>
-                                                </div>
-                                            </div>
+                                            <div id="${responseAudioContId}"></div>
                                         </div>
-                                        <div id="${responseAudioContId}"></div>
                                     </div>
                                 </div>`;
             // ..
@@ -6572,7 +6574,7 @@ const WordSearch = (() => {
             
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `<div class="question word-searched">                                    
                                     <div class="container" id="${containerId}">
                                         <div class="${Define.get('head')}"></div>
                                         <div class="ps-2 hints">Hints</div>
@@ -6771,7 +6773,7 @@ const WordSearch = (() => {
                     text: 'Please choose a word from the box before checking your answer.',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#3085d6',
-                    showConfirmButton: false,
+                    showConfirmButton: true,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     allowEnterKey: false,
@@ -7130,7 +7132,7 @@ const CrossWord = (() => {
 
             const uiHtml = `<div class="question">
                             <div class="container" id="${containerId}">                                        
-                                <div class="crossword-content" style="text-align:left;">
+                                <div class="cross-word-puzzle crossword-content" style="text-align:left;">
                                     <div class="${Define.get('head')}"></div>
                                     <div class="cross-puzzle">
                                         <div class="criss-cross"></div>
@@ -7145,12 +7147,6 @@ const CrossWord = (() => {
                                         </div>
                                     </div>
                                 </div>
-                                <div id="centerPopup" class="popup-overlay" role="dialog" aria-hidden="true">
-                                    <div class="popup-box">
-                                        <button class="close-btn">×</button>
-                                        <div style="font-weight:700;color:green;font-size:20px;">Correct!</div>
-                                    </div>
-                                </div>
                             </div>
                         </div>`;
             // ..
@@ -7161,12 +7157,10 @@ const CrossWord = (() => {
 			const resetBtn  = parent.querySelector( '.reset-btn' );
 			const showBtn   = parent.querySelector( '.show-btn' );
 			const submitBtn = parent.querySelector( '.submit-btn' );
-			// const closeBtn  = parent.querySelector( '.close-btn' );
 
 			if(resetBtn) resetBtn.addEventListener('click', clearAllInputs);
 			if(showBtn) showBtn.addEventListener('click', fillAllCorrect);
 			if(submitBtn) submitBtn.addEventListener('click', checkAnswers);
-			// if(closeBtn) closeBtn.addEventListener('click', closePopup);
 		} catch (err) {
             console.error( 'CrossWord.ui :', err );
         }
@@ -7486,6 +7480,7 @@ const ShravanKaushalWithImages = (() => {
     const currentAudio   = new Audio();
 
     Activity.css('shravanKaushal.css');
+    Activity.css('mcq.css');
 
     const ui = (questionId) => {
         try {
@@ -7514,7 +7509,7 @@ const ShravanKaushalWithImages = (() => {
             const prevNextLabel = Activity.translateNextPrevLabel(lang);
 
             const uiHtml = `<div class="question">
-                                <div class="container" id="${containerId}">
+                                <div class="container shrawan-kaushal" id="${containerId}">
                                     <div class="listen-activity-container">
                                         <div class="play-btn">
                                             <div class="icon"></div>
@@ -7531,7 +7526,7 @@ const ShravanKaushalWithImages = (() => {
                                             </svg>
                                         </div>
                                         <div class="container contListen">
-                                            <div class="poem-text" id="poemContainer"></div>
+                                            <div class="poem-text my-2" id="poemContainer"></div>
                                             <div class="buttons machiNgs">
                                                 <button class="show-btn">${prevNextLabel.next}</button>
                                                 <button class="replay-btn" id="replay-audio-btn">${lang == 'en' ? 'Replay' : 'दुबारा सुने'}</button>
@@ -7561,7 +7556,7 @@ const ShravanKaushalWithImages = (() => {
                                         </div>
                                     </div>
                                 </div>
-                                <div id="popupAnsBox" style="display: none;">
+                                <div id="popupDialogAns" style="display: none;">
                                     <div class="baseMod">
                                         <div class="answerdiv">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -7830,11 +7825,11 @@ const ShravanKaushalWithImages = (() => {
         table.push( `</tbody></table></div>` );
 
         document.getElementById("answer-review").innerHTML = table.join( '' );
-        document.getElementById("popupAnsBox").style.display = "block";
+        document.getElementById("popupDialogAns").style.display = "block";
     }
 
     const closePopUp = () => {
-        $("#popupAnsBox").hide();
+        $("#popupDialogAns").hide();
     }
 
     return {

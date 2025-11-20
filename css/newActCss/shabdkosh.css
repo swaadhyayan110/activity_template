@@ -1,25 +1,20 @@
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
 
 .qu_0 {
 margin: 30px 20px;
 }
 
-.tab-pane {
+.tab-containerz .tab-pane {
   overflow: hidden;
   display: none;
   animation: fadeIn 0.3s ease-in;
 }
 
-.tab-container {
+.tab-containerz {
   width: 100%;
   height: auto;
 }
 
-.tab-buttons {
+.tab-containerz .tab-buttons {
   padding: 10px;
   justify-content: center;
   margin-bottom: 20px;
@@ -30,7 +25,7 @@ margin: 30px 20px;
   text-align:center;
 }
 
-.tab-buttons button {
+.tab-containerz .tab-buttons button {
   transition: all 0.3s;
   font-weight: bold;
   padding: 10px 10px;
@@ -47,38 +42,38 @@ margin: 30px 20px;
   background: #fff;
 }
 
-.tab-buttons button:hover,
-.tab-buttons button.active {
+.tab-containerz .tab-buttons button:hover,
+.tab-containerz .tab-buttons button.active {
   background: #fff;
   border-color: green;
   color: #000;
 }
 
-.heading {
+.tab-containerz .heading {
   font-size: 1.8rem;
   line-height: 2.4rem;
   text-align: justify;
   color: #333;
 }
 
-.tab-content {
+.tab-containerz .tab-content {
   border: 2px solid #b0ecb0;
   margin: 2vw auto;
   border-radius: 50px;
   width: 95%;
-  height: 80vh;
+  height: 80vh; 
   position: relative;
 }
 
-.photo {
+.tab-containerz .photo {
   width: 100%;
 }
 
-.tab-pane.active {
+.tab-containerz .tab-pane.active {
   display: block;
 }
 
-.meaning {
+.tab-containerz .meaning {
   font-size: 23px;
   color: #333;
   padding: 10px 0;
@@ -86,7 +81,7 @@ margin: 30px 20px;
   line-height: 2rem;
 }
 
-.sentence-use {
+.tab-containerz .sentence-use {
   font-size: 23px;
   color: #333;
   padding: 10px 0;
@@ -94,27 +89,28 @@ margin: 30px 20px;
   line-height: 2rem;
 }
 
-.blinking-underline {
+.tab-containerz .blinking-underline {
   position: relative;
 }
 
-.over {
+.tab-containerz .over {
   font-size: 26px;
   font-weight: 500;
   color: #2b8a3e;
+  margin-bottom: 10px;
 }
 
-.sent-head {
+.tab-containerz .sent-head {
   font-size: 23px;
   color: #0a3d6c;
   line-height: 2rem;
 }
 
-.arth {
+.tab-containerz .arth {
   color: #0a3d6c;
 }
 
-.blinking-underline::after {
+.tab-containerz .blinking-underline::after {
   content: "";
   position: absolute;
   left: 0;
@@ -125,13 +121,13 @@ margin: 30px 20px;
   animation: blinkUnderline 1s infinite;
 }
 
-.img-box {
+.tab-containerz .img-box {
   text-align: center;
   width: 40%;
   margin: 0 auto;
 }
 
-.content-bg {
+.tab-containerz .content-bg {
   margin: 20px auto;
   text-align: center;
 }
@@ -146,66 +142,74 @@ margin: 30px 20px;
   to { opacity: 1; }
 }
 
-
-@media (min-width: 200px) and (max-width:767px) {
-
-#jumping {
-  margin-top: 13%;
-}
-
-  .tab-content {
-    position: relative;
-    padding-top: 60px; 
-  }
-
-  .tab-buttons {
-    position: absolute;
-    top: -42px;
+@media (min-width: 768px) and (max-width:992px) {  
+   .tab-containerz .tab-buttons {
+    position: sticky;
+    top: 0;
     left: 0;
     right: 0;
     overflow-x: auto;
     white-space: nowrap;
-    padding: 8px; 
+    padding: 8px;
     z-index: 9999;
     scroll-behavior: smooth;
-    scroll-snap-type: x mandatory; 
+    scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     width: 90%;
     margin: 0 auto;
+    background: #fff;
+  }
+}
+
+@media (min-width: 200px) and (max-width:767px) {
+
+   .tab-containerz .tab-buttons {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 8px;
+    z-index: 9999;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    width: 90%;
+    margin: 0 auto;
+    background: #fff;
   }
 
-  .tab-buttons button {
+  .tab-containerz .tab-buttons button {
     flex: 0 0 auto;
     font-size: 15px;
   }
 
-  .tab-buttons::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab-content {
-    margin-top: 46px; 
+ .tab-containerz .tab-content {
+    margin-top: 10px; 
     padding: 10px;
+     height: auto; 
   }
 
-  .img-box {
+ .tab-containerz .img-box {
     width: 93%;
     height: auto;
     margin-top: 10px;
   }
 
-  .heading {
+  .tab-containerz .heading {
     font-size: 1.4rem;
     line-height: 1.4rem;
   }
 
-  .meaning,
-  .over {
+ .tab-containerz .meaning,
+  .tab-containerz .over {
     font-size: 17px;
   }
 
-  .sentence-use,
-  .sent-head {
+  .tab-containerz .sentence-use,
+  .tab-containerz .sent-head {
     font-size: 17px;
   }
+  
 }
