@@ -25,6 +25,7 @@ const Modules = (() => {
         { id : 21, module : 'WordSearch' },
         { id : 22, module : 'TextArea' },
         { id : 23, module : 'CrossWord' },
+        { id : 24, module : 'ShravanKaushalWithImages' },
     ];
 
     const get = () => modules;

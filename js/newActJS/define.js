@@ -36,9 +36,11 @@
             { qid : 23, text : ['Q-23', 'PDF'], module : 18 },
             { qid : 24, text : ['Q-24', 'Shabdkosh'], module : 19 },
             { qid : 25, text : ['Q-25', 'Shrutlekh'], module : 20 },
+            { qid : 30, text : ['Q-30', 'Shrutlekh'], module : 20 },
             { qid : 26, text : ['Q-26', 'WordSearch'], module : 21 },
             { qid : 27, text : ['Q-27', 'TextArea'], module : 22 },
             { qid : 28, text : ['Q-28', 'CrossWord'], module : 23 },
+            { qid : 29, text : ['Q-29', 'ShravanKaushalWithImages'], module : 24 },
         ];
 
         // DEFINE QUESTIONS
@@ -594,7 +596,19 @@
                         { audio : './audio/3.mp3', answer: '3' },
                         { audio : './audio/4.mp3', answer: '4' },
                         { audio : './audio/5.mp3', answer: '5' },
-                        { audio : './audio/6.mp3', answer: '6' }
+                    ]
+                }
+            },
+            {
+                id      : 30,
+                lang    : 'en',
+                content : {
+                    questions : [
+                        { audio : './audio/6.mp3', answer: '1' },
+                        { audio : './audio/2.mp3', answer: '2' },
+                        { audio : './audio/3.mp3', answer: '3' },
+                        { audio : './audio/4.mp3', answer: '4' },
+                        { audio : './audio/5.mp3', answer: '5' },
                     ]
                 }
             },
@@ -685,6 +699,14 @@
                         { text: 'किस महापुरुष के जन्मदिन को बाल-दिवस के रूप में मनाया जाता है? <br> #_#', answer: 'जछ' },
                         { text: 'नेहरू जी ने अपने जन्मदिन को बच्चों के जन्मदिन के रूप में मनाना क्यों स्वीकार कर लिया था? <br> #_#', answer: 'ज' }
                     ]
+                }
+            },
+            {
+                id      : 29,
+                lang    : 'hi',
+                head    : 'Module : 24',
+                content : {
+                    
                 }
             },
             {

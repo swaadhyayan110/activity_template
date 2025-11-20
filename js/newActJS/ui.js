@@ -177,7 +177,7 @@ const UI = (() => {
                         div.textContent = m;
                     }
                 });
-            });            
+            });
         } catch( err ) {
             console.error( 'Error :: UI.(buttons) -', err );
         }

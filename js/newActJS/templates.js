@@ -142,15 +142,19 @@ const Activity = (() => {
     const translateButtonLabels = (lang='en') => {
         if( lang == 'en' ) {
             return { 
-                check : 'Check Answers',
-                show  : 'Show Answers',
-                try   : 'Try Again'
+                check  : 'Check Answers',
+                show   : 'Show Answers',
+                submit : 'Submit',
+                replay : 'Replay',
+                try    : 'Try Again'
             };
         } else {
             return { 
-                check : 'उत्तर जाँचिए',
-                show  : 'उत्तर देखो',
-                try   : 'पुनः प्रयास करें'
+                check  : 'उत्तर जाँचिए',
+                show   : 'उत्तर देखो',
+                submit : 'सबमिट करें',
+                replay : 'दुबारा खेलें',
+                try    : 'पुनः प्रयास करें'
             };
         }
     };
@@ -169,6 +173,20 @@ const Activity = (() => {
                 attempted : 'आपका उत्तर',
                 correct   : 'सही उत्तर',
                 result    : 'परिणाम'
+            };
+        }
+    };
+
+    const translateNextPrevLabel = (lang='en') => {
+        if( lang == 'en' ) {
+            return { 
+                next : 'Next',
+                prev : 'Prev'
+            };
+        } else {
+            return { 
+                next : 'अगला',
+                prev : 'पिछला'
             };
         }
     };
@@ -205,7 +223,7 @@ const Activity = (() => {
     const translateMeaningLabel  = (lang='en') => lang == 'en' ? 'meaning' : 'अर्थ';
     const translateColumnLabel   = (lang='en') => lang == 'en' ? 'column' : 'खंड';
     const translateBoxLabel      = (lang='en') => lang == 'en' ? 'box' : 'बॉक्स';    
-
+    
     const pathToCWD = () => assets_url;
 
     const get = (key) => store[key];
@@ -271,7 +289,8 @@ const Activity = (() => {
         translateButtonLabels,
         translateBulletLabels,
         translateSentenceLabel,
-        translateBooleanLabels
+        translateBooleanLabels,
+        translateNextPrevLabel
     };    
 })();
 
@@ -2760,6 +2779,8 @@ const Adaptiv = (() => {
                 instructions.push(`<li>${item}</li>`);
             });
 
+            const prevNextLabel = Activity.translateNextPrevLabel(lang);
+            const buttonLabels  = Activity.translateButtonLabels(lang);
             parent.innerHTML = `<div class="question">
                                     <div class="container-fluid">
                                         <div class="${headerContainer}">
@@ -2794,9 +2815,9 @@ const Adaptiv = (() => {
                                             <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
                                             <div class="buttonection" id="nav-buttons">
                                                 <div class="buttons machiNgs">
-                                                    <button class="submit-btn" id="prev-btn">${ lang == 'en' ? 'Prev' : 'पिछला' }</button>
-                                                    <button class="show-btn" id="next-btn">${ lang == 'en' ? 'Next' : 'अगला' }</button>
-                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${ lang == 'en' ? 'Submit' : 'सबमिट करें' }</button>
+                                                    <button class="submit-btn" id="prev-btn">${ prevNextLabel.prev }</button>
+                                                    <button class="show-btn" id="next-btn">${ prevNextLabel.next }</button>
+                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${ buttonLabels.submit }</button>
                                                 </div>
                                                 <div id="submit-btn-wrapper" class="text-center"></div>
                                             </div>
@@ -4268,7 +4289,8 @@ const ShravanKaushal = (() => {
 
             const activity = Activity.getDefine(questionId) ?? {};
             const lang     = activity.lang ?? 'en';
-            const buttonLabel = Activity.translateButtonLabels(lang);
+            const buttonLabel   = Activity.translateButtonLabels(lang);
+            const nextPrevLabel = Activity.translateNextPrevLabel(lang);
 
             parent.innerHTML = `<div class="question">
                                     <audio id="audioPlayer" preload="auto"></audio>
@@ -4284,9 +4306,9 @@ const ShravanKaushal = (() => {
                                             <div id="${inputDataId}" class="rowInputsData"></div>
                                             <div class="secondRowaBB">
                                                 <div class="nextPreviRow">
-                                                    <button class="buttShar" id="prevBtns">Previous</button>
-                                                    <button class="buttShar" id="nextBtns">Next</button>
-                                                    <button class="buttShar" id="replayBtns">Replay</button>
+                                                    <button class="buttShar" id="prevBtns">${nextPrevLabel.prev}</button>
+                                                    <button class="buttShar" id="nextBtns">${nextPrevLabel.next}</button>
+                                                    <button class="buttShar" id="replayBtns">${buttonLabel.replay}</button>
                                                 </div>
                                                 <div class="buttons machiNgs">
                                                     <button class="submit-btn">${buttonLabel.check}</button>
@@ -6090,22 +6112,27 @@ const Shrutlekh = (() => {
         writeCorrectBelow: { hi: `${audioBasePath}secondAttemptStatement-Hn.mp3`, en: `${audioBasePath}secondAttemptStatement.mp3` }
     };
     const _constructAudio = () => {
+        const ad = [];
         for( const key in audioBundle ) {
             for( const lang in audioBundle[key] ) {
-                const audio = new Audio(audioBundle[key][lang]);
+                ad.push( audioBundle[key][lang] )
+                const audio = new Audio();
+                audio.src   = audioBundle[key][lang];
                 audioBundle[key][lang] = audio;
             }
         }
     };
+    _constructAudio();
 
     const playAudio = async (key, lang='en') => {
         await pauseAllAudio();
-        const audio = audioBundle[key]?.[lang];        
+        const audio = audioBundle[key]?.[lang];
+        console.info(audio, '|', key, '|', lang, '|', audioBundle[key]?.[lang], '|', audio instanceof HTMLAudioElement );
         if( audio instanceof HTMLAudioElement ) {
             try {
                 await audio.play();
             } catch (err) {
-                console.warn('audio play blocked:', err);
+                console.warn('audio play blocked:', err);                
             }
         }
         return audio;
@@ -6134,8 +6161,7 @@ const Shrutlekh = (() => {
     };    
 
     const ui = (questionId) => {
-        try {
-            _constructAudio();
+        try {            
 
             const container = Define.get('questionContainer');
             const parent    = document.querySelector(container);
@@ -6818,11 +6844,12 @@ const WordSearch = (() => {
 
     const popup = ({complete=false, correct=0, total=0, lang='en'} = {}) => {
         if( complete ) {
+            const buttonLabels = Activity.translateButtonLabels(lang);
             Swal.fire({
                 title: lang == 'en' ? '🎉 Well Done!' : '🎉बहुत बढ़िया!',
                 text: lang == 'en' ? 'You found all the words!' : 'आपने सारे शब्द ढूँढ लिए!',
                 icon: 'success',
-                confirmButtonText: lang == 'en' ? 'Replay' : 'दुबारा खेलें',
+                confirmButtonText: buttonLabels.replay,
                 confirmButtonColor: '#28a745',
                 allowOutsideClick: false,
                 allowEscapeKey: false,
@@ -7142,7 +7169,7 @@ const CrossWord = (() => {
 			if(submitBtn) submitBtn.addEventListener('click', checkAnswers);
 			// if(closeBtn) closeBtn.addEventListener('click', closePopup);
 		} catch (err) {
-            console.error( 'TextArea.ui :', err );
+            console.error( 'CrossWord.ui :', err );
         }
     };
 
@@ -7449,6 +7476,146 @@ const CrossWord = (() => {
     return {
         render
     }
+})();
+
+const ShravanKaushalWithImages = (() => {
+    const containerId  = 'sharavan-container';
+
+    Activity.css('shravanKaushal.css');
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            console.info( activity, lang )
+            
+            const buttonLabel   = Activity.translateButtonLabels(lang);
+            const prevNextLabel = Activity.translateNextPrevLabel(lang);
+
+            const uiHtml = `<div class="question">
+                                <div class="container" id="${containerId}">
+                                    <div class="listen-activity-container">
+                                        <div class="play-btn">
+                                            <div class="icon"></div>
+                                        </div>
+                                    </div>
+                                    <div class="poem-sec" style="display:none;">
+                                        <div class="my-3 container" id="questionTitle">
+                                            <b class="${Define.get('head')}"></b>
+                                            <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+                                            </svg>
+                                            <svg id="stop-audio-icon" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
+                                            </svg>
+                                        </div>
+                                        <div class="container contListen">
+                                            <div class="poem-text" id="poemContainer">
+                                                करता था शैतानी दिनभर,<br>
+                                                गिरकर लगती चोट मुझे,<br>
+                                                होते घरवाले सब परेशान।<br>
+                                                समझ न आती उनकी बात,<br>
+                                                जितना मचाता तूफ़ान मैं,<br>
+                                                घर के होते खुश सब लोग।
+                                            </div>
+                                            <div class="buttons machiNgs">
+                                                <button class="show-btn" onclick="gotoQuestion()">${prevNextLabel.next}</button>
+                                                <button class="replay-btn" onclick="replayAudio()">${buttonLabel.replay}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="question-sec" style="display:none;">
+                                        <div class="my-3 container" id="questionTitle">
+                                            <b>इन पंक्तियों को ध्यानपूर्वक सुनो और पूछे गए प्रश्नों के उत्तर बताओ-</b>
+                                            <svg id="ado-play2" fill="currentColor" class="bi bi-play-circle-fill playBtn" viewBox="0 0 16 16" onclick="playAudio2()">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+                                            </svg>
+                                            <svg id="stop-audio-icon2" fill="currentColor" class="bi bi-pause-circle-fill" viewBox="0 0 16 16" onclick="pauseAudio2()">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
+                                            </svg>
+                                        </div>
+                                        <div class="container contListen">
+                                            <div id="mcqContainer"></div>
+                                            <div class="listen-buttonection">
+                                                <div class="buttons machiNgs">
+                                                    <button class="submit-btn" id="listen-prev-btn" style="display:block;" onclick="prevQuestion()">${prevNextLabel.prev}</button>
+                                                    <button class="show-btn" id="listen-next-btn" onclick="nextQuestion()">${prevNextLabel.next}</button>
+                                                    <button class="reset-btn" id="listen-sub-btn" onclick="submitAnswers()" style="display:none;">${buttonLabel.submit}</button> 
+                                                    <button class="replay-btn" id="listen-replay-btn" onclick="replayAudio()">${buttonLabel.replay}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="popupAnsBox" style="display: none;">
+                                    <div class="baseMod">
+                                        <div class="answerdiv">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                            <button class="btn btn-secondary popUp-close-btn" onclick="closePopUp()">X</button>
+                                        </div>
+                                        <div id="answer-review"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+            // ..
+            parent.innerHTML = uiHtml;
+            Activity.setHeader( questionId );
+			
+			const playBtn   = parent.querySelector( '.play-btn' );
+			const audioPlayBtn  = parent.querySelector( '#ado-play' );
+			const audioPauseBtn = parent.querySelector( '#stop-audio-icon' );
+			const resetBtn  = parent.querySelector( '.reset-btn' );
+			const showBtn   = parent.querySelector( '.show-btn' );
+			const submitBtn = parent.querySelector( '.submit-btn' );
+			// const closeBtn  = parent.querySelector( '.close-btn' );
+
+            if( playBtn ) playBtn.addEventListener('click', startListeningActivity);
+            if( audioPlayBtn ) audioPlayBtn.addEventListener('click', playAudio);
+            if( audioPauseBtn ) audioPauseBtn.addEventListener('click', pauseAudio);
+
+			// if(resetBtn) resetBtn.addEventListener('click', clearAllInputs);
+			// if(showBtn) showBtn.addEventListener('click', fillAllCorrect);
+			// if(submitBtn) submitBtn.addEventListener('click', checkAnswers);
+			// if(closeBtn) closeBtn.addEventListener('click', closePopup);
+		} catch (err) {
+            console.error( 'ShravanKaushalWithImages.ui :', err );
+        }
+    };
+
+    const startListeningActivity = () => {
+        $(".listen-activity-container").hide();
+        $(".poem-sec").show();
+        // stopAllAudio();
+        // startGameA.play();
+    }
+
+    const playAudio = () => {
+        // startGameA.currentTime = 0;
+        // startGameA.play();
+        $("#ado-play").hide();
+        $("#stop-audio-icon").show();
+    }
+
+    const pauseAudio = () => {
+        // startGameA.pause();
+        $("#stop-audio-icon").hide();
+        $("#ado-play").show();
+    }
+
+    return {
+        render:ui
+    }
+    
 })();
 
 Modules.get().map(({ module }) => {
