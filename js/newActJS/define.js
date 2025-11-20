@@ -36,11 +36,11 @@
             { qid : 23, text : ['Q-23', 'PDF'], module : 18 },
             { qid : 24, text : ['Q-24', 'Shabdkosh'], module : 19 },
             { qid : 25, text : ['Q-25', 'Shrutlekh'], module : 20 },
-            { qid : 30, text : ['Q-30', 'Shrutlekh'], module : 20 },
             { qid : 26, text : ['Q-26', 'WordSearch'], module : 21 },
             { qid : 27, text : ['Q-27', 'TextArea'], module : 22 },
             { qid : 28, text : ['Q-28', 'CrossWord'], module : 23 },
             { qid : 29, text : ['Q-29', 'ShravanKaushalWithImages'], module : 24 },
+            { qid : 30, text : ['Q-30', 'ShravanKaushalWithImages'], module : 24 },
         ];
 
         // DEFINE QUESTIONS
@@ -596,19 +596,7 @@
                         { audio : './audio/3.mp3', answer: '3' },
                         { audio : './audio/4.mp3', answer: '4' },
                         { audio : './audio/5.mp3', answer: '5' },
-                    ]
-                }
-            },
-            {
-                id      : 30,
-                lang    : 'en',
-                content : {
-                    questions : [
-                        { audio : './audio/6.mp3', answer: '1' },
-                        { audio : './audio/2.mp3', answer: '2' },
-                        { audio : './audio/3.mp3', answer: '3' },
-                        { audio : './audio/4.mp3', answer: '4' },
-                        { audio : './audio/5.mp3', answer: '5' },
+                        { audio : './audio/6.mp3', answer: '6' },
                     ]
                 }
             },
@@ -700,15 +688,7 @@
                         { text: 'नेहरू जी ने अपने जन्मदिन को बच्चों के जन्मदिन के रूप में मनाना क्यों स्वीकार कर लिया था? <br> #_#', answer: 'ज' }
                     ]
                 }
-            },
-            {
-                id      : 29,
-                lang    : 'hi',
-                head    : 'Module : 24',
-                content : {
-                    
-                }
-            },
+            },            
             {
                 id      : 28,
                 lang    : 'en',
@@ -725,6 +705,100 @@
                         { sequence : 8, direction : 'v', row : [8, 16], col : [25], question: 'Legends & folk stories', answer : 'FOLKLORES' },
                         { sequence : 9, direction : 'h', row : [9], col : [2, 11], question: 'Old handwritten record', answer : 'MANUSCRIPT' },
                         { sequence : 10, direction : 'h', row : [10], col : [12, 25], question: 'Remains to study past life', answer : 'ARCHAEOLOGICAL' },
+                    ]
+                }
+            },
+            {
+                id      : 29,
+                lang    : 'hi',
+                head    : 'Module : 24',
+                content : {
+                    main: {
+                        text :  `
+                                करता था शैतानी दिनभर,<br>
+                                गिरकर लगती चोट मुझे,<br>
+                                होते घरवाले सब परेशान।<br>
+                                समझ न आती उनकी बात,<br>
+                                जितना मचाता तूफ़ान मैं,<br>
+                                घर के होते खुश सब लोग।
+                                `,
+                        audio : 'audio/m24_main.mp3',
+                    },
+                    questions : [
+                        {
+                            question : {
+                                text  : 'बच्चों की किन बातों से घर के लोग खुश होते हैं?',
+                                image : 'img/1.png',
+                                audio : 'audio/m24_q1.mp3'
+                            },
+                            options  : [
+                                { text : 'खेल-कूद में तूफ़ान मचाने पर' },
+                                { text : 'खूब सोते रहने से', },
+                                { text : 'हर बात में ज़िद करने से', image : 'img/1.png' },
+                                { text : 'इनमें से कोई नहीं ', image : 'img/1.png' }
+                            ],
+                            answer   : 0
+                        },
+                        {
+                            question : {
+                                text  : 'बच्चों की किन बातों से घर के लोग परेशान होते हैं?',
+                                audio : 'audio/m24_q2.mp3'
+                            },
+                            options  : [
+                                { text : 'खूब रोने से' },
+                                { text : 'खेलने में चोट लगने से' },
+                                { text : 'बार-बार खाने की इच्छा करने से' },
+                                { text : 'इनमें से कोई नहीं' }
+                            ],
+                            answer   : 1
+                        }
+                    ]
+                }
+            },
+            {
+                id      : 30,
+                lang    : 'hi',
+                head    : 'Module : 24',
+                content : {
+                    main: {
+                        text :  `
+                                करता था शैतानी दिनभर,<br>
+                                गिरकर लगती चोट मुझे,<br>
+                                होते घरवाले सब परेशान।<br>
+                                समझ न आती उनकी बात,<br>
+                                जितना मचाता तूफ़ान मैं,<br>
+                                घर के होते खुश सब लोग।
+                                `,
+                        audio : 'audio/m24_main.mp3',
+                    },
+                    questions : [
+                        {
+                            question : {
+                                text  : 'बच्चों की किन बातों से घर के लोग खुश होते हैं?',
+                                image : 'img/1.png',
+                                audio : 'audio/m24_q1.mp3'
+                            },
+                            options  : [
+                                { text : 'खेल-कूद में तूफ़ान मचाने पर' },
+                                { text : 'खूब सोते रहने से', },
+                                { text : 'हर बात में ज़िद करने से', image : 'img/1.png' },
+                                { text : 'इनमें से कोई नहीं ', image : 'img/1.png' }
+                            ],
+                            answer   : 0
+                        },
+                        {
+                            question : {
+                                text  : 'बच्चों की किन बातों से घर के लोग परेशान होते हैं?',
+                                audio : 'audio/m24_q2.mp3'
+                            },
+                            options  : [
+                                { text : 'खूब रोने से' },
+                                { text : 'खेलने में चोट लगने से' },
+                                { text : 'बार-बार खाने की इच्छा करने से' },
+                                { text : 'इनमें से कोई नहीं' }
+                            ],
+                            answer   : 1
+                        }
                     ]
                 }
             },
