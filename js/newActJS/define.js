@@ -761,7 +761,7 @@
                 head    : 'Module : 25',
                 content : {
                     video : {
-                        // path    : 'https://www.youtube.com/embed/WyVuxlx3Nq4?autoplay=1&mute=1&controls=0',
+                        path    : 'https://www.youtube.com/embed/WyVuxlx3Nq4?autoplay=1&mute=1&controls=0',
                         // path    : './video.mp4',
                         youtube : true
                     }
