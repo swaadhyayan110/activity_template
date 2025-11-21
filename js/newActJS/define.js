@@ -40,7 +40,7 @@
             { qid : 27, text : ['Q-27', 'TextArea'], module : 22 },
             { qid : 28, text : ['Q-28', 'CrossWord'], module : 23 },
             { qid : 29, text : ['Q-29', 'ShravanKaushalWithImages'], module : 24 },
-            { qid : 30, text : ['Q-30', 'ShravanKaushalWithImages'], module : 24 },
+            { qid : 30, text : ['Q-30', 'VideoPlayer'], module : 25 },
         ];
 
         // DEFINE QUESTIONS
@@ -757,51 +757,16 @@
             },
             {
                 id      : 30,
-                lang    : 'hi',
-                head    : 'Module : 24',
+                lang    : 'en',
+                head    : 'Module : 25',
                 content : {
-                    main: {
-                        text :  `
-                                करता था शैतानी दिनभर,<br>
-                                गिरकर लगती चोट मुझे,<br>
-                                होते घरवाले सब परेशान।<br>
-                                समझ न आती उनकी बात,<br>
-                                जितना मचाता तूफ़ान मैं,<br>
-                                घर के होते खुश सब लोग।
-                                `,
-                        audio : 'audio/m24_main.mp3',
-                    },
-                    questions : [
-                        {
-                            question : {
-                                text  : 'बच्चों की किन बातों से घर के लोग खुश होते हैं?',
-                                image : 'img/1.png',
-                                audio : 'audio/m24_q1.mp3'
-                            },
-                            options  : [
-                                { text : 'खेल-कूद में तूफ़ान मचाने पर' },
-                                { text : 'खूब सोते रहने से', },
-                                { text : 'हर बात में ज़िद करने से', image : 'img/1.png' },
-                                { text : 'इनमें से कोई नहीं ', image : 'img/1.png' }
-                            ],
-                            answer   : 0
-                        },
-                        {
-                            question : {
-                                text  : 'बच्चों की किन बातों से घर के लोग परेशान होते हैं?',
-                                audio : 'audio/m24_q2.mp3'
-                            },
-                            options  : [
-                                { text : 'खूब रोने से' },
-                                { text : 'खेलने में चोट लगने से' },
-                                { text : 'बार-बार खाने की इच्छा करने से' },
-                                { text : 'इनमें से कोई नहीं' }
-                            ],
-                            answer   : 1
-                        }
-                    ]
+                    video : {
+                        // path    : 'https://www.youtube.com/embed/WyVuxlx3Nq4?autoplay=1&mute=1&controls=0',
+                        // path    : './video.mp4',
+                        youtube : true
+                    }
                 }
-            },
+            }
         ];
 
         const questionContainer = '.question-container';

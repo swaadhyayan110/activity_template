@@ -7838,6 +7838,54 @@ const ShravanKaushalWithImages = (() => {
     
 })();
 
+const VideoPlayer = (() => {
+    const containerId = 'video-container';
+
+    const ui = (questionId) => {
+        try {          
+
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity  = Activity.getDefine(questionId) ?? {};
+            const content   = activity.content ?? {};
+            const video     = content?.video ?? {};
+            const isYouTube = video?.youtube ?? false;
+            const path      = ( video?.path && isYouTube ) ? video?.path : Activity.pathToCWD()+video?.path;
+
+            const uiHtml = `<div class="question">
+                                <div class="container p-2 d-flex align-items-center justify-content-center" id="${containerId}" style="height:85vh !important;">
+                                    ${
+                                      `<iframe id="ytVideo" 
+                                            class="w-100 h-100"
+                                            src="${path}"
+                                            frameborder="0"
+                                            allow="autoplay; fullscreen;"
+                                            allowfullscreen>
+                                        </iframe>`  
+                                    }
+                                </div>
+                            </div>`;
+            // ..
+            parent.innerHTML = uiHtml;
+            Activity.setHeader( questionId );
+            Activity.setQid( `#${containerId}`, questionId );
+		} catch (err) {
+            console.error( 'VideoPlayer.ui :', err );
+        }
+    };
+
+    return {
+        render:ui
+    }
+    
+})();
+
 Modules.get().map(({ module }) => {
     try {
         const mod = eval(module);
