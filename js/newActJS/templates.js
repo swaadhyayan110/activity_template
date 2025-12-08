@@ -324,9 +324,15 @@ const MatchLeftToRight = (() => {
             line.setAttribute("y2", y2);
             line.setAttribute("stroke", color);
             line.setAttribute("stroke-width", "2");
-            line.setAttribute("marker-end", "url(#arrowhead)");
             line.dataset.from = leftId;
             line.dataset.to = rightId;
+
+            if( color == 'green' ) {
+                line.setAttribute("marker-end", "url(#arrowhead)");
+            } else {
+                line.setAttribute("marker-end", "url(#arrowheadRed)");
+            }
+
             svg.appendChild(line);
         } catch( err ) {
             console.error( 'MatchLeftToRight.drawArrow :', err );
@@ -508,6 +514,13 @@ const MatchLeftToRight = (() => {
                                     <defs>
                                         <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
                                         <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                                        </marker>
+                                    </defs>
+                                </svg>
+                                <svg width="100%" height="100%">
+                                    <defs>
+                                        <marker id="arrowheadRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="red"></polygon>
                                         </marker>
                                     </defs>
                                 </svg>
@@ -743,10 +756,13 @@ const MatchLeftRightToCenter = (() => {
             line.setAttribute("stroke", color);
             line.setAttribute("stroke-width", "2");
             line.setAttribute("stroke-linecap", "round");
-            line.setAttribute("marker-end", "url(#arrowhead2)");
-
             line.dataset.from = `${tag}~${fromId}`;
             line.dataset.to   = `${tag}~${toId}`;
+            if( color == 'green' ) {
+                line.setAttribute("marker-end", "url(#arrowhead2)");
+            } else {
+                line.setAttribute("marker-end", "url(#arrowheadRed2)");
+            }
             svg.appendChild(line);
         } catch( err ) {
             console.error( 'MatchLeftRightToCenter.drawLine :', err );
@@ -991,11 +1007,18 @@ const MatchLeftRightToCenter = (() => {
                                     <div class="colmn1 matchItems2"></div>
                                     <div class="colmn1 matchItems3"></div>
                                     <svg class="svg2" style="position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:9999;">
-                                    <defs>
-                                        <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
-                                        </marker>
-                                    </defs>
+                                        <defs>
+                                            <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                                            </marker>
+                                        </defs>
+                                    </svg>
+                                    <svg class="svg2" style="position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:9999;"
+                                        <defs>
+                                            <marker id="arrowheadRed2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="red"></polygon>
+                                            </marker>
+                                        </defs>
                                     </svg>
                                 </div>
                                 <div class="buttons machiNgs">
@@ -1186,10 +1209,14 @@ const MatchTopToBottom = (() => {
             line.setAttribute("x2", x2);
             line.setAttribute("y2", y2);
             line.setAttribute("stroke", color);
-            line.setAttribute("stroke-width", "2");
-            line.setAttribute("marker-end", `url(#arrowhead_${activityId})`);
+            line.setAttribute("stroke-width", "2");                        
             line.dataset.from = topId;
             line.dataset.to = bottomId;
+            if( color == 'green' ) {
+                line.setAttribute("marker-end", `url(#arrowhead_${activityId})`);
+            } else {
+                line.setAttribute("marker-end", `url(#arrowhead_${activityId}_red)`);
+            }
             svg.appendChild(line);
         } catch( err ) {
             console.error( 'MatchTopToBottom.drawArrow : ', err );
@@ -1204,7 +1231,9 @@ const MatchTopToBottom = (() => {
             const attempted = Object.keys(act.userMatches || {}).filter(k => act.userMatches[k]).length;
             const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
             if (!area) return;
-            Activity.toggleCheckBtn('.submit-btn', attempted === total);
+            if( attempted === total ) {
+                Activity.toggleCheckBtn( '.submit-btn', false );
+            }
         } catch( err ) {
             console.error( 'MatchTopToBottom.checkIfAllAttempted : ', err );
         }
@@ -1249,7 +1278,8 @@ const MatchTopToBottom = (() => {
             activities[activityId].userMatches = {};
             activities[activityId].selectedTop = null;
 
-            area.querySelectorAll(".item2").forEach(it => it.classList.remove("selected", "correct", "wrong"));        
+            area.querySelectorAll(".item2").forEach(it => it.classList.remove("selected", "correct", "wrong"));
+            Activity.toggleCheckBtn('.submit-btn', false);
         } catch( err ) {
             console.error( 'MatchTopToBottom.resetActivity : ', err );
         }
@@ -1351,6 +1381,13 @@ const MatchTopToBottom = (() => {
                         <defs>
                         <marker id="arrowhead_${activityId}" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                        </marker>
+                        </defs>
+                    </svg>
+                    <svg data-svg width="100%" height="100%" style="position: absolute; left: 0; top: 0;">
+                        <defs>
+                        <marker id="arrowhead_${activityId}_red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="red"></polygon>
                         </marker>
                         </defs>
                     </svg>
