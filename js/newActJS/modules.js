@@ -29,7 +29,5 @@ const Modules = (() => {
         { id : 25, module : 'VideoPlayer' },
     ];
 
-    const get = () => modules;
-
-    return { get };
+    return modules;
 })();

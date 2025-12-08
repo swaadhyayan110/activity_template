@@ -18,9 +18,9 @@ const Activity = (() => {
         }
     };
 
-    const module = (id) => {
-        try {            
-            const found = Modules.get()?.find(m => m.id === id);
+    const module = (mid) => {
+        try {
+            const found = Modules.find(({id}) => id === mid);
             return found ? found.module : null;
         } catch ( err ) {
             console.error( 'Activity.module : ', err );
@@ -7931,7 +7931,7 @@ const VideoPlayer = (() => {
     
 })();
 
-Modules.get().map(({ module }) => {
+Modules.map(({ module }) => {
     try {
         const mod = eval(module);
         if( !mod || (typeof mod !== 'function' && typeof mod !== 'object') ) {
