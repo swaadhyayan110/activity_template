@@ -581,8 +581,8 @@ const MatchLeftToRight = (() => {
                 
                 const imagePath  = ( typeof d?.left === 'object' && d?.left?.path ) ? d.left.path : false;
                 const imageWidth = ( imagePath != false && d?.left?.width ) ? d.left.width : '50px';
-                const leftImage  = `<img src="${Activity.pathToCWD()+imagePath}" style="width:${imageWidth};" class="mx-auto" ondragstart="return false;">`;
-                div.innerHTML    = ( imagePath != false ) ? leftImage : d.left;
+                const leftImage  = `<img src="${Activity.pathToCWD()+imagePath}" alt="image" style="width:${imageWidth};" class="mx-auto" ondragstart="return false;">`;
+                div.innerHTML    = ( imagePath != false ) ? leftImage : ( typeof d?.left === 'object' ) ? '-' : d.left;
 
                 div.addEventListener('click', (ev) => {
                     leftContainer.querySelectorAll('.item.selected').forEach(i => i.classList.remove('selected'));
