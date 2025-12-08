@@ -53,9 +53,9 @@
                 content : [
                     { id: 1, left: 'Bird\'s&nbsp;<u>eye</u>&nbsp;view', right: 'Seen from above, as a bird does' },
                     { id: 2, left: 'Feast for the eyes', right: 'To look with great enjoyment' },
-                    { id: 3, left: 'All eyes and ears', right: 'To be very attentive' },
+                    { id: 3, left: { path : 'img/1.png', width : '40px' }, right: 'To be very attentive' },
                     { id: 4, left: 'Apple of someone\'s eye', right: 'To be a favourite or loved one of someone' },
-                    { id: 5, left: 'Catch someone\'s eye', right: 'Be noticed by someone' },
+                    { id: 5, left: 'Catch someone\'s eye', right: { path : 'img/2.png', width : '10%' } },
                     { id: 6, left: 'Be an eye-opener', right: 'To understand something' }
                 ]
             },

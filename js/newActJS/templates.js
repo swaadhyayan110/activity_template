@@ -562,10 +562,14 @@ const MatchLeftToRight = (() => {
             activities[activityId].userMatches = {};
             
             leftShuffled.forEach(d => {
-                const div       = document.createElement('div');
-                div.className   = 'item';
-                div.dataset.id  = d.id;
-                div.innerHTML   = d.left;
+                const div        = document.createElement('div');
+                div.className    = 'item';
+                div.dataset.id   = d.id;
+                
+                const imagePath  = ( typeof d?.left === 'object' && d?.left?.path ) ? d.left.path : false;
+                const imageWidth = ( imagePath != false && d?.left?.width ) ? d.left.width : '50px';
+                const leftImage  = `<img src="${Activity.pathToCWD()+imagePath}" style="width:${imageWidth};" class="mx-auto" ondragstart="return false;">`;
+                div.innerHTML    = ( imagePath != false ) ? leftImage : d.left;
 
                 div.addEventListener('click', (ev) => {
                     leftContainer.querySelectorAll('.item.selected').forEach(i => i.classList.remove('selected'));
@@ -580,7 +584,11 @@ const MatchLeftToRight = (() => {
                 const div      = document.createElement('div');
                 div.className  = 'item';
                 div.dataset.id = d.id;
-                div.innerHTML  = d.right;
+
+                const imagePath  = ( typeof d?.right === 'object' && d?.right?.path ) ? d.right.path : false;
+                const imageWidth = ( imagePath != false && d?.right?.width ) ? d.right.width : '50px';
+                const leftImage  = `<img class="mx-auto" src="${Activity.pathToCWD()+imagePath}" style="width:${imageWidth};" ondragstart="return false;">`;
+                div.innerHTML    = ( imagePath != false ) ? leftImage : d.right;
 
                 div.addEventListener('click', (ev) => {
                     const activity = activities[activityId];
