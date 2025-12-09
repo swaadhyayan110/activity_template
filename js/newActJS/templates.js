@@ -5176,7 +5176,7 @@ const DragAndDropMulti = (() => {
                                     <div class="container">
                                         <div class="rowWithAudios border-bottom font18 fontBold ${Define.get('head')}"></div>
                                         <div class="question-block">
-                                            <div class="dragItems drag-container2" id="${containerId}"></div>
+                                            <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
                                             <div class="drag-question-box2 mt-3"></div>
                                         </div>
                                         <div class="buttons machiNgs">
@@ -5525,11 +5525,11 @@ const DragAndDropMulti = (() => {
                                     <div class="col-auto p-1">
                                         (${Activity.translateBulletLabels({lang:lang, ind:ind})})
                                     </div>
-                                    <div class="d-flex flex-column justify-content-between col question-container_2" data-queindex="${ind}">
+                                    <div class="d-flex flex-column justify-content-between col question-container_2">
                                         <div class="d-flex align-items-center justify-content-center h-100">
                                             ${image.join( '' )}
                                         </div>
-                                        <div class="d-flex flex-column justify-content-center align-items-center gap-4 my-3">
+                                        <div class="d-flex flex-column justify-content-center align-items-center gap-4 my-3" data-queindex="${ind}">
                                             ${replacedText}
                                         </div>
                                     </div>
@@ -5577,12 +5577,20 @@ const DragAndDropMulti = (() => {
                 drop: function (event, ui) {
                     const dragVal = ui.draggable.attr('data-ans');
                     $(this).html(dragVal).attr('data-val', `${dragVal}`);
-                    const index = $(this).parent().attr('data-queIndex');
+                    const index = $(this).parent().attr('data-queindex');
+                    const qID   = $(`#${containerId}`).attr('data-qid');
+
+                    const activity = Activity.getDefine(qID) ?? {};
+                    const hasCol   = typeof activity?.content?.col === 'object' ? true : false;
 
                     if( Array.isArray(userAns[index]) ) {
-                        const totalDropBox = $(`.question-container_2`).eq(index).children(selector);
-                        let tempArr = [];
-                        for (let i = 0; i < totalDropBox.length; i++) {
+                        const totalDropBox = ( hasCol === true )
+                            ? $(this).parent().children() 
+                            : $(`.question-container_2`).eq(index).children(selector);
+                        // ..
+                        
+                        const tempArr = [];
+                        for( let i = 0; i < totalDropBox.length; i++) {
                             if ($(totalDropBox).eq(i).attr('data-val') != "") {
                                 tempArr.push($(totalDropBox).eq(i).attr('data-val'));
                             }
@@ -5592,7 +5600,7 @@ const DragAndDropMulti = (() => {
                         userAns[index] = dragVal;
                     }
 
-                    if (enableDragCheckSubmitBtn() == $(selector).length) {
+                    if( enableDragCheckSubmitBtn() == $(selector).length ) {
                         $(`#submit2`).removeClass('disable');
                     }
                 }

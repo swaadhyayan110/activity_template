@@ -40,11 +40,11 @@ const Define = (() => {
         { qid : 27, text : ['Q-27', 'TextArea'], module : 22 },
         { qid : 28, text : ['Q-28', 'CrossWord'], module : 23 },
         { qid : 29, text : ['Q-29', 'ShravanKaushalWithImages'], module : 24 },
-        { qid : 30, text : ['Q-30', 'VideoPlayer'], module : 25 },
+        { qid : 30, text : ['Q-30', 'VideoPlayer'], module : 25 }
     ];
 
     // DEFINE QUESTIONS
-    const questions = [
+    const questions = [       
         {
             id      : 1,
             lang    : 'en',
