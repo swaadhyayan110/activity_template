@@ -5399,14 +5399,26 @@ const DragAndDropMulti = (() => {
             const dragItems = document.getElementById(containerId);
             dragItems.dataset.qid = questionId;
 
-            const content     = data?.content || {};
-            const replacement = content?.replacement || '#_#';
-            const option_side = content?.option_side || 'top';
-            const type_set    = content?.set || {};
+            const content     = data?.content ?? {};
+            const replacement = content?.replacement ?? '#_#';
+            const option_side = content?.option_side ?? 'top';
+            const type_set    = content?.set ?? {};
             const hasTypeSet  = Object.keys(type_set).length > 0;
             const isShuffle   = content?.shuffle ?? true;
+            const isCol       = typeof content?.col == 'object' ? true : false;
+
+            const defaultCol = {
+                md : 4,
+                sm : 6,
+                col : 12
+            };
+            const col_size = {
+                md: content?.col?.md ?? defaultCol.md,
+                sm: content?.col?.sm ?? defaultCol.sm,
+                col: content?.col?.col ?? defaultCol.col
+            }; 
             
-            const questions_temp = content?.questions || [];
+            const questions_temp = content?.questions ?? [];
 
             const optionHtml = [];
             const questions  = isShuffle == true ? Activity.shuffleArray( questions_temp ) || [] : questions_temp;
@@ -5490,18 +5502,43 @@ const DragAndDropMulti = (() => {
                         `;
                         questionHtml.push( html );
                     } else {
-                        const html = `
-                            <div class="row g-0 my-3">
-                                <div class="col-auto me-1">
-                                    (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                        if( isCol === false ) {
+                            const html = `
+                                <div class="row g-0 my-3">
+                                    <div class="col-auto me-1">
+                                        (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                                    </div>
+                                    <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
+                                        ${image.join( '' )}
+                                        ${replacedText}
+                                    </div>
                                 </div>
-                                <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
-                                    ${image.join( '' )}
-                                    ${replacedText}
+                            `;
+                            questionHtml.push( html );
+                        } else {
+                            ind == 0 ? questionHtml.push( '<div class="row g-0 my-3">' ) : false;
+
+                            replacedText = replacedText.replaceAll( ',', '' );
+
+                            const html = `
+                                <div class="d-flex col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm}">
+                                    <div class="col-auto p-1">
+                                        (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-between col question-container_2" data-queindex="${ind}">
+                                        <div class="d-flex align-items-center justify-content-center h-100">
+                                            ${image.join( '' )}
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center align-items-center gap-4 my-3">
+                                            ${replacedText}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        `;
-                        questionHtml.push( html );
+                            `;                            
+                            questionHtml.push( html );
+
+                            ind == questions.length ? questionHtml.push( '</div>' ) : false;
+                        }
                     }
                 });
             }
@@ -6107,9 +6144,9 @@ const Shabdkosh = (() => {
                     }
                 </div>` : ''
             }
-            ${item?.image && item?.image?.path ?
+            ${item?.image && item?.image?.path ?                
                 `<div class="img-box">
-                    <img style="width:${ item?.image?.width ?? '40%' };" src="${item?.image?.path}" class="photo animate__animated animate__bounceInRight">
+                    <img style="width:${ item?.image?.width ?? '40%' };" src="${Activity.pathToCWD() + item?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
                 </div>` 
                 : ''
             }

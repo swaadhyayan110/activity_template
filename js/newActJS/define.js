@@ -528,10 +528,11 @@ const Define = (() => {
                 shuffle     : false,
                 strictMatch : false,
                 replacement : '#_#',
+                col         : { col : 3, md : 4, sm : 12 },
                 questions   : [
                     { text: '#_#, #_#', image : 'img/1.png', width : '25%', options: ['पंख', 'नाचने'] },
                     { text: '#_#, #_#', image : 'img/2.png', options: ['जंगल', 'पंखूँटी'] },
-                    { text: '#_#, #_#', image : 'img/3.png', options: ['नक्काषी', 'पंखूँटी'] }
+                    { text: '#_#, #_#', image : 'img/4.png', options: ['नक्काषी', 'पंखूँटी'] }
                 ]
             }
         },
