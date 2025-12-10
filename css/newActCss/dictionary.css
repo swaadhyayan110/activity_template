@@ -1,0 +1,254 @@
+/* Main Header Dictionary Box */
+.menHeDic {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  margin: 18px 0;
+  border: 2px solid #e3e3e3;
+  border-radius: 14px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ffffff, #f2f7ff);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: all 0.35s ease;
+}
+
+.menHeDic:hover {
+  border-color: #1e88e5;
+  box-shadow: 0 8px 22px rgba(30, 136, 229, 0.30);
+  transform: translateY(-4px);
+}
+
+/* Headings */
+.dictHeadintTexts {
+  font-family: 'PoppinsSemiBold';
+  font-size: 22px;
+  color: #0b5fff;
+  margin: 8px 0;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  transition: color .3s ease, transform .3s ease;
+}
+
+.dictHeadintTexts:hover {
+  color: #004cbd;
+}
+
+.secondTextsRed {
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+.subHeading {
+  font-family: 'PoppinsSemiBold';
+  font-size: 18px;
+  color: #011622;
+}
+
+/* Drag Box Container */
+.boxOfItem {
+  border: 2px solid #d2e6ff;
+  padding: 18px;
+  border-radius: 18px;
+  margin: 22px 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: #f6fbff;
+  transition: .3s ease;
+}
+
+.boxOfItem:hover {
+  border-color: #64b5f6;
+  box-shadow: 0 6px 18px rgba(0, 100, 200, 0.18);
+}
+
+/* Drag items */
+.disDragItems {
+    font-family: 'PoppinsRegular';
+    margin: 6px;
+    padding: 8px 15px;
+    border-radius: 12px;
+    font-size: 16px;
+    background: linear-gradient(to bottom, #e1f0ff, #bcdcff);
+    border: 2px solid #8ec7ff;
+    cursor: grab;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    width: 45%;
+    color: #000;
+    transition: 0.45s 
+ease;
+    text-align: center;
+}
+
+.disDragItems:hover {
+  transform: translateY(-6px) scale(1.07);
+  background: linear-gradient(to bottom, #4797ff, #0077e6);
+  color: #fff;
+  border-color: #005fc0;
+  box-shadow: 0 10px 22px rgba(0, 90, 200, 0.45);
+}
+
+/* Drop Section */
+.dropSectDic {
+  height: 58vh;
+  overflow-y: auto;
+  border: 2px solid #c5e2fb;
+  padding: 18px;
+  border-radius: 18px;
+  margin: 22px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background: #ffffff;
+  box-shadow: inset 0 0 12px rgba(0, 142, 214, 0.06);
+}
+
+/* Drop Box */
+.dropBoxDictP {
+  padding: 12px;
+  border: 2px solid #067296;
+  border-radius: 18px;
+  width: 249px;
+  height: 18vh;
+  margin: 15px auto;
+  background: #f7fdff;
+  transition: .35s ease;
+  position: relative;
+}
+
+.dropBoxDictP:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 100, 170, 0.3);
+}
+.dropBoxDict{
+  overflow: auto;
+  height: 100%;
+  height: 85%;
+  position: absolute;
+  left: 0;
+  top: 20px;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.dropBoxDict .disDragItems {
+    width: 92%;
+    margin: 3px auto;
+}
+
+/* Number Circle */
+.letterNums {
+  background: linear-gradient(to right, #0c5ed1, #1aa2ff);
+  color: #fff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'PoppinsRegular';
+  font-size: 18px;
+  margin: -32px auto 12px;
+  border: 2px solid #004e7a;
+  box-shadow: 0 4px 10px rgba(0, 140, 200, 0.3);
+  position: sticky;
+  z-index: 2;
+}
+.disabled{
+  pointer-events: none;
+  opacity: 0.5;
+}
+/* Responsive */
+@media (max-width: 760px) {
+  .disDragItems {
+    width: 100%;
+  margin: 1px;
+  padding: 2px 15px;
+  font-size: 12px;
+  cursor: grab;
+  width: 45%;
+  color: #000;
+  transition: 0.45s ease;
+  text-align: center;
+  }
+  .dropBoxDict {
+    width: 100%;
+  }
+  .dropBoxDictP {
+  padding: 12px;
+  border: 2px solid #067296;
+  border-radius: 18px;
+  width: 146px;
+  height: 20vh;
+  margin: 13px auto;
+  background: #f7fdff;
+  transition: .35s ease;
+}
+.letterNums {
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  font-size: 15px;
+  margin: -28px auto 12px;
+}
+.dictHeadintTexts {
+  font-size: 14px;
+  color: #0b5fff;
+  margin: -2px 0;
+}
+.boxOfItem{
+  margin: 2px;
+  padding: 10px;
+  position: sticky;
+  top: 150px;
+  z-index: 9;
+}
+.dropSectDic {
+  height: 34vh;
+}
+}
+
+@media (min-width:761px) and (max-width:1200px) {
+.disDragItems {
+  font-family: 'PoppinsRegular';
+  margin: 0px;
+  padding: 8px 2px;
+  border-radius: 12px;
+  font-size: 11px;
+  border: 2px solid #8ec7ff;
+  cursor: grab;
+  width: 48%;
+}
+.dropBoxDictP {
+  padding: 12px;
+  width: 184px;
+  height: 14vh;
+  margin: 10px auto;
+  background: #f7fdff;
+  transition: .35s ease;
+  position: relative;
+}
+.letterNums {
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  font-size: 13px;
+  margin: -26px auto 12px;
+  border: 2px solid #004e7a;
+  z-index: 2;
+}
+.dictHeadintTexts {
+  font-family: 'PoppinsSemiBold';
+  font-size: 14px;
+  color: #0b5fff;
+  margin: -2px 0;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  transition: color .3s ease, transform .3s ease;
+}
+}

@@ -27,7 +27,20 @@ const Modules = (() => {
         { id : 23, module : 'CrossWord' },
         { id : 24, module : 'ShravanKaushalWithImages' },
         { id : 25, module : 'VideoPlayer' },
+        { id : 26, module : 'RachnatmakParaWithImages' },
+        { id : 27, module : 'RachnatmakWithKeyboard' },
+        { id : 28, module : 'RachnatmakWithTabBtns' },
+        { id : 29, module : 'RachnatmakWithInputs' },
+        { id : 30, module : 'ClickOnImage' },
+        { id : 31, module : 'FillOnClick' },
+        { id : 32, module : 'Dictionary' }
     ];
 
-    return modules;
+    const store = {
+        modules
+    };
+
+    const get = (key) => store[key];
+
+    return { get };
 })();

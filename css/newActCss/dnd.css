@@ -18,6 +18,10 @@
   text-align: center;
 }
 
+.drag-question-box2 {
+  font-size: 20px;
+}
+
 .questLine:hover {
   color: #0d47a1;
   transform: scale(1.02);
@@ -245,6 +249,10 @@
 /* Responsive */
 @media (max-width: 880px) {
   .questLine {
+    font-size: 15px;
+  }
+
+  .drag-question-box2 {
     font-size: 15px;
   }
 

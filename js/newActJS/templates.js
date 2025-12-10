@@ -6,13 +6,18 @@ const Activity = (() => {
 
     const css = (href) => {
         try {
-            if( !href ) return;
+            if( !href ) return;            
 
-            const link = document.createElement("link");
-            link.rel   = "stylesheet";
-            link.type  = "text/css";
-            link.href  = 'css/newActCss/'+href;
-            document.head.appendChild(link);
+            const completePath = 'css/newActCss/' + href;            
+            const exists = [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes(completePath));
+
+            if( exists ) return;
+
+            const link = document.createElement('link');
+            link.rel   = 'stylesheet';
+            link.type  = 'text/css';
+            link.href  = completePath;
+            document.head.appendChild(link);            
         } catch( err ) {
             console.error( 'Activity.css : ', err );
         }
@@ -20,7 +25,7 @@ const Activity = (() => {
 
     const module = (mid) => {
         try {
-            const found = Modules.find(({id}) => id === mid);
+            const found = Modules.get('modules')?.find(m => m.id === mid);
             return found ? found.module : null;
         } catch ( err ) {
             console.error( 'Activity.module : ', err );
@@ -222,7 +227,8 @@ const Activity = (() => {
     const translateSentenceLabel = (lang='en') => lang == 'en' ? 'sentence' : 'वाक्य';
     const translateMeaningLabel  = (lang='en') => lang == 'en' ? 'meaning' : 'अर्थ';
     const translateColumnLabel   = (lang='en') => lang == 'en' ? 'column' : 'खंड';
-    const translateBoxLabel      = (lang='en') => lang == 'en' ? 'box' : 'बॉक्स';    
+    const translateBoxLabel      = (lang='en') => lang == 'en' ? 'box' : 'बॉक्स';
+    const translateHintLabel     = (lang='en') => lang == 'en' ? 'Hint' : 'संकेत';
     
     const pathToCWD = () => assets_url;
 
@@ -283,6 +289,7 @@ const Activity = (() => {
         toggleCheckBtn,
         translateBoxLabel,
         translateWordLabel,
+        translateHintLabel,
         translateTableHeads,
         translateColumnLabel,
         translateMeaningLabel,
@@ -3303,437 +3310,6 @@ const Adaptiv = (() => {
 
 })();
 
-const OnlyAudio = (() => {
-    
-    Activity.css('audioPlay.css');
-    
-    let mode = ""; 
-    let ytPlayer = null;
-    let animationFrameId = null;
-    let loaderInterval = null;
-    let isPlaying = false;
-    let isSeeking = false;
-    let wasPlayingBeforeSeek = false;
-    let pendingYouTubeVideoId = null; 
-    let initialized = false;
-    
-    let audioEl = null;
-    let seekSlider = null;
-    let currentTimeEl = null;
-    let durationEl = null;
-    let loader = null;
-    let playPauseBtn = null;
-    let replayBtn = null;
-    let youtubeContainer = null;    
-
-    const isYouTube = (url) => {
-        return typeof url === "string" && (url.includes("youtube.com") || url.includes("youtu.be"));
-    };
-
-    const extractVideoId = (url) => {
-        const match = (url || "").match(/(?:v=|\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-        return match ? match[1] : null;
-    };
-
-    const safeLog = (...args) => {
-        if (console && console.log) console.log(...args);
-    };
-    
-    const formatTime = (sec) => {
-        if (!Number.isFinite(sec) || sec < 0) sec = 0;
-        const m = Math.floor(sec / 60).toString();
-        const s = Math.floor(sec % 60).toString().padStart(2, "0");
-        return `${m}:${s}`;
-    };
-   
-    const showLoader = () => {
-        if (!loader) return;
-        loader.style.display = "block";
-        loader.textContent = "Loading... 0%";
-        clearInterval(loaderInterval);
-        let percent = 0;
-        loaderInterval = setInterval(() => {
-            percent += Math.floor(Math.random() * 10) + 5;
-            if (percent >= 100) percent = 99;
-            loader.textContent = `Loading... ${percent}%`;
-        }, 150);
-    };
-
-    const hideLoader = () => {
-        clearInterval(loaderInterval);
-        if (loader) loader.textContent = "Loading... 100%";
-        setTimeout(() => {
-            if (loader) loader.style.display = "none";
-        }, 250);
-    };
-    
-    const cacheElements = () => {
-        audioEl = document.getElementById("localAudio");
-        seekSlider = document.getElementById("seekSlider");
-        currentTimeEl = document.getElementById("currentTime");
-        durationEl = document.getElementById("duration");
-        loader = document.getElementById("loader");
-        playPauseBtn = document.getElementById("playPauseBtn");
-        replayBtn = document.getElementById("replayBtn");
-        youtubeContainer = document.getElementById("youtubePlayer");
-    };    
-
-    const renderUI = (questionId) => {
-        try {
-            const description = Activity.getDefine(questionId)?.content?.desc;
-
-            const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
-            const parent = container ? document.querySelector(container) : null;
-
-            if (!parent) {
-                console.error("Audio.renderUI: ui container not found (Define.get('questionContainer') =>", container, ")");
-                return;
-            }
-
-            parent.innerHTML = `
-            <div class="question">
-                <div class="container">
-                <div class="audio-music-bg"></div>
-                <div class="container-sub">
-                    <div class="row g-0 justify-content-center audio-box">
-                    <div class="col-lg-11 col-md-10 col-sm-10 col-12 d-flex justify-content-center align-items-center">
-                        <div class="audio-container">
-                        <div class="audio-banner">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" fill="#fff"
-                            class="bi bi-music-note-beamed" viewBox="0 0 16 16">
-                            <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
-                            <path fill-rule="evenodd" d="M14 11V2h1v9zM6 3v10H5V3z" />
-                            <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
-                            </svg>
-                        </div>
-                        <div class="audio-name">${description}</div>
-                        <div>
-                            <input type="range" class="w-100" id="seekSlider" min="0" max="100" value="0" step="0.1">
-                            <div class="d-flex justify-content-between align-items-center progress-bar-seek">
-                            <span id="currentTime">00:00</span>
-                            <span id="duration">00:00</span>
-                            </div>
-                            <audio id="localAudio"></audio>
-                            <div id="youtubePlayer"></div>
-                            <div class="rowAudioBtns">
-                            <img src="images/replay2.png" class="audio-replay-btn" id="replayBtn" alt="replay">
-                            <div id="loader" style="display:none">Loading... 0%</div>
-                            <img src="images/play2.png" class="w-25 play-icon" alt="play-pause" id="playPauseBtn">
-                            <img src="images/replay2.png" class="audio-replay-btn invisible" alt>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            `;
-
-            $('.container-sub').children().css({ 'width': '560px', 'height': '500px' });
-            $('.audio-container').css({ 'width': '90%', 'height': '90%' }).removeClass('mb-3');
-            $('.audio-container').parent().addClass('d-flex justify-content-center align-items-center');
-        } catch (e) {
-            console.error('OnlyAudio.renderUI error:', e);
-        }
-    };    
-
-    const attachEvents = () => {
-        if (!seekSlider) return;
-        
-        seekSlider.addEventListener("input", (e) => {
-            handleSeek(e.target.value);
-        });
-        
-        const onStart = () => {
-            isSeeking = true;
-            wasPlayingBeforeSeek = isPlaying;
-            if (mode === "file" && audioEl && !audioEl.paused) audioEl.pause();
-            else if (mode === "youtube" && ytPlayer && typeof ytPlayer.pauseVideo === "function") {
-                try { ytPlayer.pauseVideo(); } catch (e) {}
-            }
-        };
-        
-        const onEnd = (val) => {
-            isSeeking = false;
-            handleSeek(val);
-            if (wasPlayingBeforeSeek) {
-                if (mode === "file" && audioEl) audioEl.play();
-                else if (mode === "youtube" && ytPlayer && typeof ytPlayer.playVideo === "function") {
-                    try { ytPlayer.playVideo(); } catch (e) {}
-                }
-            }
-        };
-
-        seekSlider.addEventListener("mousedown", onStart);
-        seekSlider.addEventListener("touchstart", onStart);
-        seekSlider.addEventListener("mouseup", (e) => onEnd(e.target.value));
-        seekSlider.addEventListener("touchend", (e) => onEnd(e.target.value));
-
-        if (playPauseBtn) playPauseBtn.addEventListener("click", togglePlay);
-        if (replayBtn) replayBtn.addEventListener("click", () => {
-            if (mode === "youtube" && ytPlayer && typeof ytPlayer.seekTo === "function") {
-                ytPlayer.seekTo(0, true);
-                ytPlayer.playVideo && ytPlayer.playVideo();
-            } else if (mode === "file" && audioEl) {
-                audioEl.currentTime = 0;
-                audioEl.play();
-            }
-        });
-        
-        if (audioEl) {
-            audioEl.addEventListener("loadedmetadata", () => {
-                hideLoader();
-                if (durationEl) durationEl.textContent = formatTime(audioEl.duration);
-            });
-
-            audioEl.addEventListener("play", () => {
-                updateButton(true);
-                updateProgressLoop();
-            });
-
-            audioEl.addEventListener("pause", () => {
-                updateButton(false);
-                stopProgressLoop();
-            });
-
-            audioEl.addEventListener("ended", () => {
-                if (seekSlider) seekSlider.value = 100;
-                updateButton(false);
-                stopProgressLoop();
-            });
-        }
-    };
-
-    const togglePlay = () => {
-        if (mode === "youtube" && ytPlayer) {
-            const state = (typeof YT !== "undefined" && YT.PlayerState) ? ytPlayer.getPlayerState() : null;
-            if (state === YT.PlayerState.PLAYING) {
-            try { ytPlayer.pauseVideo(); } catch (e) {}
-            } else {
-            try { ytPlayer.playVideo(); } catch (e) {}
-            }
-        } else if (mode === "file" && audioEl) {
-            if (audioEl.paused) audioEl.play();
-            else audioEl.pause();
-        }
-    };
-
-    const updateButton = (playing) => {
-        isPlaying = !!playing;
-        if (playPauseBtn) playPauseBtn.src = playing ? "images/pause2.png" : "images/play2.png";
-    };
-    
-    const seek = (seconds) => {
-        if (mode === "youtube" && ytPlayer && typeof ytPlayer.seekTo === "function") {
-            try {
-            const current = ytPlayer.getCurrentTime();
-            ytPlayer.seekTo(current + seconds, true);
-            } catch (e) {}
-        } else if (mode === "file" && audioEl) {
-            const target = Math.max(0, Math.min(audioEl.duration || 0, (audioEl.currentTime || 0) + seconds));
-            audioEl.currentTime = target;
-        }
-    };
-    
-    const handleSeek = (val) => {
-        const percent = parseFloat(val);
-        if (isNaN(percent)) return;
-        if (mode === "youtube" && ytPlayer && typeof ytPlayer.getDuration === "function") {
-            const dur = ytPlayer.getDuration() || 0;
-            const target = (dur * percent) / 100;
-            try { ytPlayer.seekTo(target, true); } catch (e) {}
-        } else if (mode === "file" && audioEl && audioEl.duration) {
-            audioEl.currentTime = (audioEl.duration * percent) / 100;
-        } else {            
-            if (seekSlider) seekSlider.value = percent;
-        }
-    };
-    
-    const updateProgressLoop = () => {
-        const step = () => {
-            if (!isSeeking) {
-                let current = 0, duration = 0;
-                if (mode === "youtube" && ytPlayer && typeof ytPlayer.getCurrentTime === "function") {
-                    try {
-                    current = ytPlayer.getCurrentTime() || 0;
-                    duration = ytPlayer.getDuration() || 0;
-                    } catch (e) { current = 0; duration = 0; }
-                } else if (mode === "file" && audioEl) {
-                    current = audioEl.currentTime || 0;
-                    duration = audioEl.duration || 0;
-                }
-
-                if (duration > 0) {
-                    const percent = (current / duration) * 100;
-                    if (seekSlider) {
-                    if (percent >= 99.5 || current >= duration) seekSlider.value = 100;
-                    else seekSlider.value = percent;
-                    }
-                    if (durationEl) durationEl.textContent = formatTime(duration);
-                }
-
-                if (currentTimeEl) currentTimeEl.textContent = formatTime(current);
-            }
-
-            animationFrameId = requestAnimationFrame(step);
-        };
-
-        if (!animationFrameId) step();
-    };
-
-    const stopProgressLoop = () => {
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-    };
-    
-    const ensureYouTubeApi = () => {
-        if (window.YT && window.YT.Player) return;
-        if (document.querySelector('script[data-audio-yt]')) return;
-        const tag = document.createElement("script");
-        tag.src = "https://www.youtube.com/iframe_api";
-        tag.setAttribute('data-audio-yt', '1');
-        document.head.appendChild(tag);
-    };
-    
-    window.onYouTubeIframeAPIReady = function () {
-        try {
-            safeLog("YouTube Iframe API ready");
-            if (!pendingYouTubeVideoId) return;
-            createYouTubePlayer(pendingYouTubeVideoId);
-            pendingYouTubeVideoId = null;
-        } catch (e) {
-            console.error("OnlyAudio.onYouTubeIframeAPIReady error:", e);
-        }
-    };
-
-    const createYouTubePlayer = (videoId) => {
-        if (!youtubeContainer) return;
-        try {
-            ytPlayer = new YT.Player("youtubePlayer", {
-            height: "0",
-            width: "0",
-            videoId,
-            playerVars: { autoplay: 0, controls: 0, rel: 0 },
-            events: {
-                onReady: (event) => {
-                    hideLoader();
-                    const waitForDuration = setInterval(() => {
-                            try {
-                                const dur = ytPlayer.getDuration();
-                                if (dur > 0) {
-                                    if (durationEl) durationEl.textContent = formatTime(dur);
-                                    clearInterval(waitForDuration);
-                                }
-                            } catch (err) {}
-                        }, 300);
-                },
-                onStateChange: (event) => {
-                    const state = event.data;
-                    if (state === YT.PlayerState.PLAYING) {
-                        updateButton(true);
-                        updateProgressLoop();
-                    } else if (state === YT.PlayerState.PAUSED || state === YT.PlayerState.ENDED) {
-                        updateButton(false);
-                        stopProgressLoop();
-                        if (state === YT.PlayerState.ENDED && seekSlider) seekSlider.value = 100;
-                    }
-                }
-            }
-            });
-        } catch (e) {
-            console.error("OnlyAudio.createYouTubePlayer error:", e);
-        }
-    };
-    
-    const init = (questionId) => {
-        try {
-            const source = Activity.getDefine(questionId)?.content?.src;
-
-            if (!source || typeof source !== "string") {
-                alert("Audio.init requires a source string (audio file URL or YouTube URL).");
-                return;
-            }
-            
-            if (initialized) destroy();
-
-            renderUI(questionId);
-            cacheElements();
-            attachEvents();
-            
-            if (isYouTube(source)) {
-                const vid = extractVideoId(source);
-                if (!vid) {
-                    alert("Invalid YouTube URL provided to Audio.init()");
-                    return;
-                }
-                mode = "youtube";
-                pendingYouTubeVideoId = vid;
-                showLoader();
-                ensureYouTubeApi();
-            } else {
-                mode = "file";
-                if (!audioEl) {
-                    console.error("Audio.init: audio element not found");
-                    return;
-                }
-                audioEl.src = source;
-                showLoader();
-                audioEl.load();
-            }
-
-            initialized = true;
-            safeLog("Audio initialized in mode:", mode);
-        } catch (err) {
-            console.error("OnlyAudio.init error:", err);
-        }
-    };
-    
-    const destroy = () => {
-        try {
-            stopProgressLoop();
-            clearInterval(loaderInterval);
-            loaderInterval = null;
-            
-            if (audioEl) {
-                try {
-                    audioEl.pause();
-                } catch (e) {}
-                
-                const cloned = audioEl.cloneNode(true);
-                audioEl.parentNode && audioEl.parentNode.replaceChild(cloned, audioEl);
-            }
-            
-            if (playPauseBtn) {
-                try { playPauseBtn.removeEventListener("click", togglePlay); } catch (e) {}
-            }
-
-            if (ytPlayer && typeof ytPlayer.destroy === "function") {
-                try { ytPlayer.destroy(); } catch (e) {}
-                ytPlayer = null;
-            }
-            
-            const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
-            const parent = container ? document.querySelector(container) : null;
-            if (parent) parent.innerHTML = "";
-            
-            audioEl = seekSlider = currentTimeEl = durationEl = loader = playPauseBtn = replayBtn = youtubeContainer = null;
-            pendingYouTubeVideoId = null;
-            mode = "";
-            initialized = false;
-        } catch (e) {
-            console.error("OnlyAudio.destroy error:", e);
-        }
-    };
-
-    return {
-        render:init,
-        destroy
-    };
-})();
-
 const DropDown = (() => {
 
     Activity.css('dd.css');
@@ -4951,9 +4527,11 @@ const DragAndDrop = (() => {
 
             const dragItems = document.getElementById(containerId);
             dragItems.dataset.qid = questionId;
+
+            const isShuffle   = content?.shuffle ?? true;
             
             const head     = [ '<div class="row w-100 justify-content-center">' ];
-            const headings = Activity.shuffleArray( content?.heading );
+            const headings = ( isShuffle == true ) ? Activity.shuffleArray( content?.heading ) : content?.heading;
 
             const defaultCol = {
                 md : 4,
@@ -4980,7 +4558,7 @@ const DragAndDrop = (() => {
             $('.dropItems').html( head.join('') );
 
             const opt     = [];
-            const options = Activity.shuffleArray( data?.content?.options );
+            const options = ( isShuffle == true ) ? Activity.shuffleArray( data?.content?.options ) : data?.content?.options;
             options.forEach((item) => {
                 const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
                 opt.push( html );
@@ -7561,7 +7139,7 @@ const CrossWord = (() => {
     }
 })();
 
-const ShravanKaushalWithImages = (() => {
+const ShravanKaushalWithImages_saurabh_old = (() => {
     const containerId = 'sharavan-image-container';
 
     let userAnswers;
@@ -7928,7 +7506,438 @@ const ShravanKaushalWithImages = (() => {
     
 })();
 
-const VideoPlayer = (() => {
+const OnlyAudio_saurabh_old = (() => {
+    
+    Activity.css('audioPlay.css');
+    
+    let mode = ""; 
+    let ytPlayer = null;
+    let animationFrameId = null;
+    let loaderInterval = null;
+    let isPlaying = false;
+    let isSeeking = false;
+    let wasPlayingBeforeSeek = false;
+    let pendingYouTubeVideoId = null; 
+    let initialized = false;
+    
+    let audioEl = null;
+    let seekSlider = null;
+    let currentTimeEl = null;
+    let durationEl = null;
+    let loader = null;
+    let playPauseBtn = null;
+    let replayBtn = null;
+    let youtubeContainer = null;    
+
+    const isYouTube = (url) => {
+        return typeof url === "string" && (url.includes("youtube.com") || url.includes("youtu.be"));
+    };
+
+    const extractVideoId = (url) => {
+        const match = (url || "").match(/(?:v=|\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        return match ? match[1] : null;
+    };
+
+    const safeLog = (...args) => {
+        if (console && console.log) console.log(...args);
+    };
+    
+    const formatTime = (sec) => {
+        if (!Number.isFinite(sec) || sec < 0) sec = 0;
+        const m = Math.floor(sec / 60).toString();
+        const s = Math.floor(sec % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+    };
+   
+    const showLoader = () => {
+        if (!loader) return;
+        loader.style.display = "block";
+        loader.textContent = "Loading... 0%";
+        clearInterval(loaderInterval);
+        let percent = 0;
+        loaderInterval = setInterval(() => {
+            percent += Math.floor(Math.random() * 10) + 5;
+            if (percent >= 100) percent = 99;
+            loader.textContent = `Loading... ${percent}%`;
+        }, 150);
+    };
+
+    const hideLoader = () => {
+        clearInterval(loaderInterval);
+        if (loader) loader.textContent = "Loading... 100%";
+        setTimeout(() => {
+            if (loader) loader.style.display = "none";
+        }, 250);
+    };
+    
+    const cacheElements = () => {
+        audioEl = document.getElementById("localAudio");
+        seekSlider = document.getElementById("seekSlider");
+        currentTimeEl = document.getElementById("currentTime");
+        durationEl = document.getElementById("duration");
+        loader = document.getElementById("loader");
+        playPauseBtn = document.getElementById("playPauseBtn");
+        replayBtn = document.getElementById("replayBtn");
+        youtubeContainer = document.getElementById("youtubePlayer");
+    };    
+
+    const renderUI = (questionId) => {
+        try {
+            const description = Activity.getDefine(questionId)?.content?.desc;
+
+            const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
+            const parent = container ? document.querySelector(container) : null;
+
+            if (!parent) {
+                console.error("Audio.renderUI: ui container not found (Define.get('questionContainer') =>", container, ")");
+                return;
+            }
+
+            parent.innerHTML = `
+            <div class="question">
+                <div class="container">
+                <div class="audio-music-bg"></div>
+                <div class="container-sub">
+                    <div class="row g-0 justify-content-center audio-box">
+                    <div class="col-lg-11 col-md-10 col-sm-10 col-12 d-flex justify-content-center align-items-center">
+                        <div class="audio-container">
+                        <div class="audio-banner">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" fill="#fff"
+                            class="bi bi-music-note-beamed" viewBox="0 0 16 16">
+                            <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
+                            <path fill-rule="evenodd" d="M14 11V2h1v9zM6 3v10H5V3z" />
+                            <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
+                            </svg>
+                        </div>
+                        <div class="audio-name">${description}</div>
+                        <div>
+                            <input type="range" class="w-100" id="seekSlider" min="0" max="100" value="0" step="0.1">
+                            <div class="d-flex justify-content-between align-items-center progress-bar-seek">
+                            <span id="currentTime">00:00</span>
+                            <span id="duration">00:00</span>
+                            </div>
+                            <audio id="localAudio"></audio>
+                            <div id="youtubePlayer"></div>
+                            <div class="rowAudioBtns">
+                            <img src="images/replay2.png" class="audio-replay-btn" id="replayBtn" alt="replay">
+                            <div id="loader" style="display:none">Loading... 0%</div>
+                            <img src="images/play2.png" class="w-25 play-icon" alt="play-pause" id="playPauseBtn">
+                            <img src="images/replay2.png" class="audio-replay-btn invisible" alt>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            `;
+
+            $('.container-sub').children().css({ 'width': '560px', 'height': '500px' });
+            $('.audio-container').css({ 'width': '90%', 'height': '90%' }).removeClass('mb-3');
+            $('.audio-container').parent().addClass('d-flex justify-content-center align-items-center');
+        } catch (e) {
+            console.error('OnlyAudio.renderUI error:', e);
+        }
+    };    
+
+    const attachEvents = () => {
+        if (!seekSlider) return;
+        
+        seekSlider.addEventListener("input", (e) => {
+            handleSeek(e.target.value);
+        });
+        
+        const onStart = () => {
+            isSeeking = true;
+            wasPlayingBeforeSeek = isPlaying;
+            if (mode === "file" && audioEl && !audioEl.paused) audioEl.pause();
+            else if (mode === "youtube" && ytPlayer && typeof ytPlayer.pauseVideo === "function") {
+                try { ytPlayer.pauseVideo(); } catch (e) {}
+            }
+        };
+        
+        const onEnd = (val) => {
+            isSeeking = false;
+            handleSeek(val);
+            if (wasPlayingBeforeSeek) {
+                if (mode === "file" && audioEl) audioEl.play();
+                else if (mode === "youtube" && ytPlayer && typeof ytPlayer.playVideo === "function") {
+                    try { ytPlayer.playVideo(); } catch (e) {}
+                }
+            }
+        };
+
+        seekSlider.addEventListener("mousedown", onStart);
+        seekSlider.addEventListener("touchstart", onStart);
+        seekSlider.addEventListener("mouseup", (e) => onEnd(e.target.value));
+        seekSlider.addEventListener("touchend", (e) => onEnd(e.target.value));
+
+        if (playPauseBtn) playPauseBtn.addEventListener("click", togglePlay);
+        if (replayBtn) replayBtn.addEventListener("click", () => {
+            if (mode === "youtube" && ytPlayer && typeof ytPlayer.seekTo === "function") {
+                ytPlayer.seekTo(0, true);
+                ytPlayer.playVideo && ytPlayer.playVideo();
+            } else if (mode === "file" && audioEl) {
+                audioEl.currentTime = 0;
+                audioEl.play();
+            }
+        });
+        
+        if (audioEl) {
+            audioEl.addEventListener("loadedmetadata", () => {
+                hideLoader();
+                if (durationEl) durationEl.textContent = formatTime(audioEl.duration);
+            });
+
+            audioEl.addEventListener("play", () => {
+                updateButton(true);
+                updateProgressLoop();
+            });
+
+            audioEl.addEventListener("pause", () => {
+                updateButton(false);
+                stopProgressLoop();
+            });
+
+            audioEl.addEventListener("ended", () => {
+                if (seekSlider) seekSlider.value = 100;
+                updateButton(false);
+                stopProgressLoop();
+            });
+        }
+    };
+
+    const togglePlay = () => {
+        if (mode === "youtube" && ytPlayer) {
+            const state = (typeof YT !== "undefined" && YT.PlayerState) ? ytPlayer.getPlayerState() : null;
+            if (state === YT.PlayerState.PLAYING) {
+            try { ytPlayer.pauseVideo(); } catch (e) {}
+            } else {
+            try { ytPlayer.playVideo(); } catch (e) {}
+            }
+        } else if (mode === "file" && audioEl) {
+            if (audioEl.paused) audioEl.play();
+            else audioEl.pause();
+        }
+    };
+
+    const updateButton = (playing) => {
+        isPlaying = !!playing;
+        if (playPauseBtn) playPauseBtn.src = playing ? "images/pause2.png" : "images/play2.png";
+    };
+    
+    const seek = (seconds) => {
+        if (mode === "youtube" && ytPlayer && typeof ytPlayer.seekTo === "function") {
+            try {
+            const current = ytPlayer.getCurrentTime();
+            ytPlayer.seekTo(current + seconds, true);
+            } catch (e) {}
+        } else if (mode === "file" && audioEl) {
+            const target = Math.max(0, Math.min(audioEl.duration || 0, (audioEl.currentTime || 0) + seconds));
+            audioEl.currentTime = target;
+        }
+    };
+    
+    const handleSeek = (val) => {
+        const percent = parseFloat(val);
+        if (isNaN(percent)) return;
+        if (mode === "youtube" && ytPlayer && typeof ytPlayer.getDuration === "function") {
+            const dur = ytPlayer.getDuration() || 0;
+            const target = (dur * percent) / 100;
+            try { ytPlayer.seekTo(target, true); } catch (e) {}
+        } else if (mode === "file" && audioEl && audioEl.duration) {
+            audioEl.currentTime = (audioEl.duration * percent) / 100;
+        } else {            
+            if (seekSlider) seekSlider.value = percent;
+        }
+    };
+    
+    const updateProgressLoop = () => {
+        const step = () => {
+            if (!isSeeking) {
+                let current = 0, duration = 0;
+                if (mode === "youtube" && ytPlayer && typeof ytPlayer.getCurrentTime === "function") {
+                    try {
+                    current = ytPlayer.getCurrentTime() || 0;
+                    duration = ytPlayer.getDuration() || 0;
+                    } catch (e) { current = 0; duration = 0; }
+                } else if (mode === "file" && audioEl) {
+                    current = audioEl.currentTime || 0;
+                    duration = audioEl.duration || 0;
+                }
+
+                if (duration > 0) {
+                    const percent = (current / duration) * 100;
+                    if (seekSlider) {
+                    if (percent >= 99.5 || current >= duration) seekSlider.value = 100;
+                    else seekSlider.value = percent;
+                    }
+                    if (durationEl) durationEl.textContent = formatTime(duration);
+                }
+
+                if (currentTimeEl) currentTimeEl.textContent = formatTime(current);
+            }
+
+            animationFrameId = requestAnimationFrame(step);
+        };
+
+        if (!animationFrameId) step();
+    };
+
+    const stopProgressLoop = () => {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    };
+    
+    const ensureYouTubeApi = () => {
+        if (window.YT && window.YT.Player) return;
+        if (document.querySelector('script[data-audio-yt]')) return;
+        const tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/iframe_api";
+        tag.setAttribute('data-audio-yt', '1');
+        document.head.appendChild(tag);
+    };
+    
+    window.onYouTubeIframeAPIReady = function () {
+        try {
+            safeLog("YouTube Iframe API ready");
+            if (!pendingYouTubeVideoId) return;
+            createYouTubePlayer(pendingYouTubeVideoId);
+            pendingYouTubeVideoId = null;
+        } catch (e) {
+            console.error("OnlyAudio.onYouTubeIframeAPIReady error:", e);
+        }
+    };
+
+    const createYouTubePlayer = (videoId) => {
+        if (!youtubeContainer) return;
+        try {
+            ytPlayer = new YT.Player("youtubePlayer", {
+            height: "0",
+            width: "0",
+            videoId,
+            playerVars: { autoplay: 0, controls: 0, rel: 0 },
+            events: {
+                onReady: (event) => {
+                    hideLoader();
+                    const waitForDuration = setInterval(() => {
+                            try {
+                                const dur = ytPlayer.getDuration();
+                                if (dur > 0) {
+                                    if (durationEl) durationEl.textContent = formatTime(dur);
+                                    clearInterval(waitForDuration);
+                                }
+                            } catch (err) {}
+                        }, 300);
+                },
+                onStateChange: (event) => {
+                    const state = event.data;
+                    if (state === YT.PlayerState.PLAYING) {
+                        updateButton(true);
+                        updateProgressLoop();
+                    } else if (state === YT.PlayerState.PAUSED || state === YT.PlayerState.ENDED) {
+                        updateButton(false);
+                        stopProgressLoop();
+                        if (state === YT.PlayerState.ENDED && seekSlider) seekSlider.value = 100;
+                    }
+                }
+            }
+            });
+        } catch (e) {
+            console.error("OnlyAudio.createYouTubePlayer error:", e);
+        }
+    };
+    
+    const init = (questionId) => {
+        try {
+            const source = Activity.getDefine(questionId)?.content?.src;
+
+            if (!source || typeof source !== "string") {
+                alert("Audio.init requires a source string (audio file URL or YouTube URL).");
+                return;
+            }
+            
+            if (initialized) destroy();
+
+            renderUI(questionId);
+            cacheElements();
+            attachEvents();
+            
+            if (isYouTube(source)) {
+                const vid = extractVideoId(source);
+                if (!vid) {
+                    alert("Invalid YouTube URL provided to Audio.init()");
+                    return;
+                }
+                mode = "youtube";
+                pendingYouTubeVideoId = vid;
+                showLoader();
+                ensureYouTubeApi();
+            } else {
+                mode = "file";
+                if (!audioEl) {
+                    console.error("Audio.init: audio element not found");
+                    return;
+                }
+                audioEl.src = source;
+                showLoader();
+                audioEl.load();
+            }
+
+            initialized = true;
+            safeLog("Audio initialized in mode:", mode);
+        } catch (err) {
+            console.error("OnlyAudio.init error:", err);
+        }
+    };
+    
+    const destroy = () => {
+        try {
+            stopProgressLoop();
+            clearInterval(loaderInterval);
+            loaderInterval = null;
+            
+            if (audioEl) {
+                try {
+                    audioEl.pause();
+                } catch (e) {}
+                
+                const cloned = audioEl.cloneNode(true);
+                audioEl.parentNode && audioEl.parentNode.replaceChild(cloned, audioEl);
+            }
+            
+            if (playPauseBtn) {
+                try { playPauseBtn.removeEventListener("click", togglePlay); } catch (e) {}
+            }
+
+            if (ytPlayer && typeof ytPlayer.destroy === "function") {
+                try { ytPlayer.destroy(); } catch (e) {}
+                ytPlayer = null;
+            }
+            
+            const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
+            const parent = container ? document.querySelector(container) : null;
+            if (parent) parent.innerHTML = "";
+            
+            audioEl = seekSlider = currentTimeEl = durationEl = loader = playPauseBtn = replayBtn = youtubeContainer = null;
+            pendingYouTubeVideoId = null;
+            mode = "";
+            initialized = false;
+        } catch (e) {
+            console.error("OnlyAudio.destroy error:", e);
+        }
+    };
+
+    return {
+        render:init,
+        destroy
+    };
+})();
+
+const VideoPlayer_saurabh_old = (() => {
     const containerId = 'video-container';
 
     const ui = (questionId) => {
@@ -7976,7 +7985,2325 @@ const VideoPlayer = (() => {
     
 })();
 
-Modules.map(({ module }) => {
+const ShravanKaushalWithImages = (() => {
+    const containerId = 'sharavan-image-container';
+
+    let userAnswers;
+    let questionRendered = false;
+    let questionIndex = 0;
+    const mainAudio = new Audio();
+    const queAudio  = new Audio();
+
+    let pass = false;
+
+    Activity.css('shravanKaushal.css');
+    Activity.css('mcq.css');
+
+    const ui = (questionId) => {
+        try {
+            questionIndex = 0;
+            questionRendered = false;
+
+            mainAudio.currentTime = 0;
+            mainAudio.pause();
+            queAudio.currentTime = 0;
+            queAudio.pause();
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity.lang ?? 'en';
+            const content = activity.content ?? {};
+            const questions = content.questions ?? [];
+
+            userAnswers = Array(questions.length).fill(null);
+
+            const buttonLabel = Activity.translateButtonLabels(lang);
+            const prevNextLabel = Activity.translateNextPrevLabel(lang);
+
+            const uiHtml = `<div class="question">
+                                <div class="container shrawan-kaushal" id="${containerId}">
+                                    <div class="listen-activity-container">
+                                        <div class="play-btn">
+                                            <div class="icon"></div>
+                                        </div>
+                                    </div>
+                                    ${activity.content?.main?.text != undefined ?
+                    `<div class="poem-sec" style="display:none;">
+                                            <div class="my-3 container" id="questionTitle">
+                                                <b class="${Define.get('head')}"></b>
+                                                <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+                                                </svg>
+                                                <svg id="stop-audio-icon" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
+                                                </svg>
+                                            </div>
+                                            <div class="container contListen">
+                                                <div class="poem-text my-2" id="poemContainer"></div>
+                                                <div class="buttons machiNgs">
+                                                    <button class="show-btn">${prevNextLabel.next}</button>
+                                                </div>
+                                            </div>
+                                        </div>`: ''
+                }
+                                    <div class="question-sec" style="${activity.content?.main != undefined ? "display:none" : 'display:block'}">
+                                        <div class="container contListen">
+                                            <div class="my-3 container" id="questionTitle">
+                                                <b class="${Define.get('head')}"></b>
+                                                <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+                                                </svg>
+                                                <svg id="stop-audio-icon" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
+                                                </svg>
+                                            </div>
+                                            <div id="mcqContainer"></div>
+                                            <div class="listen-buttonection">
+                                                <div class="buttons machiNgs">
+                                                    <button class="submit-btn" id="listen-prev-btn" style="${activity.content?.main?.text != undefined ? "display:block" : "display:none"}">${prevNextLabel.prev}</button>
+                                                    <button class="show-btn" id="listen-next-btn">${prevNextLabel.next}</button>
+                                                    <button class="reset-btn" id="listen-sub-btn" style="display:none;">${buttonLabel.submit}</button> 
+                                                    <button class="replay-btn" id="listen-replay-btn">${lang == 'en' ? 'Replay' : 'दुबारा सुने'}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="popupDialogAns" style="display: none;">
+                                    <div class="baseMod">
+                                        <div class="answerdiv">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                            <button class="btn btn-secondary popUp-close-btn">X</button>
+                                        </div>
+                                        <div id="answer-review"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+            // ..
+
+            {/* <button class="replay-btn" id="replay-audio-btn" style="${activity.content?.main?.text != undefined ? "display:block" : "display:none"}">${lang == 'en' ? 'Replay' : 'दुबारा सुने'}</button> */ }
+
+
+
+            parent.innerHTML = uiHtml;
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+
+            const playBtn = parent.querySelector('.play-btn');
+            const audioPlayBtn = parent.querySelectorAll('.bi-play-circle-fill');
+            const audioPauseBtn = parent.querySelectorAll('.bi-pause-circle-fill');
+            const replayBtn = parent.querySelectorAll('.replay-btn');
+            const nextQuestion = parent.querySelectorAll('.show-btn');
+            const prevBtn = parent.querySelector('#listen-prev-btn');
+            const submitBtn = parent.querySelector('#listen-sub-btn');
+            const closeBtn = parent.querySelector('.popUp-close-btn');
+
+            if (playBtn) playBtn.addEventListener('click', startListeningActivity);
+            if (prevBtn) prevBtn.addEventListener('click', prevQuestion);
+            if (submitBtn) submitBtn.addEventListener('click', submitAnswers);
+            if (closeBtn) closeBtn.addEventListener('click', closePopUp);
+
+            nextQuestion.forEach(btn => {
+                btn.addEventListener('click', renderQuestion);
+            });
+            replayBtn.forEach(btn => {
+                btn.addEventListener('click', playAudio);
+            });
+            audioPlayBtn.forEach(btn => {
+                btn.addEventListener('click', playMainHeadAudio);
+            });
+            audioPauseBtn.forEach(btn => {
+                btn.addEventListener('click', pauseMainHeadAudio);
+            });
+        } catch (err) {
+            console.error('ShravanKaushalWithImages.ui :', err);
+        }
+    };
+
+    const startListeningActivity = () => {
+        $('.listen-activity-container').hide();
+        $('.poem-sec').show();
+
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+        const main = content?.main ?? {};
+
+        const text = main?.text ?? {};
+        const img = main?.img ?? {};
+
+        const shravanContextContainer = $('#poemContainer');
+        shravanContextContainer.empty();
+
+        const hasText = text && Object.keys(text).length > 0;
+        const hasImg = img && Object.keys(img).length > 0;
+
+        if (!hasText && !hasImg) shravanContextContainer.remove();
+
+        if (hasText || hasImg) {
+            const textDiv = $('<div class="mcq-text"></div>');
+            const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
+
+            shravanContextContainer.addClass('row g-0');
+
+            const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'left';
+            const side = String(preferredSide).toLowerCase();
+
+            const commonClassText = 'col-md-12 col-lg-7 col-12 col-sm-12';
+            const commonClassImg = 'col-md-12 col-lg-5 col-sm-12 col-12 text-center';
+
+            if (hasText) {
+                shravanContextContainer.append(textDiv);
+                const mcq_txt_class = hasImg ? `${commonClassText}` : 'col';
+                textDiv.addClass(mcq_txt_class).html(text.text || '');
+            }
+
+            if (hasImg) {
+                const imageclass = img?.imageclass ?? '';
+                shravanContextContainer.append(imgDiv);
+                const mcq_img_cont_class = hasText
+                    ? commonClassImg
+                    : `col ${imageclass}`;
+                // ..
+
+                const image_width = img.width ?? '40%';
+
+                imgDiv.addClass(mcq_img_cont_class)
+                    .find('img')
+                    .attr('src', Activity.pathToCWD() + img.path)
+                    .css({ 'border-radius': '20px', 'width': image_width });
+            }
+
+            if (side === 'left' || side === 'right') {
+                shravanContextContainer.css('flex-direction', 'row');
+                if (side === 'left') {
+                    textDiv.css('order', 1);
+                    imgDiv.css('order', 2);
+
+                    textDiv.removeClass('text-end').addClass('text-start');
+
+                } else {
+                    textDiv.css('order', 2);
+                    imgDiv.css('order', 1);
+
+                    textDiv.removeClass('text-start').addClass('text-end');
+                }
+            } else if (side === 'top' || side === 'bottom') {
+                shravanContextContainer.css('flex-direction', 'column');
+                if (side === 'top') {
+                    textDiv.css('order', 1);
+                    imgDiv.css('order', 2);
+                } else {
+                    textDiv.css('order', 2);
+                    imgDiv.css('order', 1);
+                }
+
+                textDiv.removeClass(commonClassText).addClass('col my-1');
+                imgDiv.removeClass(commonClassImg).addClass('col my-1 text-center');
+            } else {
+                shravanContextContainer.css('flex-direction', 'row');
+                textDiv.css('order', 1);
+                imgDiv.css('order', 2);
+            }
+
+        }
+
+        if (main.audio != undefined && main?.audio != '') {
+            playMainHeadAudio(main.audio);
+
+            if (main.text == undefined) {
+                renderQuestion();
+            }
+
+        }
+    }
+
+    const playMainHeadAudio = () => {
+        pauseAudio();
+
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+        const main = content?.main ?? {};
+
+        mainAudio.src = Activity.pathToCWD() + main.audio;
+
+        mainAudio.currentTime = 0;
+        mainAudio.play();
+
+        $(".bi-play-circle-fill").hide();
+        $(".bi-pause-circle-fill").show();
+
+        mainAudio.addEventListener('ended', () => {
+            pauseMainHeadAudio();
+        });
+    }
+
+    const pauseMainHeadAudio = () => {
+        mainAudio.currentTime = 0;
+        mainAudio.pause();
+
+        $(".bi-pause-circle-fill").hide();
+        $(".bi-play-circle-fill").show();
+    }
+
+    const playAudio = (src = '') => {
+        pauseMainHeadAudio();
+        if (src != '' && typeof src === 'string') queAudio.src = Activity.pathToCWD() + src;
+
+        queAudio.currentTime = 0;
+        queAudio.play();
+
+        queAudio.addEventListener('ended', () => {
+            pauseAudio();
+        });
+    }
+
+    const pauseAudio = () => {
+        queAudio.currentTime = 0;
+        queAudio.pause();
+    }
+
+    const renderQuestion = () => {
+
+        if (questionRendered) {
+            const selected = document.querySelector(
+                `input[name="question-${questionIndex}"]:checked`
+            );
+
+            if (!selected) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Info",
+                    text: "Please select an option before next.",
+                    confirmButtonText: "OK"
+                });
+                return;
+            } else {
+                questionIndex++;
+            }
+        }
+
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content ?? {};
+        const questions = content?.questions ?? [];
+        const q = questions[questionIndex];
+
+        if (content?.main?.text != undefined) {
+            pass = true;
+        }
+
+        if (questionIndex == 0) {
+            let flag = true;
+            if (!pass) {
+                mainAudio.addEventListener('ended', () => {
+                    if (flag) {
+                        playAudio(q?.question?.audio);
+                        flag = false;
+                    }
+                })
+            } else {
+                playAudio(q?.question?.audio);
+            }
+        } else {
+            // console.log('elkse2')
+            // console.log(q?.question)
+            // console.log(questionIndex, 'index');
+            playAudio(q?.question?.audio);
+            pass = true;
+        }
+
+        $(`.${Define.get('head')}`).html(activity.head);
+
+        const html = [];
+
+        const headHtml = `
+            <div class='question-block animate__animated animate__fadeInRight'>
+            <div class="Ques"><b>${questionIndex + 1}. ${q?.question?.text ?? ''}</b></div>
+            ${q?.question?.image
+                ? `<img src="${Activity.pathToCWD() + q.question?.image}" class="question-img mb-2 image-Center">`
+                : ''
+            }
+            <div class='row m-0 mt-2'>
+        `;
+        html.push(headHtml);
+
+        const hasImage = q?.options.some(opt => opt.image);
+        q?.options.forEach((opt, i) => {
+            const options = `
+                            <div class="col-sm-12 col-md-12 col-lg-6 p-0">
+                                <label class="opt-box ${hasImage ? "big-box" : "small-box"}">
+                                    <div class="left-content">
+                                        <input 
+                                            type="radio"
+                                            name="question-${questionIndex}"
+                                            value="${i}"                                            
+                                            ${userAnswers[questionIndex] === i ? "checked" : ""}
+                                        >
+                                        <strong class="alpha">
+                                            (${Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: true })})
+                                        </strong>
+                                        <span>${opt.text || ""}</span>
+                                    </div>
+                                    <div class="right-img ${opt.text == undefined ? 'w-100' : null}">
+                                        ${opt.image ? `<img src="${Activity.pathToCWD() + opt.image}" class="opt-image">` : ""}
+                                    </div>
+                                </label>
+                            </div>`;
+            // ..
+            html.push(options);
+        });
+        html.push('</div></div>');
+        document.getElementById("mcqContainer").innerHTML = html.join('');
+
+        $('.question-sec').show();
+        $('.poem-sec').hide();
+
+        $('.left-content input').each((ind, item) => {
+            item.addEventListener('click', () => selectOption(questionIndex, ind));
+        });
+
+        toggleButtons(questions);
+        questionRendered = true;
+    }
+
+    const selectOption = (qIndex, optIndex) => {
+        userAnswers[qIndex] = optIndex;
+    }
+
+    const toggleButtons = (questions) => {
+        document.getElementById("listen-prev-btn").style.display = questionIndex != 0 || pass ? "inline-block" : "none";
+        document.getElementById("listen-next-btn").style.display =
+            questionIndex === questions.length - 1 ? "none" : "inline-block";
+        document.getElementById("listen-sub-btn").style.display =
+            questionIndex === questions.length - 1 ? "inline-block" : "none";
+        // document.getElementById("listen-replay-btn").style.display = questionIndex != 0 ? "inline-block": "none";
+    }
+
+    const prevQuestion = () => {
+        questionRendered = false;
+
+        if (questionIndex > 0) {
+            questionIndex--;
+            renderQuestion();
+        } else {
+            $('.question-sec').hide();
+            startListeningActivity();
+        }
+    }
+
+    const submitAnswers = () => {
+        pauseAudio();
+
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity.lang ?? 'en';
+        const content = activity.content ?? {};
+        const questions = content.questions ?? [];
+
+        const notAnsweredIndex = userAnswers.findIndex(a => a === null);
+
+        if (notAnsweredIndex !== -1) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: `Please select an option for Question ${notAnsweredIndex + 1} before submitting.`,
+                confirmButtonText: "OK"
+            });
+            return;
+        }
+
+        const userTextAns = [];
+        const correctTextAns = [];
+
+        questions?.forEach((q, index) => {
+            const selected = userAnswers[index];
+            userTextAns.push(q.options[selected].text);
+            correctTextAns.push(q.options[q.answer].text);
+        });
+
+        const score = userTextAns.filter((ans, i) => ans === correctTextAns[i]).length;
+        const total = questions.length;
+
+        showResultPopup(score, total, userTextAns, correctTextAns, lang);
+    }
+
+    const showResultPopup = (score, total, userAns, correctAns, lang = 'en') => {
+
+        document.getElementById("scoreTextQ1").innerText = `You got : ${score} out of ${total}`;
+
+        const tableHeadLabels = Activity.translateTableHeads(lang);
+
+        const table = [];
+        const tableHead = `
+            <div class="table-responsive">
+                <table class="table table-bordered" style="font-size:20px">
+                    <thead class="text-light" style="white-space: nowrap;">
+                        <tr>
+                            <th>${tableHeadLabels.sequence}</th>
+                            <th>${tableHeadLabels.attempted}</th>
+                            <th>${tableHeadLabels.correct}</th>
+                            <th>${tableHeadLabels.result}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        table.push(tableHead);
+
+        userAns.forEach((ua, i) => {
+            const ca = correctAns[i];
+            const isCorrect = ua === ca;
+
+            const tr = `
+                <tr>
+                    <th>${i + 1}</th>
+                    <td class="${isCorrect ? "text-success" : "text-danger"}">${ua}</td>
+                    <td class="text-success">${ca}</td>
+                    <td class="${isCorrect ? "text-success" : "text-danger"}">
+                        ${isCorrect ? "✔" : "✘"}
+                    </td>
+                </tr>
+            `;
+            table.push(tr);
+        });
+
+        table.push(`</tbody></table></div>`);
+
+        document.getElementById("answer-review").innerHTML = table.join('');
+        document.getElementById("popupDialogAns").style.display = "block";
+    }
+
+    const closePopUp = () => {
+        $("#popupDialogAns").hide();
+    }
+
+    return {
+        render: ui
+    }
+
+})();
+
+const OnlyAudio = (() => {
+
+    Activity.css('audioPlay.css');
+
+    let state = {
+        container: null,
+        audioEl: null,
+        ytPlayer: null,
+        mode: null,
+        rafId: null,
+        isSeeking: false,
+        initialized: false,
+    };
+
+    let fakePercent = 0;
+    let fakeInterval;
+
+    const safeLog = (...a) => { if (window.console) console.log(...a); };
+
+    const formatTime = (s) => {
+        if (!Number.isFinite(s) || s < 0) s = 0;
+        const m = Math.floor(s / 60).toString();
+        const sec = Math.floor(s % 60).toString().padStart(2, "0");
+        return `${m}:${sec}`;
+    };
+
+    const isYouTube = (u) => typeof u === "string" && (u.includes("youtube.com") || u.includes("youtu.be"));
+
+    const extractYouTubeId = (url) => {
+        if (!url) return null;
+        let m = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+        if (m) return m[1];
+        m = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+        if (m) return m[1];
+        m = url.match(/\/embed\/([a-zA-Z0-9_-]{11})/);
+        if (m) return m[1];
+        return null;
+    };
+
+    let ytApiPromise = null;
+    const ensureYouTubeApi = () => {
+        if (window.YT && window.YT.Player) return Promise.resolve();
+        if (ytApiPromise) return ytApiPromise;
+
+        ytApiPromise = new Promise((resolve, reject) => {
+            // create script
+            const s = document.createElement("script");
+            s.src = "https://www.youtube.com/iframe_api";
+            s.async = true;
+            document.head.appendChild(s);
+
+            // single global callback
+            const prev = window.onYouTubeIframeAPIReady;
+            window.onYouTubeIframeAPIReady = function () {
+                if (typeof prev === "function") try { prev(); } catch (e) { /* ignore */ }
+                resolve();
+            };
+
+            // fallback timeout
+            setTimeout(() => {
+                if (window.YT && window.YT.Player) resolve();
+                else reject(new Error("YouTube API load timeout"));
+            }, 10000);
+        });
+
+        return ytApiPromise;
+    };
+
+    const updatePlayButton = (playing) => {
+        if (!state.playBtn) return;
+        state.playBtn.src = playing
+            ? "images/pause2.png"
+            : "images/play2.png";
+    };
+
+    const startProgressLoop = () => {
+        if (state.rafId) return;
+        const frame = () => {
+            if (!state.isSeeking) {
+                let cur = 0, dur = 0;
+                if (state.mode === "file" && state.audioEl) {
+                    cur = state.audioEl.currentTime || 0;
+                    dur = state.audioEl.duration || 0;
+                } else if (state.mode === "youtube" && state.ytPlayer) {
+                    try {
+                        cur = state.ytPlayer.getCurrentTime() || 0;
+                        dur = state.ytPlayer.getDuration() || 0;
+                    } catch (e) { cur = 0; dur = 0; }
+                }
+
+                if (dur > 0) {
+                    const pct = Math.min(100, (cur / dur) * 100);
+                    if (state.seek) state.seek.value = pct;
+                    if (state.durationEl) state.durationEl.textContent = formatTime(dur);
+                }
+                if (state.currentTimeEl) state.currentTimeEl.textContent = formatTime(cur);
+            }
+            state.rafId = requestAnimationFrame(frame);
+        };
+        state.rafId = requestAnimationFrame(frame);
+    };
+
+    const stopProgressLoop = () => { if (state.rafId) cancelAnimationFrame(state.rafId); state.rafId = null; };
+
+    const destroyYT = () => {
+        try {
+            if (state.ytPlayer && typeof state.ytPlayer.destroy === "function") {
+                state.ytPlayer.destroy();
+            }
+        } catch (e) { /* ignore */ }
+        state.ytPlayer = null;
+    };
+
+    const initFile = (src) => {
+        if (state.ytPlayer) {
+            try { state.ytPlayer.pauseVideo(); } catch (e) { }
+        }
+
+        destroyYT();
+        if (!state.audioEl) {
+            state.audioEl = document.createElement("audio");
+            state.audioEl.id = "oas-audio";
+            state.audioEl.preload = "metadata";
+            state.audioEl.style.display = "none";
+            state.container.appendChild(state.audioEl);
+        }
+        state.mode = "file";
+        state.audioEl.src = src;
+        state.loaderEl.style.display = "inline-block";
+        startFakeLoader();
+
+        state.audioEl.onloadedmetadata = () => {
+            stopFakeLoader();
+            if (state.durationEl) state.durationEl.textContent = formatTime(state.audioEl.duration);
+        };
+
+        state.audioEl.onplay = () => { updatePlayButton(true); startProgressLoop(); };
+        state.audioEl.onpause = () => { updatePlayButton(false); stopProgressLoop(); };
+        state.audioEl.onended = () => { updatePlayButton(false); stopProgressLoop(); state.seek && (state.seek.value = 100); };
+    };
+
+    const initYouTube = async (urlOrId) => {
+        if (state.audioEl) {
+            state.audioEl.pause();
+        }
+        state.mode = "youtube";
+        destroyYT();
+
+        const id = extractYouTubeId(urlOrId) || urlOrId;
+        if (!id) throw new Error("Invalid YouTube URL or id");
+
+        state.loaderEl.style.display = "inline-block";
+        startFakeLoader();
+        await ensureYouTubeApi(); // may throw
+
+        // Create player in a hidden wrapper (but not 0x0)
+        state.iframeWrap.innerHTML = `<div id="oas-yt-player"></div>`;
+        state.ytPlayer = new YT.Player("oas-yt-player", {
+            height: "1",
+            width: "1",
+            videoId: id,
+            playerVars: { autoplay: 0, controls: 0, rel: 0 },
+            events: {
+                onReady: (ev) => {
+                    // allow autoplay on the created iframe
+                    const iframe = state.iframeWrap.querySelector("iframe");
+                    if (iframe) iframe.setAttribute("allow", "autoplay; encrypted-media");
+                    try {
+                        const dur = state.ytPlayer.getDuration();
+                        if (state.durationEl && Number.isFinite(dur)) state.durationEl.textContent = formatTime(dur);
+                        stopFakeLoader();
+                    } catch (e) { /* ignore */ }
+                    state.loaderEl.style.display = "none";
+                },
+                onStateChange: (e) => {
+                    const s = e.data;
+                    if (s === YT.PlayerState.PLAYING) {
+                        updatePlayButton(true);
+                        startProgressLoop();
+                    }
+                    else if (s === YT.PlayerState.PAUSED) {
+                        updatePlayButton(false);
+                        stopProgressLoop();
+                    }
+                    else if (s === YT.PlayerState.ENDED) {
+                        updatePlayButton(false);
+                        stopProgressLoop();
+                        state.seek && (state.seek.value = 100);
+                    }
+                }
+            }
+        });
+    };
+
+    const ui = (questionId) => {
+        try {
+
+            const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
+            const parent = container ? document.querySelector(container) : null;
+
+            if (!parent) {
+                console.error("Audio.renderUI: ui container not found (Define.get('questionContainer') =>", container, ")");
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
+
+            const defaultDesc = lang == 'en' ? 'Audio' : 'ऑडियो';
+            const description = content?.desc ?? defaultDesc;
+
+            parent.innerHTML = `
+            <div class="question">
+                <div class="container">
+                    <div class="audio-music-bg"></div>
+                    <div class="container-sub">
+                        <div class="row g-0 justify-content-center audio-box">
+                            <div class="col-lg-11 col-md-10 col-sm-10 col-12 d-flex justify-content-center align-items-center">
+                                <div class="audio-container">
+                                    <div class="audio-banner">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" fill="#fff"
+                                        class="bi bi-music-note-beamed" viewBox="0 0 16 16">
+                                        <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
+                                        <path fill-rule="evenodd" d="M14 11V2h1v9zM6 3v10H5V3z" />
+                                        <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
+                                        </svg>
+                                    </div>
+                                    <div class="audio-name my-3">${description}</div>
+                                    <div>
+                                        <input type="range" class="w-100" id="seekSlider" min="0" max="100" value="0" step="0.1">
+                                        <div class="d-flex justify-content-between align-items-center progress-bar-seek">
+                                            <span id="currentTime">00:00</span>
+                                            <span id="duration">00:00</span>
+                                        </div>
+                                        <div id="oas-iframe-wrap" class="hidden-iframe d-none" aria-hidden="true"></div>
+                                        <div class="rowAudioBtns">
+                                            <img src="images/replay2.png" class="audio-replay-btn" id="replayBtn" alt="replay">
+                                            <div id="loader" style="display:none">Loading... 0%</div>
+                                            <img src="images/play2.png" class="w-25 play-icon" alt="play-pause" id="playPauseBtn">
+                                            <img src="images/replay2.png" class="audio-replay-btn invisible" alt>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+            state.container = parent;
+            state.playBtn = parent.querySelector("#playPauseBtn");
+            state.seek = parent.querySelector("#seekSlider");
+            state.currentTimeEl = parent.querySelector("#currentTime");
+            state.durationEl = parent.querySelector("#duration");
+            state.replayBtn = parent.querySelector("#replayBtn");
+            state.loaderEl = parent.querySelector("#loader");
+            state.iframeWrap = parent.querySelector("#oas-iframe-wrap");
+        } catch (e) {
+            console.error('OnlyAudio.renderUI error:', e);
+        }
+    };
+
+    const init = async (questionId) => {
+
+        ui(questionId);
+
+        const activity = Activity.getDefine(questionId) ?? {};
+        const content = activity.content ?? {};
+
+        let source = `${content?.src}`;
+
+        if (!source || typeof source !== "string") throw new Error("source string required");
+
+        state.playBtn.addEventListener("click", async () => {
+            try {
+                if (state.mode === "file" && state.audioEl) {
+                    if (state.audioEl.paused) await state.audioEl.play();
+                    else state.audioEl.pause();
+                } else if (state.mode === "youtube" && state.ytPlayer) {
+                    const st = state.ytPlayer.getPlayerState();
+                    if (st === YT.PlayerState.PLAYING) state.ytPlayer.pauseVideo();
+                    else state.ytPlayer.playVideo();
+                } else {
+                    await setupSource(source);
+                    if (state.mode === "file" && state.audioEl) state.audioEl.play();
+                    if (state.mode === "youtube" && state.ytPlayer) state.ytPlayer.playVideo();
+                }
+            } catch (err) {
+                console.error("play error:", err);
+            }
+        });
+
+        state.replayBtn.addEventListener("click", () => {
+            if (state.mode === "file" && state.audioEl) {
+                state.audioEl.currentTime = 0;
+                state.audioEl.play();
+            } else if (state.mode === "youtube" && state.ytPlayer) {
+                try { state.ytPlayer.seekTo(0, true); state.ytPlayer.playVideo(); } catch (e) { /* ignore */ }
+            }
+        });
+
+        // seeking
+        state.seek.addEventListener("input", (e) => {
+            state.isSeeking = true;
+        });
+        state.seek.addEventListener("change", (e) => {
+            const pct = parseFloat(e.target.value) || 0;
+            handleSeekPct(pct);
+            state.isSeeking = false;
+        });
+
+        // keyboard support for play button
+        state.playBtn.tabIndex = 0;
+        state.playBtn.addEventListener("keydown", (e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); state.playBtn.click(); } });
+
+        // set up initial source but do not autoplay (user gesture needed for some browsers)
+        await setupSource(source);
+
+        state.initialized = true;
+        safeLog("OnlyAudioSimple initialized", state.mode);
+    };
+
+    const handleSeekPct = (pct) => {
+        if (state.mode === "file" && state.audioEl && state.audioEl.duration) {
+            state.audioEl.currentTime = (pct / 100) * state.audioEl.duration;
+        } else if (state.mode === "youtube" && state.ytPlayer && typeof state.ytPlayer.getDuration === "function") {
+            try {
+                const dur = state.ytPlayer.getDuration() || 0;
+                const target = (pct / 100) * dur;
+                state.ytPlayer.seekTo(target, true);
+            } catch (e) { /* ignore */ }
+        }
+    };
+
+    const setupSource = async (src) => {
+        if (isYouTube(src)) {
+            await initYouTube(src);
+        } else {
+            initFile(src);
+        }
+    };
+
+    const startFakeLoader = () => {
+        fakePercent = 0;
+        state.loaderEl.style.display = "inline-block";
+        fakeInterval = setInterval(() => {
+            fakePercent += 5;
+            if (fakePercent > 95) fakePercent = 95;
+            state.loaderEl.textContent = `Loading... ${fakePercent}%`;
+        }, 200);
+    }
+
+    const stopFakeLoader = () => {
+        clearInterval(fakeInterval);
+        state.loaderEl.textContent = `Loading... 100%`;
+        setTimeout(() => {
+            state.loaderEl.style.display = "none";
+        }, 200);
+    }
+
+    const destroy = () => {
+        try {
+            // Stop RAF
+            if (state.rafId) {
+                cancelAnimationFrame(state.rafId);
+                state.rafId = null;
+            }
+
+            // Stop & clean audio
+            if (state.audioEl) {
+                // Remove all event handlers to prevent re-triggering
+                state.audioEl.onplay = null;
+                state.audioEl.onpause = null;
+                state.audioEl.onended = null;
+                state.audioEl.onloadedmetadata = null;
+                state.audioEl.onerror = null;
+
+                // Stop playback & stop loading
+                state.audioEl.pause();
+                state.audioEl.src = "";
+                state.audioEl.load();   // IMPORTANT: cancels pending load
+                state.audioEl.remove();
+            }
+
+            // Destroy YouTube
+            if (state.ytPlayer && state.ytPlayer.destroy) {
+                state.ytPlayer.destroy();
+            }
+            state.ytPlayer = null;
+
+            // Clear UI
+            if (state.container) {
+                state.container.innerHTML = "";
+            }
+
+            // Reset state
+            state = {
+                container: null,
+                audioEl: null,
+                ytPlayer: null,
+                mode: null,
+                rafId: null,
+                isSeeking: false,
+                initialized: false
+            };
+
+        } catch (e) {
+            console.error("destroy error", e);
+        }
+    };
+
+
+    return { render: init, destroy };
+})();
+
+const VideoPlayer = (() => {
+    const containerId = 'video-container';
+
+    const ui = (questionId) => {
+        try {
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity.content ?? {};
+            const video = content?.video ?? {};
+            const isYouTube = video?.youtube ?? false;
+            const path = (video?.path && isYouTube) ? video?.path : Activity.pathToCWD() + video?.path;
+
+            const uiHtml = `<div class="question">
+                                <div class="p-2 d-flex align-items-center justify-content-center" id="${containerId}" style="height:85vh !important;">
+                                    ${`<iframe id="ytVideo" 
+                                            class="w-100 h-100"
+                                            src="${path}"
+                                            frameborder="0"
+                                            allow="autoplay; fullscreen;"
+                                            allowfullscreen
+                                            style="background: #000">
+                                        </iframe>`
+                }
+                                </div>
+                            </div>`;
+            // ..
+            parent.innerHTML = uiHtml;
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+        } catch (err) {
+            console.error('VideoPlayer.ui :', err);
+        }
+    };
+
+    return {
+        render: ui
+    }
+
+})();
+
+const RachnatmakParaWithImages = (() => {
+    const containerId = 'rachnatmak-container';
+
+    Activity.css('fillHindi.css');
+
+    const ui = (questionId) => {
+        try {
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang     = activity?.lang ?? 'en';
+
+            const uiHtml = `<div class="question">
+                                <div class="container" id="${containerId}">
+                                    <div class="menHeading ${Define.get('head')}"></div>
+                                    <p class="nameOfTopic ${Define.get('subHead')}"></p>
+                                    ${activity.instruction != undefined && activity.instruction !== "" ?
+                    `<div class="instForFillText shadow-sm">
+                                            <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
+                                            <p class="saketText">instruction</p>
+                                        </div>`: ''
+                }
+                                    <div class="textNormalRun"></div>
+                                </div>
+                                `;
+            // ..
+            parent.innerHTML = uiHtml;
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+        } catch (err) {
+            console.error('RachnatmakWithImages.ui :', err);
+        }
+    };
+
+    const renderActivity = (questionId) => {
+        ui(questionId);
+
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+
+        const container = document.querySelector(".textNormalRun");
+
+        const image = content?.image ?? false;
+
+        if (image != false) {
+            const align = (image?.align == 'left' || image?.align == 'right') ? image?.align : 'right';
+            const width = image?.width ?? '40%';
+            const replacement = image?.replacement ?? '#_#';
+            const path = image?.path ? Activity.pathToCWD() + image.path : false;
+            if (path != false) {
+                const image = `<img src="${path}" style="width:${width};" class="img-${align}">`
+                const text = content?.text?.replace(replacement, image);
+                container.innerHTML = text;
+            }
+        }
+    }
+
+    return {
+        render: renderActivity
+    }
+
+})();
+
+const RachnatmakWithKeyboard = (() => {
+    const containerId = 'rachnatmak-container';
+
+    Activity.css('fillHindi.css');
+
+    const ui = (questionId) => {
+        try {
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity?.content ?? {};
+            const lang = activity.lang ?? 'en';
+
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            const uiHtml = `<div class="question">
+                                <div class="container" id="${containerId}">
+                                    <div class="menHeading ${Define.get('head')}"></div>
+                                    <div class="nameOfTopic ${Define.get('subHead')}"></div>
+                                    <div id="activitiesRachnatmal"></div>
+                                    <div class='clear'></div>
+                                    <div class="studentAnsBox" style="display:none;">
+                                        <div class="inForContRach animate__animated  animate__fadeInDown">
+                                            <div class="closeBtnsRachna">X</div>
+                                            <div class="studentOutPut"></div>
+                                        </div>
+                                    </div>
+                                    <div class="sampleBox" style="display:none;">
+                                        <div class="sampleAnsBox inForContRach animate__animated  animate__fadeInDown">
+                                            <div class="closeBtnsRachna closeAnsBox">X</div>
+                                            ${content.answer}
+                                        </div>
+                                    </div>
+                                    <div class="buttons machiNgs">
+                                        <button class="submit-btn">${buttonLabel.check}</button>
+                                        <button class="show-btn">${buttonLabel.show}</button>
+                                        <button class="reset-btn">${buttonLabel.try}</button>
+                                    </div>
+                                </div>
+                            `;
+            // ..
+            parent.innerHTML = uiHtml;
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+
+
+            const resetBtn = parent.querySelector('.reset-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const submitBtn = parent.querySelector('.submit-btn');
+            const closeBtn = parent.querySelectorAll('.closeBtnsRachna');
+
+            if (showBtn) showBtn.addEventListener("click", showAnswer);
+            if (resetBtn) resetBtn.addEventListener("click", resetActivity);
+            if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+            if (closeBtn) closeBtn.forEach((item) => {
+                item.addEventListener("click", closePopUp);
+            })
+
+
+        } catch (err) {
+            console.error('RachnatmakWithKeyboard.ui :', err);
+        }
+    };
+
+    const renderActivity = (questionId) => {
+        ui(questionId);
+
+        const activity = Activity.getDefine(questionId) ?? {};
+        const lang = activity.lang ?? 'en';
+        const content = activity.content ?? {};
+
+        let textareaType = content.textArea?.type ?? "single";
+        let textareaClass = textareaType === "multi" ? "multiTextArea" : "singleTextarea";
+        let textBox = "";
+        for (let i = 0; i < content.textArea?.count; i++) {
+            textBox += `<textarea 
+            class="form-control hindiInput ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted forHindiDev 
+            ${textareaClass}" 
+            data-ans="${i}"
+            style="height:${content?.textArea?.height};"></textarea>`;
+        }
+
+        const imgSrc = Activity.pathToCWD() + content?.image?.path ?? "";
+        const image = imgSrc ? `<img
+            class="dynamicImgRachna shadow-sm ${content?.image?.side}"
+            src="${imgSrc}"
+            style="width:${content.image.width};" />` : "";
+
+        const html = `
+            <div class="instForFillText shadow-sm">
+                <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
+                <p class="saketText">${content?.heading ?? ''}</p>
+            </div>
+            <div class="inputeSectionsRachna img-${content.image.side}">
+                ${content.image.side === "left" ? image : ""}
+                <div class="textInputsBox">${textBox}</div>
+                ${content.image.side === "right" ? image : ""}
+            </div>
+            `;
+
+        document.getElementById("activitiesRachnatmal").innerHTML = html;
+
+        if (lang == 'hi') {
+            const inputs = $('#' + containerId)[0].querySelectorAll('.hindiInput');
+            $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
+            $(inputs)
+                .keyboard({
+                    layout: 'hindi',
+                    usePreview: false,
+                    autoAccept: true,
+                })
+                .addTyping({ showTyping: true, delay: 70 })
+                .on('keydown', e => e.preventDefault());
+        }
+    }
+
+    const showAnswer = () => {
+        $(".sampleBox").show();
+    }
+
+    const resetActivity = () => {
+        document.querySelectorAll('textarea').forEach(t => t.value = "");
+    }
+
+    const checkAnswer = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content  = activity.content ?? {};
+        const lang     = activity?.lang ?? 'en';
+
+        const textareas = document.querySelectorAll('textarea');
+        const studentBox = document.querySelector('.studentOutPut');
+        let isEmptyFound = false;
+
+        const keywords = content.answer
+            .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "")
+            .split(/\s+/)
+            .filter(word => word.length > 3);
+        const uniqueKeywords = [...new Set(keywords)];
+
+        textareas.forEach(t => {
+            if (t.value.trim() === "") {
+                isEmptyFound = true;
+                t.style.border = "2px solid red";
+            } else {
+                t.style.border = "";
+            }
+        });
+        if (isEmptyFound) {
+            Swal.fire({
+                icon: "error",
+                title: lang == 'hi' ? 'अरे रुकिए!' : 'Hold on a second!',
+                text: lang == 'hi' ? 'कृपया सभी स्थानों को भरें!' : 'Please fill in all the blanks!',
+            });
+            return;
+        }
+
+        $(".studentAnsBox").show();
+        let studentText = Array.from(textareas).map(t => t.value).join(" ");
+
+        let matchedKeywords = 0;
+        let studentWords = studentText.split(/\s+/);
+
+        uniqueKeywords.forEach(key => {
+            if (studentWords.includes(key)) matchedKeywords++;
+        });
+
+        let score = Math.round((matchedKeywords / uniqueKeywords.length) * 100);
+        score = Math.max(0, Math.min(100, score));
+
+        studentBox.innerHTML = `<div class='headingYourAns'>आपके उत्तर :</div><br>
+                                <span class='studentTextApp'>${studentText}</span><br><br>
+                                <div class='scoreInRachNamat'>आपको 100 में से ${score} अंक मिले हैं</div>`;
+
+        $(".studentAnsBox").show();
+
+        studentBox.innerHTML = `
+                <div class='headingYourAns'>आपके उत्तर :</div><br>
+                <span class='studentTextApp'>${studentText}</span><br><br>
+                <div class='scoreInRachNamat'>आपको 100 में से ${score} अंक मिले हैं</div>`;
+    }
+
+    const closePopUp = () => {
+        $(".studentAnsBox").hide();
+        $(".sampleBox").hide();
+    }
+
+    return {
+        render: renderActivity
+    }
+
+})();
+
+const RachnatmakWithTabBtns = (() => {
+    const containerId = 'rachnatmak-container';
+
+    Activity.css('fillHindi.css');
+
+    const ui = (questionId) => {
+        try {
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity.lang ?? 'en';
+
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            const uiHtml = `<div class="question">
+                                <div class="container" id="${containerId}">
+                                    <div class="container">
+                                        <div class="wrapers">
+                                            <div class="menHeading text-center ${Define.get('head')}" id="mainHRach"></div>
+                                            <div class="nameOfTopic text-center ${Define.get('subHead')}" id="subHeadRach"></div>
+                                            <div class="holderLeterBox">
+                                                <div class="rowRachnaButtons animate__animated animate__fadeInDown" id="dynamicTabs"></div>
+                                                <div class="showContentBox" id="dynamicContent"></div>
+                                            </div>
+                                            <div class="readyLetterBox" id="readyLetterBox"></div>
+                                            <div class="buttons machiNgs">
+                                                <button class="show-btn readyPatar">${buttonLabel.show}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                `;
+            // ..
+            parent.innerHTML = uiHtml;
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+        } catch (err) {
+            console.error('RachnatmakWithTabBtns.ui :', err);
+        }
+    };
+
+    const renderActivities = (questionId) => {
+        const activity = Activity.getDefine(questionId) ?? {};
+        const content = activity?.content ?? {};
+
+        ui(questionId);
+
+        const tabContainer = document.getElementById("dynamicTabs");
+        const contentContainer = document.getElementById("dynamicContent");
+
+        content?.questions.forEach((item, index) => {
+            const tab = document.createElement("div");
+            tab.className = "tbClicked";
+            tab.dataset.id = index;
+            tab.innerHTML = `<div class="row align-items-start">
+                                <div class="col-md-3 col-12">
+                                    <div class="tabsForLetter shadow-sm" data-id="${index}">
+                                        ${index + 1 + '. ' + item.label}
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-12">
+                                    <div class="showInboxes animate__animated animate__fadeInUp" data-id="${index}" style="display:none;">
+                                        ${item.answer}
+                                    </div>
+                                </div>
+                            </div>`;
+
+            tabContainer.appendChild(tab);
+            const div = document.createElement("div");
+            div.className = "showInboxes animate__animated animate__fadeInDown";
+            div.dataset.id = index;
+            div.style.display = "none";
+            div.innerHTML = item.answer;
+            contentContainer.appendChild(div);
+        });
+
+        showAns(questionId);
+        handlingClick();
+    }
+
+    const handlingClick = () => {
+        const tabs = document.querySelectorAll('.tabsForLetter');
+        tabs.forEach( (tab) => {
+            const tabId = tab.dataset.id;
+            const contentBox = document.querySelector(`.showInboxes[data-id="${tabId}"]`);            
+            tab.addEventListener( 'click', (e) => {
+                $(contentBox).toggle();
+            });            
+        });
+    }
+
+    const showAns = (questionId) => {
+        const activity = Activity.getDefine(questionId) ?? {};
+        const content = activity?.content ?? {};
+
+        const readyLetterBox = document.getElementById("readyLetterBox");
+        const htmlReady = `<div class="baseModelsReady animate__animated animate__fadeInDown">
+                            <div class='headingReadyPatr'>${content?.heading}</div>
+                            <div class="closeBtnsRachna closeReadyPatar">X</div>
+                            <div id="dataForReadyPatar"></div>
+                        </div>`
+        readyLetterBox.innerHTML = htmlReady
+        const dataForReadyPatar = document.getElementById("dataForReadyPatar")
+        content?.questions.map((item) => {
+            const html = `<div>${item.answer}</div>`
+            dataForReadyPatar.innerHTML += html;
+        });
+
+        $('.closeReadyPatar').on('click', () => {
+            $("#readyLetterBox").hide();
+        });
+
+        $('.readyPatar').on('click', () => {
+            $("#readyLetterBox").show();
+            $("#readyLetterBox").css("display", "flex");
+        });
+    }
+
+    return {
+        render: renderActivities
+    }
+
+})();
+
+const RachnatmakWithInputs = (() => {
+    const containerId = 'rachnatmak-container';
+
+    Activity.css('fillHindi.css');
+
+    const ui = (questionId) => {
+        try {
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity?.content ?? {};
+            const lang = activity.lang ?? 'en';
+
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+
+            const uiHtml = `<div class="question">
+                                <div class="container" id="${containerId}">
+                                    <div class="container">
+                                        <div class="wrapers">
+                                            <div class="menHeading text-center ${Define.get('head')}" id="mainHRach"></div>
+                                            <div class="nameOfTopic text-center ${Define.get('subHead')}" id="subHeadRach"></div>
+                                            ${content?.hint ?
+                    `<div class="instForFillText shadow-sm">
+                                                    <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
+                                                    <p class="saketText">${content?.hint}</p>
+                                                </div>`: ''
+                }
+                                            ${content?.image ?
+                    `<div class="imgDisplay" style="width:${content.image?.width}">
+                                                    <img src="${Activity.pathToCWD() + content.image?.path}"/>
+                                                </div>`: ''
+                }
+                                            <div id="showInputsAnnds"></div>
+                                            ${content?.showButtons ?
+                    `<div class="buttons machiNgs">
+                                                    <button class="submit-btn">${buttonLabel.check}</button>
+                                                    <button class="show-btn">${buttonLabel.show}</button>
+                                                    <button class="reset-btn">${buttonLabel.try}</button>
+                                                </div>`: ''
+                }
+                                        </div>
+                                    </div>
+                                </div>
+                                `;
+            // ..
+            parent.innerHTML = uiHtml;
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showAnsBtn = parent.querySelector('.show-btn');
+            const retryBtn = parent.querySelector('.reset-btn');
+
+            if (submitBtn) submitBtn.addEventListener('click', checkAnswers);
+            if (showAnsBtn) showAnsBtn.addEventListener('click', showAnswer);
+            if (retryBtn) retryBtn.addEventListener('click', resetActivity);
+
+        } catch (err) {
+            console.error('RachnatmakWithInputs.ui :', err);
+        }
+    };
+
+    const renderActivity = (questionId) => {
+        ui(questionId);
+
+        const activity = Activity.getDefine(questionId) ?? {};
+        const content = activity?.content ?? {};
+        const lang = activity?.lang ?? 'en';
+
+        const showInputsAnnds = document.getElementById("showInputsAnnds");
+
+        const colLeft  = content?.col?.left != undefined ? content?.col?.left : { md: 6, sm: 6, col: 6, show: true };
+        const colRight = content?.col?.right != undefined ? content?.col?.right : { md: 6, sm: 6, col: 6, show: true };
+
+        content?.question.map((item, index) => {
+            if (!item?.text) return;
+            const html = `<div class="row rowContainer">
+                            <div class="col-md-${colLeft?.md} col-sm-${colLeft?.sm} col-${colLeft?.col}"
+                                style="display:${colLeft?.show ? "block" : "none"}">
+                                ${content?.inputLeft === false ?
+                    `<div class="headingText animate__animated animate__fadeInDown">
+                                        ${index + 1}. ${item.text}
+                                    </div>`
+                    :
+                    `<textarea data-type="left" id="leftValue_${index}"
+                                        class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
+                                        placeholder="${content?.placeholder?.left ?? ""}"></textarea>`
+                }
+                            </div>
+                            <div class="col-md-${colRight?.md} col-sm-${colRight?.sm} col-${colRight?.col}"
+                                style="display:${colRight?.show ? "block" : "none"}">
+                                <textarea data-type="right" id="inputAns_${index}"
+                                class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
+                                placeholder="${content?.placeholder?.right ?? ""}"></textarea>
+                            </div>
+                        </div>`;
+            showInputsAnnds.innerHTML += html;
+        });
+
+        // Default Show Answers
+        showDefaultAnswer();
+
+        document.querySelectorAll(".fillAppli").forEach((textarea) => {
+            textarea.addEventListener("input", () => autoResizeTextarea(textarea));
+            autoResizeTextarea(textarea);
+        });
+
+        if (lang == 'hi') {
+            const inputs = $('#' + containerId)[0].querySelectorAll('.hindiInput');
+
+            $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
+            $(inputs)
+                .keyboard({
+                    layout: 'hindi',
+                    usePreview: false,
+                    autoAccept: true,
+                })
+                .addTyping({ showTyping: true, delay: 70 })
+                .on('keydown', e => e.preventDefault());
+        }
+    }
+
+    const showDefaultAnswer = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+
+        const fillAppli = document.querySelectorAll(".fillAppli");
+
+        if (content?.showAnswerOfId === true) {
+            if (content?.inputLeft === false) {
+                content?.question.forEach((item, index) => {
+                    if (fillAppli[index]) {
+                        fillAppli[index].value = item?.answer.replaceAll("<br/>", "\n");
+                        autoResizeTextarea(fillAppli[index]);
+                        fillAppli[index].classList.add("pointer-none");
+                    }
+                });
+            }
+            else {
+                const row = $(`.rowContainer`);
+                row.map((index, item) => {
+                    const inputs = $(item).children().find('.fillAppli');
+                    inputs.map((_, input) => {
+                        const type = input.dataset.type;
+                        input.value = type == 'left' ? content?.question[index].text : content?.question[index].answer;
+                        input.classList.add("pointer-none");
+                    });
+                });
+            }
+        } else {
+            let qID = content?.showAnswerOfId;
+            if (Number(qID)) {
+                if (qID < 0 || qID > content?.question.length) { qID = 1 };
+                const question = content?.question.filter(item => item.id == qID);
+                if (content?.inputLeft === false) {
+                    fillAppli[qID - 1].value = question[0]?.answer.replaceAll("<br/>", "\n");
+                    fillAppli[qID - 1].classList.add("pointer-none");
+                }
+                else {
+                    const row = $(`.rowContainer`).eq(qID - 1).children().find('.fillAppli');
+                    row.map((_, item) => {
+                        const type = item.dataset.type
+                        item.value = type == 'left' ? question[0].text : question[0].answer;
+                        item.classList.add("pointer-none");
+                    })
+                }
+                autoResizeTextarea(fillAppli[qID]);
+            }
+        }
+    }
+
+    const autoResizeTextarea = (el) => {
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
+    }
+
+    const getAllTextareas = () => {
+        return document.querySelectorAll(".fillAppli");
+    }
+
+    const showAnswer = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+
+        $(".submit-btn").addClass("noClicked");
+        if (content.inputLeft == false) {
+            let fillAppli = document.querySelectorAll(".fillAppli");
+            content?.question.forEach((item, index) => {
+                if (fillAppli[index]) {
+                    fillAppli[index].value = item.answer.replaceAll("<br/>", "\n");
+                    autoResizeTextarea(fillAppli[index]);
+                }
+            });
+            $(".fillAppli").css("overflow", "hidden");
+            $(".fillAppli").addClass("pointer-none");
+        } else {
+            const textareas = getAllTextareas();
+            const { leftData, rightData } = activity.content;
+
+            textareas.forEach((ta, index) => {
+                let correctAns = "";
+
+                if (index % 2 === 0) {
+                    correctAns = leftData.data[Math.floor(index / 2)]?.answer || "";
+                } else {
+                    correctAns = rightData.data[Math.floor(index / 2)]?.answer || "";
+                }
+
+                ta.value = correctAns;
+                ta.classList.add("pointer-none");
+            });
+        }
+    }
+
+    const resetActivity = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+
+        $(".submit-btn").removeClass("noClicked");
+        $(".fillAppli").removeClass("pointer-none");
+
+        if (content.inputLeft == false) {
+            let fillAppli = document.querySelectorAll(".fillAppli");
+            content.question.forEach((item, index) => {
+                if (fillAppli[index]) {
+                    if (index === content.showAnswer) {
+                        fillAppli[index].value = item.ans.replaceAll("<br/>", "\n");
+                    } else {
+                        fillAppli[index].value = "";
+                    }
+                    autoResizeTextarea(fillAppli[index]);
+                }
+            });
+        }
+        else {
+            const textareas = getAllTextareas();
+            textareas.forEach((ta) => {
+                ta.value = "";
+                ta.classList.remove("pointer-none", "correctAnswer", "wrongAnswer");
+            });
+        }
+    }
+
+    const checkAnswers = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content  = activity?.content ?? {};
+        const lang     = activity?.lang ?? 'en';
+
+        if (content?.inputLeft == false) {
+
+            let fillAppli = document.querySelectorAll(".fillAppli");
+            let correct = 0;
+
+            content?.question.forEach((item, index) => {
+                if (fillAppli[index].value.trim() !== "" &&
+                    fillAppli[index].value.trim() === item.answer.replaceAll("<br/>", "\n")
+                ) {
+                    correct++;
+                }
+            });
+
+            let score = (correct / fillAppli.length) * 100;
+            let finalScore = score.toFixed(0);
+
+            const scoreText = ( lang == 'hi' ? `आपका स्कोर है:` : `Your score is:` ) + finalScore + '%';
+
+            // SCORE BASED ALERT
+            if (finalScore == 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: lang == 'hi' ? "ओह!" : 'Ohh!',
+                    text: scoreText
+                });
+            }
+            else if (finalScore <= 50) {
+                Swal.fire({
+                    icon: "warning",
+                    title: lang == 'hi' ? 'और मेहनत कीजिए!' : 'Work harder!',
+                    text: scoreText
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: "success",
+                    title: lang == 'hi' ? 'शानदार!' : 'Fabulous',
+                    text: scoreText
+                });
+            }
+        } else {
+
+            const textareas = getAllTextareas();
+            const { leftData, rightData } = content;
+            let score = 0;
+            const total = leftData.data.length + rightData.data.length;
+            textareas.forEach((ta, index) => {
+                let correctAns = "";
+                if (index % 2 === 0) {
+                    correctAns = leftData.data[Math.floor(index / 2)]?.answer || "";
+                } else {
+                    correctAns = rightData.data[Math.floor(index / 2)]?.answer || "";
+                }
+                if (ta.value.trim() === correctAns.trim()) {
+                    score++;
+                    ta.classList.add("correctAnswer");
+                    ta.classList.remove("wrongAnswer");
+                } else {
+                    ta.classList.add("wrongAnswer");
+                    ta.classList.remove("correctAnswer");
+                }
+            });
+
+            let iconType = "info";
+
+            if (score === total) {
+                iconType = "success";
+            } else if (score === 0) {
+                iconType = "error";
+            } else {
+                iconType = "info";
+            }
+
+            const totalScoreTxt = score/total + (lang == 'hi' ? 'अंक प्राप्त हुए' : 'Points Scored' );
+            Swal.fire({
+                title: lang == 'hi' ? 'परिणाम' : 'Result',
+                text: totalScoreTxt,
+                icon: iconType,
+                confirmButtonText: lang == 'hi' ? 'ठीक है' : 'OK'
+            });
+        }
+    }
+
+    return {
+        render: renderActivity
+    }
+
+})();
+
+const ClickOnImage = (() => {
+    const containerId = 'clickOnImage-container';
+
+    Activity.css('fillHindi.css');
+
+    const default_smallScreen_width = '100px';
+    const default_smallScreen_height = '100px';
+
+    const default_largeScreen_width = '200px';
+    const default_largeScreen_height = '200px';
+
+    const popUpTxt = {
+        hi: {
+            swalNoSelectTitle: "⚠️ चयन करें",
+            swalNoSelectText: "कृपया कम से कम एक चित्र चुनें",
+            swalCorrectTitle: "शाबाश! 👍",
+            swalCorrectText: "सभी उत्तर सही हैं",
+            swalWrongTitle: "गलत उत्तर ❌",
+            swalWrongText: "कृपया दोबारा प्रयास करें"
+        },
+        en: {
+            swalNoSelectTitle: "⚠️ Select Images",
+            swalNoSelectText: "Please select at least one image",
+            swalCorrectTitle: "Great! 👍",
+            swalCorrectText: "All answers are correct",
+            swalWrongTitle: "Wrong ❌",
+            swalWrongText: "Please try again"
+        }
+    };
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity.lang ?? 'en';
+
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+
+            parent.innerHTML = `<div class="question">
+                                <div class="container" id="${containerId}">
+                                    <div class="container">
+                                        <div class="wrapers">
+                                            <div class="menHeading text-center ${Define.get('head')}" id="mainHRach"></div>
+                                            <div class="nameOfTopic text-center ${Define.get('subHead')}" id="subHeadRach"></div>
+                                            <div class="clikImhCRow row g-0" id="clikImhCRow"></div>
+                                            <div class="buttons machiNgs">
+                                                <button class="submit-btn">${buttonLabel.check}</button>
+                                                <button class="show-btn">${buttonLabel.show}</button>
+                                                <button class="reset-btn">${buttonLabel.try}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                `;
+            // ..
+
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showAnsBtn = parent.querySelector('.show-btn');
+            const retryBtn = parent.querySelector('.reset-btn');
+
+            if (submitBtn) submitBtn.addEventListener('click', checkAnswers);
+            if (showAnsBtn) showAnsBtn.addEventListener('click', showAnswers);
+            if (retryBtn) retryBtn.addEventListener('click', resetActivity);
+
+        } catch (err) {
+            console.error('clickOnImage.ui :', err);
+        }
+    };
+
+    const renderActivity = (questionId) => {
+        ui(questionId);
+
+        const activity = Activity.getDefine(questionId) ?? {};
+        const content = activity?.content ?? {};
+
+        const clikImhCRow = document.getElementById("clikImhCRow");
+
+        const isAndroid = window.innerWidth <= 480;
+        const imgWidth = content?.width ?? default_largeScreen_width;
+        const imgHeight = content?.height ?? default_largeScreen_height;
+
+        const width = isAndroid ? default_smallScreen_width : imgWidth;
+        const height = isAndroid ? default_smallScreen_height : imgHeight;
+
+        content?.question.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'imgClick shadow-sm';
+            div.style.width = width;
+            div.style.height = height;
+            div.style.margin = "5px";
+            div.setAttribute('data-index', index);
+            div.classList.add('col-3');
+            div.innerHTML = `<img src="${Activity.pathToCWD() + item.path}" alt="img-${index}" style="width:100%; height:100%;">`;
+            clikImhCRow.appendChild(div);
+        });
+
+        clikImhCRow.addEventListener('click', (e) => {
+            const card = e.target.closest('.imgClick');
+            if (!card) return;
+            card.classList.toggle('selectedClickImgs');
+            card.classList.remove('correct-borderClickImgs', 'wrong-borderClickImgs');
+        });
+
+        window.addEventListener("resize", () => {
+            resizeFn(width, height)
+        });
+    }
+
+    const resizeFn = (width, height) => {
+        const isAndroidResize = window.innerWidth <= 480;
+        document.querySelectorAll(".imgClick").forEach(div => {
+            div.style.width = isAndroidResize ? default_smallScreen_width : width;
+            div.style.height = isAndroidResize ? default_smallScreen_height : height;
+        });
+    }
+
+    const checkAnswers = () => {
+
+        const selectedCards = document.querySelectorAll('.imgClick.selectedClickImgs');
+
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content  = activity?.content ?? {};
+        const question = content?.question ?? [];
+        const lang     = activity.lang ?? 'en';
+        const txt      = popUpTxt[lang];
+
+        const totalCount = question.filter( (item) => item.answer === true );        
+
+        if( selectedCards.length === 0 ) {
+            document.querySelectorAll('.imgClick').forEach(card => {
+                card.classList.remove('correct-borderClickImgs', 'wrong-borderClickImgs');
+            });
+
+            Swal.fire({
+                icon  : 'warning',
+                title : txt.swalNoSelectTitle,
+                text  : txt.swalNoSelectText
+            });
+            return;
+        }
+
+        let allCorrect   = false;
+        let correctCount = 0;
+
+        content?.question.forEach((item, index) => {
+            const card = document.querySelector(`.imgClick[data-index="${index}"]`);
+            card.classList.remove('correct-borderClickImgs', 'wrong-borderClickImgs');
+
+            const selectedCard =  document.querySelector(`.imgClick[data-index="${index}"].selectedClickImgs`);            
+
+            const isSelected = card.classList.contains('selectedClickImgs');
+            const isRight    = item?.answer === true;
+
+            if( isRight && isSelected ) {
+                correctCount++;
+                selectedCard?.classList.add( 'correct-borderClickImgs' );
+            } else {
+                selectedCard?.classList.add( 'wrong-borderClickImgs' );
+            }
+        });
+
+        if( correctCount === totalCount.length ) {
+            Swal.fire({ icon: 'success', title: txt.swalCorrectTitle, text: txt.swalCorrectText });
+        } else {
+            Swal.fire({ icon: 'error', title: txt.swalWrongTitle, text: txt.swalWrongText });
+        }
+    }
+
+    const resetActivity = () => {
+        $(".submit-btn").removeClass("noClicked");
+        document.querySelectorAll('.imgClick').forEach(card => {
+            card.classList.remove('selectedClickImgs', 'correct-borderClickImgs', 'wrong-borderClickImgs');
+        });
+    }
+
+    const showAnswers = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+
+        $(".submit-btn").addClass("noClicked");
+        content?.question.forEach((item, index) => {
+            const card = document.querySelector(`.imgClick[data-index="${index}"]`);
+            card.classList.remove('selectedClickImgs', 'wrong-borderClickImgs', 'correct-borderClickImgs');
+            if (item?.answer === true) card.classList.add('correct-borderClickImgs');
+        });
+    }
+
+    return {
+        render: renderActivity
+    }
+
+})();
+
+const FillOnClick = (() => {
+    const containerId = 'fillOnclick-container';
+
+    Activity.css('reading.css');
+
+    const popUpTxt = {
+        hi: {
+            head: "परिणाम",
+            title1: "आपका उत्तर",
+            title2: "सही उत्तर",
+            score: "अंक",
+            attempt: "प्रयास नहीं किया"
+        },
+        en: {
+            head: "Result",
+            title1: "Your Answer",
+            title2: "Correct Answer",
+            score: "Score",
+            attempt: "Not Attempted"
+        }
+    };
+
+    const ui = (questionId) => {
+        try {
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity.lang ?? 'en';
+
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                <div class="container" id="${containerId}">
+                                    <div class="container">
+                                        <div class="wrapers">
+                                            <div class="menWord ${Define.get('head')}"></div>
+                                            <div class="instTextEng ${Define.get('subHead')}"></div>
+                                            <div id="readingHolders"></div>
+                                            <div id="rowOpts"></div>
+                                            <div class="buttons machiNgs">
+                                                <button class="submit-btn">${buttonLabel.check}</button>
+                                                <button class="show-btn">${buttonLabel.show}</button>
+                                                <button class="reset-btn">${buttonLabel.try}</button>
+                                            </div>
+                                            <div id="reportBoxReading" class="reportBoxReading"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                `;
+            // ..
+
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showAnsBtn = parent.querySelector('.show-btn');
+            const retryBtn = parent.querySelector('.reset-btn');
+
+            if (submitBtn) submitBtn.addEventListener('click', checkAnswers);
+            if (showAnsBtn) showAnsBtn.addEventListener('click', showAnswers);
+            if (retryBtn) retryBtn.addEventListener('click', resetActivity);
+
+        } catch (err) {
+            console.error('fillOnClick.ui :', err);
+        }
+    };
+
+    const renderActivity = (questionId) => {
+        ui(questionId);
+
+        const container = Define.get('questionContainer');
+        const parent = document.querySelector(container);
+
+        const activity = Activity.getDefine(questionId) ?? {};
+        const content = activity?.content ?? {};
+
+        const replacement = content?.replacement ?? '#_#';
+        const rowOpts = document.getElementById("rowOpts");
+
+        const opts = [];
+        content?.question.map((item, index) => {
+            const modifiedText = item?.text.replace(replacement, `<input type="text" data-q="${index}" class="form-control clickToFillsRed fullInputs"/>`);
+            const optionsHtml = item?.options.map((opt) =>
+                `<div class="clickedLetter" data-opt="${opt}" data-q="${index}">${opt}</div>`
+            ).join("");
+
+            const html = `<div class="rowFillClick">
+                            <div class="firstColRe">
+                                <div class="levelsLe">${index + 1} </div>
+                                <div class="withInputsRowsRed">${modifiedText}</div>
+                            </div>
+                            <div class="optionsBoxClicked">${optionsHtml}</div>
+                        </div>`;
+            // ..
+            opts.push( html );
+        });
+        rowOpts.innerHTML = opts.join( '' );
+
+        const option = parent.querySelectorAll('.clickedLetter');
+
+        if (option) {
+            option.forEach((opt) => {
+                opt.addEventListener('click', selectOption);
+            });
+        }
+    }
+
+    const selectOption = (e) => {
+        const qIndex = e.target.getAttribute("data-q");
+        const inputBox = document.querySelector(`input[data-q="${qIndex}"]`);
+        const val = e.target.innerText.trim();
+
+        inputBox.value = val;
+        inputBox.style.width = (val.length + 1) * 11 + "px";
+
+        document.querySelectorAll(`.clickedLetter[data-q="${qIndex}"]`)
+            .forEach(o => o.classList.remove("activeOpt"));
+        e.target.classList.add("activeOpt");
+    }
+
+    const checkAnswers = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+
+        const lang = activity.lang ?? 'en';
+
+        $("#reportBoxReading").show();
+        let score = 0;
+
+        const t = popUpTxt[lang];
+
+        let reportHTML = `<div class="ReadingActCard effectFadeScale">
+                            <button id="closeReport" class="ReadingActCloseBtn">✖</button>
+                            <h2 class="ReadingActTitle">🎉 ${t.head} 🤪</h2>
+                            <div class="ReadingActItemsBox">`;
+
+        content?.question.map((item, index) => {
+            const userVal = document.querySelector(`input[data-q="${index}"]`).value.trim();
+            const correctAns = item?.options[item.answer - 1];
+            const isCorrect = userVal.toLowerCase() === correctAns.toLowerCase();
+            if (isCorrect) score++;
+
+            reportHTML += `<div class="ReadingActItem ${isCorrect ? "ReadingActCorrect" : "ReadingActWrong"}">
+                            <div class="ReadingActQno">${index + 1}.</div>
+                            <div class="ReadingActAnswerBox">
+                                <p><strong>${t.title1}:</strong> <span>${userVal || `😶 ${t.attempt}?`}</span></p>
+                                <p><strong>${t.title2}:</strong> <span>${correctAns}</span></p>
+                            </div>
+                            <div class="ReadingActEmoji">${isCorrect ? "😎✔" : "😭❌"}</div>
+                        </div>`;
+        });
+
+        reportHTML += `</div>
+                        <h2 class="ReadingActScore">🏆 ${t.score}: ${score}/${content?.question.length}</h2>
+                        </div>`;
+
+        document.getElementById("reportBoxReading").innerHTML = reportHTML;
+
+        document.getElementById("closeReport").addEventListener("click", () => {
+            $("#reportBoxReading").hide();
+            document.getElementById("reportBoxReading").innerHTML = "";
+        });
+    }
+
+    const resetActivity = () => {
+        $(".submit-btn").removeClass("noclickMe");
+        document.querySelectorAll(".fullInputs").forEach(inp => {
+            inp.value = "";
+            inp.style.width = "120px";
+        });
+        document.querySelectorAll(".clickedLetter").forEach(opt => {
+            opt.classList.remove("activeOpt");
+        });
+        $("#reportBoxReading").hide();
+        document.getElementById("reportBoxReading").innerHTML = "";
+    }
+
+    const showAnswers = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content = activity?.content ?? {};
+
+        $(".submit-btn").addClass("noclickMe");
+        content?.question.map((item, index) => {
+            const correct = item?.options[item?.answer - 1];
+            const inp = document.querySelector(`input[data-q="${index}"]`);
+            inp.value = correct;
+            inp.style.width = (correct.length + 1) * 11 + "px";
+
+            const options = document.querySelectorAll(`.clickedLetter[data-q="${index}"]`);
+            options.forEach(o => {
+                o.classList.remove("activeOpt");
+                if (o.innerText.trim() === correct) {
+                    o.classList.add("activeOpt");
+                }
+            });
+        });
+    }
+
+    return {
+        render: renderActivity
+    }
+
+})();
+
+const Dictionary = (() => {
+    const containerId = 'dictionary-container';
+
+    Activity.css('dictionary.css');
+
+    const ui = (questionId) => {
+        try {
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity.lang ?? 'en';
+
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                <div class="container" id="${containerId}">
+                                    <div class="wrapers">
+                                        <div class="menHeDic">
+                                            <div class="dictHeadintTexts">
+                                                <span class="${Define.get('head')}"></span>
+                                                <span class="secondTextsRed ${Define.get('subHead')}"></span>
+                                            </div>
+                                        </div>
+                                        <div id="dictionaryHolders"></div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn">${buttonLabel.check}</button>
+                                            <button class="show-btn">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showAnsBtn = parent.querySelector('.show-btn');
+            const retryBtn = parent.querySelector('.reset-btn');
+
+            if (submitBtn) submitBtn.addEventListener('click', checkAnswers);
+            if (showAnsBtn) showAnsBtn.addEventListener('click', showAnswers);
+            if (retryBtn) retryBtn.addEventListener('click', resetActivity);
+
+        } catch (err) {
+            console.error('Dictionary.ui :', err);
+        }
+    };
+
+    const renderActivity = (questionId) => {
+        ui(questionId);
+
+        const activity = Activity.getDefine(questionId) ?? {};
+        const lang     = activity.lang ?? 'en';
+        const content  = activity?.content ?? [];
+
+        const sortedContent = content.sort();
+
+        const dictionaryHolders = document.getElementById("dictionaryHolders");
+        let dropBoxes = "";
+        sortedContent.forEach((item, index) => {
+            const letter = item.trim()[0].toUpperCase();
+            dropBoxes += `<div class="dropBoxDictP shadow-sm">
+                            <div class="letterNums shadow-sm">${Activity.translateBulletLabels({ lang: lang, ind: index, upperCase: true })}</div>
+                            <div class="dropBoxDict" data-accept="${letter}"></div>
+                        </div>`;
+        });
+
+        const html = `<div class="row">
+                            <div class="col-md-4 col-sm-4 col-12">
+                                <div class="boxOfItem shadow-sm dragItems" id="optHolders"></div>
+                            </div>
+                            <div class="col-md-8 col-sm-8 col-12">
+                                <div class="shadow-sm dropSectDic">
+                                    ${dropBoxes}
+                                </div>
+                            </div>
+                        </div>`;
+
+        dictionaryHolders.innerHTML = html;
+
+        const optHolders = document.getElementById("optHolders");
+
+        content.forEach(item => {
+            const firstLetter = item.trim()[0].toUpperCase();
+            optHolders.innerHTML += `<div class="disDragItems wordDragDic" data-ans="${firstLetter}">${item}</div>`;
+        });
+
+        makeDraggable(".wordDragDic");
+        initDroppable(".container");
+    }
+
+    const makeDraggable = (selector) => {
+        $(selector).draggable({
+            helper: "original",
+            revert: "invalid",
+        });
+    }
+
+    const initDroppable = (containerSelector) => {
+        $(`${containerSelector} .dropBoxDict`).droppable({
+            accept: ".wordDragDic",
+            drop: function (event, ui) {
+                const $dragged = ui.draggable;
+                $dragged.css({ position: "relative", top: "auto", left: "auto" });
+                $(this).append($dragged);
+            }
+        });
+        $(`${containerSelector} .dragItems`).droppable({
+            accept: ".wordDragDic",
+            drop: function (event, ui) {
+                const $dragged = ui.draggable;
+                $dragged.css({ position: "relative", top: "auto", left: "auto" });
+                $(this).append($dragged);
+            }
+        });
+    }
+
+    const checkAnswers = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity.lang ?? 'en';
+        const content = activity?.content ?? [];
+
+        let correct = 0;
+        const totalWords = content.length;
+        $(".dropBoxDict").each(function () {
+            const correctLetter = $(this).data("accept");
+            $(this).children(".wordDragDic").each(function () {
+                const droppedItem = $(this);
+                if (droppedItem.data("ans") === correctLetter) {
+                    droppedItem.css("background", "#c8e6c9");
+                    correct++;
+                } else {
+                    droppedItem.css("background", "#ffcdd2");
+                }
+            });
+        });
+        if (correct === totalWords) {
+            Swal.fire({
+                title: "🎉" + (lang == "en" ? "Excellent!" : "hi"),
+                text: lang == "en"? "All answers are correct.": "सभी उत्तर सही है।",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        } else {
+            Swal.fire({
+                title: (lang == "en" ? "Try Again" : "दुबारा प्रयास करें।") + "💪",
+                text: lang == "en" ? "Some answers are incorrect." : "कुछ उत्तर गलत हैं।",
+                icon: "info",
+                confirmButtonText: "OK"
+            });
+        }
+    }
+
+    const resetActivity = () => {
+        $(".submit-btn").removeClass("noclickMe");
+        renderActivity(Activity.getQid(`#${containerId}`));
+    }
+
+    const showAnswers = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const content  = activity?.content ?? [];
+
+        $(".submit-btn").addClass("disabled");
+        $(".dropBoxDict").empty();
+        content.forEach(item => {
+            const letter = item.trim()[0].toUpperCase();
+            const $clone = $(`<div class="disDragItems wordDragDic">${item}</div>`)
+                .css("background", "#c8e6c9")
+                .attr("data-ans", letter);
+            // ..
+            $(`.dropBoxDict[data-accept='${letter}']`).append($clone);
+        });        
+        $(".dropBoxDict").droppable("disable");
+    }
+
+    return {
+        render: renderActivity
+    }
+
+})();
+
+Modules.get('modules').map(({ module }) => {
     try {
         const mod = eval(module);
         if( !mod || (typeof mod !== 'function' && typeof mod !== 'object') ) {

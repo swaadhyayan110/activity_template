@@ -126,58 +126,74 @@ const UI = (() => {
 
             const mobile = detectMobile();
 
-            const definedBtn = Define.get('buttons') ?? [];
+            const render = (tabs) => {
+                if( tabs.length === 1 ) {
+                    const item         = tabs[0];
+                    const itemId       = item.qid;
+                    const itemSelector = `q${itemId}`;
+                    const moduleId     = item.module ?? '';
+                    const landscape    = item.landscape ?? false;                
+                    container.style.display = 'none';
+                    
+                    activity(itemSelector, itemId, moduleId, landscape);
+                    return;
+                }
 
-            if( definedBtn.length === 1 ) {
-                const item         = definedBtn[0];
-                const itemId       = item.qid;
-                const itemSelector = `q${itemId}`;
-                const moduleId     = item.module ?? '';
-                const landscape    = item.landscape ?? false;                
-                container.style.display = 'none';
-                
-                activity(itemSelector, itemId, moduleId, landscape);
-                return;
+                const frag   = document.createDocumentFragment();
+                tabs.forEach((item, index) => {
+
+                    const div       = document.createElement('div');
+                    const [m, d]    = normalizeLabel(item.text);
+                    div.className   = `boxQ ${index === 0 ? 'activeBtns' : ''} user-select-none`;
+                    div.textContent = mobile ? m : (d || m);
+
+                    const itemId       = item.qid;
+                    const itemSelector = `q${itemId}`;
+                    div.id             = itemSelector;
+                    
+                    const moduleId     = item.module ?? '';
+                    div.dataset.module = moduleId;
+
+                    const landscape = item.landscape ?? false;
+                    div.addEventListener( 'click', () => {
+                        activity( itemSelector, itemId, moduleId, landscape )
+                    });
+
+                    frag.appendChild(div);
+                });
+
+                container.style.overflow = 'auto';
+                container.replaceChildren(frag);
+                container.firstElementChild?.click();
+
+                requestAnimationFrame(() => {
+                    container.querySelectorAll('.boxQ').forEach((div) => {
+                        if( div.scrollWidth > div.clientWidth ) {
+                            const id   = Number( div.id.slice(1) );
+                            const item = tabs.find( x => x.qid === id );
+                            if( !item ) return;
+                            const [m] = normalizeLabel(item.text);
+                            div.textContent = m;
+                        }
+                    });
+                });
             }
 
-            const frag   = document.createDocumentFragment();
-            definedBtn.forEach((item, index) => {
+            const viaJson = () => {
+                fetch('js/newActJS/tabs.json')
+                .then(res => res.json())
+                .then(tabs => {
+                    render(tabs);
+                })
+                .catch(err => console.error('[FATAL]',err));
+            }
 
-                const div       = document.createElement('div');
-                const [m, d]    = normalizeLabel(item.text);
-                div.className   = `boxQ ${index === 0 ? 'activeBtns' : ''} user-select-none`;
-                div.textContent = mobile ? m : (d || m);
-
-                const itemId       = item.qid;
-                const itemSelector = `q${itemId}`;
-                div.id             = itemSelector;
-                
-                const moduleId     = item.module ?? '';
-                div.dataset.module = moduleId;
-
-                const landscape = item.landscape ?? false;
-                div.addEventListener( 'click', () => {
-                    activity( itemSelector, itemId, moduleId, landscape )
-                });
-
-                frag.appendChild(div);
-            });
-
-            container.style.overflow = 'auto';
-            container.replaceChildren(frag);
-            container.firstElementChild?.click();
-
-            requestAnimationFrame(() => {
-                container.querySelectorAll('.boxQ').forEach((div) => {
-                    if( div.scrollWidth > div.clientWidth ) {
-                        const id   = Number( div.id.slice(1) );
-                        const item = definedBtn.find( x => x.qid === id );
-                        if( !item ) return;
-                        const [m] = normalizeLabel(item.text);
-                        div.textContent = m;
-                    }
-                });
-            });
+            const viaJs = () => {
+                const tabs = Define.get('buttons') ?? [];
+                render(tabs);
+            }
+            
+            viaJs();
         } catch( err ) {
             console.error( 'Error :: UI.(buttons) -', err );
         }
