@@ -121,7 +121,7 @@
   transform: translateY(-4px) scale(1.09);
   background: #0568b9;
   color: #ffffff;
-  box-shadow: 0 0 18px #4dabff, 0 0 35px #4dabff;
+  /* box-shadow: 0 0 18px #4dabff, 0 0 35px #4dabff; */
 }
 
 .clickedLetter:active{

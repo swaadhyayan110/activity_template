@@ -6630,7 +6630,8 @@ const TextArea = (() => {
             const replacement = content?.replacement ?? '#_#';
             shuffledQuestions = Activity.shuffleArray( content?.questions ?? [] ) ?? [];
             
-            const textArea  = '<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="उत्तर लिखें" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px;" role="textbox"></textarea>';
+            const placeholder = lang == 'hi' ? 'उत्तर लिखें' : 'Write Answer';
+            const textArea  = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px;" role="textbox"></textarea>`;
             const questions = [];
             shuffledQuestions.forEach( (ques,index) => {
                 const questionText = ques?.text?.replace(replacement, textArea );
