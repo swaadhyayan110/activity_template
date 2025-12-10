@@ -580,9 +580,9 @@ const Define = (() => {
             content : [
                 {
                     id       : 1,
-                    tabtitle : 'apple',
+                    tabtitle : 'aPPle',
                     meaning  : 'कूद-कूदकर',
-                    sentence : 'छोटी चिड़ियाँ apples चलना सीखती हैं।',
+                    sentence : 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
                     image    : {
                         path  : 'img/1.png',
                         width : '20%'

@@ -223,11 +223,11 @@ const Activity = (() => {
     };
 
     const translateBooleanLabels = (lang='en') => lang == 'en' ? ['True', 'False'] : ['सही', 'गलत'];
-    const translateWordLabel     = (lang='en') => lang == 'en' ? 'word' : 'शब्द';
-    const translateSentenceLabel = (lang='en') => lang == 'en' ? 'sentence' : 'वाक्य';
-    const translateMeaningLabel  = (lang='en') => lang == 'en' ? 'meaning' : 'अर्थ';
-    const translateColumnLabel   = (lang='en') => lang == 'en' ? 'column' : 'खंड';
-    const translateBoxLabel      = (lang='en') => lang == 'en' ? 'box' : 'बॉक्स';
+    const translateWordLabel     = (lang='en') => lang == 'en' ? 'Word' : 'शब्द';
+    const translateSentenceLabel = (lang='en') => lang == 'en' ? 'Sentence' : 'वाक्य';
+    const translateMeaningLabel  = (lang='en') => lang == 'en' ? 'Meaning' : 'अर्थ';
+    const translateColumnLabel   = (lang='en') => lang == 'en' ? 'Column' : 'खंड';
+    const translateBoxLabel      = (lang='en') => lang == 'en' ? 'Box' : 'बॉक्स';
     const translateHintLabel     = (lang='en') => lang == 'en' ? 'Hint' : 'संकेत';
     
     const pathToCWD = () => assets_url;
@@ -5670,9 +5670,11 @@ const Shabdkosh = (() => {
 
                 if( !item.tabtitle || !item.id ) return;
 
+                const titleLower = item.tabtitle.toLowerCase();
+                const tabTitle   = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
                 const tab = `
-                    <button class="tab-btn" data-id="${item.id}" data-title="${item.tabtitle}">
-                        ${item.tabtitle}
+                    <button class="tab-btn" data-id="${item.id}" data-title="${titleLower}">
+                        ${tabTitle}
                     </button>
                 `;
                 tabs.push( tab );
@@ -5716,16 +5718,19 @@ const Shabdkosh = (() => {
 
         if( !item?.tabtitle || !item?.id ) return;
 
+        const titleLower = item.tabtitle.toLowerCase();
+        const tabTitle   = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
+
         const tabpanecontent = `
             <div class="tab-pane active">
-            ${item?.tabtitle ? `<div class="over my-3"><b>${item.tabtitle}</b></div>` : '' }
+            ${item?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : '' }
             ${item?.meaning ? `<div class="meaning me-1"><b class="me-1 arth">${Activity.translateMeaningLabel(lang)} :</b>${item.meaning}</div>` : ''}
             ${item?.sentence ? 
                 `<div class="sentence-use">
                     <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
                     ${
-                        item?.sentence ? 
-                            item?.sentence.replace(item?.tabtitle, `<span class="blinking-underline sometextcolor">${item?.tabtitle}</span>`)
+                        item?.sentence ?
+                            item?.sentence.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
                             : ''
                     }
                 </div>` : ''
@@ -6589,6 +6594,13 @@ const TextArea = (() => {
                                                 <button class="reset-btn">${buttonLabel.try}</button>
                                             </div>
                                         </div>
+                                        <div id="popupDialogAns">
+                                            <div class="baseMod">
+                                                <div class="answerdiv">                                                    
+                                                    <div id="answerShowMCW"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>`;
             // ..
@@ -6713,12 +6725,12 @@ const TextArea = (() => {
                 tableData.push( data );
             });
             
-            const tableHead = Activity.translateTableHeads(lang);
-            Swal.fire({
-                html: `
-                    <div class="popup-header">
-                        <h2> ${lang == 'hi' ? 'उत्तर समीक्षा' : 'Answer review' }</h2>
-                        <button class="close-btn" onclick="Swal.close()">✘</button>
+            const tableHead = Activity.translateTableHeads(lang);            
+
+            const popHtml = `
+                    <div class="popup-header d-flex justify-content-between align-items-center py-2">
+                        <h2> ${lang == 'hi' ? 'उत्तर समीक्षा' : 'Answer review' }</h2>    
+                        <button id="close-popup" class="btn btn-secondary">X</button>                    
                     </div>
                     <table class="answerdiv table table-bordered w-100" style="font-size:20px">
                         <thead class="text-light" style="white-space: nowrap;">
@@ -6738,10 +6750,15 @@ const TextArea = (() => {
                         <p>${lang == 'hi' ? 'गलत' : 'Wrong' } :</p> &nbsp;${wrongCount} &nbsp;| &nbsp;
                         <p>${lang == 'hi' ? 'खाली' : 'Empty' } :</p>&nbsp; ${emptyCount}
                     </div>
-                `,
-                showConfirmButton: false,
-                customClass: { popup: 'custom-popup' }
-            });
+                    `;
+            // ..            
+            const answerShowEl = document.getElementById("answerShowMCW");
+            if (answerShowEl) answerShowEl.innerHTML = popHtml;
+            const popup = document.getElementById("popupDialogAns");
+            if (popup) popup.style.display = "block";
+
+            const closeBtn = document.querySelector('#close-popup');
+            if( closeBtn ) closeBtn.addEventListener( 'click', closeFnMCQ );
         }
     }
   
@@ -6768,6 +6785,15 @@ const TextArea = (() => {
             correct : correctAnswer, 
             user    : userAnswer 
         };
+    }
+
+    const closeFnMCQ = () => {
+        try {
+            const popup = document.getElementById("popupDialogAns");
+            if (popup) popup.style.display = "none";            
+        } catch( e ) {
+            console.error( 'Mcq.closeFnMCQ', e );
+        }
     }
 
     return {
@@ -7227,11 +7253,11 @@ const ShravanKaushalWithImages_saurabh_old = (() => {
                                 <div id="popupDialogAns" style="display: none;">
                                     <div class="baseMod">
                                         <div class="answerdiv">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
-                                            <button class="btn btn-secondary popUp-close-btn">X</button>
-                                        </div>
-                                        <div id="answer-review"></div>
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                                <button class="btn btn-secondary popUp-close-btn">X</button>
+                                            </div>
+                                            <div id="answer-review"></div>
                                         </div>
                                     </div>
                                 </div>
