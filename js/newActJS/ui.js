@@ -102,7 +102,7 @@ const UI = (() => {
             quesEle.classList.add('activeBtns');
         }
         
-        const moduleName = Activity.module(moduleId);        
+        const moduleName = Activity.template(moduleId);
         
         if (!moduleName) {
             console.error('No activity mapped for id:', moduleId);

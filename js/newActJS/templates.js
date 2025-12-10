@@ -2,7 +2,7 @@ const activities = {};
 
 const Activity = (() => {
 
-    const store = { modules: {} };
+    const store = { templates: {} };
 
     const css = (href) => {
         try {
@@ -23,12 +23,12 @@ const Activity = (() => {
         }
     };
 
-    const module = (mid) => {
+    const template = (tid) => {
         try {
-            const found = Modules.get('modules')?.find(m => m.id === mid);
-            return found ? found.module : null;
+            const found = Templates.get('templates')?.find(t => t.id === tid);
+            return found ? found.template : null;
         } catch ( err ) {
-            console.error( 'Activity.module : ', err );
+            console.error( 'Activity.template : ', err );
         }
     };
     
@@ -236,23 +236,23 @@ const Activity = (() => {
 
     const register = (name, mod) => {
         try {
-            store.modules[name] = mod;
+            store.templates[name] = mod;
         } catch ( err ) {
             console.error( 'Activity.register : ', err );
         }
     };
   
-    const render = (moduleId, questionId, activityId=null) => {
+    const render = (templateId, questionId, activityId=null) => {
         try {
-            const moduleName = module(moduleId);
-            if( !moduleName ) {
-                console.error('Activity.render: unknown moduleId', moduleId);
+            const templateName = template(templateId);
+            if( !templateName ) {
+                console.error('Activity.render: unknown templateId', templateId);
                 return;
             }       
 
-            const mod = store.modules[moduleName];
-            if( !mod || !mod.render ) {
-                console.error('Activity.render: module not registered:', moduleName);
+            const temp = store.templates[templateName];
+            if( !temp || !temp.render ) {
+                console.error('Activity.render: module not registered:', templateName);
                 return;
             }
 
@@ -263,10 +263,10 @@ const Activity = (() => {
             }
             
             if( !activityId ) {
-                activityId = moduleName === 'MatchLeftToRight' ? `m${qObj.id}` : `act${qObj.id}`;
+                activityId = templateName === 'MatchLeftToRight' ? `m${qObj.id}` : `act${qObj.id}`;
             }        
             
-            mod.render( questionId, activityId );
+            temp.render( questionId, activityId );
         } catch ( err ) {
             console.error( 'Activity.render : ', err );
         }
@@ -276,10 +276,10 @@ const Activity = (() => {
         get,
         css,
         render,
-        module,
         getQid,
         setQid,
         register,
+        template,
         setHeader,
         getDefine,
         pathToCWD,
@@ -10303,15 +10303,15 @@ const Dictionary = (() => {
 
 })();
 
-Modules.get('modules').map(({ module }) => {
+Templates.get('templates').map(({ template }) => {
     try {
-        const mod = eval(module);
+        const mod = eval(template);
         if( !mod || (typeof mod !== 'function' && typeof mod !== 'object') ) {
-            console.error(`FATAL :: Couldn't register ${module} :`, mod);
+            console.error(`FATAL :: Couldn't register ${template} :`, mod);
             return;
         }
-        Activity.register(module, mod);
+        Activity.register(template, mod);
     } catch( err ) {
-        console.error( `FATAL :: Couldn't register ${module} :`, err );
+        console.error( `FATAL :: Couldn't register ${template} :`, err );
     }
 });
