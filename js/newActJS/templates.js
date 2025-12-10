@@ -10074,7 +10074,7 @@ const FillOnClick = (() => {
 
         content?.question.map((item, index) => {
             const userVal = document.querySelector(`input[data-q="${index}"]`).value.trim();
-            const correctAns = item?.options[item.answer - 1];
+            const correctAns = item?.options[item.answer];
             const isCorrect = userVal.toLowerCase() === correctAns.toLowerCase();
             if (isCorrect) score++;
 
@@ -10119,7 +10119,7 @@ const FillOnClick = (() => {
 
         $(".submit-btn").addClass("noclickMe");
         content?.question.map((item, index) => {
-            const correct = item?.options[item?.answer - 1];
+            const correct = item?.options[item?.answer];
             const inp = document.querySelector(`input[data-q="${index}"]`);
             inp.value = correct;
             inp.style.width = (correct.length + 1) * 11 + "px";
