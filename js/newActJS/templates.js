@@ -9971,9 +9971,8 @@ const FillOnClick = (() => {
             parent.innerHTML = `<div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
-                                        <div class="wrapers">
-                                            <div class="menWord ${Define.get('head')}"></div>
-                                            <div class="instTextEng ${Define.get('subHead')}"></div>
+                                        <div class="wrapers">                                            
+                                            <div class="instTextEng ${Define.get('head')}"></div>
                                             <div id="readingHolders"></div>
                                             <div id="rowOpts"></div>
                                             <div class="buttons machiNgs">
@@ -10121,6 +10120,7 @@ const FillOnClick = (() => {
         $(".submit-btn").addClass("noclickMe");
         content?.question.map((item, index) => {
             const correct = item?.options[item?.answer];
+            if( !correct ) return;
             const inp = document.querySelector(`input[data-q="${index}"]`);
             inp.value = correct;
             inp.style.width = (correct.length + 1) * 11 + "px";

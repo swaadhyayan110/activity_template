@@ -940,16 +940,15 @@ const Define = (() => {
         },
         {
             id      : 37,
-            lang    : 'en',
-            head    : 'Module : 31',
-            subhead : 'Click on the correct words in the blanks given below.',
+            lang    : 'en',            
+            head    : 'Click on the correct words in the blanks given below.',
             content : {
                 replacement : '#_#',
                 question    : [
-                    { text: 'The maximum tally marks fell in a #_# range', options: ['general', 'particular'], answer: 2 },
+                    { text: 'The maximum tally marks fell in a #_# range', options: ['general', 'particular'], answer: 0 },
                     { text: 'Raw data can be condensed using a #_#', options: ['class intervals', 'age intervals'], answer: 1 },
                     { text: 'No two students had identical #_#', options: ['heights and weights', 'health requirements'], answer: 1 },
-                    { text: 'Many students had their data falling under the same #_#', options: ['index', 'range'], answer: 2 },
+                    { text: 'Many students had their data falling under the same #_#', options: ['index', 'range'], answer: 1 },
                     { text: 'The teacher guessed to take the highest and lowest scores to calculate the #_# of the pupils.', options: ['heights and weights', 'age and length'], answer: 1 },
                 ]
             }
