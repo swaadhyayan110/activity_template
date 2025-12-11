@@ -132,28 +132,26 @@ const Activity = (() => {
     };
 
     const translateBulletLabels = ({ lang='mt', ind=0, upperCase=true } = {}) => {
-        const alphabets = {
+        const bullets = {
             en: [...'abcdefghijklmnopqrstuvwxyz'],
             hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय'],
-            mt: Array.from({ length: 26 }, (_, i) => (i + 1).toString())
+            mt: Array.from({ length: 26 }, (_, i) => (i + 1).toString()),
+            ro: [
+                'i','ii','iii','iv','v','vi','vii','viii','ix','x',
+                'xi','xii','xiii','xiv','xv','xvi','xvii','xviii','xix','xx',
+                'xxi','xxii','xxiii','xxiv','xxv','xxvi'
+            ]
+
         }
 
-        const characters = alphabets[lang] ?? alphabets.mt;
-        const casedList  = upperCase ? characters.map(ch => ch.toUpperCase()) : characters;
+        const chars = bullets[lang] ?? bullets.mt;
+        const cased = upperCase ? chars.map(ch => ch.toUpperCase()) : chars;
 
-        return (ind !== undefined && casedList[ind] !== undefined) ? casedList[ind] : '-';
+        return (ind !== undefined && cased[ind] !== undefined) ? cased[ind] : '-';
     };
 
-    const translateButtonLabels = (lang='en') => {
-        if( lang == 'en' ) {
-            return { 
-                check  : 'Check Answers',
-                show   : 'Show Answers',
-                submit : 'Submit',
-                replay : 'Replay',
-                try    : 'Try Again'
-            };
-        } else {
+    const translateButtonLabels = (lang='hi') => {
+        if( lang == 'hi' ) {
             return { 
                 check  : 'उत्तर जाँचिए',
                 show   : 'उत्तर देखो',
@@ -161,37 +159,45 @@ const Activity = (() => {
                 replay : 'दुबारा खेलें',
                 try    : 'पुनः प्रयास करें'
             };
+        } else {
+            return { 
+                check  : 'Check Answers',
+                show   : 'Show Answers',
+                submit : 'Submit',
+                replay : 'Replay',
+                try    : 'Try Again'
+            };
         }
     };
 
-    const translateTableHeads = (lang='en') => {
-        if( lang == 'en' ) {
-            return {
-                sequence  : 'Question No.',
-                attempted : 'Your Answer',
-                correct   : 'Correct Answer',
-                result    : 'Result'
-            };
-        } else {
+    const translateTableHeads = (lang='hi') => {
+        if( lang == 'hi' ) {
             return {
                 sequence  : 'प्रश्‍न संख्या',
                 attempted : 'आपका उत्तर',
                 correct   : 'सही उत्तर',
                 result    : 'परिणाम'
             };
+        } else {
+            return {
+                sequence  : 'Question No.',
+                attempted : 'Your Answer',
+                correct   : 'Correct Answer',
+                result    : 'Result'
+            };
         }
     };
 
-    const translateNextPrevLabel = (lang='en') => {
-        if( lang == 'en' ) {
-            return { 
-                next : 'Next',
-                prev : 'Prev'
-            };
-        } else {
+    const translateNextPrevLabel = (lang='hi') => {
+        if( lang == 'hi' ) {
             return { 
                 next : 'अगला',
                 prev : 'पिछला'
+            };
+        } else {
+            return { 
+                next : 'Next',
+                prev : 'Prev'
             };
         }
     };
@@ -221,14 +227,15 @@ const Activity = (() => {
             ]
         };
     };
-
-    const translateBooleanLabels = (lang='en') => lang == 'en' ? ['True', 'False'] : ['सही', 'गलत'];
-    const translateWordLabel     = (lang='en') => lang == 'en' ? 'Word' : 'शब्द';
-    const translateSentenceLabel = (lang='en') => lang == 'en' ? 'Sentence' : 'वाक्य';
-    const translateMeaningLabel  = (lang='en') => lang == 'en' ? 'Meaning' : 'अर्थ';
-    const translateColumnLabel   = (lang='en') => lang == 'en' ? 'Column' : 'खंड';
-    const translateBoxLabel      = (lang='en') => lang == 'en' ? 'Box' : 'बॉक्स';
-    const translateHintLabel     = (lang='en') => lang == 'en' ? 'Hint' : 'संकेत';
+    
+    const translateBooleanLabels = (lang='hi') => lang == 'hi' ? ['सही', 'गलत'] : ['True', 'False'] ;
+    const translateWordLabel     = (lang='hi') => lang == 'hi' ? 'शब्द' : 'Word';
+    const translateSentenceLabel = (lang='hi') => lang == 'hi' ? 'वाक्य' : 'Sentence';
+    const translateMeaningLabel  = (lang='hi') => lang == 'hi' ? 'अर्थ' : 'Meaning';
+    const translateColumnLabel   = (lang='hi') => lang == 'hi' ? 'खंड' : 'Column';
+    const translateBoxLabel      = (lang='hi') => lang == 'hi' ? 'बॉक्स' : 'Box';
+    const translateHintLabel     = (lang='hi') => lang == 'hi' ? 'संकेत' : 'Hint';
+    const translateWriteAnsLabel = (lang='hi') => lang == 'hi' ? 'उत्तर लिखें' : 'write answer';
     
     const pathToCWD = () => assets_url;
 
@@ -295,6 +302,7 @@ const Activity = (() => {
         translateMeaningLabel,
         translateButtonLabels,
         translateBulletLabels,
+        translateWriteAnsLabel,
         translateSentenceLabel,
         translateBooleanLabels,
         translateNextPrevLabel
@@ -1788,7 +1796,8 @@ const FillInTheBlanksHindiKb = (() => {
 
             container.dataset.qid = questionId;
             const data        = Activity.getDefine(questionId)?.content;
-            const replacement = data?.replacement;
+            const lang        = Activity.getDefine(questionId)?.lang ?? 'en';
+            const replacement = data?.replacement;            
 
             data?.questions.forEach((item, qIndex) => {
                 const div = document.createElement("div");
@@ -1796,11 +1805,12 @@ const FillInTheBlanksHindiKb = (() => {
                 
                 const parts = item.question.split( replacement );
 
-                const html = [];
+                const html = [ `${Activity.translateBulletLabels({lang:lang, ind:qIndex})}) ` ];
                 parts.forEach((part, idx) => {
                     html.push(part);
                     if( item.answers[idx] !== undefined ) {
-                        html.push(`<input class="hindiInput inPutHindiNew" data-qindex="${qIndex}" data-blankindex="${idx}" autocomplete="off" type="text" placeholder="उत्तर लिखें">`);
+                        const placeholder = Activity.translateWriteAnsLabel(lang);
+                        html.push(`<input class="hindiInput inPutHindiNew" data-qindex="${qIndex}" data-blankindex="${idx}" autocomplete="off" type="text" placeholder="${placeholder}">`);
                     }
                 });
                 div.innerHTML = html.join( '' );
@@ -6630,7 +6640,7 @@ const TextArea = (() => {
             const replacement = content?.replacement ?? '#_#';
             shuffledQuestions = Activity.shuffleArray( content?.questions ?? [] ) ?? [];
             
-            const placeholder = lang == 'hi' ? 'उत्तर लिखें' : 'Write Answer';
+            const placeholder = Activity.translateWriteAnsLabel(lang);
             const textArea  = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px;" role="textbox"></textarea>`;
             const questions = [];
             shuffledQuestions.forEach( (ques,index) => {
@@ -10328,6 +10338,302 @@ const Dictionary = (() => {
         render: renderActivity
     }
 
+})();
+
+const MentalMath = (() => {
+    Activity.css('math.css');    
+
+    const containerId        = 'mental-container';
+    const questionTextId     = 'dynamicTypeArea';
+    const questionContentCls = 'boxForAttemptedMath';
+    const dropOptionsMathCls = 'drpOptionsMath';
+    const draggableOptionCls = 'disDragItemsMath';
+    const dropAreaCls        = 'dropArea';
+
+    let shuffledQuestions;
+    let currentQuesIndex  = 0;
+    let currentScore      = 0;
+    let correctDropCount  = 0;
+
+    let __questionID;
+
+    MathJax = {
+        tex : {
+            inlineMath : [
+                ["\\(", "\\)"],
+                ["\\[", "\\]"]
+            ]
+        }
+    };
+
+    const ui = async (questionId) => {
+        try {
+            __questionID = questionId;
+
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error('ui container not found:', container);
+                return;
+            }
+
+            await Define.get( 'loadScript' )('js/tex-chtml.js');
+
+            currentQuesIndex  = 0;
+            currentScore      = 0;
+            correctDropCount  = 0;
+
+            const activity    = Activity.getDefine(questionId) ?? {};
+            const content     = activity?.content ?? [];
+            const questions   = content?.questions ?? [];
+            const lang        = activity.lang ?? 'en';
+            shuffledQuestions = content?.shuffle === true 
+                                    ? ( Activity.shuffleArray( questions ) ?? [] ) 
+                                    : questions;
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container" id="${containerId}">
+                                        ${
+                                            activity?.head
+                                                ? 
+                                                    `<div class="menHeDicMath text-center">
+                                                        <span class="menHeadingMath ${Define.get('head')}"></span>
+                                                        ${
+                                                            activity?.subhead
+                                                                ? ` (<span class="secondTextsRedMath ${Define.get('subHead')}"></span>)` 
+                                                                : ''
+                                                        }
+                                                    </div>`
+                                                : ''
+                                        }
+                                        <div class="${dropOptionsMathCls}" id="optLoop"></div>
+                                        <div class="${questionContentCls} shadow-sm"></div>
+                                    </div>
+                                </div>`;
+            // ..
+            Activity.setHeader(questionId);            
+            
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            renderQuestion();
+
+		} catch (err) {
+            console.error( 'MentalMath.ui :', err );
+        }
+    };    
+
+    const renderQuestion = () => {
+        try {
+            
+            const activity    = Activity.getDefine( Activity.getQid(containerId) ) ?? {};
+            const lang        = activity?.lang ?? 'en';
+            const question    = shuffledQuestions[currentQuesIndex];
+
+            const options = [];
+            question?.options.forEach((item, i) => {
+                const html = `<div class="${draggableOptionCls}" data-index="${i}">${item}</div>`;
+                options.push( html );
+            });
+            $(`.${dropOptionsMathCls}`).html( options.join( '' ) );
+            makeDraggable( `.${draggableOptionCls}` );
+
+            const html = `
+                            <div class="numAndNumof">
+                                <div class="qnuMath">
+                                    Question : ${currentQuesIndex + 1} / ${shuffledQuestions.length}
+                                </div>
+                                <div class="qnuMath">Score : ${currentScore}</div>
+                            </div>
+                            <div id="${questionTextId}"></div>
+                        `;
+            // ..
+            $(`.${questionContentCls}`).html( html );
+            operatorUI( question );
+
+        } catch (err) {
+            console.error( 'MentalMath.renderQuestion :', err );
+        }
+    };
+
+    const makeDraggable = ( selector ) => {
+        try {
+            $( selector ).draggable({
+                helper : 'clone',
+                revert : 'invalid',
+            });
+        } catch (err) {
+            console.error( 'MentalMath.makeDraggable :', err );
+        }
+    }
+
+    const operatorUI = (question) => {
+        try {
+            let html;
+
+            switch( question.type ) {
+                case '+' :
+                    html = `
+                                <div class="rowT1">
+                                <div class="opraterMath">${question.type}</div>
+                                <div class="dititalText">
+                                    <div class="textDigit">
+                                        ${question.text.map(txt => `<div>${txt}</div>`).join('')}
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="dropAnsBoxes ${dropAreaCls}"></div>
+                            `;
+                    // ..
+                break;
+
+                case 'x' :
+                    const data = shuffledQuestions[currentQuesIndex];
+
+                    const imageWidth     = ( data?.image && data.image?.width ) ? data.image.width : '15%';
+                    const imgReplacement = ( data?.image && data.image?.replacement ) ? data.image?.replacement : '#img#';
+                    const image          = ( data?.image && data.image?.path )
+                                                ? `<img class="mx-2" src="${Activity.pathToCWD() + data.image.path}" style="width:${imageWidth};">`
+                                                : '';
+                    // ..
+
+                    const quesText    = ( data?.text && ( Array( data?.text[0] ) !== undefined ) ) 
+                                            ? data?.text[0] : '' ;
+                    
+                    const replacement = data?.replacement ?? '#_#';
+                    const content     = quesText.replace( imgReplacement, image )
+                                            .replaceAll(
+                                                replacement,
+                                                `<div class="dropAnsBoxes2 ${dropAreaCls}"></div>`
+                                            );
+                    // ..
+
+                    html = `<div class="multifillBox">${content}</div>`;
+                break;
+
+                default:
+                    html = `<div class="dropAnsBoxes ${dropAreaCls}"></div>`;
+            }
+
+            const area = document.getElementById(questionTextId);
+            if( area ) area.innerHTML = html;
+
+            makeDroppable( `.${dropAreaCls}` );            
+            MathJax.typesetPromise();
+
+        } catch (err) {
+            console.error( 'MentalMath.operatorUI :', err );
+        }
+    }
+
+    const makeDroppable = ( selector ) => {
+        try {
+            const correctAnswers = shuffledQuestions[currentQuesIndex].correct;
+            const totalDrops     = Array.isArray(correctAnswers) ? correctAnswers.length : 1;
+
+            $( selector ).droppable({
+                accept    : `.${draggableOptionCls}`,
+                tolerance : 'intersect',
+                drop      : function (event, ui) {
+                    const ansIndex = parseInt( ui.draggable.attr('data-index') );
+                    const pos      = $( selector ).index(this);
+
+                    const isCorrect = correctAnswers[pos] === ansIndex;
+
+                    if( isCorrect ) {
+                        const dragWidth = ui.draggable.outerWidth();
+                        $(this).css({
+                            'width'      : dragWidth + 'px',
+                            'background' : '#c8e6c9',
+                            'transition' : '0.3s'
+                        });
+
+                        $(this).html(
+                            ui.draggable.clone()
+                                .removeClass(draggableOptionCls)
+                                .addClass('fixedDrop')
+                        );
+                        $(this).droppable('disable');
+
+                        correctDropCount++;
+
+                        if( correctDropCount === totalDrops ) {
+                            setTimeout(() => {
+                                correctDropCount = 0;
+                                currentScore++;
+                                updateScore();
+                                if( ( currentQuesIndex + 1 ) === shuffledQuestions.length ) {
+                                    showFunnySuccess();
+                                } else {
+                                    currentQuesIndex++;
+                                    renderQuestion();
+                                }
+                            }, 900);
+                        }
+
+                    } else {
+                        $(this).css('background', '#ffcdd2');
+                        $(this).addClass('shake');
+                        setTimeout(() => $(this).removeClass('shake'), 600);
+                    }
+                }
+            });
+        } catch (err) {
+            console.error( 'MentalMath.makeDroppable :', err );
+        }
+    }
+
+    const updateScore = () => {
+        $('.qnuMath').html( `Score : ${currentScore}` );
+    }
+
+    const showFunnySuccess = () => {
+        Swal.fire({
+            title: "🎉 Wohoo! All Completed! 🎉",
+            html: `
+                <b>You are unstoppable 😎🔥</b><br>Superb Job Buddy!<br><br>
+                <div style="display:flex; gap:15px; justify-content:center;">
+                    <button id="restartBtn" style="
+                    padding: 10px 20px;
+                    border: none;
+                    background: #ff9800;
+                    color: white;
+                    font-weight: bold;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 18px;
+                    ">🔁 Do It Again</button>
+
+                    <button id="closeBtn" style="
+                    padding: 10px 20px;
+                    border: none;
+                    background: #f44336;
+                    color: white;
+                    font-weight: bold;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 18px;
+                    ">❌ Close</button>
+                </div>
+            `,
+            icon: "success",
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
+
+        $(document).on("click", "#restartBtn", function () {
+            Swal.close();
+            currentQuesIndex  = 0;
+            currentScore      = 0;
+            correctDropCount  = 0;
+            ui( __questionID );
+        });
+
+        $(document).on("click", "#closeBtn", function () {
+            Swal.close();
+        });
+    }
+
+    return { render : ui }
 })();
 
 Templates.get('templates').map(({ template }) => {

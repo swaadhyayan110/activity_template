@@ -1,0 +1,278 @@
+/* Main Header Dictionary Box */
+.menHeDicMath {
+  /* display: flex; */
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  margin: 18px 0;
+  /* border: 2px solid #e3e3e3; */
+  border-radius: 14px;
+  font-weight: bold;
+  /* background: linear-gradient(135deg, #ffffff, #f2f7ff); */
+  /* box-shadow: 0 2px 6px rgba(0,0,0,0.08); */
+  transition: all 0.35s ease;
+}
+
+.menHeDicMath:hover {
+  border-color: #1e88e5;
+  box-shadow: 0 8px 22px rgba(30, 136, 229, 0.30);
+  transform: translateY(-4px);
+}
+
+/* Headings */
+.menHeadingMath {
+  font-family: 'PoppinsRegular';
+  font-size: 22px;
+  color: #0b5fff;
+  margin: 8px 0;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  transition: color .3s ease, transform .3s ease;
+  text-align: center;
+}
+
+.secondTextsRedMath {
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+.drpOptionsMath{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  position: sticky;
+  padding: 10px 0;
+  top: 52px;
+  background: #fff;
+}
+
+/* Drag items */
+.disDragItemsMath {
+    font-family: 'PoppinsRegular';
+    margin: 6px;
+    padding: 8px 15px;
+    border-radius: 12px;
+    font-size: 17px;
+    background: linear-gradient(to bottom, #e1f0ff, #bcdcff);
+    border: 2px solid #8ec7ff;
+    cursor: grab;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    color: #000;
+    transition: 0.s ease;
+    text-align: center;
+}
+.disDragItemsMath:hover {
+  transform: translateY(-6px) scale(1.07);
+  background: linear-gradient(to bottom, #4797ff, #0077e6);
+  color: #fff;
+  border-color: #005fc0;
+  box-shadow: 0 10px 22px rgba(0, 90, 200, 0.45);
+}
+.rowT1{
+  font-family: 'PoppinsRegular';
+  display: flex;
+  justify-content: center;
+  font-size: 28px;
+  align-items: end;
+  margin: 1px 10px;
+}
+.boxForAttemptedMath{
+  background: #fafafa69;
+  padding: 0px 0px 53px 0px;
+  margin: 15px 0;
+  border-radius: 15px;
+  border: 1px solid #bbddff;
+  overflow: auto;
+}
+.imgQuestMath{
+  max-width: 100%;
+}
+.dropAnsBoxes{
+  font-family: 'PoppinsRegular';
+  height: 46px;
+  border: 1px solid #7faff7;
+  width: 150px;
+  margin: 0 auto;
+  border-left: 0;
+  border-right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+  color: #000;
+}
+.dropAnsBoxes2{
+  font-family: 'PoppinsRegular';
+  height: 46px;
+  border-bottom: 1px solid #7faff7;
+  width: 120px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+  color: #000;
+}
+.multifillBox{
+    display: flex;
+    justify-content: start;
+    width: max-content;
+    align-items: center;
+    margin: 0 auto;
+    font-size: 19px;
+}
+.numAndNumof{
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  font-family: 'PoppinsRegular';
+  color: #000;
+  font-size: 18px;
+  background: #f1f1f1;
+  margin-bottom: 20px;
+}
+.shake {
+  animation: shakeAnim 0.3s;
+}
+
+@keyframes shakeAnim {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.bill-wrapper {
+  background: #ffffff;
+  padding: 18px 22px;
+  border-radius: 10px;
+  margin: 20px 0;
+ font-family: 'PoppinsRegular';
+  font-size: 16px;
+  color: #1e1e1e;
+  border: 1px solid #e2e6eb;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+  /* max-width: 550px; */
+}
+
+.bill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #92abcb;
+  padding-bottom: 0px;
+  margin-bottom: 11px;
+}
+
+.bill-title {
+  font-size: 22px;
+  margin: 0;
+  font-weight: 600;
+  color: #2f80ed;
+}
+.bill-details p {
+  margin: 6px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.bill-customer {
+  margin-top: 18px;
+  font-weight: 500;
+}
+.customer-address {
+  margin-top: 5px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px dashed #b3b3b3;
+  background: #f7faff;
+  font-weight: 400;
+}
+.dropBoxItem {
+  background: #f8fbff;
+  border: 2px dashed #6a8fc5;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.totalAmtText {
+  text-align: right;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.tblsMaths {
+  white-space: nowrap;
+    font-family: 'PoppinsLight';
+  font-size: 18px;
+}
+
+.signatureOf {
+  text-align: right;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.tblsMaths .table {
+  border-radius: 12px !important;
+}
+
+.tblsMaths .table th {
+  background-color: #234f9c;
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.tblsMaths .table td {
+  vertical-align: middle;
+  height: 70px;
+  font-size: 19px;
+  color: #000;
+}
+
+.tblsMaths .table tbody tr:hover {
+  background-color: #f2f6ff;
+  transition: 0.3s;
+}
+.correctAnsMoney { border: 2px solid green; background:#d6ffd6; }
+.wrongAnsMoney { border:2px solid red; background:#ffd6d6; }
+
+/* Responsive */
+@media (max-width: 760px) {
+  .disDragItemsMath {
+  margin: 1px;
+  padding: 2px 15px;
+  font-size: 12px;
+  cursor: grab;
+  color: #000;
+  transition: 0.45s ease;
+  text-align: center;
+  }
+  .bill-wrapper {
+  padding: 12px 22px;
+  margin: 15px 0;
+  font-size: 13px;
+  }
+  .dropBoxItem {
+  background: #f8fbff;
+  border: 2px dashed #6a8fc5;
+  height: 47px;
+  }
+  .tblsMaths .table td {
+  height: 33px;
+  font-size: 15px;
+}
+.tblsMaths .table th {
+  font-size: 13px;
+}
+.menHeadingMath {
+  font-size: 17px;
+  margin: 0px 0;
+}
+  
+}

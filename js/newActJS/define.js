@@ -39,16 +39,17 @@ const Define = (() => {
         { qid : 26, text : ['Q-26', 'WordSearch'], module : 21 },
         { qid : 27, text : ['Q-27', 'TextArea'], module : 22 },
         { qid : 28, text : ['Q-28', 'CrossWord'], module : 23 },
-        { qid: 29, text: ['Q-29', 'ShravanKaushalWithPara'], module: 24 },
-        { qid: 30, text: ['Q-30', 'ShravanKaushalWithoutPara'], module: 24 },
+        { qid : 29, text : ['Q-29', 'ShravanKaushalWithPara'], module : 24 },
+        { qid : 30, text : ['Q-30', 'ShravanKaushalWithoutPara'], module : 24 },
         { qid : 31, text : ['Q-31', 'VideoPlayer'], module : 25 },
-        { qid: 32, text: ['Q-32', 'Rachnatmak_Para-1'], module: 26 },
-        { qid: 33, text: ['Q-33', 'Rachnatmak_Inputs&Images-2'], module: 27 },
-        { qid: 34, text: ['Q-34', 'Rachnatmak_Tab_Btns-3'], module: 28 },
-        { qid: 35, text: ['Q-35', 'Rachnatmak_multi_Inputs-4'], module: 29 },        
-        { qid: 36, text: ['Q-36', 'ClickOnImage'], module: 30 },
-        { qid: 37, text: ['Q-37', 'FillOnClick'], module: 31 },
-        { qid: 38, text: ['Q-38', 'Dictionary'], module: 32 },
+        { qid : 32, text : ['Q-32', 'Rachnatmak_Para-1'], module : 26 },
+        { qid : 33, text : ['Q-33', 'Rachnatmak_Inputs&Images-2'], module : 27 },
+        { qid : 34, text : ['Q-34', 'Rachnatmak_Tab_Btns-3'], module : 28 },
+        { qid : 35, text : ['Q-35', 'Rachnatmak_multi_Inputs-4'], module : 29 },
+        { qid : 36, text : ['Q-36', 'ClickOnImage'], module : 30 },
+        { qid : 37, text : ['Q-37', 'FillOnClick'], module : 31 },
+        { qid : 38, text : ['Q-38', 'Dictionary'], module : 32 },
+        { qid : 39, text : ['Q-39', 'MentalMath'], module : 33 },
     ];
 
     // DEFINE QUESTIONS
@@ -147,16 +148,16 @@ const Define = (() => {
         },
         {
             id      : 5,
-            lang    : 'en',
+            lang    : 'hi',
             head    : 'Module : 5',
             content : {
                 replacement : '#_#',
                 questions   : [
-                    { question: '1. हमारे #_# देश का नाम #_# है।', answers: ['भारत', 'भारत'] },
-                    { question: '2. भारत की राजधानी #_# है।', answers: ['दिल्ली'] },
-                    { question: '3. भारत की राजभाषा #_# है।', answers: ['हिंदी'] },
-                    { question: '4. बच्चों को पढ़ने के लिए #_# चाहिए।', answers: ['किताब'] },
-                    { question: '5. जहाँ पढ़ाई होती है उसे #_# कहते हैं।', answers: ['विद्यालय'] }
+                    { text : 'हमारे #_# देश का नाम #_# है।', answers : ['भारत', 'भारत'] },
+                    { text : 'भारत की राजधानी #_# है।', answers : ['दिल्ली'] },
+                    { text : 'भारत की राजभाषा #_# है।', answers : ['हिंदी'] },
+                    { text : 'बच्चों को पढ़ने के लिए #_# चाहिए।', answers : ['किताब'] },
+                    { text : 'जहाँ पढ़ाई होती है उसे #_# कहते हैं।', answers : ['विद्यालय'] }
                 ]
             }
         },
@@ -893,18 +894,18 @@ const Define = (() => {
             head    : 'Module : 29',
             subhead : 'अपनी छोटी बहन को मोबाइल पर व्यर्थ समय बिताने की जगह पढ़ाई पर ध्यान देने का सुझाव देते हुए पत्र लिखिए।',
             content : {
+                showButtons    : true,
+                showAnswerOfId : 1,
+                inputLeft      : false,
                 hint  : 'आदरणीया चाची जी, गर्मियों की छुट्टियाँ, बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ  दिन रहे सब मिलकर मजे करेंगे',
                 image : {
                     path  : 'img/1.png',
                     width : '15%'
                 },
-                inputLeft: false,
                 col : {
                     left  : { md: 4, sm: 6, col: 6, show: true },
                     right : { md: 6, sm: 6, col: 6, show: true }
                 },
-                showButtons: true,
-                showAnswerOfId: 1,
                 placeholder: {
                     left  : 'यहाँ सामग्री लिखें...',
                     right : 'यहाँ विधि लिखें...'
@@ -963,7 +964,43 @@ const Define = (() => {
                 'Scrimping', 'Patronage', 'Relinquished', 'Celestial', 'Xenophobia', 
                 'Grimly', 'Hankering', 'Quavered', 'Angel', 'Deterrence', 'Lavender', 'aeroplane',
             ]
-        }
+        },
+        {
+            id      : 39,
+            lang    : 'en',
+            head    : 'Numbers and Numeration',
+            subhead : 'Drag the correct answer',
+            content : {
+                shuffle   : false,
+                questions : [
+                    {
+                        type        : 'x',
+                        replacement : '#_#',
+                        text        : [ '\\( \\sqrt{49} \\)  = #_# + 200 = 207 x #_# = #img#' ],
+                        image       : {
+                            width       : '200px',
+                            path        : 'img/414.png',
+                            replacement : '#img#',
+                        },
+                        options     : [ '7', '2', '20' ],
+                        correct     : [ 0, 1 ]
+                    },
+                    {
+                        type      : '+',
+                        text      : [ '393', '607' ],
+                        options   : [ '1000', '5987', '3895', '9538' ],
+                        correct   : [ 0 ]
+                    },
+                    {
+                        type        : 'x',
+                        replacement : '#_#',
+                        text        : [ '200 + 200 = #_# + 200 = #_#' ],
+                        options     : [ '400', '700', '600' ],
+                        correct     : [ 0, 2 ]
+                    }
+                ]
+            }
+        },
     ];
 
     const questionContainer = '.question-container';

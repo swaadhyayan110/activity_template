@@ -33,7 +33,8 @@ const Templates = (() => {
         { id : 29, template : 'RachnatmakWithInputs' },
         { id : 30, template : 'ClickOnImage' },
         { id : 31, template : 'FillOnClick' },
-        { id : 32, template : 'Dictionary' }
+        { id : 32, template : 'Dictionary' },
+        { id : 33, template : 'MentalMath' },
     ];
 
     const store = {
