@@ -8290,8 +8290,8 @@ const RachnatmakWithKeyboard = (() => {
         ui(questionId);
 
         const activity = Activity.getDefine(questionId) ?? {};
-        const lang = activity.lang ?? 'en';
-        const content = activity.content ?? {};
+        const lang     = activity.lang ?? 'en';
+        const content  = activity.content ?? {};
 
         let textareaType = content.textArea?.type ?? "single";
         let textareaClass = textareaType === "multi" ? "multiTextArea" : "singleTextarea";
@@ -8304,22 +8304,30 @@ const RachnatmakWithKeyboard = (() => {
             style="height:${content?.textArea?.height};"></textarea>`;
         }
 
-        const imgSrc = Activity.pathToCWD() + content?.image?.path ?? "";
-        const image = imgSrc ? `<img
-            class="dynamicImgRachna shadow-sm ${content?.image?.side}"
-            src="${imgSrc}"
-            style="width:${content.image.width};" />` : "";
+        const imgSrc   = content?.image?.path ? Activity.pathToCWD() + content?.image?.path : '';
+        const imgWidth = content?.image?.width ?? '10%';
+        const image    = imgSrc 
+            ? `<img
+                class="dynamicImgRachna shadow-sm ${content?.image?.side}"
+                src="${imgSrc}"
+                style="width:${imgWidth};" />` 
+            : '';
+        // ..
 
         const html = `
-            <div class="instForFillText shadow-sm">
-                <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
-                <p class="saketText">${content?.heading ?? ''}</p>
-            </div>
-            <div class="inputeSectionsRachna img-${content.image.side}">
-                ${content.image.side === "left" ? image : ""}
-                <div class="textInputsBox">${textBox}</div>
-                ${content.image.side === "right" ? image : ""}
-            </div>
+            ${ content?.heading ?
+                `<div class="instForFillText shadow-sm">
+                    <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
+                    <p class="saketText">${content?.heading ?? ''}</p>
+                </div>` : ''
+            }
+            ${ content?.image ? 
+                `<div class="inputeSectionsRachna img-${content?.image?.side}">
+                    ${content.image?.side === 'left' ? image : ''}
+                    <div class="textInputsBox">${textBox}</div>
+                    ${content.image?.side === 'right' ? image : ''}
+                </div>` : ''
+            }
             `;
 
         document.getElementById("activitiesRachnatmal").innerHTML = html;
@@ -8628,27 +8636,33 @@ const RachnatmakWithInputs = (() => {
         const colRight = content?.col?.right != undefined ? content?.col?.right : { md: 6, sm: 6, col: 6, show: true };
 
         content?.question.map((item, index) => {
-            if (!item?.text) return;
+            
             const html = `<div class="row rowContainer">
                             <div class="col-md-${colLeft?.md} col-sm-${colLeft?.sm} col-${colLeft?.col}"
                                 style="display:${colLeft?.show ? "block" : "none"}">
                                 ${content?.inputLeft === false ?
-                    `<div class="headingText animate__animated animate__fadeInDown">
-                                        ${index + 1}. ${item.text}
-                                    </div>`
-                    :
-                    `<textarea data-type="left" id="leftValue_${index}"
+                                    item?.text ?
+                                        `<div class="headingText animate__animated animate__fadeInDown">
+                                            ${index + 1}. ${item.text}
+                                        </div>` : ''                                    
+                                    :
+                                    `<textarea 
+                                        data-type="left" id="leftValue_${index}"
                                         class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
-                                        placeholder="${content?.placeholder?.left ?? ""}"></textarea>`
-                }
+                                        placeholder="${content?.placeholder?.left ?? ""}">
+                                    </textarea>`
+                                }
                             </div>
-                            <div class="col-md-${colRight?.md} col-sm-${colRight?.sm} col-${colRight?.col}"
-                                style="display:${colRight?.show ? "block" : "none"}">
-                                <textarea data-type="right" id="inputAns_${index}"
-                                class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
-                                placeholder="${content?.placeholder?.right ?? ""}"></textarea>
-                            </div>
+                            ${item?.answer ? 
+                                `<div class="col-md-${colRight?.md} col-sm-${colRight?.sm} col-${colRight?.col}"
+                                    style="display:${colRight?.show ? "block" : "none"}">
+                                    <textarea data-type="right" id="inputAns_${index}"
+                                    class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
+                                    placeholder="${content?.placeholder?.right ?? ""}"></textarea>
+                                </div>` : ''
+                            }
                         </div>`;
+            // ..
             showInputsAnnds.innerHTML += html;
         });
 
@@ -8679,7 +8693,7 @@ const RachnatmakWithInputs = (() => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
         const content = activity?.content ?? {};
 
-        const fillAppli = document.querySelectorAll(".fillAppli");
+        const fillAppli = document.querySelectorAll('.fillAppli');
 
         if (content?.showAnswerOfId === true) {
             if (content?.inputLeft === false) {
@@ -8703,23 +8717,26 @@ const RachnatmakWithInputs = (() => {
                 });
             }
         } else {
-            let qID = content?.showAnswerOfId;
-            if (Number(qID)) {
-                if (qID < 0 || qID > content?.question.length) { qID = 1 };
+            const qID = content?.showAnswerOfId;
+            if( Number(qID) ) {
+                if( qID < 0 || qID > content?.question.length ) return false;
+
                 const question = content?.question.filter(item => item.id == qID);
-                if (content?.inputLeft === false) {
-                    fillAppli[qID - 1].value = question[0]?.answer.replaceAll("<br/>", "\n");
-                    fillAppli[qID - 1].classList.add("pointer-none");
-                }
-                else {
-                    const row = $(`.rowContainer`).eq(qID - 1).children().find('.fillAppli');
+                const index    = Number( qID - 1 );
+                if( content?.inputLeft === false ) {
+                    if( !fillAppli[index] ) return false;
+
+                    fillAppli[index].value = question[0]?.answer?.replaceAll("<br/>", "\n");
+                    fillAppli[index].classList.add('pointer-none');
+                } else {
+                    const row = $(`.rowContainer`).eq(index).children().find('.fillAppli');
                     row.map((_, item) => {
                         const type = item.dataset.type
                         item.value = type == 'left' ? question[0].text : question[0].answer;
-                        item.classList.add("pointer-none");
-                    })
+                        item.classList.add('pointer-none');
+                    });
                 }
-                autoResizeTextarea(fillAppli[qID]);
+                autoResizeTextarea(fillAppli[index]);
             }
         }
     }
