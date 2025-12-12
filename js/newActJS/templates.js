@@ -8324,13 +8324,16 @@ const RachnatmakWithKeyboard = (() => {
 
         const imageDirection = () => {
             const html  = [];
+            if( content?.image?.side === 'top' ) html.push( `<div class="text-center">${image}</div>` );
+
             const frag1 = `<div class="inputeSectionsRachna img-${content?.image?.side}">`
             html.push( frag1 );
 
-            if( content?.image?.side == 'left' ) html.push( image );
+            if( content?.image?.side === 'left' ) html.push( image );
             const textArea = `<div class="textInputsBox">${textBox}</div>`;
             html.push( textArea );
-            if( content?.image?.side == 'right' ) html.push( image );
+
+            if( content?.image?.side === 'right' ) html.push( image );
             html.push( '</div>' );
 
             return html.join('');

@@ -504,11 +504,11 @@ const Define = (() => {
                 replacement : '#_#',
                 addOptions  : [ 'op1', 'op2', 'op3', 'op1' ],
                 questions   : [
-                    { qid : 1, text: 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', options: ['पंख', 'नाचने'] },
-                    { qid : 2, text: 'सितार के सुर #_# में गूँजने लगे।', options: ['जंगल'] },
-                    { qid : 3, text: 'सितार पर खाली जगह पर #_# की गई।', options: ['नक्काषी'] },
-                    { qid : 4, text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', options: ['खूँटी'] },
-                    { qid : 5, text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', options: ['जतन'] }
+                    { qid : 1, text : 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', options : ['पंख', 'नाचने'] },
+                    { qid : 2, text : 'सितार के सुर #_# में गूँजने लगे।', options : ['जंगल'] },
+                    { qid : 3, text : 'सितार पर खाली जगह पर #_# की गई।', options : ['नक्काषी'] },
+                    { qid : 4, text : 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', options : ['खूँटी'] },
+                    { qid : 5, text : 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', options : ['जतन'] }
                 ],
                 subquestions : [
                     { sid : 1, qid : 1, text : '' },
@@ -870,9 +870,9 @@ const Define = (() => {
                     type   : 'multi',
                     height : '100px',
                 },
-                images : {
+                image : {
                     path  : 'img/1.png',
-                    side  : 'right',
+                    side  : 'top',
                     width : '150px',
                 }
             }
