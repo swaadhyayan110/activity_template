@@ -8297,11 +8297,15 @@ const RachnatmakWithKeyboard = (() => {
         let textareaClass = textareaType === "multi" ? "multiTextArea" : "singleTextarea";
         let textBox = "";
         for (let i = 0; i < content.textArea?.count; i++) {
-            textBox += `<textarea 
-            class="form-control hindiInput ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted forHindiDev 
-            ${textareaClass}" 
-            data-ans="${i}"
-            style="height:${content?.textArea?.height};"></textarea>`;
+            textBox += `
+                    <textarea 
+                        class="form-control hindiInput ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted forHindiDev 
+                        ${textareaClass}" 
+                        data-ans="${i}"
+                        style="height:${content?.textArea?.height};"
+                        placeholder="${Activity.translateWriteAnsLabel(lang)}"
+                    ></textarea>
+                `;
         }
 
         const imgSrc   = content?.image?.path ? Activity.pathToCWD() + content?.image?.path : '';
@@ -8314,6 +8318,24 @@ const RachnatmakWithKeyboard = (() => {
             : '';
         // ..
 
+        const imageHTML = content?.image 
+                            ? ( content.image?.side === 'left' )
+                            : '';
+
+        const imageDirection = () => {
+            const html  = [];
+            const frag1 = `<div class="inputeSectionsRachna img-${content?.image?.side}">`
+            html.push( frag1 );
+
+            if( content?.image?.side == 'left' ) html.push( image );
+            const textArea = `<div class="textInputsBox">${textBox}</div>`;
+            html.push( textArea );
+            if( content?.image?.side == 'right' ) html.push( image );
+            html.push( '</div>' );
+
+            return html.join('');
+        }
+        
         const html = `
             ${ content?.heading ?
                 `<div class="instForFillText shadow-sm">
@@ -8321,13 +8343,7 @@ const RachnatmakWithKeyboard = (() => {
                     <p class="saketText">${content?.heading ?? ''}</p>
                 </div>` : ''
             }
-            ${ content?.image ? 
-                `<div class="inputeSectionsRachna img-${content?.image?.side}">
-                    ${content.image?.side === 'left' ? image : ''}
-                    <div class="textInputsBox">${textBox}</div>
-                    ${content.image?.side === 'right' ? image : ''}
-                </div>` : ''
-            }
+            ${imageDirection()}
             `;
 
         document.getElementById("activitiesRachnatmal").innerHTML = html;
