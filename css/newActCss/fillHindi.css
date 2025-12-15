@@ -25,10 +25,13 @@
   background: none !important;
   border: none !important;
   border-bottom: 2px dashed #333 !important;
-  max-width: 150px !important;
   text-align: center !important;
   color: #4CAF50 !important;
   font-family: 'IBM Plex Sans Devanagari';
+}
+
+.inPutHindiNew:not(.w-100) {
+  max-width: 150px !important;
 }
 
 .inPutHindiNew:focus {

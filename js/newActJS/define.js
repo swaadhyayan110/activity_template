@@ -151,13 +151,20 @@ const Define = (() => {
             lang    : 'hi',
             head    : 'Module : 5',
             content : {
-                replacement : '#_#',
-                questions   : [
-                    { question : 'हमारे #_# देश का नाम #_# है।', answers : ['भारत', 'भारत'] },
-                    { question : 'भारत की राजधानी #_# है।', answers : ['दिल्ली'] },
-                    { question : 'भारत की राजभाषा #_# है।', answers : ['हिंदी'] },
-                    { question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', answers : ['किताब'] },
-                    { question : 'जहाँ पढ़ाई होती है उसे #_# कहते हैं।', answers : ['विद्यालय'] }
+                replacement  : '#_#',
+                questions    : [
+                    { qid : 1, question : 'हमारे #_# देश का नाम #_# है।', answers : ['भारत', 'भारत'] },
+                    { qid : 2, question : 'भारत की राजधानी #_# है।', answers : ['दिल्ली'] },
+                    { qid : 3, question : 'भारत की राजभाषा #_# है।', answers : ['हिंदी', 'djf', 'sfdsf'], inputBelow : true },
+                    { qid : 4, question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', answers : ['किताब'] },
+                    { qid : 5, question : 'जहाँ पढ़ाई होती है उसे #_# कहते हैं।', answers : ['विद्यालय'] }
+                ],
+                subquestions : [
+                    { sid : 1, qid : 1, text : '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['~पंख'] },
+                    { sid : 2, qid : 1, text : '! सितार बनाने #_# तारों को #_# से बाँधा गया।', answers : ['!पंख', '!पंख'] },
+                    { sid : 3, qid : 2, text : '@ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['@पंख', '@नाचने'], inputBelow : true },
+                    { sid : 4, qid : 2, text : '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['#पंख'] },
+                    { sid : 5, qid : 2, text : '$ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['$पंख'] }
                 ]
             }
         },
@@ -547,7 +554,7 @@ const Define = (() => {
                 replacement : '#_#',
                 col         : { col : 3, md : 4, sm : 12 },
                 questions   : [
-                    { text: '#_#, #_#', image : 'img/1.png', width : '25%', options: ['पंख', 'नाचने'] },
+                    { text: '#_#, #_#', inputWidth : '5%', image : 'img/1.png', width : '25%', options: ['पंख', 'नाचने'] },
                     { text: '#_#, #_#', image : 'img/2.png', options: ['जंगल', 'पंखूँटी'] },
                     { text: '#_#, #_#', image : 'img/4.png', options: ['नक्काषी', 'पंखूँटी'] }
                 ]

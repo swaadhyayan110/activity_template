@@ -1746,6 +1746,8 @@ const FillInTheBlanksHindiKb = (() => {
 
     const quizContainerID = 'quizContainer';
 
+    let __subQuestions;
+
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
@@ -1774,6 +1776,9 @@ const FillInTheBlanksHindiKb = (() => {
                                 </div>`;
             // ..
 
+            Activity.setHeader( questionId );
+            Activity.setQid(`#${quizContainerID}`, questionId);            
+
             const submitBtn = parent.querySelector( '.submit-btn' );
             const showBtn   = parent.querySelector( '.show-btn' );
             const resetBtn  = parent.querySelector( '.reset-btn' );
@@ -1789,50 +1794,131 @@ const FillInTheBlanksHindiKb = (() => {
     const fillInTheBlanks = (questionId) => {
         try {
 
-            ui(questionId);
-            Activity.setHeader( questionId );
+            ui(questionId);            
 
-            const container = $('#'+quizContainerID)[0];
+            const activity    = Activity.getDefine(questionId);
+            const content     = activity?.content;
+            const lang        = activity?.lang ?? 'en';
+            const replacement = content?.replacement;
+            
+            if( content?.subquestions ) __subQuestions = content?.subquestions;
 
-            container.dataset.qid = questionId;
-            const data        = Activity.getDefine(questionId)?.content;
-            const lang        = Activity.getDefine(questionId)?.lang ?? 'en';
-            const replacement = data?.replacement;            
+            const placeholder = Activity.translateWriteAnsLabel(lang);
+            const input = ({ind='',id='',classes=''}={}) => {
+                const inputHtml = `
+                            <input 
+                                class="hindiInput inPutHindiNew ${classes}" 
+                                data-qindex="${ind}" 
+                                data-blankindex="${id}" 
+                                autocomplete="off" 
+                                type="text" 
+                                placeholder="${placeholder}"
+                            >
+                        `;
+                return inputHtml;
+            }
 
-            data?.questions.forEach((item, qIndex) => {
-                const div = document.createElement("div");
-                div.classList.add("questionFILL");
+            content?.questions.forEach((item, qIndex) => {
+                const subQuestion = __subQuestions?.filter( subques => subques.qid === item.qid ) ?? [];                
+                const mainBullet  = Activity.translateBulletLabels({lang:lang, ind:qIndex});
+                const html        = [ `${mainBullet}) ` ];
+
+                const div = document.createElement('div');
+                div.classList.add('questionFILL'); 
+
+                const inputBelowCondition = item?.inputBelow === true && item?.answers;
                 
-                const parts = item.question.split( replacement );
+                if( subQuestion.length || inputBelowCondition ) {
+                    html.push( item?.question ?? '' );
+                }
 
-                const html = [ `${Activity.translateBulletLabels({lang:lang, ind:qIndex})}) ` ];
-                parts.forEach((part, idx) => {
-                    html.push(part);
-                    if( item.answers[idx] !== undefined ) {
-                        const placeholder = Activity.translateWriteAnsLabel(lang);
-                        html.push(`<input class="hindiInput inPutHindiNew" data-qindex="${qIndex}" data-blankindex="${idx}" autocomplete="off" type="text" placeholder="${placeholder}">`);
+                if( subQuestion.length ) {
+                    if( html.length > 2 ) return false;
+                    
+                    const frame = '<div class="my-2 mx-5 ps-3">';
+                    html.push( frame );
+                    subQuestion.map( (subques, subind) => {
+                        
+                        const multiInput  = [];
+                        const subQuesText = [];
+                        if( subques?.inputBelow === true ) {
+                            subques?.answers.map((_,i) => {
+                                const belowInput = `
+                                                    <div class="my-1 mx-4 px-2">
+                                                        ${input({ind:qIndex,classes:'w-100 my-2'})}
+                                                    </div>
+                                                    `;
+                                // ..
+                                multiInput.push( belowInput );
+                            });
+                        } else {
+                            const text = subques?.text.replaceAll( 
+                                                replacement, 
+                                                `<input 
+                                                    class="hindiInput inPutHindiNew" 
+                                                    data-subid="${subques?.sid}" 
+                                                    data-type="sub-ques" 
+                                                    data-qindex="${qIndex}" 
+                                                    data-blankindex="${subind}" 
+                                                    autocomplete="off" 
+                                                    type="text" 
+                                                    placeholder="${placeholder}"
+                                                >`
+                                            );
+                            // ..
+                            subQuesText.push( text );
+                        }
+
+                        const bullet = Activity.translateBulletLabels({lang:'ro', ind:subind, upperCase:false});
+                        const final  = `
+                                            <div class="my-1">
+                                                ${bullet}) ${subQuesText.join('')}
+                                            </div>
+                                            ${multiInput.join('')}
+                                        `;
+                        // ..
+                        html.push( final );
+                    });
+                    html.push( '</div>' );                    
+                } else {
+
+                    if( inputBelowCondition ) {
+                        item?.answers.map((_,i) => {
+                            const belowInput = `<div class="my-1 mx-4 px-2">${input({ind:qIndex,classes:'w-100 my-2'})}</div>`;
+                            html.push( belowInput );
+                        });
+                    } else {
+                        const parts = item?.question.split( replacement );
+                        parts.forEach((part, idx) => {
+                            html.push(part);
+                            if( item?.answers[idx] !== undefined ) {
+                                html.push(input({id:idx}));
+                            }
+                        });                        
                     }
-                });
+                }
                 div.innerHTML = html.join( '' );
-                container.appendChild( div );
+                $(`#${quizContainerID}`)[0].appendChild( div );
             });
 
-            $(function () {
-                $.keyboard.layouts["hindiQuiz"] = Activity.hindiKeyboard();
-                
-                $(".hindiInput")
-                .keyboard({
-                    layout: "hindiQuiz",
-                    usePreview: false,
-                    autoAccept: true,
-                })
-                .addTyping({ showTyping: true, delay: 70 })
-                .addCaret({
-                    caretClass: "ui-keyboard-caret",
-                    animate: true,
-                    blinkRate: 600,
+            if( lang === 'hi' ) {
+                $(function () {
+                    $.keyboard.layouts["hindiQuiz"] = Activity.hindiKeyboard();
+                    
+                    $(".hindiInput")
+                    .keyboard({
+                        layout: "hindiQuiz",
+                        usePreview: false,
+                        autoAccept: true,
+                    })
+                    .addTyping({ showTyping: true, delay: 70 })
+                    .addCaret({
+                        caretClass: "ui-keyboard-caret",
+                        animate: true,
+                        blinkRate: 600,
+                    });
                 });
-            });
+            }
 
 
         } catch( e ) {
@@ -5052,13 +5138,14 @@ const DragAndDropMulti = (() => {
             } else {
                 shuffledQuestions = questions;
                 questions.forEach((item, ind) => {
+                    const inputWidth  = item?.inputWidth ?? '';
                     const quesOptions = item.options || [];
 
                     let replacedText = item.text;
                     quesOptions.forEach(ans => {
                         replacedText = replacedText.replace(
                             replacement,
-                            `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}"></div>`
+                            `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}" style="width:${inputWidth};"></div>`
                         );
                     });
                     
@@ -9409,10 +9496,10 @@ const Dictionary = (() => {
         const dictionaryHolders = document.getElementById("dictionaryHolders");
         let dropBoxes = "";
         sortedContent.forEach((item, index) => {
-            const letter = item.trim()[0].toUpperCase();
+            const alpha  = Activity.translateBulletLabels({ lang: lang, ind: index, upperCase: true });
             dropBoxes += `<div class="dropBoxDictP shadow-sm">
-                            <div class="letterNums shadow-sm">${Activity.translateBulletLabels({ lang: lang, ind: index, upperCase: true })}</div>
-                            <div class="dropBoxDict" data-accept="${letter}"></div>
+                            <div class="letterNums shadow-sm">${alpha}</div>
+                            <div class="dropBoxDict" data-accept="${alpha}"></div>
                         </div>`;
         });
 
@@ -9474,10 +9561,10 @@ const Dictionary = (() => {
         let correct = 0;
         const totalWords = content.length;
         $(".dropBoxDict").each(function () {
-            const correctLetter = $(this).data("accept");
+            const correctLetter = $(this).attr("data-accept");
             $(this).children(".wordDragDic").each(function () {
                 const droppedItem = $(this);
-                if (droppedItem.data("ans") === correctLetter) {
+                if (droppedItem.attr("data-ans") === correctLetter) {
                     droppedItem.css("background", "#c8e6c9");
                     correct++;
                 } else {
