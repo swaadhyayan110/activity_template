@@ -1765,6 +1765,7 @@ const FillInTheBlanksHindiKb = (() => {
             parent.innerHTML = `<div class="question">
                                     <div class="container">
                                         <div class="hindiHeadings ${Define.get('head')}"></div>
+                                        <div id="fill-img-container" class="text-center"></div>
                                         <div id="${quizContainerID}"></div>
                                     </div>
                                     <div class="buttons machiNgs">
@@ -1816,6 +1817,13 @@ const FillInTheBlanksHindiKb = (() => {
                             >
                         `;
                 return inputHtml;
+            }
+            
+            if( content?.image && content?.image?.path ) {
+                const path  = Activity.pathToCWD() + content.image.path;
+                const width = content?.image?.width ?? '15%';
+                const image = `<img src="${path}" style="width:${width};">`
+                $('#fill-img-container').html( image );
             }
 
             content?.questions.forEach((item, qIndex) => {

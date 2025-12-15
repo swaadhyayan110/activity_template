@@ -57,7 +57,7 @@ const Define = (() => {
         {
             id      : 1,
             lang    : 'en',
-            head    : 'Module : 1',
+            head    : 'Template : 1',
             subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
             content : [
                 { id: 1, left: 'Bird\'s&nbsp;<u>eye</u>&nbsp;view', right: 'Seen from above, as a bird does' },
@@ -71,7 +71,7 @@ const Define = (() => {
         {
             id      : 2,
             lang    : 'hi',
-            head    : 'Module : 2',
+            head    : 'Template : 2',
             subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
             content : {
                 col1: [
@@ -99,7 +99,7 @@ const Define = (() => {
         {
             id      : 3,
             lang    : 'hi',
-            head    : 'Module : 3',
+            head    : 'Template : 3',
             subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
             content : [
                 { id: 1, top: 'Bird\'s eye view', bottom: 'To understand something' },
@@ -112,7 +112,7 @@ const Define = (() => {
         {
             id      : 4,
             lang    : 'en',
-            head    : 'Module : 4',
+            head    : 'Template : 4',
             subhead : 'text..',
             content : {
                 hintimage : 'img/ch4_1.png',
@@ -149,9 +149,13 @@ const Define = (() => {
         {
             id      : 5,
             lang    : 'hi',
-            head    : 'Module : 5',
+            head    : 'Template : 5',
             content : {
                 replacement  : '#_#',
+                image        : {
+                    path  : 'img/1.png',
+                    width : '10%'
+                },
                 questions    : [
                     { qid : 1, question : 'हमारे #_# देश का नाम #_# है।', answers : ['भारत', 'भारत'] },
                     { qid : 2, question : 'भारत की राजधानी #_# है।', answers : ['दिल्ली'] },
@@ -171,7 +175,7 @@ const Define = (() => {
         {
             id      : 6,
             lang    : 'hi',
-            head    : 'Module : 6',
+            head    : 'Template : 6',
             subhead : 'text..',
             content : [
                 'SCHOOL', 'TEACHER', 'STUDENT', 'BOOK', 
@@ -181,7 +185,7 @@ const Define = (() => {
         {
             id      : 7,
             lang    : 'en',
-            head    : 'Module : 7',
+            head    : 'Template : 7',
             subhead : 'text ...',
             content : [
                 'A short, statement expressing an opinion.',
@@ -197,7 +201,7 @@ const Define = (() => {
         {
             id      : 8,
             lang    : 'hi',
-            head    : 'Module : 9, Text Only',
+            head    : 'Template : 9, Text Only',
             content : {
                 mcq  : [
                     {
@@ -242,7 +246,7 @@ const Define = (() => {
         {
             id      : 9,
             lang    : 'hi',
-            head    : 'Module : 9, Path Ka Saar/Naitik Shiksha',
+            head    : 'Template : 9, Path Ka Saar/Naitik Shiksha',
             content : {
                 text : {
                     text : 'वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
@@ -257,7 +261,7 @@ const Define = (() => {
         {
             id      : 10,
             lang    : 'hi',
-            head    : 'Module : 9, With Option images',
+            head    : 'Template : 9, With Option images',
             content : {
                 img  : {
                     width : '15%',
@@ -393,7 +397,7 @@ const Define = (() => {
         {
             id      : 13,
             lang    : 'hi',
-            head    : 'Module : 12, Drop Down',
+            head    : 'Template : 12, Drop Down',
             content : {                
                 replacement : '#_#',
                 questions   : [
@@ -408,7 +412,7 @@ const Define = (() => {
         {
             id      : 14,
             lang    : 'hi',
-            head    : 'Module : 13, Circle ',
+            head    : 'Template : 13, Circle ',
             mode    : 'single',
             content : [
                 { id: 1, text: 'दादा जी के लिए - तू, आप, तुम', answer: 'आप' },
@@ -423,7 +427,7 @@ const Define = (() => {
         {
             id      : 15,
             lang    : 'hi',
-            head    : 'Module : 14',
+            head    : 'Template : 14',
             subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
             content : {
                 questions : [
@@ -450,7 +454,7 @@ const Define = (() => {
         {
             id      : 16,
             lang    : 'en',
-            head    : 'Module : 15',
+            head    : 'Template : 15',
             content : [
                 {
                     question: 'सितार बनाने के लिए लुहार ने पेड़ से लकड़ी काटी।',
@@ -477,7 +481,7 @@ const Define = (() => {
         {
             id      : 17,
             lang    : 'hi',
-            head    : 'Module : 8',
+            head    : 'Template : 8',
             subhead : '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो )',
             content : {
                 shuffle : false,
@@ -504,7 +508,7 @@ const Define = (() => {
         {
             id      : 18,
             lang    : 'hi',
-            head    : 'Module : 16',            
+            head    : 'Template : 16',            
             content : {
                 shuffle     : false,
                 strictMatch : false,
@@ -529,7 +533,7 @@ const Define = (() => {
         {
             id      : 19,
             lang    : 'hi',
-            head    : 'Module : 16',            
+            head    : 'Template : 16',            
             content : {
                 shuffle     : false,
                 strictMatch : true,
@@ -547,7 +551,7 @@ const Define = (() => {
         {
             id      : 20,
             lang    : 'hi',
-            head    : 'Module : 16',
+            head    : 'Template : 16',
             content : {
                 shuffle     : false,
                 strictMatch : false,
@@ -563,7 +567,7 @@ const Define = (() => {
         {
             id      : 21,
             lang    : 'hi',
-            head    : 'Module : 16',
+            head    : 'Template : 16',
             content : {
                 set : {
                     answers : [ 'पंख', 'जंगल', 'नक्काषी' ],
@@ -574,7 +578,7 @@ const Define = (() => {
         {
             id      : 22,
             lang    : 'en',
-            head    : 'Module : 17',
+            head    : 'Template : 17',
             content : {
                 sequence : [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday' ],
             }
@@ -590,7 +594,7 @@ const Define = (() => {
         {
             id      : 24,
             lang    : 'en',
-            head    : 'Module : 19',
+            head    : 'Template : 19',
             subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
             content : [
                 {
@@ -628,7 +632,7 @@ const Define = (() => {
         {
             id      : 26,
             lang    : 'en',
-            head    : 'Module : 21',
+            head    : 'Template : 21',
             content : [
                 { 
                     text   : 'A drawing of Earth on a flat surface (3 letters)',
@@ -705,7 +709,7 @@ const Define = (() => {
         {
             id      : 27,
             lang    : 'hi',
-            head    : 'Module : 22',
+            head    : 'Template : 22',
             content : {
                 replacement : '#_#',
                 questions   : [
@@ -717,7 +721,7 @@ const Define = (() => {
         {
             id      : 28,
             lang    : 'en',
-            head    : 'Module : 23',
+            head    : 'Template : 23',
             content : {
                 questions : [
                     { sequence : 1, direction : 'v', row : [1, 15], col : [20], question: 'Fossil scientists', answer : 'paLEONTOLOGISTS' },
@@ -736,7 +740,7 @@ const Define = (() => {
         {
             id      : 29,
             lang    : 'hi',
-            head    : 'Module : 24 ---',
+            head    : 'Template : 24 ---',
             content : {
                 main: {
                     text: {
@@ -783,7 +787,7 @@ const Define = (() => {
         {
             id      : 30,
             lang    : 'hi',
-            head    : 'Module : 24',
+            head    : 'Template : 24',
             content : {
                 main: {
                     audio: 'audio/3.mp3',
@@ -822,7 +826,7 @@ const Define = (() => {
         {
             id      : 31,
             lang    : 'en',
-            head    : 'Module : 25',
+            head    : 'Template : 25',
             content : {
                 video : {
                     path    : 'https://www.youtube.com/embed/WyVuxlx3Nq4?autoplay=1&mute=1&controls=0',
@@ -834,7 +838,7 @@ const Define = (() => {
         {
             id      : 32,
             lang    : 'hi',
-            head    : 'Module : 26',
+            head    : 'Template : 26',
             subhead : "पेड़ - प्रकृति का वरदान",
             content : {
                 image: {
@@ -849,7 +853,7 @@ const Define = (() => {
         {
             id      : 33,
             lang    : 'hi',
-            head    : 'Module : 27',
+            head    : 'Template : 27',
             subhead : "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
             content : {
                 heading : " • विज्ञान का उद्देश्य मानव जीवन को सरल व कष्टरहित बनाना • विभिन्न क्षेत्रों में चमत्कार • चिकित्सा क्षेत्र में• संचार व परिवहन क्षेत्र में • शिक्षा व कृषि क्षेत्र में • विभिन्न  ष्कारों ने मानव जीवन को सुविधासंपन्न बना दिया है।",
@@ -887,7 +891,7 @@ const Define = (() => {
         {
             id      : 34,
             lang    : 'hi',
-            head    : 'Module : 28',
+            head    : 'Template : 28',
             subhead : "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
             content : {
                 heading   : "दादा जी को स्वास्थ्य का ध्यान रखने की सलाह देते हुए पत्र",
@@ -905,7 +909,7 @@ const Define = (() => {
         {
             id      : 35,
             lang    : 'hi',
-            head    : 'Module : 29',
+            head    : 'Template : 29',
             subhead : 'अपनी छोटी बहन को मोबाइल पर व्यर्थ समय बिताने की जगह पढ़ाई पर ध्यान देने का सुझाव देते हुए पत्र लिखिए।',
             content : {
                 showButtons    : true,
@@ -938,7 +942,7 @@ const Define = (() => {
         {
             id      : 36,
             lang    : 'en',
-            head    : "Module : 30",
+            head    : "Template : 30",
             content : {
                 width    : "200px",
                 height   : "200px",
@@ -971,7 +975,7 @@ const Define = (() => {
         {
             id      : 38,
             lang    : 'en',
-            head    : 'Module : 32',
+            head    : 'Template : 32',
             subhead : '(Drag and arrange each word in the order you will find them in a dictionary.)',
             content : [
                 'Negligence', 'Untruthfulness', 'Omnibus', 'Flustered', 'Stupidity', 
