@@ -9491,8 +9491,6 @@ const Dictionary = (() => {
         const lang     = activity.lang ?? 'en';
         const content  = activity?.content ?? [];
 
-        const sortedContent = content.sort();
-
         const dictionaryHolders = document.getElementById("dictionaryHolders");
         let dropBoxes = "";
         for( let i = 0; i <= 25; i++ ) {
