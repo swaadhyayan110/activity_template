@@ -9495,13 +9495,14 @@ const Dictionary = (() => {
 
         const dictionaryHolders = document.getElementById("dictionaryHolders");
         let dropBoxes = "";
-        sortedContent.forEach((item, index) => {
-            const alpha  = Activity.translateBulletLabels({ lang: lang, ind: index, upperCase: true });
+        // sortedContent.forEach((item, index) => {
+        for( let i = 0; i <= 25; i++ ) {
+            const alpha  = Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: true });
             dropBoxes += `<div class="dropBoxDictP shadow-sm">
                             <div class="letterNums shadow-sm">${alpha}</div>
                             <div class="dropBoxDict" data-accept="${alpha}"></div>
                         </div>`;
-        });
+        }
 
         const html = `<div class="row">
                             <div class="col-md-4 col-sm-4 col-12">
