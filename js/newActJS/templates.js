@@ -9495,7 +9495,6 @@ const Dictionary = (() => {
 
         const dictionaryHolders = document.getElementById("dictionaryHolders");
         let dropBoxes = "";
-        // sortedContent.forEach((item, index) => {
         for( let i = 0; i <= 25; i++ ) {
             const alpha  = Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: true });
             dropBoxes += `<div class="dropBoxDictP shadow-sm">
