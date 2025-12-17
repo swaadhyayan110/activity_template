@@ -149,7 +149,7 @@ const Define = (() => {
         },
         {
             id      : 5,
-            lang    : 'hi',
+            lang    : 'en',
             head    : 'Template : 5',
             content : {
                 replacement  : '#_#',
@@ -158,18 +158,18 @@ const Define = (() => {
                     width : '10%'
                 },
                 questions    : [
-                    { qid : 1, question : 'हमारे #_# देश का नाम #_# है।', answers : ['भारत', 'भारत'] },
-                    { qid : 2, question : 'भारत की राजधानी #_# है।', answers : ['दिल्ली'] },
-                    { qid : 3, question : 'भारत की राजभाषा #_# है।', answers : ['हिंदी', 'djf', 'sfdsf'], inputBelow : true },
+                    { qid : 1, question : 'हमारे #_# देश का नाम #_# है।', answers : ['हिंदी'] },
+                    { qid : 2, question : 'भारत की राजधानी #_# है।' },
+                    { question : 'भारत की #_# राजभाषा #_# है।', answers : ['हिंदी', 'djf', 'sfdsf'], inputBelow : false },
                     { qid : 4, question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', answers : ['किताब'] },
                     { qid : 5, question : 'जहाँ पढ़ाई होती है उसे #_# कहते हैं।', answers : ['विद्यालय'] }
                 ],
                 subquestions : [
-                    { sid : 1, qid : 1, text : '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['~पंख'] },
-                    { sid : 2, qid : 1, text : '! सितार बनाने #_# तारों को #_# से बाँधा गया।', answers : ['!पंख', '!पंख'] },
-                    { sid : 3, qid : 2, text : '@ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['@पंख', '@नाचने'], inputBelow : true },
-                    { sid : 4, qid : 2, text : '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['#पंख'] },
-                    { sid : 5, qid : 2, text : '$ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['$पंख'] }
+                    { sqid : 1, qid : 1, text : '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['~पंख'] },
+                    { sqid : 2, qid : 1, text : '! सितार बनाने #_# तारों को #_# से बाँधा गया।', answers : ['!पंख', '!पंख'] },
+                    { sqid : 3, qid : 2, text : '@ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['@पंख', '@नाचने'], inputBelow : true },
+                    { sqid : 4, qid : 2, text : '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['#पंख'] },
+                    { sqid : 5, qid : 2, text : '$ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['$पंख'] }
                 ]
             }
         },

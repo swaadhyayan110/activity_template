@@ -1805,39 +1805,41 @@ const FillInTheBlanksHindiKb = (() => {
             if( content?.subquestions ) __subQuestions = content?.subquestions;
 
             const placeholder = Activity.translateWriteAnsLabel(lang);
-            const input = ({ind='',id='',classes=''}={}) => {
+            const renderInput = ({qID='', sqID='', inputIndex='', classes=''}={}) => {
                 const inputHtml = `
                             <input 
                                 class="hindiInput inPutHindiNew ${classes}" 
-                                data-qindex="${ind}" 
-                                data-blankindex="${id}" 
+                                data-qId="${qID}"
+                                data-sqId="${sqID}"
+                                data-index="${inputIndex}"
                                 autocomplete="off" 
                                 type="text" 
                                 placeholder="${placeholder}"
                             >
                         `;
                 return inputHtml;
-            }
+            }            
             
             if( content?.image && content?.image?.path ) {
                 const path  = Activity.pathToCWD() + content.image.path;
                 const width = content?.image?.width ?? '15%';
-                const image = `<img src="${path}" style="width:${width};">`
+                const image = `<img src="${path}" style="width:${width};" ondragstart="return false;">`
                 $('#fill-img-container').html( image );
             }
 
-            content?.questions.forEach((item, qIndex) => {
-                const subQuestion = __subQuestions?.filter( subques => subques.qid === item.qid ) ?? [];                
+            content?.questions.forEach((question, qIndex) => {
+                const subQuestion = __subQuestions?.filter( subques => subques.qid === question.qid ) ?? [];                
+                const questionId  = question?.qid !== undefined ? question?.qid : (qIndex + 1);
                 const mainBullet  = Activity.translateBulletLabels({lang:lang, ind:qIndex});
                 const html        = [ `${mainBullet}) ` ];
 
                 const div = document.createElement('div');
                 div.classList.add('questionFILL'); 
 
-                const inputBelowCondition = item?.inputBelow === true && item?.answers;
+                const inputBelowCondition = question?.inputBelow === true && question?.answers;
                 
                 if( subQuestion.length || inputBelowCondition ) {
-                    html.push( item?.question ?? '' );
+                    html.push( question?.question ?? '' );
                 }
 
                 if( subQuestion.length ) {
@@ -1846,40 +1848,42 @@ const FillInTheBlanksHindiKb = (() => {
                     const frame = '<div class="my-2 mx-5 ps-3">';
                     html.push( frame );
                     subQuestion.map( (subques, subind) => {
-                        
                         const multiInput  = [];
                         const subQuesText = [];
+                        const subquesID   = subques?.sqid ?? false;
                         if( subques?.inputBelow === true ) {
+                            const text = subques?.text ?? '';
+                            subQuesText.push( text );
+
                             subques?.answers.map((_,i) => {
                                 const belowInput = `
-                                                    <div class="my-1 mx-4 px-2">
-                                                        ${input({ind:qIndex,classes:'w-100 my-2'})}
+                                                    <div class="my-2 mx-4 px-2">
+                                                        ${renderInput({
+                                                            qID:questionId,
+                                                            sqID:subquesID,
+                                                            inputIndex:i,
+                                                            classes:'w-100 my-2'
+                                                        })}
                                                     </div>
                                                     `;
                                 // ..
                                 multiInput.push( belowInput );
                             });
                         } else {
-                            const text = subques?.text.replaceAll( 
-                                                replacement, 
-                                                `<input 
-                                                    class="hindiInput inPutHindiNew" 
-                                                    data-subid="${subques?.sid}" 
-                                                    data-type="sub-ques" 
-                                                    data-qindex="${qIndex}" 
-                                                    data-blankindex="${subind}" 
-                                                    autocomplete="off" 
-                                                    type="text" 
-                                                    placeholder="${placeholder}"
-                                                >`
-                                            );
-                            // ..
-                            subQuesText.push( text );
+                            let idx = 0;
+                            const view = subques?.text.replaceAll(replacement, () =>
+                                renderInput({
+                                    qID: questionId,
+                                    sqID: subquesID,
+                                    inputIndex: idx++
+                                })
+                            );
+                            subQuesText.push( view );
                         }
 
                         const bullet = Activity.translateBulletLabels({lang:'ro', ind:subind, upperCase:false});
                         const final  = `
-                                            <div class="my-1">
+                                            <div class="my-2">
                                                 ${bullet}) ${subQuesText.join('')}
                                             </div>
                                             ${multiInput.join('')}
@@ -1887,24 +1891,33 @@ const FillInTheBlanksHindiKb = (() => {
                         // ..
                         html.push( final );
                     });
-                    html.push( '</div>' );                    
+                    html.push( '</div>' );
                 } else {
-
                     if( inputBelowCondition ) {
-                        item?.answers.map((_,i) => {
-                            const belowInput = `<div class="my-1 mx-4 px-2">${input({ind:qIndex,classes:'w-100 my-2'})}</div>`;
+                        question?.answers.map((_,i) => {
+                            const belowInput = `<div class="my-1 mx-4 px-2">
+                                ${renderInput({
+                                    qID:questionId,
+                                    sqID:false,
+                                    inputIndex:i,
+                                    classes:'w-100 my-2'
+                                })}
+                            </div>`;
                             html.push( belowInput );
                         });
                     } else {
-                        const parts = item?.question.split( replacement );
-                        parts.forEach((part, idx) => {
-                            html.push(part);
-                            if( item?.answers[idx] !== undefined ) {
-                                html.push(input({id:idx}));
-                            }
-                        });                        
+                        let idx = 0;
+                        const view = question?.question.replaceAll(replacement, () =>
+                            renderInput({
+                                qID: questionId,
+                                sqID: false,
+                                inputIndex: idx++
+                            })
+                        );
+                        html.push( view );
                     }
                 }
+
                 div.innerHTML = html.join( '' );
                 $(`#${quizContainerID}`)[0].appendChild( div );
             });
@@ -1928,9 +1941,8 @@ const FillInTheBlanksHindiKb = (() => {
                 });
             }
 
-
-        } catch( e ) {
-            console.error( 'FillInTheBlanksHindiKb.fillIntheBlanks :', e );
+        } catch( err ) {
+            console.error( 'FillInTheBlanksHindiKb.fillIntheBlanks :', err );
         }
     }
 
@@ -1939,50 +1951,102 @@ const FillInTheBlanksHindiKb = (() => {
     }
 
     const checkAnswersHandler = () => {
-        let score = 0;
-        const inputs = document.querySelectorAll(".inPutHindiNew");
+        let __score = 0;
+        
+        const activity     = Activity.getDefine( Activity.getQid( `#${quizContainerID}` ) );
+        const content      = activity?.content ?? {};
+        const questions    = content?.questions ?? [];
+        const subquestions = content?.subquestions ?? [];
 
-        const questionId = $('#'+quizContainerID)[0].dataset.qid;
-        const questions  = Activity.getDefine(questionId)?.content?.questions;
-
-        inputs.forEach(el => {
-            const qIndex = el.dataset.qindex;
-            const blankIndex = el.dataset.blankindex;
-            const val = normalizeHindi(el.value);
-            const correctAns = normalizeHindi(questions[qIndex].answers[blankIndex]);
-
-            if (val === correctAns) {
-                score++;
-                el.style.borderColor = "limegreen";
+        $('.inPutHindiNew').map( (_, item) => {
+            const dataset = item.dataset;
+            const qid     = dataset.qid;
+            const sqid    = dataset.sqid;
+            const index   = dataset.index;
+            const input   = $(`.hindiInput.inPutHindiNew[data-qid="${qid}"][data-index="${index}"][data-sqid="${sqid}"]`);
+            
+            if( input[0] === undefined ) return false;
+            
+            if( sqid == 'false' ) {
+                questions.map( (ques, ind) => {
+                    const questionID = ques.qid ?? ind + 1;
+                    const condition  = questionID == qid
+                            && (Array.isArray( ques.answers ))
+                            && (ques.answers.length)
+                            && (ques.answers[index]);
+                    // ..
+                    if( condition && normalizeHindi( input.val() ) == normalizeHindi( ques.answers[index] ) ) {
+                        __score++;
+                        input[0].style.borderColor = 'limegreen';
+                    }
+                });
             } else {
-                el.style.borderColor = "red";
+                subquestions.map( (ques) => {
+                    const condition = (ques.qid == qid) 
+                        && (ques.sqid == sqid) 
+                        && (ques.answers.length) 
+                        && (ques.answers[index]);
+                    // ..
+                    if( condition && normalizeHindi( input.val() ) == normalizeHindi( ques.answers[index] ) ) {
+                        __score++;
+                        input[0].style.borderColor = 'red';
+                    }
+                });
             }
+
         });
 
-        const totalBlanks = questions.reduce((acc, q) => acc + q.answers.length, 0);
+        const totalBlanks = $('.inPutHindiNew').length;
 
-        const swalIcon = (score === totalBlanks) ? "success" : "info";
-        const swalTitle = (score === totalBlanks) ? "🎉 सभी सही!" : "अरे नहीं...";
+        const swalIcon = (__score === totalBlanks) ? "success" : "info";
+        const swalTitle = (__score === totalBlanks) ? "🎉 सभी सही!" : "अरे नहीं...";
 
         Swal.fire({
             icon: swalIcon,
             title: swalTitle,
-            text: `✅ आपका स्कोर: ${score}/${totalBlanks}`,
+            text: `✅ आपका स्कोर: ${__score}/${totalBlanks}`,
             confirmButtonColor: "#00bfff"
         });
     }
 
     const showAnswersHandler = () => {
-        const questionId = $('#'+quizContainerID)[0].dataset.qid;
-        const questions  = Activity.getDefine(questionId)?.content?.questions;
+        const activity     = Activity.getDefine( Activity.getQid( `#${quizContainerID}` ) );
+        const content      = activity?.content ?? {};
+        const questions    = content?.questions ?? [];
+        const subquestions = content?.subquestions ?? [];
 
         $(".check_1").addClass("disable");
-        const inputs = document.querySelectorAll(".inPutHindiNew");
-        inputs.forEach(el => {
-            const qIndex = el.dataset.qindex;
-            const blankIndex = el.dataset.blankindex;
-            el.value = questions[qIndex].answers[blankIndex];
-            el.style.borderColor = "dodgerblue";
+
+        $('.inPutHindiNew').map( (_, item) => {
+            const dataset = item.dataset;
+            const qid     = dataset.qid;
+            const sqid    = dataset.sqid;
+            const index   = dataset.index;
+            const input   = $(`.hindiInput.inPutHindiNew[data-qid="${qid}"][data-index="${index}"][data-sqid="${sqid}"]`);
+            
+            input[0] != undefined ? input[0].style.borderColor = 'dodgerblue' : '';
+            
+            if( sqid == 'false' ) {
+                questions.map( (ques, ind) => {
+                    const questionID = ques.qid ?? ind + 1;
+                    const condition  = questionID == qid
+                            && (Array.isArray( ques.answers ))
+                            && (ques.answers.length)
+                            && (ques.answers[index]);
+                    // ..
+                    if( condition ) input.val( ques.answers[index] );
+                });
+            } else {
+                subquestions.map( (ques) => {
+                    const condition = (ques.qid == qid) 
+                        && (ques.sqid == sqid) 
+                        && (ques.answers.length) 
+                        && (ques.answers[index]);
+                    // ..
+                    if( condition ) input.val( ques.answers[index] );
+                });
+            }
+
         });
     }
 
