@@ -7783,7 +7783,7 @@ const OnlyAudio = (() => {
     let state = {
         container: null,
         audioEl: null,
-        ytPlayer: null,
+        __ytPlayer: null,
         mode: null,
         rafId: null,
         isSeeking: false,
@@ -7859,10 +7859,10 @@ const OnlyAudio = (() => {
                 if (state.mode === "file" && state.audioEl) {
                     cur = state.audioEl.currentTime || 0;
                     dur = state.audioEl.duration || 0;
-                } else if (state.mode === "youtube" && state.ytPlayer) {
+                } else if (state.mode === "youtube" && state.__ytPlayer) {
                     try {
-                        cur = state.ytPlayer.getCurrentTime() || 0;
-                        dur = state.ytPlayer.getDuration() || 0;
+                        cur = state.__ytPlayer.getCurrentTime() || 0;
+                        dur = state.__ytPlayer.getDuration() || 0;
                     } catch (e) { cur = 0; dur = 0; }
                 }
 
@@ -7882,16 +7882,16 @@ const OnlyAudio = (() => {
 
     const destroyYT = () => {
         try {
-            if (state.ytPlayer && typeof state.ytPlayer.destroy === "function") {
-                state.ytPlayer.destroy();
+            if (state.__ytPlayer && typeof state.__ytPlayer.destroy === "function") {
+                state.__ytPlayer.destroy();
             }
         } catch (e) { /* ignore */ }
-        state.ytPlayer = null;
+        state.__ytPlayer = null;
     };
 
     const initFile = (src) => {
-        if (state.ytPlayer) {
-            try { state.ytPlayer.pauseVideo(); } catch (e) { }
+        if (state.__ytPlayer) {
+            try { state.__ytPlayer.pauseVideo(); } catch (e) { }
         }
 
         destroyYT();
@@ -7933,7 +7933,7 @@ const OnlyAudio = (() => {
 
         // Create player in a hidden wrapper (but not 0x0)
         state.iframeWrap.innerHTML = `<div id="oas-yt-player"></div>`;
-        state.ytPlayer = new YT.Player("oas-yt-player", {
+        state.__ytPlayer = new YT.Player("oas-yt-player", {
             height: "1",
             width: "1",
             videoId: id,
@@ -7944,7 +7944,7 @@ const OnlyAudio = (() => {
                     const iframe = state.iframeWrap.querySelector("iframe");
                     if (iframe) iframe.setAttribute("allow", "autoplay; encrypted-media");
                     try {
-                        const dur = state.ytPlayer.getDuration();
+                        const dur = state.__ytPlayer.getDuration();
                         if (state.durationEl && Number.isFinite(dur)) state.durationEl.textContent = formatTime(dur);
                         stopFakeLoader();
                     } catch (e) { /* ignore */ }
@@ -8055,14 +8055,14 @@ const OnlyAudio = (() => {
                 if (state.mode === "file" && state.audioEl) {
                     if (state.audioEl.paused) await state.audioEl.play();
                     else state.audioEl.pause();
-                } else if (state.mode === "youtube" && state.ytPlayer) {
-                    const st = state.ytPlayer.getPlayerState();
-                    if (st === YT.PlayerState.PLAYING) state.ytPlayer.pauseVideo();
-                    else state.ytPlayer.playVideo();
+                } else if (state.mode === "youtube" && state.__ytPlayer) {
+                    const st = state.__ytPlayer.getPlayerState();
+                    if (st === YT.PlayerState.PLAYING) state.__ytPlayer.pauseVideo();
+                    else state.__ytPlayer.playVideo();
                 } else {
                     await setupSource(source);
                     if (state.mode === "file" && state.audioEl) state.audioEl.play();
-                    if (state.mode === "youtube" && state.ytPlayer) state.ytPlayer.playVideo();
+                    if (state.mode === "youtube" && state.__ytPlayer) state.__ytPlayer.playVideo();
                 }
             } catch (err) {
                 console.error("play error:", err);
@@ -8073,8 +8073,8 @@ const OnlyAudio = (() => {
             if (state.mode === "file" && state.audioEl) {
                 state.audioEl.currentTime = 0;
                 state.audioEl.play();
-            } else if (state.mode === "youtube" && state.ytPlayer) {
-                try { state.ytPlayer.seekTo(0, true); state.ytPlayer.playVideo(); } catch (e) { /* ignore */ }
+            } else if (state.mode === "youtube" && state.__ytPlayer) {
+                try { state.__ytPlayer.seekTo(0, true); state.__ytPlayer.playVideo(); } catch (e) { /* ignore */ }
             }
         });
 
@@ -8102,11 +8102,11 @@ const OnlyAudio = (() => {
     const handleSeekPct = (pct) => {
         if (state.mode === "file" && state.audioEl && state.audioEl.duration) {
             state.audioEl.currentTime = (pct / 100) * state.audioEl.duration;
-        } else if (state.mode === "youtube" && state.ytPlayer && typeof state.ytPlayer.getDuration === "function") {
+        } else if (state.mode === "youtube" && state.__ytPlayer && typeof state.__ytPlayer.getDuration === "function") {
             try {
-                const dur = state.ytPlayer.getDuration() || 0;
+                const dur = state.__ytPlayer.getDuration() || 0;
                 const target = (pct / 100) * dur;
-                state.ytPlayer.seekTo(target, true);
+                state.__ytPlayer.seekTo(target, true);
             } catch (e) { /* ignore */ }
         }
     };
@@ -8162,10 +8162,10 @@ const OnlyAudio = (() => {
             }
 
             // Destroy YouTube
-            if (state.ytPlayer && state.ytPlayer.destroy) {
-                state.ytPlayer.destroy();
+            if (state.__ytPlayer && state.__ytPlayer.destroy) {
+                state.__ytPlayer.destroy();
             }
-            state.ytPlayer = null;
+            state.__ytPlayer = null;
 
             // Clear UI
             if (state.container) {
@@ -8176,7 +8176,7 @@ const OnlyAudio = (() => {
             state = {
                 container: null,
                 audioEl: null,
-                ytPlayer: null,
+                __ytPlayer: null,
                 mode: null,
                 rafId: null,
                 isSeeking: false,
@@ -9917,6 +9917,258 @@ const MentalMath = (() => {
     }
 
     return { render : ui }
+})();
+
+const AudioAndVideoFromYoutube = (() => {
+    Activity.css('audioVideoYoutube.css');
+
+    const containerId  = 'youtube-container';
+    const playerCont   = 'plyItems';    
+    const playerViewId = 'playerViewContainer';
+    let __currentIndex;
+    let __currentItem;
+    let __ytPlayer;
+    let __ytReadyResolve;
+    let __done = false;
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container-fluid" id="${containerId}">
+                                        <div class="row">
+                                            <div class="col-md-3 col-sm-6 col-12">
+                                                <div class="leftPanelBoxes">
+                                                    <div class="circleWrapper" id="circleWrapper"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-9 col-sm-6 col-12" id="${playerViewId}"></div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+            __playerHtml();
+
+            Activity.setHeader( questionId );
+		} catch (err) {
+            console.error( 'AudioAndVideoFromYoutube.ui :', err );
+        }
+    };
+
+    const render = async (questionId) => {
+        try {
+            ui(questionId);
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+            const activity = Activity.getDefine( questionId );
+            const content  = activity?.content ?? {};
+            const buttons  = content?.buttons ?? [];
+
+            const buttonUI = () => {
+                const buttonHtml = [];
+                buttons.map((btn) => {
+                    const button = `<div class="circle3D activeCircle3D">${btn?.label ?? ''}</div>`;
+                    buttonHtml.push( button );
+                });
+                $('#circleWrapper').html( buttonHtml.join( '' ) );
+
+                $('.circle3D.activeCircle3D').map( (ind, item) => {
+                    item.addEventListener( 'click', () => loadandplay(ind) );
+                });
+            }
+
+            await Define.get( 'loadScript' )('https://www.youtube.com/iframe_api');
+            await ytReady;
+            buttonUI();
+
+            if( buttons.length ) loadandplay( 0 );
+        } catch (err) {
+            console.error( 'AudioAndVideoFromYoutube.render :', err );
+        }
+    };
+
+    const setActiveCircle = (index) => {
+        document.querySelectorAll(".circle3D").forEach((c, i) => {
+            c.classList.toggle("activeCircle3D", i === index);
+        });
+    };
+
+    const __playerHtml = () => {
+        $(`#${playerViewId}`).html( `<div id="${playerCont}" class="leftPanelBoxes ${playerCont}"></div>` );
+    };
+
+    const loadandplay = (index) => {
+
+        __playerHtml();
+        setActiveCircle(index);
+
+        __currentIndex  = index;
+        __ytPlayer      = undefined;
+        __currentItem   = undefined;        
+        const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
+        const content   = activity?.content ?? {};
+        const buttons   = content?.buttons ?? [];
+        const button    = buttons[__currentIndex] ?? false;
+        const youTubeID = button?.ytId ?? false;
+
+        if( button === false || youTubeID === false ) return false;
+
+        __currentItem = button;
+        const isVideo = button?.isVideo ?? false;
+
+        ( isVideo === true ) ? videoUI( youTubeID ) : audioUI( youTubeID );
+    };
+
+    const videoUI = (yiId) => {
+        youtube(yiId);
+        $('iframe').addClass( `vdoFrmMulti` );
+    };
+
+    const audioUI = (yiId) => {
+        const ui = `<div class="audioPlayerFull">
+                        <div class="funBG"></div>
+                        <div class="bigCenterCircle" id="bigCircle">
+                            <button class="mainPlayBtn" id="playBtn">►</button>
+                        </div>
+                        <div class="funControls">
+                            <button class="funBtn" id="btnReplay">⟲</button>
+                            <button class="funBtn" id="btnMute">🔊</button>
+                        </div>
+                        <div class="progressBox">
+                            <input type="range" id="seekBar" value="0" min="0">
+                            <div class="timeRowFS">
+                                <span id="currTime">00:00</span>
+                                <span id="totalTime">00:00</span>
+                            </div>
+                        </div>                        
+                        <div id="ytAudioPlayer" style="width:1px;height:1px;overflow:hidden"></div>
+                    </div>`;
+        // ..
+        $(`.${playerCont}`).html( ui );
+        youtube(yiId, 'ytAudioPlayer');
+
+        const playBtn   = document.getElementById('playBtn');
+        const bigCircle = document.getElementById('bigCircle');
+        const seekBar   = document.getElementById('seekBar');
+        const btnReplay = document.getElementById('btnReplay');
+        const btnMute   = document.getElementById('btnMute');
+
+        playBtn.onclick = () => {
+            if( !__ytPlayer ) return;
+            const state = __ytPlayer.getPlayerState();
+            if( state !== 1 ) {
+                __ytPlayer.playVideo();
+                playBtn.textContent = '❚❚';
+                bigCircle.classList.add('playing');
+            } else {
+                __ytPlayer.pauseVideo();
+                playBtn.textContent = '►';
+                bigCircle.classList.remove('playing');
+            }
+        };
+
+        btnReplay.onclick = () => {
+            if( __ytPlayer ) {
+                __ytPlayer.seekTo(0);
+                __ytPlayer.playVideo();
+            }
+        };
+        
+        btnMute.onclick = () => {
+            if( !__ytPlayer ) return;
+            if( __ytPlayer.isMuted() ) {
+                __ytPlayer.unMute();
+                btnMute.textContent = '🔊';
+            } else {
+                __ytPlayer.mute();
+                btnMute.textContent = '🔇';
+            }
+        };
+
+        seekBar.oninput = () => {
+            if( __ytPlayer ) __ytPlayer.seekTo(seekBar.value);
+        };
+    };
+
+    const youtube = (yiId, selector=playerCont) => {
+        __ytPlayer = new YT.Player( selector, {
+            height     : '1',
+            width      : '1',
+            videoId    : yiId,
+            playerVars : {
+                'playsinline' : 1
+            },
+            events: {
+                'onReady' : onPlayerReady,
+                'onStateChange' : onPlayerStateChange
+            }
+        });
+    };
+
+    const onPlayerReady = (event) => {
+        if( __currentItem?.isVideo !== undefined && __currentItem.isVideo === false ) {
+            const playBtn   = document.getElementById('playBtn');
+            const bigCircle = document.getElementById('bigCircle');
+            const seekBar   = document.getElementById('seekBar');
+            const currTime  = document.getElementById('currTime');
+            const totalTime = document.getElementById('totalTime');
+
+            event.target.playVideo();
+            bigCircle.classList.add('playing');
+            playBtn.textContent = '❚❚';
+
+            setInterval(() => {
+                if( !event.target ) return;
+                if( event.target.getDuration() === 0 ) return;
+                const duration = Math.round( event.target.getDuration() );
+                const getCurrentTime = Math.round( event.target.getCurrentTime() );
+
+                seekBar.max   = Math.round( duration );
+                seekBar.value = Math.round( getCurrentTime );
+                currTime.textContent  = format( getCurrentTime );
+                totalTime.textContent = format( duration );
+            }, 500);
+        }
+    };
+    
+    const onPlayerStateChange = (event) => {
+        if( __currentItem?.isVideo !== undefined && __currentItem.isVideo === false ) {
+            const playBtn   = document.getElementById('playBtn');
+            const bigCircle = document.getElementById('bigCircle');
+
+            if( event.data === YT.PlayerState.PLAYING ) {
+                bigCircle.classList.add('playing');
+                playBtn.textContent = '❚❚';
+            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                bigCircle.classList.remove('playing');
+                playBtn.textContent = '►';
+            }
+        }
+    };
+
+    const format = (sec) => {
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    }
+    
+    const ytReady = new Promise(resolve => {
+        __ytReadyResolve = resolve;
+    });
+
+    window.onYouTubeIframeAPIReady = () => {
+        __ytReadyResolve();
+    };
+
+
+    return { render : render }
 })();
 
 Templates.get('templates').map(({ template }) => {

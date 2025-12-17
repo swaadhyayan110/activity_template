@@ -1,0 +1,538 @@
+:root {
+  --primary: #0d6efd;
+  --sky: #78c9ff;
+  --darkBlue: #0b2545;
+  --light: #ffffff;
+
+  --funPink: #ff72b6;
+  --funYellow: #ffe066;
+  --funMint: #9dffd9;
+  --funPurple: #b793ff;
+  --balck: #000000;
+
+}
+
+.leftPanelBoxes {
+  border: 3px solid #ffffff;
+  margin: 10px 0;
+  height: 90.8vh;
+  border-radius: 22px;
+  overflow: auto;
+
+  background: linear-gradient(135deg,
+      #0d6efd,
+      #4aa9ff,
+      #85e3ff,
+      #ffe066,
+      #ff72b6);
+  background-size: 400% 400%;
+  animation: candyFlow 12s ease-in-out infinite;
+
+  box-shadow: 0 5px 20px rgba(33, 100, 170, 0.35);
+  position: relative;
+}
+
+@keyframes candyFlow {
+  0% {
+    background-position: 0% 40%;
+  }
+
+  50% {
+    background-position: 100% 60%;
+  }
+
+  100% {
+    background-position: 0% 40%;
+  }
+}
+
+.leftPanelBoxes::before,
+.leftPanelBoxes::after {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  filter: blur(3px);
+  animation: floatBubble 10s infinite ease-in-out;
+}
+
+.leftPanelBoxes::after {
+  width: 80px;
+  height: 80px;
+  right: 30px;
+  bottom: 20px;
+  animation-duration: 14s;
+  animation-delay: 2s;
+}
+
+@keyframes floatBubble {
+  0% {
+    transform: translateY(0px) translateX(0px);
+  }
+
+  50% {
+    transform: translateY(-40px) translateX(25px);
+  }
+
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+}
+
+.circleWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px;
+}
+
+.circle3D {
+  font-family: 'PoppinsLight';
+  width: 135px;
+  height: 135px;
+  border-radius: 50%;
+
+  background: radial-gradient(circle at top left,
+      var(--funMint),
+      var(--funPurple));
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--balck);
+
+  box-shadow:
+    inset 5px 5px 20px rgba(255, 255, 255, 0.9),
+    inset -6px -6px 16px rgba(0, 0, 0, 0.15),
+    10px 12px 22px rgba(0, 0, 0, 0.45);
+
+  transition: all 0.35s ease;
+}
+
+.circle3D:hover {
+  transform: translateY(-12px) scale(1.12) rotate(2deg);
+  box-shadow:
+    inset 5px 5px 12px rgba(255, 255, 255, .9),
+    inset -6px -6px 10px rgba(0, 0, 0, .2),
+    18px 25px 30px rgba(0, 0, 0, .45);
+}
+
+.circle3D:active {
+  transform: scale(0.94);
+  box-shadow:
+    inset -3px -3px 10px rgba(0, 0, 0, .3),
+    inset 5px 5px 10px rgba(255, 255, 255, .7);
+}
+
+.vdoFrmMulti {
+  width: 100%;
+  height: 100%;
+}
+
+.plyItems {
+  overflow: hidden;
+}
+
+.audioBoxMoneyType {
+  width: 620px;
+  background: rgba(255, 255, 255, 0.93);
+  border-radius: 30px;
+  padding: 55px 25px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  position: relative;
+  margin: 5vw auto;
+  border-top: 6px solid var(--funPink);
+}
+
+.progressBar input {
+  width: 100%;
+  height: 6px;
+  background: #d7e9ff;
+  border-radius: 5px;
+  outline: none;
+}
+
+.progressBar input::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+  background: var(--funPink);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--funPink);
+}
+
+.timeRow {
+  display: flex;
+  justify-content: space-between;
+  color: #4b6a88;
+  font-size: 12px;
+}
+
+.centerCircle {
+  width: 145px;
+  height: 145px;
+  border-radius: 50%;
+
+  background: radial-gradient(circle,
+      #ffffff,
+      #e7f3ff);
+
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow:
+    inset 0 6px 10px rgba(0, 0, 0, 0.15),
+    0 8px 20px rgba(0, 0, 0, 0.1);
+
+  position: relative;
+}
+
+.centerCircle.playing::before {
+  content: "";
+  position: absolute;
+  width: 165px;
+  height: 165px;
+  border-radius: 50%;
+  border: 5px solid var(--funPink);
+  border-top-color: transparent;
+  animation: rotate 1.4s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.playBtn {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: var(--funMint);
+  border: none;
+  color: var(--darkBlue);
+  font-size: 32px;
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 10px rgba(0, 0, 0, 0.15),
+    inset 3px 3px 8px rgba(255, 255, 255, 0.7);
+
+  transition: 0.2s;
+}
+
+.playBtn:active {
+  transform: scale(0.92);
+}
+
+.controlsMM .btn {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: none;
+  background: var(--funYellow);
+  color: var(--darkBlue);
+  font-size: 20px;
+
+  box-shadow:
+    inset 2px 2px 8px rgba(255, 255, 255, 0.7),
+    0 6px 10px rgba(0, 0, 0, 0.1);
+
+  transition: 0.25s;
+}
+
+.controlsMM .btn:active {
+  transform: scale(0.9);
+}
+
+#ytVdo.d-none {
+  display: none !important;
+}
+
+.audioPlayerFull {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.funBG {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+      #ff9ccf,
+      #ffa987,
+      #fff07c,
+      #9dffd9,
+      #8ec5ff,
+      #c9a9ff);
+  background-size: 500% 500%;
+  animation: rainbowFlow 12s ease-in-out infinite;
+  z-index: 1;
+}
+
+.funBG::before,
+.funBG::after {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: bubbleFloat 10s infinite ease-in-out;
+}
+
+.funBG::after {
+  width: 100px;
+  height: 100px;
+  right: 20px;
+  bottom: 20px;
+  animation-duration: 14s;
+  animation-delay: 3s;
+}
+
+@keyframes rainbowFlow {
+  0% {
+    background-position: 0% 40%;
+  }
+
+  50% {
+    background-position: 100% 60%;
+  }
+
+  100% {
+    background-position: 0% 40%;
+  }
+}
+
+@keyframes bubbleFloat {
+  0% {
+    transform: translateY(0px) translateX(0px);
+    opacity: .7;
+  }
+
+  50% {
+    transform: translateY(-55px) translateX(25px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: .7;
+  }
+}
+
+.bigCenterCircle {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  margin: 40px auto;
+  position: relative;
+  z-index: 5;
+
+  background: radial-gradient(circle,
+      #ffffff,
+      #ddedff);
+
+  box-shadow:
+    inset -10px -10px 20px rgba(255, 255, 255, 0.9),
+    inset 10px 10px 25px rgba(0, 0, 0, 0.15),
+    0 12px 30px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  animation: softBounce 3s infinite ease-in-out;
+}
+
+@keyframes softBounce {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.bigCenterCircle.playing::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  border: 8px solid #00d0ff;
+  border-top-color: transparent;
+  animation: spin 1.3s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mainPlayBtn {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #9dffd9;
+  border: none;
+  font-size: 50px;
+  color: #0b2545;
+  cursor: pointer;
+  z-index: 10;
+
+  box-shadow:
+    inset 4px 4px 10px rgba(255, 255, 255, 0.9),
+    inset -6px -6px 18px rgba(0, 0, 0, 0.25),
+    0 8px 18px rgba(0, 0, 0, 0.25);
+
+  transition: 0.25s;
+}
+
+.mainPlayBtn:active {
+  transform: scale(0.92);
+}
+
+.funControls {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 10px;
+  position: relative;
+  z-index: 5;
+  align-items: center;
+}
+
+.funBtn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: none;
+  font-size: 28px;
+  color: #0b2545;
+  background: #ffe066;
+
+  box-shadow:
+    inset 4px 4px 10px rgba(255, 255, 255, 0.9),
+    inset -6px -6px 18px rgba(0, 0, 0, 0.25),
+    0 8px 18px rgba(0, 0, 0, 0.25);
+
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.funBtn:active {
+  transform: scale(0.88);
+}
+
+.progressBox {
+  width: 80%;
+  margin: 30px auto;
+  z-index: 5;
+  position: relative;
+}
+
+.progressBox input {
+  width: 100%;
+  height: 10px;
+  -webkit-appearance: none;
+  background: #ffffffaa;
+  border-radius: 25px;
+  outline: none;
+}
+
+.progressBox input::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  background: #ff72b6;
+  border-radius: 50%;
+  -webkit-appearance: none;
+  box-shadow: 0 0 8px #ff72b6;
+}
+
+.timeRowFS {
+  display: flex;
+  justify-content: space-between;
+  color: #0b2545;
+  font-weight: bold;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.activeCircle3D {
+  transform: scale(1.05);
+  border: 4px solid var(--swal2-backdrop);
+  box-shadow:
+    0 0 15px rgba(255, 255, 255, 0.9),
+    0 0 25px rgba(0, 200, 255, 0.6),
+    inset -3px -3px 10px rgba(0, 0, 0, .3),
+    inset 5px 5px 10px rgba(255, 255, 255, .7);
+  filter: brightness(1.2);
+}
+
+@media (max-width:880px) {
+  .circleWrapper {
+    justify-content: start;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .leftPanelBoxes {
+    height: auto;
+  }
+
+  .circle3D {
+    height: auto;
+    width: auto;
+    padding: 5px 20px;
+    border-radius: 5px;
+    width: 1040x;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  .bigCenterCircle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 30px auto;
+  }
+  .funBtn {
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
+  transition: 0.25s;
+}
+.funControls {
+  width: 100%;
+  gap: 3px;
+}
+.bigCenterCircle.playing::before {
+  width: 195px;
+  height: 195px;
+  border: 5px solid #00d0ff;
+}
+.plyItems{
+  height: 78vh;
+}
+}

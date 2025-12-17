@@ -35,6 +35,7 @@ const Templates = (() => {
         { id : 31, template : 'FillOnClick' },
         { id : 32, template : 'Dictionary' },
         { id : 33, template : 'MentalMath' },
+        { id : 34, template : 'AudioAndVideoFromYoutube' },
     ];
 
     const store = {
