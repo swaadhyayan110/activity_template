@@ -192,6 +192,10 @@ body {
   margin-bottom: 30px;
 }
 
+.matching-area svg {
+  position: absolute;
+}
+
 .levelText {
   text-align: center;
   width: 34%;
@@ -314,16 +318,7 @@ body {
   z-index: 10;
 }
 
-.m1 svg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-
-.m2 svg {
+.matching-area svg {
   position: absolute;
   width: 100%;
   height: 100%;
