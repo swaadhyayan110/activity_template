@@ -18,39 +18,34 @@ const Define = (() => {
         { qid : 5, text : ['Q-5','Fill-2'], module : 5 },
         { qid : 6, text : ['Q-6', 'Jumble-Letter'], module : 6 },
         { qid : 7, text : ['Q-7', 'Jumble-Word'], module : 7 },
-        { qid : 8, text : ['Q-8', 'MCQ-1'], module : 9 },
-        { qid : 9, text : ['Q-9', 'MCQ-2'], module : 9 },
-        { qid : 10, text : ['Q-10', 'MCQ-3'], module : 9 },
-        { qid : 11, text : ['Q-11', 'Adaptiv'], module : 10 },
-        { qid : 12, text : ['Q-12', 'Audio'], module : 11 },
-        { qid : 13, text : ['DD', 'Drop Down'], module : 12 },
-        { qid : 14, text : ['Q-14', 'Circle'], module : 13 },
-        { qid : 15, text : ['Q-15','श्रवण कौशल'], module : 14 },
-        { qid : 16, text : ['Q-16', 'T&F'], module : 15 },
-        { qid : 17, text : ['Q-17', 'DND-1'], module : 8 },
-        { qid : 18, text : ['Q-18', 'DND-2'], module : 16 },
-        { qid : 19, text : ['Q-19', 'DND-3'], module : 16 },
-        { qid : 20, text : ['Q-20', 'DND-4'], module : 16 },
-        { qid : 21, text : ['Q-21', 'DND-5'], module : 16 },
-        { qid : 22, text : ['Q-22', 'DND-6'], module : 17 },
-        { qid : 23, text : ['Q-23', 'PDF'], module : 18 },
-        { qid : 24, text : ['Q-24', 'Shabdkosh'], module : 19 },
-        { qid : 25, text : ['Q-25', 'Shrutlekh'], module : 20 },
-        { qid : 26, text : ['Q-26', 'WordSearch'], module : 21 },
-        { qid : 27, text : ['Q-27', 'TextArea'], module : 22 },
-        { qid : 28, text : ['Q-28', 'CrossWord'], module : 23 },
-        { qid : 29, text : ['Q-29', 'ShravanKaushalWithPara'], module : 24 },
-        { qid : 30, text : ['Q-30', 'ShravanKaushalWithoutPara'], module : 24 },
-        { qid : 31, text : ['Q-31', 'VideoPlayer'], module : 25 },
-        { qid : 32, text : ['Q-32', 'Rachnatmak_Para-1'], module : 26 },
-        { qid : 33, text : ['Q-33', 'Rachnatmak_Inputs&Images-2'], module : 27 },
-        { qid : 34, text : ['Q-34', 'Rachnatmak_Tab_Btns-3'], module : 28 },
-        { qid : 35, text : ['Q-35', 'Rachnatmak_multi_Inputs-4'], module : 29 },
-        { qid : 36, text : ['Q-36', 'ClickOnImage'], module : 30 },
-        { qid : 37, text : ['Q-37', 'FillOnClick'], module : 31 },
-        { qid : 38, text : ['Q-38', 'Dictionary'], module : 32 },
-        { qid : 39, text : ['Q-39', 'MentalMath'], module : 33 },
-        { qid : 40, text : ['Q-40', 'Youtube-Audio-Video'], module : 34 },
+        { qid : 8, text : ['Q-8', 'DND-1'], module : 8 },
+        { qid : 9, text : ['Q-9', 'MCQ-1'], module : 9 },
+        { qid : 10, text : ['Q-10', 'Adaptiv'], module : 10 },
+        { qid : 11, text : ['Q-11', 'Audio'], module : 11 },
+        { qid : 12, text : ['Q-12', 'Drop Down'], module : 12 },
+        { qid : 13, text : ['Q-13', 'Circle'], module : 13 },
+        { qid : 14, text : ['Q-14','श्रवण कौशल'], module : 14 },
+        { qid : 15, text : ['Q-15', 'T&F'], module : 15 },
+        { qid : 16, text : ['Q-16', 'DND-2'], module : 16 },
+        { qid : 17, text : ['Q-17', 'DND-3'], module : 16 },
+        { qid : 18, text : ['Q-18', 'Sorting'], module : 17 },
+        { qid : 19, text : ['Q-19', 'PDF'], module : 18 },
+        { qid : 20, text : ['Q-20', 'Shabdkosh'], module : 19 },
+        { qid : 21, text : ['Q-21', 'Shrutlekh'], module : 20 },
+        { qid : 22, text : ['Q-22', 'WordSearch'], module : 21 },
+        { qid : 23, text : ['Q-23', 'TextArea'], module : 22 },
+        { qid : 24, text : ['Q-24', 'CrossWord'], module : 23 },
+        { qid : 25, text : ['Q-25', 'ShravanKaushalWithPara'], module : 24 },
+        { qid : 26, text : ['Q-26', 'VideoPlayer'], module : 25 },
+        { qid : 27, text : ['Q-27', 'Rachnatmak_Para-1'], module : 26 },
+        { qid : 28, text : ['Q-28', 'Rachnatmak_Inputs&Images-2'], module : 27 },
+        { qid : 29, text : ['Q-29', 'Rachnatmak_Tab_Btns-3'], module : 28 },
+        { qid : 30, text : ['Q-30', 'Rachnatmak_multi_Inputs-4'], module : 29 },
+        { qid : 31, text : ['Q-31', 'ClickOnImage'], module : 30 },
+        { qid : 32, text : ['Q-32', 'FillOnClick'], module : 31 },
+        { qid : 33, text : ['Q-33', 'Dictionary'], module : 32 },
+        { qid : 34, text : ['Q-34', 'MentalMath'], module : 33 },
+        { qid : 35, text : ['Q-35', 'Youtube-Audio-Video'], module : 34 },
     ];
 
     // DEFINE QUESTIONS
@@ -198,56 +193,38 @@ const Define = (() => {
                 'Knowledge is power.',
                 'Honesty is the best policy.'
             ]
-        },            
+        },
         {
             id      : 8,
             lang    : 'hi',
-            head    : 'Template : 9, Text Only',
+            head    : 'Template : 8',
+            subhead : '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो )',
             content : {
-                mcq  : [
-                    {
-                        question : {                            
-                            text : 'दूसरों के खिलौनों को खराब कहना'
-                        },
-                        options  : [
-                            { text : 'बात बात है' },
-                            { text : 'अच्छी बात है' },
-                            { text : 'आम बात है।'},
-                            { text : 'खास बात है।' }
-                        ],
-                        answer   : 0
-                    },
-                    {
-                        question: {
-                            text : 'दूसरों के खिलौनों को खराब कहना-'
-                        },                        
-                        options  : [
-                            { text : 'अच्छा है।' },
-                            { text : 'अच्छी बात है' },
-                            { text : 'आम बात है।'},
-                            { text : 'खास बात है।' }
-                        ],
-                        answer: 1
-                    },
-                    {
-                        question: {
-                            text : 'साथी खिलाड़ी को धमकाना और डराना-'
-                        },
-                        options  : [
-                            { text : 'अच्छा है।' },
-                            { text : 'अच्छी बात है' },
-                            { text : 'आम बात है।'},
-                            { text : 'खास बात है।' }
-                        ],
-                        answer: 1
-                    }
+                shuffle : false,
+                audio   : './bg.mp3',
+                col     : {
+                    md : 4,
+                    sm : 4,
+                    om : 4
+                },
+                heading : [
+                    { id: 1, accept: 'm', text: 'पुल्लिंग(Masculine)' },
+                    { id: 2, accept: 'f', text: 'स्त्रीलिंग(Feminine)' },
+                    { id: 3, accept: 'n', text: 'नपुंसकलिंग(Neuter)' }
+                ],
+                options : [
+                    { id: 1, ans: 'm', text: 'हंसौ' },
+                    { id: 2, ans: 'f', text: 'अध्यापिके' },
+                    { id: 3, ans: 'n', text: 'क्रीडनकानि' },
+                    { id: 4, ans: 'm', text: 'हंसौक्री' },
+                    { id: 4, ans: 'm', text: 'अध्याकानि' },
                 ]
             }
         },
         {
             id      : 9,
             lang    : 'hi',
-            head    : 'Template : 9, Path Ka Saar/Naitik Shiksha',
+            head    : 'Template : 9',
             content : {
                 text : {
                     text : 'वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
@@ -255,17 +232,6 @@ const Define = (() => {
                 },
                 img  : {
                     width : '35%',
-                    path  : 'img/1.png'
-                }
-            }
-        },
-        {
-            id      : 10,
-            lang    : 'hi',
-            head    : 'Template : 9, With Option images',
-            content : {
-                img  : {
-                    width : '15%',
                     path  : 'img/1.png',
                     imageclass : 'text-center'
                 },
@@ -316,7 +282,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 11,
+            id      : 10,
             lang    : 'hi',
             content : {
                 skiplevels : true,
@@ -388,7 +354,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 12,
+            id      : 11,
             lang    : 'hi',
             content : {
                 desc : 'audio description',
@@ -396,7 +362,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 13,
+            id      : 12,
             lang    : 'hi',
             head    : 'Template : 12, Drop Down',
             content : {                
@@ -411,7 +377,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 14,
+            id      : 13,
             lang    : 'hi',
             head    : 'Template : 13, Circle ',
             mode    : 'single',
@@ -426,7 +392,7 @@ const Define = (() => {
             ]
         },
         {
-            id      : 15,
+            id      : 14,
             lang    : 'hi',
             head    : 'Template : 14',
             subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
@@ -453,7 +419,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 16,
+            id      : 15,
             lang    : 'en',
             head    : 'Template : 15',
             content : [
@@ -480,93 +446,27 @@ const Define = (() => {
             ]
         },
         {
-            id      : 17,
-            lang    : 'hi',
-            head    : 'Template : 8',
-            subhead : '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो )',
-            content : {
-                shuffle : false,
-                audio   : './bg.mp3',
-                col     : {
-                    md : 4,
-                    sm : 4,
-                    om : 4
-                },
-                heading : [
-                    { id: 1, accept: 'm', text: 'पुल्लिंग(Masculine)' },
-                    { id: 2, accept: 'f', text: 'स्त्रीलिंग(Feminine)' },
-                    { id: 3, accept: 'n', text: 'नपुंसकलिंग(Neuter)' }
-                ],
-                options : [
-                    { id: 1, ans: 'm', text: 'हंसौ' },
-                    { id: 2, ans: 'f', text: 'अध्यापिके' },
-                    { id: 3, ans: 'n', text: 'क्रीडनकानि' },
-                    { id: 4, ans: 'm', text: 'हंसौक्री' },
-                    { id: 4, ans: 'm', text: 'अध्याकानि' },
-                ]
-            }
-        },
-        {
-            id      : 18,
-            lang    : 'hi',
-            head    : 'Template : 16',            
-            content : {
-                shuffle     : false,
-                strictMatch : false,
-                replacement : '#_#',
-                addOptions  : [ 'op1', 'op2', 'op3', 'op1' ],
-                questions   : [
-                    { qid : 1, text : 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', options : ['पंख', 'नाचने'] },
-                    { qid : 2, text : 'सितार के सुर #_# में गूँजने लगे।', options : ['जंगल'] },
-                    { qid : 3, text : 'सितार पर खाली जगह पर #_# की गई।', options : ['नक्काषी'] },
-                    { qid : 4, text : 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', options : ['खूँटी'] },
-                    { qid : 5, text : 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', options : ['जतन'] }
-                ],
-                subquestions : [
-                    { sid : 1, qid : 1, text : '' },
-                    { sid : 1, qid : 1, text : '' },
-                    { sid : 1, qid : 2, text : '' },
-                    { sid : 1, qid : 2, text : '' },
-                    { sid : 1, qid : 2, text : '' },
-                ]
-            }
-        },
-        {
-            id      : 19,
-            lang    : 'hi',
-            head    : 'Template : 16',            
-            content : {
-                shuffle     : false,
-                strictMatch : true,
-                replacement : '#_#',
-                option_side : 'right',
-                questions   : [
-                    { text: 'सितार बनने पर कोयल #_# नचाकर नाचने लगी।', options: ['पंख', 'नाचने'], answer : 1 },
-                    { text: 'सितार के सुर #_# में गूँजने लगे।', options: ['जंगल', 'पंखूँटी'], answer : 0 },
-                    { text: 'सितार पर खाली जगह पर #_# की गई।', options: ['नक्काषी', 'पंखूँटी'], answer : 1 },
-                    { text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', options: ['खूँटी', 'पंखूँटी'], answer : 0 },
-                    { text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', options: ['जतन', 'पंखूँटी'], answer : 1 }
-                ]
-            }
-        },
-        {
-            id      : 20,
+            id      : 16,
             lang    : 'hi',
             head    : 'Template : 16',
             content : {
                 shuffle     : false,
                 strictMatch : false,
                 replacement : '#_#',
-                col         : { col : 3, md : 4, sm : 12 },
+                option_side : 'top',
+                col         : { col : 6, md : 6, sm : 6 },
+                addOptions  : [ 'op1', 'op2', 'op3', 'op1' ],
                 questions   : [
-                    { text: '#_#, #_#', inputWidth : '5%', image : 'img/1.png', width : '25%', options: ['पंख', 'नाचने'] },
-                    { text: '#_#, #_#', image : 'img/2.png', options: ['जंगल', 'पंखूँटी'] },
-                    { text: '#_#, #_#', image : 'img/4.png', options: ['नक्काषी', 'पंखूँटी'] }
+                    { qid : 1, text : 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', inputWidth : '50%', image : 'img/1.png', width : '25%', options : ['पंख', 'नाचने'], answer : 1 },
+                    { qid : 2, text : 'सितार के सुर #_# में गूँजने लगे।', image : 'img/1.png', options : ['जंगल'], answer : 0 },
+                    { qid : 3, text : 'सितार पर खाली जगह पर #_# की गई।', image : 'img/1.png', options : ['नक्काषी'], answer : 0 },
+                    { qid : 4, text : 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image : 'img/1.png', options : ['खूँटी'], answer : 0 },
+                    { qid : 5, text : 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image : 'img/1.png', options : ['जतन'], answer : 0 }
                 ]
             }
         },
         {
-            id      : 21,
+            id      : 17,
             lang    : 'hi',
             head    : 'Template : 16',
             content : {
@@ -577,7 +477,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 22,
+            id      : 18,
             lang    : 'en',
             head    : 'Template : 17',
             content : {
@@ -585,7 +485,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 23,
+            id      : 19,
             lang    : 'en',
             content : {
                 pdf : 'pdf.pdf',
@@ -593,7 +493,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 24,
+            id      : 20,
             lang    : 'en',
             head    : 'Template : 19',
             subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
@@ -617,7 +517,7 @@ const Define = (() => {
             ]
         },
         {
-            id      : 25,
+            id      : 21,
             lang    : 'en',
             content : {
                 questions : [
@@ -631,7 +531,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 26,
+            id      : 22,
             lang    : 'en',
             head    : 'Template : 21',
             content : [
@@ -708,7 +608,7 @@ const Define = (() => {
             ]
         },
         {
-            id      : 27,
+            id      : 23,
             lang    : 'hi',
             head    : 'Template : 22',
             content : {
@@ -720,7 +620,7 @@ const Define = (() => {
             }
         },            
         {
-            id      : 28,
+            id      : 24,
             lang    : 'en',
             head    : 'Template : 23',
             content : {
@@ -739,9 +639,9 @@ const Define = (() => {
             }
         },
         {
-            id      : 29,
+            id      : 25,
             lang    : 'hi',
-            head    : 'Template : 24 ---',
+            head    : 'Template : 24',
             content : {
                 main: {
                     text: {
@@ -784,60 +684,20 @@ const Define = (() => {
                     }
                 ]
             }
-        },
+        },        
         {
-            id      : 30,
-            lang    : 'hi',
-            head    : 'Template : 24',
-            content : {
-                main: {
-                    audio: 'audio/3.mp3',
-                },
-                questions: [
-                    {
-                        question : {
-                            text  : 'बच्चों की किन बातों से घर के लोग खुश होते हैं?',
-                            image : 'img/ch4_1.png',
-                            audio : 'audio/1.mp3'
-                        },
-                        options: [
-                            { text : 'खेल-कूद में तूफ़ान मचाने पर' },
-                            { text : 'खूब सोते रहने से', },
-                            { text : 'हर बात में ज़िद करने से', image : 'img/ch4_1.png' },
-                            { text : 'इनमें से कोई नहीं ', image : 'img/ch4_1.png' }
-                        ],
-                        answer : 0
-                    },
-                    {
-                        question : {
-                            text  : 'बच्चों की किन बातों से घर के लोग परेशान होते हैं?',
-                            audio : 'audio/2.mp3'
-                        },
-                        options : [
-                            { text : 'खूब रोने से' },
-                            { text : 'खेलने में चोट लगने से' },
-                            { text : 'बार-बार खाने की इच्छा करने से' },
-                            { text : 'इनमें से कोई नहीं' }
-                        ],
-                        answer : 1
-                    }
-                ]
-            }
-        },
-        {
-            id      : 31,
+            id      : 26,
             lang    : 'en',
             head    : 'Template : 25',
             content : {
                 video : {
-                    path    : 'https://www.youtube.com/embed/WyVuxlx3Nq4?autoplay=1&mute=1&controls=0',
-                    // path    : './video.mp4',
+                    path    : './video.mp4',
                     youtube : true
                 }
             }
         },
         {
-            id      : 32,
+            id      : 27,
             lang    : 'hi',
             head    : 'Template : 26',
             subhead : "पेड़ - प्रकृति का वरदान",
@@ -852,7 +712,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 33,
+            id      : 28,
             lang    : 'hi',
             head    : 'Template : 27',
             subhead : "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
@@ -890,7 +750,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 34,
+            id      : 29,
             lang    : 'hi',
             head    : 'Template : 28',
             subhead : "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
@@ -908,7 +768,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 35,
+            id      : 30,
             lang    : 'hi',
             head    : 'Template : 29',
             subhead : 'अपनी छोटी बहन को मोबाइल पर व्यर्थ समय बिताने की जगह पढ़ाई पर ध्यान देने का सुझाव देते हुए पत्र लिखिए।',
@@ -941,7 +801,7 @@ const Define = (() => {
             },
         },
         {
-            id      : 36,
+            id      : 31,
             lang    : 'en',
             head    : "Template : 30",
             content : {
@@ -959,7 +819,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 37,
+            id      : 32,
             lang    : 'en',            
             head    : 'Click on the correct words in the blanks given below.',
             content : {
@@ -974,7 +834,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 38,
+            id      : 33,
             lang    : 'en',
             head    : 'Template : 32',
             subhead : '(Drag and arrange each word in the order you will find them in a dictionary.)',
@@ -985,7 +845,7 @@ const Define = (() => {
             ]
         },
         {
-            id      : 39,
+            id      : 34,
             lang    : 'en',
             head    : 'Numbers and Numeration',
             subhead : 'Drag the correct answer',
@@ -1021,7 +881,7 @@ const Define = (() => {
             }
         },
         {
-            id      : 40,
+            id      : 35,
             content : {
                 buttons : [
                     { ytId : 'xyxlR0DNyRI', isVideo : false, label : '1 पुल्लिङ्गम् प्रथम:' },
