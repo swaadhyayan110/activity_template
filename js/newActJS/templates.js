@@ -131,7 +131,7 @@ const Activity = (() => {
         }
     };
 
-    const translateBulletLabels = ({ lang='mt', ind=0, upperCase=true } = {}) => {
+    const translateBulletLabels = ({ lang='mt', ind=0, upperCase=false } = {}) => {
         const bullets = {
             en: [...'abcdefghijklmnopqrstuvwxyz'],
             hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय'],
@@ -8934,7 +8934,7 @@ const RachnatmakWithInputs = (() => {
 
         $(".submit-btn").addClass("noClicked");
         if (content.inputLeft == false) {
-            let fillAppli = document.querySelectorAll(".fillAppli");
+            const fillAppli = document.querySelectorAll(".fillAppli");
             content?.question.forEach((item, index) => {
                 if (fillAppli[index]) {
                     fillAppli[index].value = item.answer.replaceAll("<br/>", "\n");
@@ -8944,20 +8944,18 @@ const RachnatmakWithInputs = (() => {
             $(".fillAppli").css("overflow", "hidden");
             $(".fillAppli").addClass("pointer-none");
         } else {
-            const textareas = getAllTextareas();
-            const { leftData, rightData } = activity.content;
-
-            textareas.forEach((ta, index) => {
-                let correctAns = "";
-
-                if (index % 2 === 0) {
-                    correctAns = leftData.data[Math.floor(index / 2)]?.answer || "";
-                } else {
-                    correctAns = rightData.data[Math.floor(index / 2)]?.answer || "";
+            const fillAppLeft  = document.querySelectorAll('.fillAppli[data-type="left"]');
+            const fillAppRight = document.querySelectorAll('.fillAppli[data-type="right"]');
+            content?.question.forEach((item, index) => {
+                if( fillAppLeft[index] ) {
+                    fillAppLeft[index].value = item.text.replaceAll("<br/>", "\n");
                 }
 
-                ta.value = correctAns;
-                ta.classList.add("pointer-none");
+                if( fillAppRight[index] ) {
+                    fillAppRight[index].value = item.answer.replaceAll("<br/>", "\n");
+                }
+                autoResizeTextarea(fillAppRight[index]);
+                autoResizeTextarea(fillAppLeft[index]);
             });
         }
     }
@@ -9021,15 +9019,13 @@ const RachnatmakWithInputs = (() => {
                     title: lang == 'hi' ? "ओह!" : 'Ohh!',
                     text: scoreText
                 });
-            }
-            else if (finalScore <= 50) {
+            } else if (finalScore <= 50) {
                 Swal.fire({
                     icon: "warning",
                     title: lang == 'hi' ? 'और मेहनत कीजिए!' : 'Work harder!',
                     text: scoreText
                 });
-            }
-            else {
+            } else {
                 Swal.fire({
                     icon: "success",
                     title: lang == 'hi' ? 'शानदार!' : 'Fabulous',
@@ -9037,31 +9033,43 @@ const RachnatmakWithInputs = (() => {
                 });
             }
         } else {
-
-            const textareas = getAllTextareas();
-            const { leftData, rightData } = content;
             let score = 0;
-            const total = leftData.data.length + rightData.data.length;
-            textareas.forEach((ta, index) => {
-                let correctAns = "";
-                if (index % 2 === 0) {
-                    correctAns = leftData.data[Math.floor(index / 2)]?.answer || "";
-                } else {
-                    correctAns = rightData.data[Math.floor(index / 2)]?.answer || "";
+
+            const fillAppLeft  = document.querySelectorAll('.fillAppli[data-type="left"]');
+            const fillAppRight = document.querySelectorAll('.fillAppli[data-type="right"]');
+            const total        = fillAppLeft.length + fillAppRight.length;
+
+            content?.question.forEach((item, index) => {
+                if( fillAppLeft[index] ) {
+                    const correctAnswer = item.text.replaceAll("<br/>", "\n");
+                    if( fillAppLeft[index].value.trim() === correctAnswer.trim() ) {
+                        score++;
+                        fillAppLeft[index].classList.add('correctAnswer');
+                        fillAppLeft[index].classList.remove('wrongAnswer');
+                    } else {
+                        fillAppLeft[index].classList.remove('correctAnswer');
+                        fillAppLeft[index].classList.add('wrongAnswer');
+                    }
                 }
-                if (ta.value.trim() === correctAns.trim()) {
-                    score++;
-                    ta.classList.add("correctAnswer");
-                    ta.classList.remove("wrongAnswer");
-                } else {
-                    ta.classList.add("wrongAnswer");
-                    ta.classList.remove("correctAnswer");
+
+                if( fillAppRight[index] ) {
+                    const correctAnswer = item.answer.replaceAll("<br/>", "\n");
+                    if( fillAppLeft[index].value.trim() === correctAnswer.trim() ) {
+                        score++;
+                        fillAppLeft[index].classList.add('correctAnswer');
+                        fillAppLeft[index].classList.remove('wrongAnswer');
+                    } else {
+                        fillAppLeft[index].classList.remove('correctAnswer');
+                        fillAppLeft[index].classList.add('wrongAnswer');
+                    }
                 }
+                autoResizeTextarea(fillAppRight[index]);
+                autoResizeTextarea(fillAppLeft[index]);
             });
 
             let iconType = "info";
 
-            if (score === total) {
+            if( score === total ) {
                 iconType = "success";
             } else if (score === 0) {
                 iconType = "error";
@@ -9069,7 +9077,7 @@ const RachnatmakWithInputs = (() => {
                 iconType = "info";
             }
 
-            const totalScoreTxt = score/total + (lang == 'hi' ? 'अंक प्राप्त हुए' : 'Points Scored' );
+            const totalScoreTxt = Number((score / total).toFixed(2)) + ' ' + (lang == 'hi' ? 'अंक प्राप्त हुए' : 'Points Scored' );
             Swal.fire({
                 title: lang == 'hi' ? 'परिणाम' : 'Result',
                 text: totalScoreTxt,
@@ -10281,6 +10289,7 @@ const MathMoney = (() => {
             ui(questionId);
             if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
 
+            __correctCount  = 0;
             const activity  = Activity.getDefine( questionId );
             const content   = activity?.content ?? {};
             const options   = Activity.shuffleArray( content?.options ?? [] ) ?? [];
@@ -10423,7 +10432,7 @@ const MathMoney = (() => {
             initDrop();
 
         } catch (err) {
-            console.error( 'MathMoney.ui :', err );
+            console.error( 'MathMoney.render :', err );
         }
     };
 
@@ -10479,6 +10488,277 @@ const MathMoney = (() => {
             setTimeout(() => $(this).removeClass('wrongAnsMoney'), 600);
             ui.draggable.draggable('option', 'revert', true);
         }
+    }
+
+    return {
+        render : render
+    }
+})();
+
+const ShabdRachna = (() => {
+
+    Activity.css('shabdRachna.css');
+
+    const containerId  = 'shabd-rachna-container';
+    const quesContId   = 'questBoxes';
+    const dropShabdCls = 'dropSabd';
+    const dragShabdCls = 'itmd';
+
+    let __score = 0;
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity  = Activity.getDefine( questionId );
+            const lang      = activity?.lang ?? 'en';
+            const content   = activity?.content ?? {};
+            const headWidth = content?.width?.heading ?? '250px';
+
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container" id="${containerId}">                                        
+                                        <div class="nameofChapter d-block ${Define.get('head')}" style="width: ${headWidth};"></div>
+                                            <div class="sabadRach">
+                                                <div class="headingTextSabad ${Define.get('subHead')}"></div>
+                                                <div class="boxAutoScroll" id="${quesContId}"></div>
+                                                <div class="buttons machiNgs">
+                                                    <button class="submit-btn submitBtnSabd">${buttonLabel.check}</button>
+                                                    <button class="show-btn">${buttonLabel.show}</button>
+                                                    <button class="reset-btn">${buttonLabel.try}</button>
+                                                </div>
+                                                <div id="funnyReport" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            const checkBtn = document.querySelector('.submit-btn');
+            const showBtn  = document.querySelector('.show-btn');
+            const resetBtn = document.querySelector('.reset-btn');
+
+            if( checkBtn ) checkBtn.addEventListener( 'click', checkAnswers );
+            if( showBtn ) showBtn.addEventListener( 'click', showAnswers );
+            if( resetBtn ) resetBtn.addEventListener( 'click', resetAll );
+
+            Activity.setHeader( questionId );
+		} catch (err) {
+            console.error( 'ShabdRachna.ui :', err );
+        }
+    };
+
+    const render = (questionId) => {
+        try {
+            ui(questionId);
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+            __score           = 0;
+            const activity    = Activity.getDefine( questionId );
+            const lang        = activity?.lang ?? 'en';
+            const content     = activity?.content ?? {};
+            const data        = content?.data ?? {};
+            const replacement = data?.replacement ?? '#_#';
+            const bullets     = data?.bullets ?? false;
+            const questions   = data?.questions ?? [];
+
+            const html = questions.map( (question, index) => {
+                const quesBullet = bullets
+                    ? 
+                        `
+                            <div class="headingQSabadRach">
+                                (${Activity.translateBulletLabels({lang:lang, ind:index})})
+                            </div>
+                        ` 
+                    : '';
+                // ..
+                const view = question.map((ques, ind) => {
+                    const subBullets  = Activity.translateBulletLabels({lang:'mt', ind:ind});
+                    const dragOptions = Activity.shuffleArray( ques?.answer ?? [] ) ?? [];
+
+                    const dropArea = ques?.text.split( '+' )
+                                        .map( (item, i) => item.replace( replacement, `<div class="${dropShabdCls}" data-index="${i}"></div>` ) )
+                                        .join( '<div class="opraterPlus">+</div>' );
+                    // ..
+                    return `
+                        <div class="qSabadRach" data-block-index="${index}" data-id="${ques?.id}">
+                            <div class="flexRow">
+                                <div class="levels">${subBullets}.</div>
+                                <div class="drgitm">
+                                    ${ dragOptions.map((opt) => `<div class="${dragShabdCls}">${opt}</div>` ) }
+                                </div>
+                                <div class="isTO">=</div>
+                                <div class="rowInFlSaba">${dropArea}</div>
+                            </div>
+                        </div>
+                    `
+                }).join( '' );
+
+                return [ quesBullet, view ].join( '' );
+            });
+            
+            $(`#${quesContId}`).html( html );
+            initDragAndDrop();
+
+        } catch (err) {
+            console.error( 'ShabdRachna.render :', err );
+        }
+    };
+
+    const initDragAndDrop = () => {
+        $(`.${dragShabdCls}`).draggable({
+            revert : 'invalid',
+            helper : 'clone',
+            cursor : 'move'
+        });
+
+        $(`.${dropShabdCls}`).droppable({
+            accept : `.${dragShabdCls}`,
+            drop   : function(event, ui) {
+                const droppedText = ui.draggable.text();
+                $(this).text(droppedText).attr('data-fill', droppedText);
+            }
+        });
+    };
+
+    const checkAnswers = () => {
+        __score         = 0;
+        const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
+        const lang      = activity?.lang ?? 'en';
+        const content   = activity?.content ?? {};
+        const data      = content?.data ?? {};
+        const questions = data?.questions ?? [];
+
+        const set = questions.map((question) => question.map((ques) => ({ answer : ques?.answer.join( '' ) }) )).flat();
+        
+        [...$(`.rowInFlSaba`)].map((row, i) => {
+            const drops = $(row).find( `.${dropShabdCls}` );
+            let correctCount = 0;
+            let thisTotal    = 0;
+            [...drops].map((drop) => {
+                const parentData  = $(drop).closest('.qSabadRach')[0].dataset;
+                const mainQuesInd = parentData.blockIndex;
+                const subQuesId   = parentData.id;
+                const dropData    = drop.dataset;
+                const dropIndex   = dropData.index;
+                const dropFill    = dropData.fill ?? '';
+                const answers     = questions[mainQuesInd].filter( ques => ques.id == subQuesId )[0]?.answer;
+                const answer      = answers[dropIndex] ?? '';
+                thisTotal         = answers.length;
+                set[i].user       = (set[i].user || '') + dropFill;                
+
+                if( answer == dropFill ) correctCount++;
+            });
+            if( correctCount === thisTotal ) __score++;
+        });
+
+        const tableRows = set.map((item) => {
+            const correct = item.answer === item.user ?? false;
+            const text    = correct ? ( lang === 'hi' ? 'सही' : 'Correct' ) : (lang === 'hi' ? 'गलत' : 'Wrong');
+            const classes = correct ? "correctSabadStatus" : "wrongSabadStatus";
+
+            const row = `
+                            <tr class="${classes}">
+                                <td>${item.answer}</td>
+                                <td>${item.user}</td>
+                                <td>${text}</td>
+                            </tr>
+                        `;
+            // ..
+            return row;
+        }).join( '' );        
+
+        const messages = {
+            hi: [
+                { min: 100, msg: "आप तो कमाल हो! 🤩 पूरी तरह सही!", emoji: "🧡🎉😁" },
+                { min: 70, msg: "बहुत बढ़िया! थोड़ी और practice कर लो!", emoji: "👍😃" },
+                { min: 40, msg: "अच्छा है, कोशिश जारी रखें!", emoji: "🙂🤏" },
+                { min: 0, msg: "😂 अरे! ये क्या कर दिया? फिर से कोशिश करो!", emoji: "😅😭" }
+            ],
+            en: [
+                { min: 100, msg: "Amazing! All correct! 🤩", emoji: "🧡🎉😁" },
+                { min: 70, msg: "Great! A little more practice!", emoji: "👍😃" },
+                { min: 40, msg: "Good! Keep trying!", emoji: "🙂🤏" },
+                { min: 0, msg: "Oops! Try again! 😂", emoji: "😅😭" }
+            ]
+        };
+
+        const total   = set.length;
+        const percent = Math.round((__score / total) * 100);
+        const res     = messages[lang].find(m => percent >= m.min);
+
+        const tableView = `
+            <div class="box" style="animation: 0.5s pop;">
+                <div id="rpText">
+                    <div class="resultTexts">
+                        ${ lang == 'hi' ? 'कुल अंक' : 'Total score' }: ${__score} / ${total}
+                    </div>
+                    <div class="emoji" style="font-size:36px; margin:6px 0;">${res.emoji}</div>
+                    <div class="messageRes">${res.msg}</div>
+                    <div class="table-responsive tblInSch">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>${ lang == 'hi' ? 'सही उत्तर' : 'Correct Answer' }</th>
+                                    <th>${ lang == 'hi' ? 'आपका उत्तर' : 'Your Answer' }</th>
+                                    <th>${ lang == 'hi' ? 'स्थिति' : 'Status' }</th>
+                                </tr>
+                            </thead>
+                            <tbody>${tableRows}</tbody>
+                        </table>
+                    </div>
+                </div>
+                <button id="funnyBtn">OK</button>
+            </div>
+        `;
+        // ..
+
+        $('#funnyReport').html( tableView ).css({ 'display' : 'flex' });
+        $('#funnyBtn')[0].addEventListener( 'click', closeReport );
+        
+    };
+
+    const showAnswers = () => {
+        const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
+        const content   = activity?.content ?? {};
+        const data      = content?.data ?? {};
+        const questions = data?.questions ?? [];
+
+        $('.submitBtnSabd').addClass('noclicked');
+        
+        [...$(`.rowInFlSaba`)].map((row, i) => {
+            const drops = $(row).find( `.${dropShabdCls}` );
+            [...drops].map((drop) => {
+                const parentData  = $(drop).closest('.qSabadRach')[0].dataset;
+                const mainQuesInd = parentData.blockIndex;
+                const subQuesId   = parentData.id;
+                const dropData    = drop.dataset;
+                const dropIndex   = dropData.index;
+                const answers     = questions[mainQuesInd].filter( ques => ques.id == subQuesId )[0]?.answer;
+                const answer      = answers[dropIndex] ?? '';
+                drop.innerHTML    = answer;
+                drop.classList.add( 'correctSabad' );
+                drop.classList.remove( 'wrongSabad' );
+            });
+        });
+    };
+
+    const resetAll = () => {
+        $('.submitBtnSabd').removeClass('noclicked');
+        $(`.${dropShabdCls}`).each(function() {
+            $(this).text('').removeAttr('data-fill').removeClass('correctSabad wrongSabad');
+        });
+    };
+
+    const closeReport = () => {
+        $("#funnyReport").hide();
     }
 
     return {

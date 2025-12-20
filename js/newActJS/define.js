@@ -47,6 +47,7 @@ const Define = (() => {
         { qid : 34, text : ['Q-34', 'MentalMath'], module : 33 },
         { qid : 35, text : ['Q-35', 'Youtube-Audio-Video'], module : 34 },
         { qid : 36, text : ['Q-36', 'Math Money'], module : 35 },
+        { qid : 37, text : ['Q-37', 'Shabd Rachna'], module : 36 },
     ];
 
     // DEFINE QUESTIONS
@@ -776,7 +777,7 @@ const Define = (() => {
             content : {
                 showButtons    : true,
                 showAnswerOfId : 1,
-                inputLeft      : false,
+                inputLeft      : true,
                 hint  : 'आदरणीया चाची जी, गर्मियों की छुट्टियाँ, बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ  दिन रहे सब मिलकर मजे करेंगे',
                 image : {
                     path  : 'img/1.png',
@@ -961,6 +962,37 @@ const Define = (() => {
                     ]
                 }
             }
+        },
+        {
+            id      : 37,
+            lang    : 'en',
+            head    : 'Template : 36',
+            subhead : 'वर्णों को सही क्रम में लगाकर सार्थक शब्द बनाओ-',
+            content : {
+                width : {
+                    heading : '240px'
+                },
+                data  : {
+                    replacement : '#_#',
+                    bullets     : true,
+                    questions   : [
+                        [
+                            { id: 1, text : '#_# + #_#', answer : ['न', 'ल'] },
+                            { id: 2, text : '#_# + #_#', answer : ['क', 'ल'] },
+                            { id: 3, text : '#_# + #_#', answer : ['च', 'ल'] },
+                            { id: 4, text : '#_# + #_#', answer : ['ध', 'न'] },
+                            { id: 5, text : '#_# + #_#', answer : ['र', 'थ'] }
+                        ],
+                        [
+                            { id: 1, text : '#_# + #_# + #_#', answer : ['क', 'ल', 'न'] },
+                            { id: 2, text : '#_# + #_# + #_#', answer : ['ग', 'ल', 'न'] },
+                            { id: 3, text : '#_# + #_# + #_#', answer : ['प', 'व', 'न'] },
+                            { id: 4, text : '#_# + #_# + #_#', answer : ['ख़', 'ब', 'र'] },
+                            { id: 5, text : '#_# + #_# + #_#', answer : ['न', 'ह', 'र'] }
+                        ]
+                    ]
+                }
+            }                
         }
     ];
 

@@ -37,6 +37,7 @@ const Templates = (() => {
         { id : 33, template : 'MentalMath' },
         { id : 34, template : 'AudioAndVideoFromYoutube' },
         { id : 35, template : 'MathMoney' },
+        { id : 36, template : 'ShabdRachna' },
     ];
 
     const store = {
