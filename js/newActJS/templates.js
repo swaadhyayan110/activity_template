@@ -1907,7 +1907,7 @@ const FillInTheBlanksHindiKb = (() => {
                         });
                     } else {
                         let idx = 0;
-                        const view = question?.question.replaceAll(replacement, () =>
+                        const view = question?.question?.replaceAll(replacement, () =>
                             renderInput({
                                 qID: questionId,
                                 sqID: false,
@@ -10652,7 +10652,7 @@ const ShabdRachna = (() => {
                 const answers     = questions[mainQuesInd].filter( ques => ques.id == subQuesId )[0]?.answer;
                 const answer      = answers[dropIndex] ?? '';
                 thisTotal         = answers.length;
-                set[i].user       = (set[i].user || '') + dropFill;                
+                set[i].user       = (set[i].user || '') + dropFill;
 
                 if( answer == dropFill ) correctCount++;
             });
