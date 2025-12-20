@@ -46,6 +46,7 @@ const Define = (() => {
         { qid : 33, text : ['Q-33', 'Dictionary'], module : 32 },
         { qid : 34, text : ['Q-34', 'MentalMath'], module : 33 },
         { qid : 35, text : ['Q-35', 'Youtube-Audio-Video'], module : 34 },
+        { qid : 36, text : ['Q-36', 'Math Money'], module : 35 },
     ];
 
     // DEFINE QUESTIONS
@@ -895,6 +896,70 @@ const Define = (() => {
                     { ytId : 'xyxlR0DNyRI', isVideo : true, label : '9 नपुंसकलिङ्गम्' },
                     { ytId : 'xyxlR0DNyRI', isVideo : true, label : '10 नपुंसकलिङ्गम्' }
                 ]
+            }
+        },
+        {
+            id      : 36,
+            lang    : 'en',
+            head    : 'Template : 35',
+            content : {
+                options : [ '120', '40', '160', '180', '480' ],
+                section : {
+                    visible : true,
+                    heading : {
+                        primary   : 'XYZ Sweets',
+                        secondary : '9876543210',
+                    },
+                    list    : [
+                        { label : 'Location', text : 'New Delhi' },
+                        { label : 'Bill No', text : '125847' },
+                        { label : 'Date', text : '08/12/2025' }
+                    ],
+                    block   : {
+                        label : 'Name & Address :',
+                        text  : 'Mr. Patel, Rajender Nagar, New Delhi'
+                    }
+                },
+                table : {
+                    head : [ 'S.N.', 'Name of the Items', 'Quantity (in kg)', 'Rate (₹/kg)', 'Amount (in ₹)' ],
+                    body : [
+                        [
+                            { value : '1.' },
+                            { value : 'Curd' },
+                            { value : '2 kg.' },
+                            { value : '₹ 60.00' },
+                            { value : '120', drop : true }
+                        ],
+                        [
+                            { value : '2.' },
+                            { value : 'Cheese' },
+                            { value : '2 kg.' },
+                            { value : '₹ 20.00' },
+                            { value : '40', drop : true }
+                        ],
+                        [
+                            { value : '3.' },
+                            { value : 'Rasgulla' },
+                            { value : '2 kg.' },
+                            { value : '₹ 80.00' },
+                            { value : '160', drop : true }
+                        ],
+                        [
+                            { value : '4.' },
+                            { value : 'Burfee' },
+                            { value : '2 kg.' },
+                            { value : '₹ 80.00' },
+                            { value : '160', drop : true }
+                        ],
+                        [
+                            { value : 'Total', colspan: 4, class: 'totalAmtText' },
+                            { value : '480', drop : true }
+                        ],
+                        [
+                            { value : 'Signature of the Shopkeeper', colspan: 5, class: 'signatureOf' } 
+                        ]
+                    ]
+                }
             }
         }
     ];

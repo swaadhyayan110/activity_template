@@ -10235,6 +10235,257 @@ const AudioAndVideoFromYoutube = (() => {
     return { render : render }
 })();
 
+const MathMoney = (() => {
+    Activity.css('math.css');
+
+    const containerId   = 'math-money-container';
+    const optionViewId  = 'option-view';
+    const sectionViewId = 'section-view';
+    const tableViewId   = 'table-view';
+    const dragItemClass = 'dragItm2';
+    const dropBoxClass  = 'dropBoxItem';
+
+    let __answers;
+    let __correctCount = 0;
+
+    const ui = (questionId) => {
+        try {
+            const container = Define.get('questionContainer');
+            const parent    = document.querySelector(container);
+
+            if( !parent ) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container" id="${containerId}">
+                                        <div class="menHeDicMath">
+                                            <div class="menHeadingMath ${Define.get('head')}"></div>
+                                        </div>
+                                        <div id="${optionViewId}" class="drpOptionsMath"></div>
+                                        <div id="${sectionViewId}" class="bill-wrapper d-block"></div>
+                                        <div id="${tableViewId}" class="table-responsive mt-3 tblsMaths"></div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            Activity.setHeader( questionId );
+		} catch (err) {
+            console.error( 'MathMoney.ui :', err );
+        }
+    };
+
+    const render = (questionId) => {
+        try {
+            ui(questionId);
+            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+            const activity  = Activity.getDefine( questionId );
+            const content   = activity?.content ?? {};
+            const options   = Activity.shuffleArray( content?.options ?? [] ) ?? [];
+            const section   = content?.section ?? {};            
+            const table     = content?.table ?? {};
+            __answers       = table?.body.map((tr) => tr.map((td, index) => ({ ...td, index })).filter(td => td?.drop));
+            const isSection = ( Object.keys( section ).length && section.visible != undefined )
+                                ? section.visible
+                                : false;
+            // ..
+
+            const optionsHtml = [];
+            options.map( (opt) => {
+                const html = `<div class="disDragItemsMath ${dragItemClass} ui-draggable ui-draggable-handle">${opt}</div>`
+                optionsHtml.push( html );
+            });
+
+            const sectionHtml = [];
+            if( isSection ) {
+                if( section?.heading ) {
+                    const sectionHeading = 
+                        ( section?.primary || section?.secondary ) 
+                            ? `
+                                <div class="bill-header">
+                                    ${ 
+                                        section?.primary 
+                                            ? `<h2 class="bill-title">${section.primary}</h2>` 
+                                            : ''
+                                    }
+                                    ${
+                                        section?.secondary
+                                            ? `<p class="bill-phone"><strong>Phone:</strong> ${section.secondary}</p>`
+                                            : ''
+                                    }
+                                </div>
+                            ` 
+                            : ''
+                    // ..
+                    sectionHtml.push( sectionHeading );
+                }
+
+                if( section?.list ) {
+                    const sectionList = `
+                        <div class="bill-details">
+                            ${
+                                section.list.map( (list) => {
+                                    return `
+                                        <p>
+                                            <strong>${list?.label ?? ''}</strong> ${list?.text ?? ''}
+                                        </p>
+                                    `;
+                                }).join( '' )
+                            }
+                        </div>`
+                    // ..
+                    sectionHtml.push( sectionList );
+                }
+
+                if( section?.block ) {
+                    const block = section.block;
+                    const blockHtml = ( block?.label || block?.text )
+                        ?
+                            `<div class="bill-customer">
+                                ${
+                                    block?.label
+                                        ? `<label>${block.label}</label>`
+                                        : ''
+                                }
+                                ${
+                                    block?.text
+                                        ? `<div class="customer-address">${block.text}</div>`
+                                        : ''
+                                }
+                            </div>`
+                        : '';
+                    // ..
+                    sectionHtml.push( blockHtml );
+                }
+            }
+
+            const tableHtml = [];
+            if( Object.keys( table ).length ) {
+                const tableView = ( table?.head || table?.body ) 
+                    ? 
+                        `
+                            <table class="table table-bordered">
+                                ${
+                                    table?.head
+                                        ? 
+                                            `<thead><tr>
+                                                ${
+                                                    table?.head.map((th) => {
+                                                        return `<th>${th}</th>`
+                                                    }).join( '' )
+                                                }
+                                            </tr></thead>`
+                                        : ''
+                                }
+                                ${
+                                    table?.body
+                                        ?
+                                            `<tbody>
+                                                ${
+                                                    table?.body.map((tr)=>{
+                                                        return `<tr>
+                                                        ${
+                                                            tr.map((td) => {
+                                                                const colspan = td?.colspan ?? '';
+                                                                const classes = td?.class ?? '';
+                                                                const tdView  = `
+                                                                    <td colspan="${colspan}" class="${classes}">
+                                                                    ${ 
+                                                                        ( td?.drop && td?.drop === true )
+                                                                            ? `<div class="${dropBoxClass} ui-droppable"></div>`
+                                                                            : td?.value ?? ''
+                                                                    }
+                                                                    </td>`
+                                                                // ..
+                                                                return tdView;
+                                                            }).join( '' )
+                                                        }
+                                                        </tr>`
+                                                    }).join( '' )
+                                                }
+                                            </tbody>`
+                                        : ''
+                                }
+                            </table>
+                        `
+                    : '';
+                // ..
+                tableHtml.push( tableView );
+            }
+
+            $(`#${optionViewId}`).html( optionsHtml.join( '' ) );
+            $(`#${sectionViewId}`).html( sectionHtml.join( '' ) );
+            $(`#${tableViewId}`).html( tableHtml );
+
+            initDrag();
+            initDrop();
+
+        } catch (err) {
+            console.error( 'MathMoney.ui :', err );
+        }
+    };
+
+    const initDrag = () => {
+        $(`.${dragItemClass}`).draggable({
+            revert : true,
+        });
+    };
+
+    const initDrop = () => {
+        $(`.${dropBoxClass}`).droppable({
+            accept    : `.${dragItemClass}`,
+            tolerance : 'intersect',
+            drop      : dropHandler
+        });
+    };
+
+    const dropHandler = (event, ui) => {
+        const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
+        const lang      = activity?.lang ?? 'en';
+
+        const text   = ui.draggable.text().trim();
+        const target = event.target;
+        const index  = $(target).closest('td').index();
+        const trInd  = $(target).closest('tr').index();
+        const answer =  __answers[trInd]
+            ?.map((ans) => (ans?.index === index) ? ( ans?.value ?? '' ) : '' )
+            ?.filter((ans) => ans )
+            .toString();
+        // ..
+
+        const totalCount = __answers.flat();
+
+        if( answer === text ) {
+            __correctCount++;
+            const html = ui.draggable.clone().removeClass(dragItemClass).addClass( 'fixedDrop' ).css('position', 'static');
+            $(target).html( html ).removeClass('wrongAnsMoney').addClass( 'correctAnsMoney' ).droppable( 'disable' );
+
+            if( __correctCount === totalCount.length ) {
+                Swal.fire({
+                    icon   : 'success',
+                    title  : lang == 'hi' ? 'शानदार' : '🎉 Super!',
+                    text   : lang == 'hi' ? 'सभी विवरण सही हैं' : 'All values are correct!',
+                    button : 'OK'
+                }).then( (res) => {
+                    if( res.isConfirmed ) {
+                        $(`.${dragItemClass}`).draggable( 'disable' );
+                    }
+                });
+            }
+        } else {
+            $(target).removeClass('correctAnsMoney').addClass('wrongAnsMoney');
+            setTimeout(() => $(this).removeClass('wrongAnsMoney'), 600);
+            ui.draggable.draggable('option', 'revert', true);
+        }
+    }
+
+    return {
+        render : render
+    }
+})();
+
 Templates.get('templates').map(({ template }) => {
     try {
         const mod = eval(template);
