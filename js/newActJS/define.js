@@ -48,6 +48,9 @@ const Define = (() => {
         { qid : 35, text : ['Q-35', 'Youtube-Audio-Video'], module : 34 },
         { qid : 36, text : ['Q-36', 'Math Money'], module : 35 },
         { qid : 37, text : ['Q-37', 'Shabd Rachna'], module : 36 },
+        { qid : 38, text : ['Q-38', 'Spell Check'], module : 37 },
+        { qid : 39, text : ['Q-39', 'Spell It out'], module : 38 },
+        { qid : 40, text : ['Q-40', 'Vowel Drag and Drop'], module : 39 },
     ];
 
     // DEFINE QUESTIONS
@@ -993,7 +996,44 @@ const Define = (() => {
                     ]
                 }
             }                
-        }
+        },
+        {
+            id      : 38,
+            lang    : 'en',
+            head    : 'Template : 37, Spell Check',
+            mode    : 'multiple',
+            content : {
+                replacement: '#{word}#',
+                questions: [
+                    { id: 1, text: 'I am six years old. I study in Class 1. I have #blac# #hare# and #broun# eyes. I have strong #leggs#. They help me #ren# fast. Today, I fell and hurt my #kne asdf#. I hope to get well soon and run again.', answer: ['black', 'hair', 'brown', 'legs', 'run', 'knee'] }
+                ]
+            }
+        },
+        {
+            id      : 39,
+            lang    : 'en',
+            head    : 'Template : 38, Spell It Out',
+            content : {
+                count: 6,
+                words: ['Jeans', 'Sweater', 'cap', 'shorts', 'frock', 'skirt', 'hat', 'Vest', 'clothes', 'socks', 't-shirt', 'trousers', 'shirt', 'scarf', 'tie']
+            }
+        },
+        {
+            id      : 40,
+            lang    : 'hi',
+            head    : 'Template : 39, Vowel Drag and Drop',
+            content : {
+                col : { col : 12, md : 6, sm : 6 },
+                words: [
+                    { text: "बल्टी", answer: "बाल्टी" },
+                    { text: "नद", answer: "नदी" },
+                    { text: "घड़या", answer: "घड़िया" },
+                    { text: "सरस्वत", answer: "सरस्वती" },
+                    { text: "बल्टी", answer: "बाल्टी" }
+                ],
+                vowels: ["ा","ि","ी","ु","ू","े","ै","ो","ौ","ं","ः","ँ"]
+            }
+        },
     ];
 
     const questionContainer = '.question-container';

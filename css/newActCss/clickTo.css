@@ -1,7 +1,7 @@
 /* CLICKABLE BUTTONS */
 .clickable {
     cursor: pointer;
-    padding: 8px 12px;
+    padding: 8px 5px;
     border-radius: 50%;
     display: inline-block;
     transition: transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
@@ -128,6 +128,15 @@
     color: red;
 }
 
+.inputCorrect {
+    background-color: #c6f9c6 !important;
+    color: #000 !important;
+}
+
+.inputIncorrect {
+    background-color: #fbb7b7 !important;
+    color: #000 !important;
+}
 
 .baseFixeds {
     position: fixed;
@@ -262,6 +271,33 @@
     /* थोड़ा fade दिखे */
 }
 
+.itemDisabled{
+    pointer-events: none;
+}
+
+
+/* spell-it-out */
+
+.spell-out-box{
+    margin: 0;
+    color: #041d29;
+    border: 3px dashed #dfdfdf;
+    padding: 15px 0;
+    transition: color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    border-radius: 12px;
+}
+
+.spell-out-box:hover {
+    transform: translateY(-2px);
+    color: #4364f7;
+}
+
+.spell-out-font-23{
+    font-size: 23px;
+}
+
+/* spell-it-out */
 
 @media (min-width:300px) and (max-width:880px) {
     .questHindi {
@@ -282,5 +318,8 @@
         padding: 8px 6px;
     }
 
+    .spell-out-font-23{
+        font-size: 13px;
+    }
 
 }

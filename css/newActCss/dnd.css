@@ -246,6 +246,40 @@
   display: none;
 }
 
+/* vowe Drag and Drop start*/
+
+.vowel-container{
+  margin: 5px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 20px;
+  background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+  border: 2px solid #90caf9;
+  cursor: grab;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  user-select: none;
+  text-align: center;
+  position: relative;
+}
+
+.vowel-drop-box{
+  font-size: 23px;
+}
+
+.vowel-correct {
+  background-color: #acfca5;
+  /* padding: 5px; */
+
+}
+
+.vowel-incorrect {
+  background-color: #fca5a5;
+  /* padding: 5px; */
+
+}
+
+/* vowe Drag and Drop end*/
+
 /* Responsive */
 @media (max-width: 880px) {
   .questLine {
@@ -269,4 +303,12 @@
     padding: 6px 10px;
     margin: 1px;
   }
+
+  /* vowe Drag and Drop start*/
+
+  .vowel-drop-box{
+    font-size: 20px;
+  }
+  
+  /* vowe Drag and Drop end*/
 }

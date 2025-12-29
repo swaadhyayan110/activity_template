@@ -1750,6 +1750,8 @@ const FillInTheBlanksHindiKb = (() => {
 
     const ui = (questionId) => {
         try {
+            __subQuestions = undefined;
+
             const container = Define.get('questionContainer');
             const parent = document.querySelector(container);
             if (!parent) {
@@ -3930,7 +3932,7 @@ const Circle = (() => {
             });
         });
 
-        showClickReportClick(activity.questions, userSelections[key], activity.lang || 'en');
+        showClickReportClick(data, userSelections[key], activity.lang || 'en');
     };
     
     const showCircle = (dataKeyParam, btn) => {
@@ -10764,6 +10766,1010 @@ const ShabdRachna = (() => {
     return {
         render : render
     }
+})();
+
+// from below New Functions added 
+
+// Template - 5 : __subQuestions = undefinded
+
+const spellCheck = (() => {
+
+    Activity.css('clickTo.css');
+
+    const containerId  = 'spell-check-container';
+
+    const quesClass = 'questInCHeading';
+    let activitiesClicked = {};
+    let userSelections    = {};
+    
+    const ui = (questionId) => {
+        try {
+            const containerSelector = Define.get('questionContainer');
+            const parent = document.querySelector(containerSelector);
+            if (!parent) {
+                console.error("ui container not found:", containerSelector);
+                return;
+            }
+            
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container" id="${containerId}">
+                                        <div class="${quesClass}">
+                                            <div class="questHindi ${Define.get('head')}"></div>
+                                        </div>
+                                        <div id="datClikToCir"></div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn">${buttonLabel.check}</button>
+                                            <button class="show-btn">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="clickAct">
+                                    <div class="baseFixeds">
+                                        <div class="report_clicks">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center">
+                                            <h4 id="scoreTextQ1Click" class="text-center"></h4>
+                                            <button id="pop-close" class="btn btn-secondary">X</button>
+                                        </div>
+                                        <div id="datapendReportClick"></div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            const submitBtn = parent.querySelector( '.submit-btn' );
+            const showBtn   = parent.querySelector( '.show-btn' );
+            const resetBtn  = parent.querySelector( '.reset-btn' );
+            const closepop  = parent.querySelector( '#pop-close' );
+
+            if( submitBtn ) submitBtn.addEventListener("click", () => checkAnswer(containerId) );
+            if( showBtn ) showBtn.addEventListener("click", (ev) => showAnswers(containerId, ev.currentTarget) );
+            if( resetBtn ) resetBtn.addEventListener("click", () => resetCircle(containerId) );
+            if( closepop ) closepop.addEventListener("click", closeReportClick );
+
+            Activity.setHeader(questionId);
+
+            if( lang === 'hi' ) {
+                $(function () {
+                    $.keyboard.layouts["hindiQuiz"] = Activity.hindiKeyboard();
+                    
+                    $(".hindiInput")
+                    .keyboard({
+                        layout: "hindiQuiz",
+                        usePreview: false,
+                        autoAccept: true,
+                    })
+                    .addTyping({ showTyping: true, delay: 70 })
+                    .addCaret({
+                        caretClass: "ui-keyboard-caret",
+                        animate: true,
+                        blinkRate: 600,
+                    });
+                });
+            }
+
+        } catch (e) {
+            console.error('Circle.ui :', e);
+        }
+    };
+    
+    const renderQuestions = (questionId) => {
+        ui(questionId);
+        if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+        const heading = document.querySelector(`.${quesClass}`);
+        if (!heading) {
+            console.error("renderQuestions: heading element not found");
+            return;
+        }
+        heading.dataset.qid = questionId;
+
+        const renderDiv = document.querySelector(`#datClikToCir`);
+        if (!renderDiv) {
+            console.error("renderQuestions: render container #datClikToCir not found");
+            return;
+        }
+        renderDiv.innerHTML = "";
+
+        const activity = Activity.getDefine(questionId);
+        const content  = activity?.content;
+        const lang     = activity?.lang ?? 'en';
+        const replacement = content?.replacement ?? '#';
+
+        if (!Array.isArray(content?.questions)) {
+            console.error("renderQuestions: activity question should be an array", content?.questions);
+            return;
+        }
+
+        activitiesClicked[containerId] = {
+            mode: activity.mode || activity?.content?.mode || activity?.mode || 'multi',
+            questions: content,
+            lang: activity?.content?.lang || activity.lang || 'en'
+        };
+        
+        if( !userSelections[containerId] ) userSelections[containerId] = {};
+        
+        content?.questions.forEach((item, ind) => {
+            const regex = new RegExp(`${replacement[0]}[^${replacement[0]}]+${replacement[replacement.length - 1]}[.,?!-]?|[^\\s]+[.,?!-]?`,"g");
+
+            if(!item?.text) return false;
+            const parts = item?.text.match(regex);
+            if(!item?.answer) return false;
+            const answers = item?.answer;
+            let count = 0;
+            
+            const html = parts?.map((part, i) => {
+                if (part.trim() === "" || part === ",") return part;
+                const match = hasHashPhrases(replacement[0], part);
+                let word = match? part.replaceAll(replacement[0],''): part;
+                let data_word = match? answers[count]: part;
+                const isSymbol = /^[.,?!-]$/.test(part);
+                if(match)count++;
+                return `<span class="${isSymbol? 'px-0':'clickable'}" data-act="${containerId}" data-id="${item.id}" data-word="${data_word}">
+                        ${word}
+                    </span>`
+            }).join("");
+
+            renderDiv.innerHTML += `
+            <div class="questInC border-0" data-id="${item.id}">
+                ${content?.questions.length > 1 ?
+                    `<span class="label">(${Activity.translateBulletLabels({lang:lang, ind:ind})})</span>`:''
+                }
+                ${html}
+            </div>`;
+
+            const input_container = document.createElement('div');
+            input_container.id = "inputFlipToCir"+ind;
+            input_container.classList.add('questInC', 'row');
+            input_container.style.border = "none";
+
+            renderDiv.append(input_container);
+
+            answers.map((_, ind) => {
+                input_container.innerHTML+=`<div class="col-md-4 col-sm-6 col-12 my-3 d-flex align-items-end">
+                                               ${ind+1}. <input type='text' class='hindiInput inPutHindiNew w-100'/>
+                                            </div>`;
+            });
+        });
+        
+        if( !document.__circle_click_attached ) {
+           document.addEventListener("click", function (e) {
+                if (!e.target || !e.target.classList) return;
+                if (e.target.classList.contains("clickable")) {
+                    const span = e.target;
+                    const act = span.dataset.act;
+                    const qId = span.dataset.id;
+
+                    const activityMeta = activitiesClicked[act];
+                    if (!activityMeta) return;
+
+                    const mode = activityMeta.mode;
+
+                    if (!userSelections[act]) userSelections[act] = {};
+                    if (!userSelections[act][qId]) userSelections[act][qId] = [];
+
+                    const spans = document.querySelectorAll(`[data-act="${act}"][data-id="${qId}"].clickable`);
+                    const circledCount = Array.from(spans).filter(s => s.classList.contains("circle")).length;
+
+                    const currentQuestion = activityMeta.questions.questions.find(q => q.id == qId);
+                    const answersLength = currentQuestion.answer.length;
+
+                    console.log(activityMeta?.mode);
+
+                    if(activityMeta?.mode != 'single'){
+                        if (!span.classList.contains("circle") && circledCount >= activityMeta.questions.questions.find(q => q.id == qId).answer.length) {
+                            Swal.fire({
+                                title: activityMeta.lang === "hi" ? "अधिकतम चयन" : "Maximum Selection",
+                                text: activityMeta.lang === "hi" 
+                                    ? `आप केवल ${answersLength} शब्द चुन सकते हैं।` 
+                                    : `You can only select ${answersLength} words.`,
+                                    icon: "warning",
+                                    confirmButtonText: activityMeta.lang === "hi" ? "ठीक है" : "OK"
+                                });
+                                return;
+                            }
+                    }
+
+                    if (mode === "single") {
+                        const siblings = document.querySelectorAll(`[data-act="${act}"][data-id="${qId}"]`);
+                        siblings.forEach(sib => sib.classList.remove("circle"));
+                        userSelections[act][qId] = [span.dataset.word];
+                        span.classList.add("circle");
+                    } else {
+                        span.classList.toggle("circle");
+                        if (span.classList.contains("circle")) {
+                            if (!userSelections[act][qId].includes(span.dataset.word)) {
+                                if(span.dataset.word.endsWith('.') || span.dataset.word.endsWith(',')){
+                                    span.dataset.word = span.dataset.word.slice(0, -1);
+                                }
+                                userSelections[act][qId].push(span.dataset.word);
+                            }
+                        } else {
+                            userSelections[act][qId] = userSelections[act][qId].filter(w => w !== span.dataset.word);
+                        }
+                    }
+                }
+            });
+
+            document.__circle_click_attached = true;
+        }
+    };
+
+    function hasHashPhrases(replacement, str) {
+        if (!str) return false;
+        const escaped = replacement.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`${escaped}([^${escaped}]+)${escaped}`, "g");
+
+        return regex.test(str);
+    }
+    
+    const checkAnswer = (dataKeyParam) => {
+        const key = dataKeyParam || containerId;
+        const container = document.getElementById(key);
+        const activity = activitiesClicked[key];
+        if (!container || !activity) return;
+
+        const data = activity.questions.questions;
+        const lang = activity?.lang ?? 'en';
+
+        let allCirclesSelected = true;
+
+        data.forEach((item) => {
+            const answers = Array.isArray(item.answer) ? item.answer.map(a => a.trim()) : [item.answer.trim()];
+            const spans = container.querySelectorAll(`[data-id="${item.id}"].clickable`);
+            const circledWords = Array.from(spans)
+                .filter(span => span.classList.contains("circle"))
+                .map(span => span.dataset.word?.trim() || '');
+
+            if (circledWords.length !== answers.length) {
+                allCirclesSelected = false;
+            }
+        });
+
+        if (!allCirclesSelected) {
+            Swal.fire({
+                title: lang === 'hi' ? "दुबारा प्रयास करें।" : "Try Again",
+                text: lang === 'hi'
+                    ? 'कृपया सभी गलत शब्द चयनित करें।'
+                    : 'Please select all wrong words first.',
+                icon: 'error',
+                confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+            });
+            return;
+        }
+
+        // --- Check input values (any order, no repetition) ---
+        let allInputsFilled = true;
+
+        data.forEach((item, id) => {
+            const answers = Array.isArray(item.answer) ? item.answer.map(a => a.trim()) : [item.answer.trim()];
+            const input_container = document.getElementById('inputFlipToCir' + id);
+            const inputs = input_container.querySelectorAll("input[type='text']");
+
+            const usedAnswers = new Set();
+            const inputValues = Array.from(inputs).map(i => i.value.trim());
+
+            if (inputValues.some(v => !v)) {
+                allInputsFilled = false;
+            }
+
+            inputs.forEach((input) => {
+                const value = input.value.trim();
+                if (answers.includes(value) && !usedAnswers.has(value)) {
+                    usedAnswers.add(value);
+                }
+            });
+        });
+
+        if (!allInputsFilled) {
+            Swal.fire({
+                title: lang === 'hi' ? "दुबारा प्रयास करें।" : "Try Again",
+                text: lang === 'hi'
+                    ? 'कृपया सभी उत्तर सही ढंग से भरें।'
+                    : 'Please fill all answers correctly',
+                icon: 'error',
+                confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+            });
+            return;
+        }
+
+        // ✅ Everything correct, show report
+        showClickReportClick(activity.questions, userSelections[key], activity.lang || 'en');
+    };
+
+    const showAnswers = (dataKeyParam, btn) => {
+        const key = dataKeyParam || containerId;
+        const container = document.getElementById(key);
+        const activity = activitiesClicked[key];
+        if (!container || !activity) {
+            console.error("showCircle: missing container or activity for", key);
+            return;
+        }
+        const data = activity.questions.questions;
+
+        container.querySelectorAll(".clickable").forEach((el) => {
+            el.classList.remove("circle");
+        });
+
+        data.forEach((item, ind) => {
+            const answers = item?.answer;
+            const spans = container.querySelectorAll(`[data-id="${item.id}"] .clickable`);
+            const input_container = document.getElementById('inputFlipToCir'+ind);
+            const inputs = input_container.querySelectorAll('input');
+            spans.forEach((span) => {
+                span.classList.add('itemDisabled');
+                if (answers.includes(span.dataset.word) && span.dataset.word != span.innerHTML) {
+                    span.classList.add("circle");
+                }
+            });
+            inputs.forEach((input, i) => {
+                input.value = answers[i];
+                input.classList.add('itemDisabled');
+            });
+        });
+
+        const checkBtn = container.querySelector(".submit-btn");
+        if (checkBtn) {
+            checkBtn.classList.add("disabled-click");
+            checkBtn.disabled = true;
+        }
+        if (btn && btn.classList) {
+            btn.classList.add("clicked-show");
+        }
+
+    };
+    
+    const resetCircle = (dataKeyParam) => {
+        const key = dataKeyParam || containerId;
+        const container = document.getElementById(key);
+        if (!container) return;
+
+        container.querySelectorAll(".clickable").forEach((el) => {
+            el.classList.remove("circle", "itemDisabled");
+        });
+
+        const inputs = document.querySelectorAll("[type=text]");
+        inputs.forEach((input) => {
+            input.value= "";
+            input.classList.remove('itemDisabled');
+        })
+
+        const checkBtn = container.querySelector(".submit-btn");
+        if (checkBtn) {
+            checkBtn.classList.remove("disabled-click");
+            checkBtn.disabled = false;
+        }
+
+        const showBtn = container.querySelector(".show-btn");
+        if (showBtn) {
+            showBtn.classList.remove("clicked-show");
+        }
+
+        userSelections[key] = {};
+    };
+    
+    const showClickReportClick = (clickData, selections = {}, typeLang = 'en') => {
+        $("#clickAct").css("display", "block");
+        let correctCount = 0;
+        const questions = clickData.questions;
+        let totalQues = Array.isArray(questions) ? questions.length : 0;
+
+        let tableHTML = `<div class="table-responsive p-2">
+            <table class="table table-bordered" style="font-size:18px">
+            <thead class="text-light" style="white-space: nowrap;">
+            <tr>
+                <th>${typeLang === "hi" ? "प्रश्न संख्या" : "Q. No."}</th>
+                <th>${typeLang === "hi" ? "आपका उत्तर" : "Your Answer"}</th>
+                <th>${typeLang === "hi" ? "सही उत्तर" : "Correct Answer"}</th>
+                <th>${typeLang === "hi" ? "परिणाम" : "Result"}</th>
+            </tr>
+            </thead>
+            <tbody>`;
+
+        (questions || []).forEach((q, i) => {
+            const correctAnswers = Array.isArray(q.answer) ? q.answer.map(a => a.trim().toLowerCase()) : [q.answer.trim().toLowerCase()];
+            
+            const circledWords = Array.from(
+                document.querySelectorAll(`[data-id="${q.id}"] .clickable.circle`)
+            ).map(s => s.dataset.word?.trim().toLowerCase() || '');
+
+            const circledWrongWords = Array.from(
+                document.querySelectorAll(`[data-id="${q.id}"] .clickable.circle`)
+            ).map(s => {
+                let word = s.innerHTML?.trim() || '';
+                word = word.replace(/[.,!?]$/, '');
+                return word;
+            });
+
+            const input_container = document.getElementById('inputFlipToCir' + i);
+            const inputs = Array.from(input_container.querySelectorAll('input'));
+            const inputValues = inputs.map(input => input.value.trim().toLowerCase());
+
+            const allCirclesSelected = circledWords.length === correctAnswers.length
+                && correctAnswers.every(ans => circledWords.includes(ans));
+
+            const allInputsCorrect = correctAnswers.every(ans => inputValues.includes(ans));
+            const noDuplicates = new Set(inputValues).size === inputValues.length;
+
+            const isCorrect = allCirclesSelected && allInputsCorrect && noDuplicates;
+
+            if (isCorrect) correctCount++;
+
+            const userAnswerText = circledWords.length > 0
+                ? `<div>
+                    <span class='text-dark'>Incorrect Words:-</span> 
+                        ${circledWrongWords.join(',')}
+                        </div>` + (inputValues.length ? `<div class='border-top'><span class='text-dark'>Correct Words:-</span> ${inputValues.join(", ")}
+                </div>` : "")
+                : typeLang === "hi" ? "प्रयास नहीं किया" : "Not Attempted";
+
+            const correctAnswerText = correctAnswers.join(", ");
+            
+            tableHTML += `
+            <tr>
+                <th>${q.label || (i + 1)}</th>
+                <td class="${isCorrect ? "text-success" : "text-danger"}">${userAnswerText}</td>
+                <td class="text-success">${correctAnswerText}</td>
+                <td class="${isCorrect ? "text-success" : "text-danger"}">
+                    ${isCorrect ? "✔" : "✘"}
+                </td>
+            </tr>`;
+        });
+
+        tableHTML += `</tbody></table></div>`;
+
+        const reportEl = document.getElementById("datapendReportClick");
+        if (reportEl) reportEl.innerHTML = tableHTML;
+
+        const scoreEl = document.getElementById("scoreTextQ1Click");
+        if (scoreEl) {
+            scoreEl.innerText = typeLang === "hi"
+                ? `आपको ${totalQues} में से ${correctCount} अंक मिले हैं`
+                : `You scored ${correctCount} out of ${totalQues}`;
+        }
+    };
+
+    const closeReportClick = () => {
+        $("#clickAct").css("display", "none");
+        const reportEl = document.getElementById("datapendReportClick");
+        if (reportEl) reportEl.innerHTML = "";
+    };
+
+    return {
+        render: renderQuestions
+    };
+
+})();
+
+const spellItOut = (() => {
+
+    Activity.css('clickTo.css');
+
+    const inputContainer   = 'input-container';
+
+    const containerId  = 'spell-It-out-container';
+
+    const quesClass = 'questInCHeading';
+    
+    const ui = (questionId) => {
+        try {
+            const containerSelector = Define.get('questionContainer');
+            const parent = document.querySelector(containerSelector);
+            if (!parent) {
+                console.error("ui container not found:", containerSelector);
+                return;
+            }
+            
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container" id="${containerId}">
+                                        <div class="${quesClass}">
+                                            <div class="questHindi ${Define.get('head')}"></div>
+                                        </div>
+                                        <div class='spell-out-box spell-out-font-23 d-flex flex-wrap gap-2 justify-content-center' id="spell-out-container"></div>
+                                        <div id="${inputContainer}" class="spell-out-font spell-out-font-23 mt-3"></div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn">${buttonLabel.check}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="clickAct">
+                                    <div class="baseFixeds">
+                                        <div class="report_clicks">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center">
+                                            <h4 id="scoreTextQ1Click" class="text-center"></h4>
+                                            <button id="pop-close" class="btn btn-secondary">X</button>
+                                        </div>
+                                        <div id="datapendReportClick"></div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            const submitBtn = parent.querySelector( '.submit-btn' );
+            const resetBtn  = parent.querySelector( '.reset-btn' );
+
+            if( submitBtn ) submitBtn.addEventListener("click", checkAnswer );
+            if( resetBtn ) resetBtn.addEventListener("click", resetActivity );
+
+            Activity.setHeader(questionId);
+
+            if( lang === 'hi' ) {
+                $(function () {
+                    $.keyboard.layouts["hindiQuiz"] = Activity.hindiKeyboard();
+                    
+                    $(".hindiInput")
+                    .keyboard({
+                        layout: "hindiQuiz",
+                        usePreview: false,
+                        autoAccept: true,
+                    })
+                    .addTyping({ showTyping: true, delay: 70 })
+                    .addCaret({
+                        caretClass: "ui-keyboard-caret",
+                        animate: true,
+                        blinkRate: 600,
+                    });
+                });
+            }
+
+        } catch (e) {
+            console.error('Circle.ui :', e);
+        }
+    };
+
+    const areAllInputsFilled = (values) => {
+        return values.every(v => v !== "");
+    };
+
+    const isWordAllowed = (word, allowedWords) => {
+        return allowedWords.includes(word);
+    };
+
+    const isWordUnique = (word, usedValues) => {
+        return !usedValues.has(word);
+    };
+
+    const isRowSameValue = (values) => {
+        return values.every(v => v === values[0]);
+    };
+
+    const checkAnswer = () => {
+        const container = document.getElementById(inputContainer);
+        const rows = container.querySelectorAll(".row");
+
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const content = activity?.content ?? {};
+        const lang = activity?.lang ?? 'en';
+
+        const words = content?.words ?? [] ;
+
+        const allowedWords = words.map(w => w.toLowerCase());
+        const usedValues = new Set();
+
+        let errorMessage = null;
+
+        rows.forEach((row, rowIndex) => {
+            if (errorMessage) return;
+
+            const inputs = row.querySelectorAll("input");
+            const values = Array.from(inputs).map(input =>
+                input.value.trim().toLowerCase()
+            );
+
+            if (!areAllInputsFilled(values)) {
+                errorMessage = lang === 'hi'
+                    ? `कृपया सभी इनपुट भरें।`
+                    : `Please fill all inputs.`;
+                return;
+            }
+
+            const word = values[0];
+
+            if (!isWordAllowed(word, allowedWords)) {
+                errorMessage = lang === 'hi'
+                    ? `लाइन ${rowIndex + 1} का शब्द सूची में नहीं है।`
+                    : `The word in Line ${rowIndex + 1} is not from the given words.`;
+                return;
+            }
+
+            if (!isWordUnique(word, usedValues)) {
+                errorMessage = lang === 'hi'
+                    ? `लाइन ${rowIndex + 1} का शब्द पहले से उपयोग किया गया है।`
+                    : `The word in Line ${rowIndex + 1} is already used in another line.`;
+                return;
+            }
+
+            if (!isRowSameValue(values)) {
+                errorMessage = lang === 'hi'
+                    ? `लाइन ${rowIndex + 1} में सभी शब्द समान होने चाहिए।`
+                    : `All inputs in Line ${rowIndex + 1} must have the same word.`;
+                return;
+            }
+
+            usedValues.add(word);
+        });
+
+        if (errorMessage) {
+            Swal.fire({
+                title: lang === 'hi' ? "दुबारा प्रयास करें।" : "Try Again",
+                text: errorMessage,
+                icon: 'error',
+                confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+            });
+            return false;
+        }
+
+        Swal.fire({
+            title: lang === 'hi' ? "बहुत बढ़िया!" : "Well done!",
+            text: lang === 'hi'
+                ? "सभी उत्तर सही हैं।"
+                : "All answers are correct!",
+            icon: 'success',
+            confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+        });
+
+        return true;
+    };
+
+    const resetActivity = () => {
+        const container = document.getElementById(inputContainer);
+        const inputs = container.querySelectorAll("[type='text");
+        inputs.forEach((input) => {
+            input.value = "";
+        })
+    }
+    
+    const render = (questionId) => {
+        ui(questionId);
+        if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+        const heading = document.querySelector(`.${quesClass}`);
+        if (!heading) {
+            console.error("heading element not found");
+            return;
+        }
+        heading.dataset.qid = questionId;
+
+        const renderDiv = document.querySelector(`#spell-out-container`);
+        if (!renderDiv) {
+            console.error("renderWords: render container #spell-out-container not found");
+            return;
+        }
+        renderDiv.innerHTML = "";
+
+        const activity = Activity.getDefine(questionId);
+        const content  = activity?.content ?? {};
+        const lang  = activity?.lang ?? "en";
+        const words  = content?.words ?? [];
+
+        if (words.length == 0) return;
+
+        if (!Array.isArray(words)) {
+            console.error("renderWords: words should be an array", words);
+            return;
+        }
+        
+        words?.map((item) => {
+           renderDiv.innerHTML += `<div class='d-flex-inline p-2'>${item}</div>`;
+        });
+
+        const count  = content?.count ?? 1;
+
+        if(count > words.length){
+            console.error(`count:- ${count} should be less than or equal to total words:- ${words.length}`);
+            return;
+        }
+
+        const wordsRepetition = 3;
+
+        const container = document.getElementById(inputContainer);
+
+        for (let i = 0; i < count; i++) {
+            const row = document.createElement("div");
+            row.classList.add("row", "align-items-end", "my-3");
+
+            const serialCol = document.createElement("div");
+            serialCol.classList.add("col-auto");
+            serialCol.innerText = `${i + 1}.`;
+
+            row.appendChild(serialCol);
+
+            for (let j = 0; j < wordsRepetition; j++) {
+                const col = document.createElement("div");
+                col.classList.add("col");
+
+                const input = document.createElement("input");
+                input.type = "text";
+                input.style.fontSize = "25px";
+                input.placeholder = lang == 'en' ? "word " : "शब्द " + (j + 1);
+                input.classList.add("hindiInput", "inPutHindiNew", "w-100");
+
+                col.appendChild(input);
+                row.appendChild(col);
+            }
+
+            container.appendChild(row);
+        }
+
+
+    };
+
+    return {
+        render: render
+    };
+
+})();
+
+const VowelDragAndDrop = (() => {
+
+    Activity.css('dnd.css');
+
+    const containerId  = 'vowel_dragAndDrop';
+    let DragEnabled = false;
+    
+    const ui = (questionId) => {
+        try {
+            const containerSelector = Define.get('questionContainer');
+            const parent = document.querySelector(containerSelector);
+            if (!parent) {
+                console.error("ui container not found:", containerSelector);
+                return;
+            }
+            
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang     = activity.lang ?? 'en';
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container">
+                                        <div class="rowWithAudios border-bottom font18 fontBold ${Define.get('head')}"></div>
+                                        <div class="question-block">
+                                            <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
+                                            <div class="vowel-drop-box mt-3"></div>
+                                        </div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn" id="submit2">${buttonLabel.check}</button>
+                                            <button class="show-btn" id="showAns2">${buttonLabel.show}</button>
+                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="clickAct">
+                                    <div class="baseFixeds">
+                                        <div class="report_clicks">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center">
+                                            <h4 id="scoreTextQ1Click" class="text-center"></h4>
+                                            <button id="pop-close" class="btn btn-secondary">X</button>
+                                        </div>
+                                        <div id="datapendReportClick"></div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            const submitBtn = parent.querySelector( '.submit-btn' );
+            const showBtn = parent.querySelector( '.show-btn' );
+            const resetBtn  = parent.querySelector( '.reset-btn' );
+
+            if( submitBtn ) submitBtn.addEventListener("click", checkAnswer );
+            if( showBtn ) showBtn.addEventListener("click", showAnswer );
+            if( resetBtn ) resetBtn.addEventListener("click", resetActivity );
+
+            Activity.setHeader(questionId);
+
+        } catch (e) {
+            console.error('Circle.ui :', e);
+        }
+    };
+
+    const splitGraphemes = (str) => {
+        if (typeof Intl !== "undefined" && Intl.Segmenter) {
+            const segmenter = new Intl.Segmenter('hi', { granularity: 'grapheme' });
+            const graphemes = Array.from(segmenter.segment(str), s => s.segment);
+            return graphemes;
+        }
+        const regex = /(?:[क-ह][्]?|[अ-औ]|[ा-ौंः])/g;
+        return str.match(regex) || str.split('');
+    };
+
+    const resetActivity = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const content = activity?.content ?? {};
+        const words = content?.words ?? [];
+
+        words.forEach((item, wordIndex) => {
+            const wordContainer = document.querySelector(`.question-container_2[data-queindex="${wordIndex}"]`);
+            const units = splitGraphemes(item.text);
+
+            if (!wordContainer) return;
+
+            wordContainer.classList.remove('vowel-correct', 'vowel-incorrect');
+            
+            wordContainer.innerHTML = units.map((unit, i) => `
+                <span class="letter" data-word-index="${wordIndex}" data-letter-index="${i}" data-original="${unit}">
+                    ${unit}
+                </span>
+            `).join('');
+        });
+
+        initDroppable('.letter');
+        DragEnabled = true;
+    }
+
+    const showAnswer = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const content = activity?.content ?? {};
+        const words = content?.words ?? [];
+
+        words.forEach((item, wordIndex) => {
+            const word = document.querySelector(`.question-container_2[data-queindex="${wordIndex}"]`);
+            if (!word) return;
+
+            word.textContent = word.dataset.ans;
+        });
+
+        DragEnabled = false;
+        initDroppable('.letter');
+    };
+
+    const checkAnswer = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const lang = activity?.lang ?? 'en';
+
+        const container = document.querySelector(`.vowel-drop-box`);
+        if (!container) return;
+
+        const wordContainers = container.querySelectorAll('.question-container_2');
+        let score = 0;
+
+        wordContainers.forEach((wordEl) => {
+            const userWord = Array.from(wordEl.querySelectorAll('.letter'))
+                .map(letterEl => letterEl.textContent.trim())
+                .join('');
+
+            const correctWord = wordEl.dataset.ans.trim();
+
+            if (userWord === correctWord) {
+                wordEl.classList.add('vowel-correct');
+                wordEl.classList.remove('vowel-incorrect');
+                score++;
+            } else {
+                wordEl.classList.add('vowel-incorrect');
+                wordEl.classList.remove('vowel-correct');
+            }
+        });
+
+        DragEnabled = false;
+
+        Swal.fire({
+            title: lang === 'hi' ? "परिणाम!" : "Result!",
+            text: lang === 'hi'
+                ? `आपके ${wordContainers.length} में से ${score} सही है।`
+                : `You got ${score} out of ${wordContainers.length} correct!`,
+            icon: score == wordContainers.length ? 'success': 'error',
+            confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+        });
+    };
+
+    const render = (questionId) => {
+        ui(questionId);
+        if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+        const activity = Activity.getDefine( questionId );
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content ?? {};
+
+        const words = content?.words ?? [];
+        const vowels = content?.vowels || [];
+
+        const defaultCol = {
+            md : 4,
+            sm : 6,
+            col : 12
+        };
+
+        const col_size = {
+            md: content?.col?.md ?? defaultCol.md,
+            sm: content?.col?.sm ?? defaultCol.sm,
+            col: content?.col?.col ?? defaultCol.col
+        }; 
+        
+        const optionHtml = [];
+
+        const drag_option_html = (item, ind) => `<div class="vowel-container"><div class="drag_${ind} vowel font17 px-2" data-text="${item}">${item}</div></div>`;
+
+        vowels.forEach((item, ind) => {
+            const html = drag_option_html(item, ind);
+            optionHtml.push( html );
+        });
+        $('.drag-container2').html( optionHtml.join( '' ) );
+
+        const questionHtml = [];
+        questionHtml.push('<div class="row g-0">');
+        words?.map((item, wordIndex) => {
+            const units = splitGraphemes(item.text);
+            const html = `
+                <div class="my-2 d-flex col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm}">
+                    <div class="col-auto p-2">
+                        (${Activity.translateBulletLabels({lang:lang, ind:wordIndex})})
+                    </div>
+                    <div class="p-2 col question-container_2 d-flex flex-wrap align-items-center" data-queindex="${wordIndex}" data-ans="${item.answer}">
+                        ${
+                            units.map((unit, i) => `
+                                <span class="letter" data-original="${unit}">
+                                    ${unit}
+                                </span>
+                            `).join('')
+                        }
+                    </div>
+                </div>
+            `;
+            questionHtml.push(html);
+        });
+        questionHtml.push('</div>');
+
+        $('.vowel-drop-box').html(questionHtml.join(''));
+
+        userAns = Array(words.length).fill([]);
+        
+        makeDraggable(`.vowel`);
+        initDroppable('.letter');
+        DragEnabled = true;
+    };
+
+    const makeDraggable = (selector) => {
+        try {
+            $(selector).draggable({
+                revert: true,
+                containment: '.container-sub',
+                start: function () {
+                    if( !DragEnabled ) {
+                        return false;
+                    }
+                }
+            });
+        } catch (e) {
+            console.error( 'DragAndDropMulti.makeDraggable :', e );
+        }
+    }
+
+    const initDroppable = (selector) => {
+        try {
+            $(selector).droppable({
+                drop: function (event, ui) {
+                    const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+                    const vowels = activity?.content?.vowels || [];
+                    const newSwar = ui.draggable.attr('data-text');
+                    let baseText = $(this).attr('data-original');
+
+                    vowels.forEach(v => {
+                        baseText = baseText.split(v).join('');
+                    });
+                    const finalText = baseText + newSwar;
+                    $(this).html(finalText);
+                }
+            });
+        } catch (e) {
+            console.error('DragAndDropMulti.initDroppable :', e);
+        }
+    };
+
+    return {
+        render: render
+    };
+
 })();
 
 Templates.get('templates').map(({ template }) => {
