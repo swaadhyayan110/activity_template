@@ -82,9 +82,8 @@
   gap: 6px;
   flex-wrap: wrap;
   position: sticky;
-  top: 35px;
+  top: 15%;
   z-index: 99;
-
 }
 
 .wordDrag {

@@ -51,6 +51,7 @@ const Define = (() => {
         { qid : 38, text : ['Q-38', 'Spell Check'], module : 37 },
         { qid : 39, text : ['Q-39', 'Spell It out'], module : 38 },
         { qid : 40, text : ['Q-40', 'Vowel Drag and Drop'], module : 39 },
+        { qid : 41, text : ['Q-41', 'Shabdkosh type-2'], module : 19 },
     ];
 
     // DEFINE QUESTIONS
@@ -157,6 +158,7 @@ const Define = (() => {
                     path  : 'img/1.png',
                     width : '10%'
                 },
+                hint         : 'आदरणीया चाची जी, गर्मियों की छुट्टियाँ, बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
                 questions    : [
                     { qid : 1, question : 'हमारे #_# देश का नाम #_# है।', answers : ['हिंदी'] },
                     { qid : 2, question : 'भारत की राजधानी #_# है।' },
@@ -427,9 +429,11 @@ const Define = (() => {
             id      : 15,
             lang    : 'en',
             head    : 'Template : 15',
+            image   : { path: "img/1.png", width: "30%" },
+            replacement: '#_#',
             content : [
                 {
-                    question: 'सितार बनाने के लिए लुहार ने पेड़ से लकड़ी काटी।',
+                    question: { text: 'तार लगाए गए #_#', image: 'img/1.png', width: '20%' },
                     answer: false,
                 },
                 {
@@ -501,7 +505,6 @@ const Define = (() => {
             id      : 20,
             lang    : 'en',
             head    : 'Template : 19',
-            subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
             content : [
                 {
                     id       : 1,
@@ -1023,16 +1026,58 @@ const Define = (() => {
             lang    : 'hi',
             head    : 'Template : 39, Vowel Drag and Drop',
             content : {
-                col : { col : 12, md : 6, sm : 6 },
+                col   : { col : 12, md : 6, sm : 6 },
+                image : {
+                    path: 'img/1.png',
+                    width : '20%',
+                },
                 words: [
-                    { text: "बल्टी", answer: "बाल्टी" },
+                    { text: "बल्टी", image: { path: 'img/1.png', width: '40%' }, answer: "बाल्टी" },
                     { text: "नद", answer: "नदी" },
-                    { text: "घड़या", answer: "घड़िया" },
-                    { text: "सरस्वत", answer: "सरस्वती" },
-                    { text: "बल्टी", answer: "बाल्टी" }
+                    { text: "घड़या", image: { path: 'img/3.png', width: '40%' }, answer: "घड़िया" },
+                    { text: "सरस्वत", image: { path: 'img/4.png', width: '40%' }, answer: "सरस्वती" },
+                    { text: "बल्टी", image: { path: 'img/5.png', width: '40%' }, answer: "बाल्टी" }
                 ],
                 vowels: ["ा","ि","ी","ु","ू","े","ै","ो","ौ","ं","ः","ँ"]
             }
+        },
+        {
+            id      : 41,
+            lang    : 'en',
+            head    : 'Template : 19, Shabdkosh',
+            shuffle : false,
+            content : [
+                {
+                    id       : 1,
+                    tabtitle : 'aPPle',
+                    meaning  : 'कूद-कूदकर',
+                    sentence : 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
+                    image    : {
+                        path  : 'img/1.png',
+                        width : '20%'
+                    },
+                    titles    : [
+                        { title: "1कूद-कूदकर", text: "1छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing" },
+                        { title: "SentenCe", text: "छोटी apple" },
+                        { title: "1Antonyms", text: "चिड़ियाँ" },
+                    ]
+                },
+                {
+                    id       : 2,
+                    tabtitle : 'कूद-कूदकर',
+                    meaning  : 'कूद-कूदकर',
+                    sentence : 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।',
+                    image    : {
+                        path  : 'img/2.png',
+                        width : '20%'
+                    },
+                    titles   : [
+                        { title: "2कूद-कूदकर", text: "2छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing" },
+                        { title: "2Synonyms", text: "2छोटी" },
+                        { title: "sentence", text: "2चिड़ियाँ कूद-कूदकर" },
+                    ]
+                }
+            ]
         },
     ];
 

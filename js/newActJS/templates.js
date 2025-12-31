@@ -1768,6 +1768,7 @@ const FillInTheBlanksHindiKb = (() => {
                                     <div class="container">
                                         <div class="hindiHeadings ${Define.get('head')}"></div>
                                         <div id="fill-img-container" class="text-center"></div>
+                                        <div id="fill-hint-container" class="text-center instForFillText shadow-sm"></div>
                                         <div id="${quizContainerID}"></div>
                                     </div>
                                     <div class="buttons machiNgs">
@@ -1827,6 +1828,14 @@ const FillInTheBlanksHindiKb = (() => {
                 const width = content?.image?.width ?? '15%';
                 const image = `<img src="${path}" style="width:${width};" ondragstart="return false;">`
                 $('#fill-img-container').html( image );
+            }else{
+                $('#fill-img-container').remove();
+            }
+
+            if( content?.hint ) {
+                $('#fill-hint-container').html( content?.hint );
+            }else{
+                $('#fill-hint-container').remove();
             }
 
             content?.questions.forEach((question, qIndex) => {
@@ -2788,7 +2797,7 @@ const Mcq_PathKaSaar = (() => {
                 // ..
 
                 const ques = `<div class="p-2">
-                                <div class="row m-0 align-items-center" style="font-size:18px">
+                                <div class="row m-0 ${ image ? 'align-items-center': ''}" style="font-size:18px">
                                     <div style="width:30px" class="questionHeadingMCQ"><strong>${ind + 1}.</strong></div>
                                     <div class="col questionHeadingMCQ">${questionText}</div>
                                 </div>
@@ -4396,9 +4405,9 @@ const TrueAndFalse = (() => {
                                     <div class="container">
                                         <div class="qSections">
                                             <div class="font18 fontBold ${Define.get('head')}"></div>
-                                            <div class="runingHead ${Define.get('subhead')}"></div>
                                         </div>
                                         <hr/>
+                                        <div class="TandF-context p-1 row g-0 justify-content-center"></div>
                                         <div class="marTop5">
                                             <div id="${inputDataId}"></div>
                                         </div>
@@ -4451,6 +4460,7 @@ const TrueAndFalse = (() => {
         const activity = Activity.getDefine(qid) ?? {};
         const lang     = activity?.lang ?? 'en';
         const dataSet  = activity?.content ?? [];
+        const replacement  = activity?.replacement ?? '#_#';
 
         userAns = new Array(dataSet.length).fill(null);
 
@@ -4459,13 +4469,67 @@ const TrueAndFalse = (() => {
         const rowDiv     = document.getElementById(inputDataId);
         rowDiv.innerHTML = "";
         const rowContent = [];
+
+        const TandFContextContainer = $('.TandF-context');
+        TandFContextContainer.empty();
+
+        const image  = activity?.image ?? {};
+        const hasImg  = image && Object.keys(image).length > 0;
+        const isPath = image?.path;
+
+        if ( !hasImg || isPath == undefined ){
+            TandFContextContainer.remove();
+        } 
+
+        if (hasImg && isPath != undefined) {
+            const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
+
+            const commonClassImg  = 'col-md-12 col-lg-5 col-sm-12 col-12 text-center';
+
+            TandFContextContainer.append(imgDiv);
+
+            const image_width = image.width ?? '40%';
+
+            imgDiv.addClass(commonClassImg)
+                .find('img')
+                .attr('src', Activity.pathToCWD() + image.path)
+                .css({ 'border-radius' : '20px', 'width' : image_width });
+        }
+
         dataSet.forEach( (item, ind) => {
+            const isImage_Text  = typeof item?.question === 'object' ? true : false;
+            const hasText = isImage_Text == true ? item?.question?.text: false;
+            const hasImage = isImage_Text == true ? item?.question?.image: false;
+
+            let question = "";
+
+            if(isImage_Text){
+                if(hasText){
+                    question += hasText;
+                }
+
+                if(hasImage){
+                    const imageWidth = item?.question?.width ?? '40px';
+                    const image  = `<img src="${Activity.pathToCWD() + hasImage}" alt="image" style="width:${imageWidth};" class="mx-auto" ondragstart="return false;">`;
+                    if(hasText){
+                        question = question.replaceAll(replacement, image);
+                    }else{
+                        question = image;
+                    }
+                }else{
+                    question = question.replaceAll(replacement, '');
+                }
+
+            }else{
+                question = item.question;
+            }
+
             const html = `
-                <div class="row m-0 mb-3 question-block">
+                <div class="row m-0 mb-3 question-block ${isImage_Text ? 'align-items-center': ''}">
                     <div style="width:40px">(${Activity.translateBulletLabels({lang:lang, ind:ind})})</div>
                     <div class="col p-0">
-                        <div class="row m-0">
-                            <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${item.question}</div>
+                        <div class="row m-0 ${isImage_Text ? 'align-items-center': ''}">
+                            <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${question}</div>
                             <div class="col-auto options mb-2">
                                 <button class="btn btn-sm btn-outline-success tnfBtn" data-answer="true" data-ind="${ind}">${btnLabels[0]}</button>
                                 <button class="btn btn-sm btn-outline-danger tnfBtn" data-answer="false" data-ind="${ind}">${btnLabels[1]}</button>
@@ -4476,6 +4540,7 @@ const TrueAndFalse = (() => {
             `;
             rowContent.push( html );
         });
+
         rowDiv.innerHTML = rowContent.join( '' );
 
         const containerSelector = Define.get('questionContainer');
@@ -4922,7 +4987,7 @@ const DragAndDropMulti = (() => {
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        <div class="rowWithAudios border-bottom font18 fontBold ${Define.get('head')}"></div>
+                                        <div class="rowWithAudios font18 fontBold ${Define.get('head')}"></div>
                                         <div class="question-block">
                                             <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
                                             <div class="drag-question-box2 mt-3"></div>
@@ -5804,40 +5869,41 @@ const Shabdkosh = (() => {
                 return;
             }
 
-            const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
-            const buttonLabel = Activity.translateButtonLabels(lang);
-
             parent.innerHTML = `<div class="question">
-                                    <div class="pt-3" id="${containerId}">
-                                        <div class="tab-containerz">
-                                            <div class="tab-content">
-                                                <div class="tab-buttons" id="tabButtons"></div>
-                                                <div class="content-bg" id="tabPanes"></div>
+                                    <div class="containe pt-3" id="${containerId}">
+                                        <div class="rowWithAudios font18 fontBold mx-4 mb-4 ${Define.get('head')}"></div>
+                                        <div class="question-block mt-3">
+                                            <div class="tab-containerz">
+                                                <div class="tab-content mx-auto">
+                                                    <div class="tab-buttons" id="tabButtons"></div>
+                                                    <div class="content-bg" id="tabPanes"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>`;
             // ..
 
+            Activity.setHeader( questionId );
+
 		} catch (e) {
             console.error( 'Shabdkosh.ui :', e );
         }
-    };   
+    };
 
     const renderQuestion = (questionId) => {
         try {
             ui(questionId);
             
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity?.lang ?? 'en';
-            const content  = Activity.shuffleArray( activity?.content ?? [] ) ?? [];
+            const content  = activity?.content ?? [];
+            const isShuffle   = activity?.shuffle ?? true;
+            const questions  = isShuffle ? Activity.shuffleArray(content) : content;
 
             if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
 
             const tabs = [];
-            content.forEach((item, ind) => {
+            questions.forEach((item, ind) => {
 
                 if( !item.tabtitle || !item.id ) return;
 
@@ -5880,42 +5946,80 @@ const Shabdkosh = (() => {
         const lang     = activity?.lang ?? 'en';
         const content  = activity?.content ?? [];
         const tabitem  = content.filter( x => x.id == id );
-        const item     = tabitem[0];
-
+        
+        const isTitles = tabitem[0]?.titles ? tabitem[0]?.titles.length > 0 : false;
+        const titles = isTitles ? tabitem[0]?.titles : tabitem[0];
+        
         if( !tabitem.length ) {
             console.warn( '[WARNING]', 'Invalid tab-id' );
             return;
         }
 
-        if( !item?.tabtitle || !item?.id ) return;
-
-        const titleLower = item.tabtitle.toLowerCase();
+        if( !tabitem[0]?.tabtitle || !tabitem[0]?.id ) return;
+        
+        const titleLower = tabitem[0].tabtitle.toLowerCase();
         const tabTitle   = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
+        
+        const titlesHtml = [];
+        let tabpanecontent = "";
 
-        const tabpanecontent = `
-            <div class="tab-pane active">
-            ${item?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : '' }
-            ${item?.meaning ? `<div class="meaning me-1"><b class="me-1 arth">${Activity.translateMeaningLabel(lang)} :</b>${item.meaning}</div>` : ''}
-            ${item?.sentence ? 
-                `<div class="sentence-use">
-                    <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
-                    ${
-                        item?.sentence ?
-                            item?.sentence.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
-                            : ''
+        titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : '' }`);
+    
+        if(!isTitles){
+            tabpanecontent = `
+                    ${titles?.meaning ? `<div class="meaning me-1"><b class="me-1 arth">${Activity.translateMeaningLabel(lang)} :</b>${titles.meaning}</div>` : ''}
+                    ${titles?.sentence ? 
+                        `<div class="sentence-use">
+                            <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
+                            ${
+                                titles?.sentence ?
+                                    titles?.sentence.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
+                                    : ''
+                            }
+                        </div>` : ''
                     }
-                </div>` : ''
-            }
-            ${item?.image && item?.image?.path ?                
-                `<div class="img-box">
-                    <img style="width:${ item?.image?.width ?? '40%' };" src="${Activity.pathToCWD() + item?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
-                </div>` 
-                : ''
-            }
-            </div>
-        `;
+                    ${titles?.image && titles?.image?.path ?                
+                        `<div class="img-box">
+                            <img style="width:${ titles?.image?.width ?? '40%' };" src="${Activity.pathToCWD() + titles?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
+                        </div>` 
+                        : ''
+                    }
+                </div>
+            `;
+            titlesHtml.push(tabpanecontent);
+        }else{
+            titles.map((item) => {
+                const labelName = item?.title;
+                const labelText = item?.text;
+                if( !labelName || !labelText ) return;
+                if( labelName.toLowerCase() == Activity.translateSentenceLabel(lang).toLocaleLowerCase() ){
+                    tabpanecontent = `<div class="sentence-use">
+                                        <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
+                                        ${
+                                            item?.text ?
+                                                item?.text.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
+                                                : ''
+                                        }
+                                    </div>`
+                }else{
+                    tabpanecontent = `<div class="meaning me-1"><b class="me-1 arth">${labelName} :</b>${item.text}</div>`;
+                }
+
+                titlesHtml.push(tabpanecontent);
+
+            });
+            
+        }
+
+        if( tabitem[0]?.image && tabitem[0]?.image?.path ){
+            const image = `<div class="img-box">
+                                <img style="width:${ tabitem[0]?.image?.width ?? '40%' };" src="${Activity.pathToCWD() + tabitem[0]?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
+                            </div>`
+            titlesHtml.push(image);
+        }
+
         const tabPanes = document.getElementById("tabPanes");
-        if( tabPanes ) tabPanes.innerHTML = tabpanecontent;
+        if( tabPanes ) tabPanes.innerHTML = titlesHtml.join('');
     };
 
     const toggleTabActive = (thisObj) => {
@@ -10768,10 +10872,6 @@ const ShabdRachna = (() => {
     }
 })();
 
-// from below New Functions added 
-
-// Template - 5 : __subQuestions = undefinded
-
 const spellCheck = (() => {
 
     Activity.css('clickTo.css');
@@ -11533,8 +11633,9 @@ const VowelDragAndDrop = (() => {
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        <div class="rowWithAudios border-bottom font18 fontBold ${Define.get('head')}"></div>
+                                        <div class="rowWithAudios font18 fontBold ${Define.get('head')}"></div>
                                         <div class="question-block">
+                                            <div class='common-image-container d-flex justify-content-center'></div>
                                             <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
                                             <div class="vowel-drop-box mt-3"></div>
                                         </div>
@@ -11684,8 +11785,21 @@ const VowelDragAndDrop = (() => {
             md: content?.col?.md ?? defaultCol.md,
             sm: content?.col?.sm ?? defaultCol.sm,
             col: content?.col?.col ?? defaultCol.col
-        }; 
-        
+        };
+
+        const hasMainImage = content?.image ?? false;
+        const imagePath = hasMainImage?.path ?? false;
+        let mainImage = "";
+
+        if(hasMainImage != false && imagePath != false){
+            const imageWidth = hasMainImage?.width ?? '50%';
+            mainImage  = `<img src="${Activity.pathToCWD() + imagePath}" alt="image" style="width:${imageWidth};" class="mx-auto mb-2" ondragstart="return false;">`;
+            $('.common-image-container').html(mainImage);
+        }else{
+            $('.common-image-container').remove();
+        }
+
+
         const optionHtml = [];
 
         const drag_option_html = (item, ind) => `<div class="vowel-container"><div class="drag_${ind} vowel font17 px-2" data-text="${item}">${item}</div></div>`;
@@ -11699,20 +11813,33 @@ const VowelDragAndDrop = (() => {
         const questionHtml = [];
         questionHtml.push('<div class="row g-0">');
         words?.map((item, wordIndex) => {
+            const hasImage  = typeof item?.image === 'object' ? true : false;
+            const imagePath = hasImage == true ? item?.image?.path: false;
+
+            let image = "";
+            
+            if(hasImage && imagePath != undefined){
+                const imageWidth = item?.image?.width ?? '40px';
+                image  = `<img src="${Activity.pathToCWD() + imagePath}" alt="image" style="width:${imageWidth};" class="mx-auto mb-2" ondragstart="return false;">`;
+            }
+
             const units = splitGraphemes(item.text);
             const html = `
                 <div class="my-2 d-flex col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm}">
                     <div class="col-auto p-2">
                         (${Activity.translateBulletLabels({lang:lang, ind:wordIndex})})
                     </div>
-                    <div class="p-2 col question-container_2 d-flex flex-wrap align-items-center" data-queindex="${wordIndex}" data-ans="${item.answer}">
-                        ${
-                            units.map((unit, i) => `
-                                <span class="letter" data-original="${unit}">
-                                    ${unit}
-                                </span>
-                            `).join('')
-                        }
+                    <div class="p-2 col d-flex flex-wrap ${hasImage && imagePath != undefined ? 'flex-column align-items-center': ''}">
+                        ${image}
+                        <div class="d-flex question-container_2" data-queindex="${wordIndex}" data-ans="${item.answer}">
+                            ${
+                                units.map((unit, i) => `
+                                    <span class="letter" data-original="${unit}">
+                                        ${unit}
+                                    </span>
+                                `).join('')
+                            }
+                        </div>
                     </div>
                 </div>
             `;

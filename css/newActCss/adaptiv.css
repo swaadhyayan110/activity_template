@@ -413,7 +413,7 @@
 
 .questionHeadingMCQ {
     font-size: 20px;
-    color: #03A9F4;
+    /* color: #03A9F4; */
     font-family: 'PoppinsSemiBold';
     min-width: 36px;
 }
