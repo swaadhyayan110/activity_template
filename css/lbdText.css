@@ -54,28 +54,31 @@ body {
   font-family: 'PoppinsRegular';
   font-size: 20px;
 }
+
 .buttonSections {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    text-align: center;    
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    background: #ffffff; 
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: #ffffff;
 }
 
 .questionsNumber {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'PoppinsLight';
-    padding-bottom: 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'PoppinsLight';
+  padding-bottom: 17px;
 }
+
 .boxQ {
-    flex-shrink: 0;         
-    margin: 0 6px;           
+  flex-shrink: 0;
+  margin: 0 6px;
 }
+
 .boxQ {
   border: 1px solid #72afff;
   padding: 12px 18px;
@@ -907,6 +910,27 @@ body {
 .noClickAllo {
   pointer-events: none;
 }
+
+/* Listening Common CSS Start */
+
+#listening_container {
+  height: 90vh;
+  overflow: auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+#listening_common_audio_container svg :active {
+  scale: .98;
+}
+
+#listening_common_audio_container .common_pauseBtn {
+  display: none;
+}
+
+
+/* Listening Common CSS End */
 
 /* Page Load Animation */
 @keyframes slideIn {

@@ -1,5 +1,53 @@
 const activities = {};
 
+const Helper = (()=> {
+
+    const __audio = new Audio();
+
+    const playAudio = () => {
+        $('#listening_container').hide();
+        $('#question_header_container').show();
+
+        $('.common_playBtn').hide();
+        $('.common_pauseBtn').show();
+
+        __audio.currentTime = 0;
+        __audio.play();
+
+        __audio.addEventListener('ended', () => {
+            pauseAudio();
+        });
+    }
+
+    const pauseAudio = () => {
+        
+        __audio.currentTime = 0;
+        __audio.pause();
+        
+        $('.common_playBtn').show();
+        $('.common_pauseBtn').hide();
+
+        $("#question-container-box").slideDown('slow');
+    }
+
+    const stopAudio = () => {
+        __audio.currentTime = 0;
+        __audio.pause();
+    }
+
+    const setAudio = (src) => {
+        if( !src ) return;
+        __audio.src = src;
+    }
+
+    return {
+        setAudio,
+        playAudio,
+        stopAudio,
+        pauseAudio
+    }
+})();
+
 const Activity = (() => {
 
     const store = { templates: {} };
@@ -251,6 +299,9 @@ const Activity = (() => {
   
     const render = (templateId, questionId, activityId=null) => {
         try {
+            
+            Helper.stopAudio();
+
             const templateName = template(templateId);
             if( !templateName ) {
                 console.error('Activity.render: unknown templateId', templateId);
@@ -1760,21 +1811,48 @@ const FillInTheBlanksHindiKb = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity?.content ?? {};
             const lang     = activity.lang ?? 'en';
             
             const buttonLabel = Activity.translateButtonLabels(lang);
+            const audio = content?.audio ?? false;
+            const audioSrc = audio != false ? audio : '';
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        <div class="hindiHeadings ${Define.get('head')}"></div>
-                                        <div id="fill-img-container" class="text-center"></div>
-                                        <div id="fill-hint-container" class="text-center instForFillText shadow-sm"></div>
-                                        <div id="${quizContainerID}"></div>
-                                    </div>
-                                    <div class="buttons machiNgs">
-                                        <button class="submit-btn check_1">${buttonLabel.check}</button>
-                                        <button class="show-btn">${buttonLabel.show}</button>
-                                        <button class="reset-btn">${buttonLabel.try}</button>
+                                        ${
+                                            audioSrc?
+                                            `<div class="common_listening_container" id="listening_container">
+                                                <div class="play-btn common_playBtn">
+                                                    <div class="icon"></div>
+                                                </div>
+                                            </div>`: ''
+                                        }
+                                        <div id="question_header_container" ${audioSrc? `style="display: none"`: ''}>
+                                            <div class="qSections row g-0 mt-3 rowWithAudios">
+                                                <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
+                                                ${audioSrc? 
+                                                    `<div class="col-auto" id="listening_common_audio_container">
+                                                        <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+                                                        </svg>
+                                                        <svg id="" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16" role="button">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
+                                                        </svg>
+                                                    </div>`:''
+                                                }
+                                            </div>
+                                        </div>
+                                        <div id='question-container-box' ${audioSrc? `style="display: none"`: ''}>
+                                            <div id="fill-img-container" class="text-center"></div>
+                                            <div id="fill-hint-container" class="text-center instForFillText shadow-sm"></div>
+                                            <div id="${quizContainerID}"></div>
+                                            <div class="buttons machiNgs">
+                                                <button class="submit-btn check_1">${buttonLabel.check}</button>
+                                                <button class="show-btn">${buttonLabel.show}</button>
+                                                <button class="reset-btn">${buttonLabel.try}</button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="result" id="result"></div>
                                 </div>`;
@@ -1790,6 +1868,9 @@ const FillInTheBlanksHindiKb = (() => {
             if( submitBtn ) submitBtn.addEventListener("click", checkAnswersHandler);
             if( showBtn ) showBtn.addEventListener("click", showAnswersHandler);
             if( resetBtn ) resetBtn.addEventListener("click", resetQuizHandler);
+
+            is_Audio_available(audioSrc);
+
         } catch (e) {
             console.error( 'FillInTheBlanksHindiKb.ui :', e );
         }
@@ -2068,6 +2149,26 @@ const FillInTheBlanksHindiKb = (() => {
             el.value = "";
             el.style.borderColor = "#444";
         });
+    }
+
+    const is_Audio_available = (src) => {
+
+        if(!src && src == '') return;
+        
+        Helper.setAudio( Activity.pathToCWD() + src );
+
+        const containerSelector = Define.get('questionContainer');
+        const parent = document.querySelector(containerSelector);
+
+        const audio_playBtns = parent.querySelectorAll('.common_playBtn');
+        const audio_pauseBtn = parent.querySelector('.common_pauseBtn');
+
+        audio_playBtns.forEach(btn => {
+            btn.addEventListener('click', Helper.playAudio);
+        });
+        
+        audio_pauseBtn.addEventListener('click', Helper.pauseAudio);
+
     }
 
     return {
@@ -4401,31 +4502,56 @@ const TrueAndFalse = (() => {
             const lang     = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
+            const audio = activity?.add_content?.audio ?? false;
+            const audioSrc = audio != false ? audio : '';
+
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        <div class="qSections">
-                                            <div class="font18 fontBold ${Define.get('head')}"></div>
-                                        </div>
-                                        <hr/>
-                                        <div class="TandF-context p-1 row g-0 justify-content-center"></div>
-                                        <div class="marTop5">
-                                            <div id="${inputDataId}"></div>
-                                        </div>
-                                    </div>
-                                    <div class="buttons machiNgs">
-                                        <button class="submit-btn disable" id="submit4">${buttonLabel.check}</button>
-                                        <button class="show-btn">${buttonLabel.show}</button>
-                                        <button class="reset-btn">${buttonLabel.try}</button>
-                                    </div>
-                                </div>
-                                <div id="popupDialogAns">
-                                    <div class="baseMod">
-                                        <div class="answerdiv">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
-                                                <button class="btn btn-secondary popUp-close-btn">X</button>
+                                        ${
+                                            audioSrc?
+                                            `<div class="common_listening_container" id="listening_container">
+                                                <div class="play-btn common_playBtn">
+                                                    <div class="icon"></div>
+                                                </div>
+                                            </div>`: ''
+                                        }
+                                        <div id="question_header_container" ${audioSrc? `style="display: none"`: ''}>
+                                            <div class="qSections row g-0 mt-3">
+                                                <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
+                                                ${audioSrc? 
+                                                    `<div class="col-auto" id="listening_common_audio_container">
+                                                        <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+                                                        </svg>
+                                                        <svg id="" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16" role="button">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
+                                                        </svg>
+                                                    </div>`:''
+                                                }
                                             </div>
-                                            <div id="answer-review"></div>
+                                            <hr/>
+                                        </div>
+                                        <div id='question-container-box' ${audioSrc? `style="display: none"`: ''}>
+                                            <div class="TandF-context p-1 row g-0 justify-content-center"></div>
+                                            <div class="marTop5">
+                                                <div id="${inputDataId}"></div>
+                                            </div>
+                                            <div class="buttons machiNgs">
+                                                <button class="submit-btn disable" id="submit4">${buttonLabel.check}</button>
+                                                <button class="show-btn">${buttonLabel.show}</button>
+                                                <button class="reset-btn">${buttonLabel.try}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="popupDialogAns">
+                                        <div class="baseMod">
+                                            <div class="answerdiv">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                                    <button class="btn btn-secondary popUp-close-btn">X</button>
+                                                </div>
+                                                <div id="answer-review"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>`;
@@ -4443,12 +4569,15 @@ const TrueAndFalse = (() => {
             if (showBtn) showBtn.addEventListener('click', showAnswersTandF );
             if (resetBtn) resetBtn.addEventListener('click', resetTrueFalse );
             if (closePopUpBtn) closePopUpBtn.addEventListener('click', closePopUp );
+
+            is_Audio_available(audioSrc);
+
         } catch (e) {
             console.error('TrueAndFalse.ui :', e);
         }
     };    
 
-    const renderQues = (questionId) => {
+    const render = (questionId) => {
         ui(questionId);
 
         const qid      = Activity.getQid( `#${inputDataId}` );
@@ -4473,7 +4602,9 @@ const TrueAndFalse = (() => {
         const TandFContextContainer = $('.TandF-context');
         TandFContextContainer.empty();
 
-        const image  = activity?.image ?? {};
+        const add_content = activity?.add_content ?? {};
+
+        const image  = add_content?.image ?? {};
         const hasImg  = image && Object.keys(image).length > 0;
         const isPath = image?.path;
 
@@ -4673,8 +4804,27 @@ const TrueAndFalse = (() => {
         document.getElementById("popupDialogAns").style.display = "none";
     }
 
+    const is_Audio_available = (src) => {
+
+        if(!src && src == '') return;
+        
+        Helper.setAudio( Activity.pathToCWD() + src );
+
+        const containerSelector = Define.get('questionContainer');
+        const parent = document.querySelector(containerSelector);
+
+        const audio_playBtns = parent.querySelectorAll('.common_playBtn');
+        const audio_pauseBtn = parent.querySelector('.common_pauseBtn');
+
+        audio_playBtns.forEach(btn => {
+            btn.addEventListener('click', Helper.playAudio);
+        });
+        
+        audio_pauseBtn.addEventListener('click', Helper.pauseAudio);
+    }
+
     return {
-        render: renderQues
+        render: render
     };
 
 })();
@@ -4981,21 +5131,49 @@ const DragAndDropMulti = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity?.content ?? {};
             const lang     = activity.lang ?? 'en';
-            
+
             const buttonLabel = Activity.translateButtonLabels(lang);
+
+            const audio = content?.audio ?? false;
+            const audioSrc = audio != false ? audio : '';
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        <div class="rowWithAudios font18 fontBold ${Define.get('head')}"></div>
-                                        <div class="question-block">
-                                            <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
-                                            <div class="drag-question-box2 mt-3"></div>
+                                        ${
+                                            audioSrc?
+                                            `<div class="common_listening_container" id="listening_container">
+                                                <div class="play-btn common_playBtn">
+                                                    <div class="icon"></div>
+                                                </div>
+                                            </div>`: ''
+                                        }
+                                        <div id="question_header_container" ${audioSrc? `style="display: none"`: ''}>
+                                            <div class="qSections row g-0 mt-3 rowWithAudios">
+                                                <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
+                                                ${audioSrc? 
+                                                    `<div class="col-auto" id="listening_common_audio_container">
+                                                        <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+                                                        </svg>
+                                                        <svg id="" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16" role="button">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
+                                                        </svg>
+                                                    </div>`:''
+                                                }
+                                            </div>
                                         </div>
-                                        <div class="buttons machiNgs">
-                                            <button class="submit-btn disable" id="submit2">${buttonLabel.check}</button>
-                                            <button class="show-btn" id="showAns2">${buttonLabel.show}</button>
-                                            <button class="reset-btn">${buttonLabel.try}</button>
+                                        <div id='question-container-box' ${audioSrc? `style="display: none"`: ''}>
+                                            <div class="question-block position-relative">
+                                                <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
+                                                <div class="drag-question-box2 mt-3"></div>
+                                            </div>
+                                            <div class="buttons machiNgs">
+                                                <button class="submit-btn disable" id="submit2">${buttonLabel.check}</button>
+                                                <button class="show-btn" id="showAns2">${buttonLabel.show}</button>
+                                                <button class="reset-btn">${buttonLabel.try}</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -5021,6 +5199,9 @@ const DragAndDropMulti = (() => {
 			if (showBtn) showBtn.addEventListener("click", showDropAnswers);
 			if (resetBtn) resetBtn.addEventListener("click", resetDropBox);
 			if (popUpCloseBtn) popUpCloseBtn.addEventListener("click", closePopUp);
+
+            is_Audio_available(audioSrc);
+
 		} catch (e) {
             console.error( 'DragAndDropMulti.ui :', e );
         }
@@ -5282,7 +5463,7 @@ const DragAndDropMulti = (() => {
 
                     let replacedText = item.text;
                     quesOptions.forEach(ans => {
-                        replacedText = replacedText.replace(
+                        replacedText = replacedText.replaceAll(
                             replacement,
                             `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}" style="width:${inputWidth};"></div>`
                         );
@@ -5432,6 +5613,25 @@ const DragAndDropMulti = (() => {
             }
         }
         return count;
+    }
+
+    const is_Audio_available = (src) => {
+
+        if(!src && src == '') return;
+        
+        Helper.setAudio( Activity.pathToCWD() + src );
+
+        const containerSelector = Define.get('questionContainer');
+        const parent = document.querySelector(containerSelector);
+
+        const audio_playBtns = parent.querySelectorAll('.common_playBtn');
+        const audio_pauseBtn = parent.querySelector('.common_pauseBtn');
+
+        audio_playBtns.forEach(btn => {
+            btn.addEventListener('click', Helper.playAudio);
+        });
+        
+        audio_pauseBtn.addEventListener('click', Helper.pauseAudio);
     }
     
     return {
@@ -7491,7 +7691,7 @@ const ShravanKaushalWithImages = (() => {
                                         </div>
                                     </div>
                                     ${activity.content?.main?.text != undefined ?
-                    `<div class="poem-sec" style="display:none;">
+                                        `<div class="poem-sec" style="display:none;">
                                             <div class="my-3 container" id="questionTitle">
                                                 <b class="${Define.get('head')}"></b>
                                                 <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn" viewBox="0 0 16 16">
@@ -7508,7 +7708,7 @@ const ShravanKaushalWithImages = (() => {
                                                 </div>
                                             </div>
                                         </div>`: ''
-                }
+                                    }
                                     <div class="question-sec" style="${activity.content?.main != undefined ? "display:none" : 'display:block'}">
                                         <div class="container contListen">
                                             <div class="my-3 container" id="questionTitle">
@@ -11615,7 +11815,7 @@ const VowelDragAndDrop = (() => {
 
     Activity.css('dnd.css');
 
-    const containerId  = 'vowel_dragAndDrop';
+    const containerId = 'vowel_dragAndDrop';
     let DragEnabled = false;
     
     const ui = (questionId) => {
@@ -11626,9 +11826,9 @@ const VowelDragAndDrop = (() => {
                 console.error("ui container not found:", containerSelector);
                 return;
             }
-            
+
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -11658,15 +11858,14 @@ const VowelDragAndDrop = (() => {
                                         </div>
                                     </div>
                                 </div>`;
-            // ..
 
-            const submitBtn = parent.querySelector( '.submit-btn' );
-            const showBtn = parent.querySelector( '.show-btn' );
-            const resetBtn  = parent.querySelector( '.reset-btn' );
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
 
-            if( submitBtn ) submitBtn.addEventListener("click", checkAnswer );
-            if( showBtn ) showBtn.addEventListener("click", showAnswer );
-            if( resetBtn ) resetBtn.addEventListener("click", resetActivity );
+            if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+            if (showBtn) showBtn.addEventListener("click", showAnswer);
+            if (resetBtn) resetBtn.addEventListener("click", resetActivity);
 
             Activity.setHeader(questionId);
 
@@ -11677,12 +11876,42 @@ const VowelDragAndDrop = (() => {
 
     const splitGraphemes = (str) => {
         if (typeof Intl !== "undefined" && Intl.Segmenter) {
-            const segmenter = new Intl.Segmenter('hi', { granularity: 'grapheme' });
-            const graphemes = Array.from(segmenter.segment(str), s => s.segment);
-            return graphemes;
+            const segmenter = new Intl.Segmenter("hi", {
+                granularity: "grapheme",
+            });
+            return Array.from(segmenter.segment(str), s => s.segment);
         }
-        const regex = /(?:[क-ह][्]?|[अ-औ]|[ा-ौंः])/g;
-        return str.match(regex) || str.split('');
+
+        const devanagariRegex = /\s|[\p{L}](?:[\p{M}]|\u094D[\p{L}])*/gu;
+        return str.match(devanagariRegex) || [];
+    };
+
+    const parseSharpWords = (text) => {
+        const parts = [];
+        let buffer = '';
+        let inside = false;
+
+        if (text.includes('#')) {
+            for (let ch of text) {
+                if (ch === '#') {
+                    if (inside) {
+                        parts.push({ text: buffer, editable: true });
+                        buffer = '';
+                    } else if (buffer) {
+                        parts.push({ text: buffer, editable: false });
+                        buffer = '';
+                    }
+                    inside = !inside;
+                } else {
+                    buffer += ch;
+                }
+            }
+            if (buffer) parts.push({ text: buffer, editable: false });
+        } else {
+            // If no #, treat the whole word as editable (if desired)
+            parts.push({ text: text.trim(), editable: true });
+        }
+        return parts;
     };
 
     const resetActivity = () => {
@@ -11692,64 +11921,149 @@ const VowelDragAndDrop = (() => {
 
         words.forEach((item, wordIndex) => {
             const wordContainer = document.querySelector(`.question-container_2[data-queindex="${wordIndex}"]`);
-            const units = splitGraphemes(item.text);
-
             if (!wordContainer) return;
 
             wordContainer.classList.remove('vowel-correct', 'vowel-incorrect');
-            
-            wordContainer.innerHTML = units.map((unit, i) => `
-                <span class="letter" data-word-index="${wordIndex}" data-letter-index="${i}" data-original="${unit}">
-                    ${unit}
-                </span>
-            `).join('');
+
+            const parts = parseSharpWords(item.text);
+
+            wordContainer.innerHTML = parts
+                .map(part => {
+                    const isEditable = part.editable;
+                    const text = part.text.trim();
+                    if (!text) return '';
+
+                    const lettersHtml = splitGraphemes(text)
+                        .map(letter => letter === ' '
+                            ? '&nbsp;'
+                            : `<span class="letter${isEditable ? ' editable' : ''}" data-original="${letter}">${letter}</span>`
+                        )
+                        .join('');
+
+                    return `<span class="part-container${isEditable ? ' editable' : ''}" data-original="${text}">${lettersHtml}</span>&nbsp;`;
+                })
+                .filter(Boolean)
+                .join('');
         });
+
+        $('.submit-btn, .show-btn').removeClass('disable');
 
         initDroppable('.letter');
         DragEnabled = true;
-    }
+    };
 
     const showAnswer = () => {
-        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
-        const content = activity?.content ?? {};
-        const words = content?.words ?? [];
+        document.querySelectorAll('.question-container_2').forEach((wordEl, wordIndex) => {
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+            const content = activity?.content?.words || [];
+            const item = content[wordIndex];
+            if (!item) return;
 
-        words.forEach((item, wordIndex) => {
-            const word = document.querySelector(`.question-container_2[data-queindex="${wordIndex}"]`);
-            if (!word) return;
+            let answers = Array.isArray(item.answer) ? [...item.answer] : [item.answer];
+            let answerIndex = 0;
 
-            word.textContent = word.dataset.ans;
+            const parts = parseSharpWords(item.text);
+
+            wordEl.innerHTML = parts.map(part => {
+                const isEditable = part.editable;
+                const text = part.text.trim();
+
+                if (!text) return '';
+
+                let partHtml = `<span class="part-container ${isEditable ? 'editable' : ''}" data-original="${text}">`;
+
+                if (isEditable) {
+                    const ans = answers[answerIndex++] || '';
+                    const lettersHtml = splitGraphemes(ans)
+                        .map(letter => `<span class="letter editable vowel-correct" data-original="${letter}">${letter}</span>`)
+                        .join('');
+                    partHtml += `${lettersHtml}</span>&nbsp;`;
+                } else {
+                    const lettersHtml = splitGraphemes(text)
+                        .map(letter => letter === ' ' ? '&nbsp;' : `<span class="letter" data-original="${letter}">${letter}</span>`)
+                        .join('');
+                    partHtml += `${lettersHtml}</span>&nbsp;`;
+                }
+
+                return partHtml;
+            }).filter(Boolean).join('');
         });
 
+        $('.question-container_2').removeClass('vowel-incorrect');
+        $('.submit-btn').addClass('disable');
         DragEnabled = false;
-        initDroppable('.letter');
     };
 
     const checkAnswer = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
         const lang = activity?.lang ?? 'en';
+        const content = activity?.content?.words || [];
 
-        const container = document.querySelector(`.vowel-drop-box`);
-        if (!container) return;
+        const questionEls = document.querySelectorAll('.question-container_2');
+        let totalScore = 0;
+        const totalQuestions = questionEls.length;
 
-        const wordContainers = container.querySelectorAll('.question-container_2');
-        let score = 0;
+        questionEls.forEach((wordEl, wordIndex) => {
+            const item = content[wordIndex];
+            if (!item) return;
 
-        wordContainers.forEach((wordEl) => {
-            const userWord = Array.from(wordEl.querySelectorAll('.letter'))
-                .map(letterEl => letterEl.textContent.trim())
-                .join('');
+            const parts = parseSharpWords(item.text);
+            const answers = Array.isArray(item.answer) ? [...item.answer] : [item.answer];
+            let answerCounter = 0;
 
-            const correctWord = wordEl.dataset.ans.trim();
+            const wordSpans = Array.from(wordEl.querySelectorAll('.part-container'));
+            let allCorrect = true;
+            let spanPointer = 0;
 
-            if (userWord === correctWord) {
-                wordEl.classList.add('vowel-correct');
-                wordEl.classList.remove('vowel-incorrect');
-                score++;
-            } else {
-                wordEl.classList.add('vowel-incorrect');
-                wordEl.classList.remove('vowel-correct');
-            }
+            parts.forEach((part) => {
+                const isEditable = part.editable;
+                const expected = isEditable ? (answers[answerCounter++] || '') : part.text;
+
+                if (!expected.trim()) return;
+
+                const currentSpan = wordSpans[spanPointer++];
+                if (!currentSpan) return;
+
+                const letterEls = Array.from(currentSpan.querySelectorAll('.letter'));
+                const userWord = letterEls.map(el => el.textContent.trim()).join('');
+
+                let correct = false;
+
+                if (isEditable) {
+                    correct = userWord === expected;
+                } else {
+                    const originalWord = letterEls.map(el => el.dataset.original || '').join('');
+                    correct = userWord === originalWord;
+                }
+
+                if (isEditable && correct) {
+                    currentSpan.classList.add('vowel-correct');
+                    currentSpan.classList.remove('vowel-incorrect');
+                } else if (isEditable) {
+                    currentSpan.classList.add('vowel-incorrect');
+                    currentSpan.classList.remove('vowel-correct');
+                    allCorrect = false;
+                } else {
+                    const originalWord = letterEls.map(el => el.dataset.original || '').join('');
+
+                    if (userWord !== originalWord) {
+                        if (userWord !== expected) {
+                            currentSpan.classList.add('vowel-incorrect');
+                            currentSpan.classList.remove('vowel-correct');
+                        } else {
+                            currentSpan.classList.add('vowel-correct');
+                            currentSpan.classList.remove('vowel-incorrect');
+                        }
+                        allCorrect = false;
+                    } else {                        
+                        currentSpan.classList.remove('vowel-incorrect');
+                        currentSpan.classList.remove('vowel-correct');
+                    }
+                }
+            });
+
+
+            if (allCorrect) totalScore++;
         });
 
         DragEnabled = false;
@@ -11757,9 +12071,9 @@ const VowelDragAndDrop = (() => {
         Swal.fire({
             title: lang === 'hi' ? "परिणाम!" : "Result!",
             text: lang === 'hi'
-                ? `आपके ${wordContainers.length} में से ${score} सही है।`
-                : `You got ${score} out of ${wordContainers.length} correct!`,
-            icon: score == wordContainers.length ? 'success': 'error',
+                ? `${totalScore} में से ${totalQuestions} सही है।`
+                : `You got ${totalScore} out of ${totalQuestions} correct!`,
+            icon: totalScore === totalQuestions ? 'success' : 'error',
             confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
         });
     };
@@ -11768,12 +12082,13 @@ const VowelDragAndDrop = (() => {
         ui(questionId);
         if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
 
-        const activity = Activity.getDefine( questionId );
+        const activity = Activity.getDefine(questionId);
         const lang = activity?.lang ?? 'en';
         const content = activity?.content ?? {};
 
         const words = content?.words ?? [];
         const vowels = content?.vowels || [];
+        const isCol = content?.col ?? false;
 
         const defaultCol = {
             md : 4,
@@ -11782,23 +12097,22 @@ const VowelDragAndDrop = (() => {
         };
 
         const col_size = {
-            md: content?.col?.md ?? defaultCol.md,
-            sm: content?.col?.sm ?? defaultCol.sm,
-            col: content?.col?.col ?? defaultCol.col
+            md  : isCol != false ? content?.col?.md ?? defaultCol.md : 12,
+            sm  : isCol != false ? content?.col?.sm ?? defaultCol.sm : 12,
+            col : isCol != false ? content?.col?.col ?? defaultCol.col : 12
         };
 
         const hasMainImage = content?.image ?? false;
         const imagePath = hasMainImage?.path ?? false;
         let mainImage = "";
 
-        if(hasMainImage != false && imagePath != false){
+        if (hasMainImage !== false && imagePath !== false) {
             const imageWidth = hasMainImage?.width ?? '50%';
-            mainImage  = `<img src="${Activity.pathToCWD() + imagePath}" alt="image" style="width:${imageWidth};" class="mx-auto mb-2" ondragstart="return false;">`;
+            mainImage = `<img src="${Activity.pathToCWD() + imagePath}" alt="image" style="width:${imageWidth};" class="mx-auto mb-2" ondragstart="return false;">`;
             $('.common-image-container').html(mainImage);
-        }else{
+        } else {
             $('.common-image-container').remove();
         }
-
 
         const optionHtml = [];
 
@@ -11806,52 +12120,61 @@ const VowelDragAndDrop = (() => {
 
         vowels.forEach((item, ind) => {
             const html = drag_option_html(item, ind);
-            optionHtml.push( html );
+            optionHtml.push(html);
         });
-        $('.drag-container2').html( optionHtml.join( '' ) );
+        $('.drag-container2').html(optionHtml.join(''));
 
         const questionHtml = [];
         questionHtml.push('<div class="row g-0">');
-        words?.map((item, wordIndex) => {
-            const hasImage  = typeof item?.image === 'object' ? true : false;
-            const imagePath = hasImage == true ? item?.image?.path: false;
 
-            let image = "";
-            
-            if(hasImage && imagePath != undefined){
-                const imageWidth = item?.image?.width ?? '40px';
-                image  = `<img src="${Activity.pathToCWD() + imagePath}" alt="image" style="width:${imageWidth};" class="mx-auto mb-2" ondragstart="return false;">`;
+        words.forEach((item, wordIndex) => {
+            const hasImage = typeof item?.image === 'object';
+            const imagePath = hasImage ? item.image.path : null;
+
+            let image = '';
+            if (hasImage && imagePath) {
+                image = `<img src="${Activity.pathToCWD() + imagePath}" style="width:${item.image.width || '40px'}" class="${isCol ? 'mx-auto' : ''} mb-2" ondragstart="return false">`;
             }
 
-            const units = splitGraphemes(item.text);
+            const parts = parseSharpWords(item.text);
+            const answerValue = Array.isArray(item.answer)
+                ? item.answer.join('|')
+                : item.answer;
+
             const html = `
-                <div class="my-2 d-flex col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm}">
-                    <div class="col-auto p-2">
-                        (${Activity.translateBulletLabels({lang:lang, ind:wordIndex})})
-                    </div>
-                    <div class="p-2 col d-flex flex-wrap ${hasImage && imagePath != undefined ? 'flex-column align-items-center': ''}">
-                        ${image}
-                        <div class="d-flex question-container_2" data-queindex="${wordIndex}" data-ans="${item.answer}">
-                            ${
-                                units.map((unit, i) => `
-                                    <span class="letter" data-original="${unit}">
-                                        ${unit}
-                                    </span>
-                                `).join('')
-                            }
-                        </div>
+            <div class="my-2 d-flex col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm}">
+                <div class="col-auto p-2">
+                    (${Activity.translateBulletLabels({ lang, ind: wordIndex })})
+                </div>
+                <div class="p-2 col d-flex flex-wrap ${hasImage ? 'flex-column align-items-center' : ''}">
+                    ${image}
+                    <div class="d-flex question-container_2" data-queindex="${wordIndex}" data-ans="${answerValue}">
+                        ${
+                            parts.map(part => {
+                                const isEditable = part.editable;
+                                const text = isEditable ? part.text.replace(/^#|#$/g, '') : part.text;
+                                if (!text.trim()) return '';
+
+                                return `<span class="part-container ${isEditable ? 'editable' : ''}" data-original="${text.trim()}">
+                                    ${splitGraphemes(text).map((letter) => {
+                                        if (letter.trim() === '') return;
+                                        return `<span class="letter" data-original="${letter.trim()}">${letter.trim()}</span>`;
+                                    }).join('')}
+                                </span>&nbsp;`;
+                            }).filter(Boolean).join('')
+                        }
                     </div>
                 </div>
-            `;
+            </div>`;
             questionHtml.push(html);
         });
-        questionHtml.push('</div>');
 
+        questionHtml.push('</div>');
         $('.vowel-drop-box').html(questionHtml.join(''));
 
         userAns = Array(words.length).fill([]);
         
-        makeDraggable(`.vowel`);
+        makeDraggable('.vowel');
         initDroppable('.letter');
         DragEnabled = true;
     };
@@ -11862,34 +12185,35 @@ const VowelDragAndDrop = (() => {
                 revert: true,
                 containment: '.container-sub',
                 start: function () {
-                    if( !DragEnabled ) {
+                    if (!DragEnabled) {
                         return false;
                     }
                 }
             });
         } catch (e) {
-            console.error( 'DragAndDropMulti.makeDraggable :', e );
+            console.error('DragAndDropMulti.makeDraggable :', e);
         }
     }
 
     const initDroppable = (selector) => {
         try {
             $(selector).droppable({
-                drop: function (event, ui) {
+                drop: function (_, ui) {
+                    if (!DragEnabled) return;
+
                     const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
                     const vowels = activity?.content?.vowels || [];
-                    const newSwar = ui.draggable.attr('data-text');
-                    let baseText = $(this).attr('data-original');
 
-                    vowels.forEach(v => {
-                        baseText = baseText.split(v).join('');
-                    });
-                    const finalText = baseText + newSwar;
-                    $(this).html(finalText);
+                    let base = $(this).attr('data-original');
+                    const swar = ui.draggable.attr('data-text');
+
+                    vowels.forEach(v => base = base.replace(v, ''));
+
+                    $(this).text(base + swar);
                 }
             });
         } catch (e) {
-            console.error('DragAndDropMulti.initDroppable :', e);
+            console.error('initDroppable:', e);
         }
     };
 
