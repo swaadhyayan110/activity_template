@@ -12071,9 +12071,9 @@ const VowelDragAndDrop = (() => {
         Swal.fire({
             title: lang === 'hi' ? "परिणाम!" : "Result!",
             text: lang === 'hi'
-                ? `${totalScore} में से ${totalQuestions} सही है।`
-                : `You got ${totalScore} out of ${totalQuestions} correct!`,
-            icon: totalScore === totalQuestions ? 'success' : 'error',
+                ? `${totalQuestions} में से ${totalScore} सही है।`
+                : `You got ${totalQuestions} out of ${totalScore} correct!`,
+            icon: totalQuestions === totalScore ? 'success' : 'error',
             confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
         });
     };
