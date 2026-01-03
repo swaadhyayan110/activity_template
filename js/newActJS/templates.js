@@ -11072,7 +11072,7 @@ const ShabdRachna = (() => {
     }
 })();
 
-const spellCheck = (() => {
+const SpellCheck = (() => {
 
     Activity.css('clickTo.css');
 
@@ -11546,7 +11546,7 @@ const spellCheck = (() => {
 
 })();
 
-const spellItOut = (() => {
+const SpellItOut = (() => {
 
     Activity.css('clickTo.css');
 

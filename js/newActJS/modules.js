@@ -38,8 +38,8 @@ const Templates = (() => {
         { id : 34, template : 'AudioAndVideoFromYoutube' },
         { id : 35, template : 'MathMoney' },
         { id : 36, template : 'ShabdRachna' },
-        { id : 37, template : 'spellCheck' },
-        { id : 38, template : 'spellItOut' },
+        { id : 37, template : 'SpellCheck' },
+        { id : 38, template : 'SpellItOut' },
         { id : 39, template : 'VowelDragAndDrop' },
     ];
 

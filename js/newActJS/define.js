@@ -172,7 +172,8 @@ const Define = (() => {
                     { sqid : 3, qid : 2, text : '@ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['@पंख', '@नाचने'], inputBelow : true },
                     { sqid : 4, qid : 2, text : '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['#पंख'] },
                     { sqid : 5, qid : 2, text : '$ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['$पंख'] }
-                ]
+                ],
+                audios: 'audio/1.mp3'
             }
         },
         {
@@ -290,7 +291,7 @@ const Define = (() => {
         },
         {
             id      : 10,
-            lang    : 'hi',
+            lang    : 'en',
             content : {
                 skiplevels : true,
                 skipanswerbutton : true,
@@ -429,7 +430,6 @@ const Define = (() => {
             id      : 15,
             lang    : 'en',
             head    : 'Template : 15',
-            image   : { path: "img/1.png", width: "30%" },
             replacement: '#_#',
             content : [
                 {
@@ -452,7 +452,11 @@ const Define = (() => {
                     question: 'कोयल ने अपने पंख से सितार बजाया।',
                     answer: true
                 }
-            ]
+            ],
+            add_content : {
+                image   : { path: "img/1.png", width: "30%" },
+                audio   : 'audio/1.mp3'
+            }
         },
         {
             id      : 16,
@@ -471,7 +475,8 @@ const Define = (() => {
                     { qid : 3, text : 'सितार पर खाली जगह पर #_# की गई।', image : 'img/1.png', options : ['नक्काषी'], answer : 0 },
                     { qid : 4, text : 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image : 'img/1.png', options : ['खूँटी'], answer : 0 },
                     { qid : 5, text : 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image : 'img/1.png', options : ['जतन'], answer : 0 }
-                ]
+                ],
+                audio     : 'audio/1.mp3'
             }
         },
         {
@@ -482,7 +487,7 @@ const Define = (() => {
                 set : {
                     answers : [ 'पंख', 'जंगल', 'नक्काषी' ],
                     options : [ 'पंख', 'जंगल', 'नक्काषी', 'नाचने', 'पंखूँटी', 'पंख' ],
-                }
+                },
             }
         },
         {
@@ -1026,17 +1031,18 @@ const Define = (() => {
             lang    : 'hi',
             head    : 'Template : 39, Vowel Drag and Drop',
             content : {
-                col   : { col : 12, md : 6, sm : 6 },
+                replacement: '#',
+                col   : { col : 12, md : 6, sm : 12 },
                 image : {
                     path: 'img/1.png',
                     width : '20%',
                 },
                 words: [
-                    { text: "बल्टी", image: { path: 'img/1.png', width: '40%' }, answer: "बाल्टी" },
+                    { text: "#बल्टी# #घड़या# नद #सरस्वत#", answer: ['बाल्टी', 'घड़िया', 'सरस्वती'] },
                     { text: "नद", answer: "नदी" },
-                    { text: "घड़या", image: { path: 'img/3.png', width: '40%' }, answer: "घड़िया" },
-                    { text: "सरस्वत", image: { path: 'img/4.png', width: '40%' }, answer: "सरस्वती" },
-                    { text: "बल्टी", image: { path: 'img/5.png', width: '40%' }, answer: "बाल्टी" }
+                    { text: "#घड़या#", image: { path: 'img/3.png', width: '15%' }, answer: ["घड़िया"] },
+                    { text: "सरस्वत #बल्टी# #नद#", image: { path: 'img/4.png', width: '15%' }, answer: ['बाल्टी', 'नदी'] },
+                    { text: "#बल्टी#", image: { path: 'img/5.png', width: '15%' }, answer: ["बाल्टी"] }
                 ],
                 vowels: ["ा","ि","ी","ु","ू","े","ै","ो","ौ","ं","ः","ँ"]
             }
