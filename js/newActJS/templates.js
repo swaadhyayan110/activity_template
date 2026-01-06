@@ -3091,7 +3091,8 @@ const Adaptiv = (() => {
     let submitted       = false;
     let currentQuizData    = undefined;
     let userAnswersAdaptiv = undefined;
-    let showResultPending  = false;    
+    let showResultPending  = false;
+    let retryQuestionIndex = undefined;
 
     const ui = ( questionId, totalQues ) => {
         try {
@@ -3207,20 +3208,19 @@ const Adaptiv = (() => {
         const data      = content?.levels;
         const found     = (data || []).find( lvl => lvl.level === level );
         const questLen  = found?.questions?.length || 0;
-        const q         = found?.questions?.[currentQuestion];
-        currentQuizData = found?.questions || [];
+        let q           = found?.questions?.[currentQuestion];
 
-        ui(questionId, questLen );
+        ui(questionId, questLen);
 
         if( userAnswersAdaptiv == undefined ) {
             userAnswersAdaptiv = new Array(questLen).fill(null);
-        } else if( userAnswersAdaptiv.length !== questLen ) {
+        } else if( userAnswersAdaptiv.length !== questLen && !isRetry) {
             const newArr = new Array(questLen).fill(null);
-            for (let i=0;i<Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
+            for (let i = 0; i < Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
                 newArr[i] = userAnswersAdaptiv[i];
             }
             userAnswersAdaptiv = newArr;
-        }        
+        }
 
         const container = document.getElementById("quizContainerAdaptiv");
         if (!container) return;
@@ -3277,7 +3277,8 @@ const Adaptiv = (() => {
                 const idxAttr = optionEl.getAttribute('data-option-index');
                 const idx = idxAttr !== null ? parseInt(idxAttr, 10) : 0;
                 selectOption(currentQuestion, idx);
-                renderQuestion(questionId);
+
+                // renderQuestion(questionId);
             });
         });
 
@@ -3328,6 +3329,9 @@ const Adaptiv = (() => {
         const subBtn = document.getElementById("sub-btn");
         const isLast = currentQuestion === (currentQuizData?.length || 0) - 1;
         const allAnswered = Array.isArray(userAnswersAdaptiv) && userAnswersAdaptiv.length > 0 && userAnswersAdaptiv.every(ans => ans !== null);
+
+        // console.log(isLast);
+        // console.log(userAnswersAdaptiv, Array.isArray(userAnswersAdaptiv), userAnswersAdaptiv.length > 0, userAnswersAdaptiv.every(ans => ans !== null));
 
         if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
 
@@ -3470,9 +3474,14 @@ const Adaptiv = (() => {
     }
 
     const retryQuiz = () => {
+        const level     = currentLevel;
+        const activity  = Activity.getDefine(Activity.getQid( `.${headerContainer}` )) ?? {};
+        const content   = activity?.content;
+        const data      = content?.levels;
+        const found     = (data || []).find( lvl => lvl.level === level );
+
         currentQuestion = 0;
         submitted = false;
-        userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);
         const navButtonsEl = document.getElementById("nav-buttons");
         if (navButtonsEl) navButtonsEl.style.display = "flex";
         renderQuestion(Activity.getQid( `.${headerContainer}` ));
@@ -3501,14 +3510,15 @@ const Adaptiv = (() => {
             const userIndex = userAnswersAdaptiv?.[i];
             const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}. ${q.options[userIndex]}` : "Not attempted";
             const correctAnswerText = `${label(q.answer)}. ${q.options[q.answer]}`;
+            console.log(userAnswerText, correctAnswerText);
             if (userAnswerText === correctAnswerText) totalCorrect++;
             totalQuestion++;
             const status = (userAnswerText === correctAnswerText) ? '✔' : '✘';
             midData2 += `<tr class="trData">
                 <th>${ lang == 'hi' ? 'प्र' : 'Q' }${totalQuestion}.</th>
-                <td class="text-danger">${userAnswerText}</td>
+                <td class="${userAnswerText === correctAnswerText ? 'text-success' : 'text-danger' }">${userAnswerText}</td>
                 <td class="text-success">${correctAnswerText}</td>
-                <td class="text-danger">${status}</td>
+                <td class="${userAnswerText === correctAnswerText ? 'text-success' : 'text-danger' }">${status}</td>
             </tr>`;
         });
 
@@ -5462,12 +5472,14 @@ const DragAndDropMulti = (() => {
                     const quesOptions = item.options || [];
 
                     let replacedText = item.text;
+
                     quesOptions.forEach(ans => {
-                        replacedText = replacedText.replaceAll(
+                        replacedText = replacedText.replace(
                             replacement,
                             `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}" style="width:${inputWidth};"></div>`
                         );
                     });
+
                     
                     const image = [];
                     if( item.image != undefined ) {
@@ -6208,14 +6220,13 @@ const Shabdkosh = (() => {
                 titlesHtml.push(tabpanecontent);
 
             });
-            
-        }
 
-        if( tabitem[0]?.image && tabitem[0]?.image?.path ){
-            const image = `<div class="img-box">
-                                <img style="width:${ tabitem[0]?.image?.width ?? '40%' };" src="${Activity.pathToCWD() + tabitem[0]?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
-                            </div>`
-            titlesHtml.push(image);
+            if( tabitem[0]?.image && tabitem[0]?.image?.path ){
+                const image = `<div class="img-box">
+                                    <img style="width:${ tabitem[0]?.image?.width ?? '40%' };" src="${Activity.pathToCWD() + tabitem[0]?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
+                                </div>`
+                titlesHtml.push(image);
+            }   
         }
 
         const tabPanes = document.getElementById("tabPanes");
@@ -12071,9 +12082,9 @@ const VowelDragAndDrop = (() => {
         Swal.fire({
             title: lang === 'hi' ? "परिणाम!" : "Result!",
             text: lang === 'hi'
-                ? `${totalQuestions} में से ${totalScore} सही है।`
-                : `You got ${totalQuestions} out of ${totalScore} correct!`,
-            icon: totalQuestions === totalScore ? 'success' : 'error',
+                ? `${totalScore} में से ${totalQuestions} सही है।`
+                : `You got ${totalScore} out of ${totalQuestions} correct!`,
+            icon: totalScore === totalQuestions ? 'success' : 'error',
             confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
         });
     };
@@ -12127,7 +12138,15 @@ const VowelDragAndDrop = (() => {
         const questionHtml = [];
         questionHtml.push('<div class="row g-0">');
 
-        words.forEach((item, wordIndex) => {
+            words.forEach((item, wordIndex) => {
+        
+            const hasHash = item.text.includes('#');
+            const wordCountWithoutHash = item.text.split(' ').filter(word => !word.includes('#')).length;
+
+            if (!hasHash || wordCountWithoutHash === item.text.split(' ').length) {
+                return;
+            }
+
             const hasImage = typeof item?.image === 'object';
             const imagePath = hasImage ? item.image.path : null;
 
@@ -12207,7 +12226,14 @@ const VowelDragAndDrop = (() => {
                     let base = $(this).attr('data-original');
                     const swar = ui.draggable.attr('data-text');
 
-                    vowels.forEach(v => base = base.replace(v, ''));
+                    vowels.forEach((v) => {
+                        base = base.replace(v, '');
+                    })
+
+                    const regex = /[^\u0900-\u097F#\u0964\u0965\w\s]/g;
+                    const symbols = $(this).text().match(regex);
+
+                    if(symbols != null && symbols.length > 0) return;
 
                     $(this).text(base + swar);
                 }
