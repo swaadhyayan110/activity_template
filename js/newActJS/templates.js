@@ -3091,8 +3091,7 @@ const Adaptiv = (() => {
     let submitted       = false;
     let currentQuizData    = undefined;
     let userAnswersAdaptiv = undefined;
-    let showResultPending  = false;
-    let retryQuestionIndex = undefined;
+    let showResultPending  = false;    
 
     const ui = ( questionId, totalQues ) => {
         try {
@@ -3208,19 +3207,20 @@ const Adaptiv = (() => {
         const data      = content?.levels;
         const found     = (data || []).find( lvl => lvl.level === level );
         const questLen  = found?.questions?.length || 0;
-        let q           = found?.questions?.[currentQuestion];
+        const q         = found?.questions?.[currentQuestion];
+        currentQuizData = found?.questions || [];
 
-        ui(questionId, questLen);
+        ui(questionId, questLen );
 
         if( userAnswersAdaptiv == undefined ) {
             userAnswersAdaptiv = new Array(questLen).fill(null);
-        } else if( userAnswersAdaptiv.length !== questLen && !isRetry) {
+        } else if( userAnswersAdaptiv.length !== questLen ) {
             const newArr = new Array(questLen).fill(null);
-            for (let i = 0; i < Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
+            for (let i=0;i<Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
                 newArr[i] = userAnswersAdaptiv[i];
             }
             userAnswersAdaptiv = newArr;
-        }
+        }        
 
         const container = document.getElementById("quizContainerAdaptiv");
         if (!container) return;
@@ -3277,7 +3277,6 @@ const Adaptiv = (() => {
                 const idxAttr = optionEl.getAttribute('data-option-index');
                 const idx = idxAttr !== null ? parseInt(idxAttr, 10) : 0;
                 selectOption(currentQuestion, idx);
-
                 // renderQuestion(questionId);
             });
         });
@@ -3291,7 +3290,7 @@ const Adaptiv = (() => {
         userAnswersAdaptiv[qIndex] = optIndex;
         updateAttemptedCount();
         if (Array.isArray(currentQuizData) && userAnswersAdaptiv.filter(a => a !== null).length === currentQuizData.length && currentQuestion === currentQuizData.length - 1) {
-            showResultPending = true;
+            showResultPendinsg = true;
         }
     }
 
@@ -3329,9 +3328,6 @@ const Adaptiv = (() => {
         const subBtn = document.getElementById("sub-btn");
         const isLast = currentQuestion === (currentQuizData?.length || 0) - 1;
         const allAnswered = Array.isArray(userAnswersAdaptiv) && userAnswersAdaptiv.length > 0 && userAnswersAdaptiv.every(ans => ans !== null);
-
-        // console.log(isLast);
-        // console.log(userAnswersAdaptiv, Array.isArray(userAnswersAdaptiv), userAnswersAdaptiv.length > 0, userAnswersAdaptiv.every(ans => ans !== null));
 
         if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
 
@@ -3474,14 +3470,9 @@ const Adaptiv = (() => {
     }
 
     const retryQuiz = () => {
-        const level     = currentLevel;
-        const activity  = Activity.getDefine(Activity.getQid( `.${headerContainer}` )) ?? {};
-        const content   = activity?.content;
-        const data      = content?.levels;
-        const found     = (data || []).find( lvl => lvl.level === level );
-
         currentQuestion = 0;
         submitted = false;
+        userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);
         const navButtonsEl = document.getElementById("nav-buttons");
         if (navButtonsEl) navButtonsEl.style.display = "flex";
         renderQuestion(Activity.getQid( `.${headerContainer}` ));
@@ -3510,15 +3501,14 @@ const Adaptiv = (() => {
             const userIndex = userAnswersAdaptiv?.[i];
             const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}. ${q.options[userIndex]}` : "Not attempted";
             const correctAnswerText = `${label(q.answer)}. ${q.options[q.answer]}`;
-            console.log(userAnswerText, correctAnswerText);
             if (userAnswerText === correctAnswerText) totalCorrect++;
             totalQuestion++;
             const status = (userAnswerText === correctAnswerText) ? '✔' : '✘';
             midData2 += `<tr class="trData">
                 <th>${ lang == 'hi' ? 'प्र' : 'Q' }${totalQuestion}.</th>
-                <td class="${userAnswerText === correctAnswerText ? 'text-success' : 'text-danger' }">${userAnswerText}</td>
+                <td class="text-danger">${userAnswerText}</td>
                 <td class="text-success">${correctAnswerText}</td>
-                <td class="${userAnswerText === correctAnswerText ? 'text-success' : 'text-danger' }">${status}</td>
+                <td class="text-danger">${status}</td>
             </tr>`;
         });
 
