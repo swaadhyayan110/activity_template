@@ -3092,6 +3092,8 @@ const Adaptiv = (() => {
     let currentQuizData    = undefined;
     let userAnswersAdaptiv = undefined;
     let showResultPending  = false;    
+    let retryWrongOnly = false;
+    let wrongQuestions = [];
 
     const ui = ( questionId, totalQues ) => {
         try {
@@ -3207,7 +3209,13 @@ const Adaptiv = (() => {
         const data      = content?.levels;
         const found     = (data || []).find( lvl => lvl.level === level );
         const questLen  = found?.questions?.length || 0;
-        const q         = found?.questions?.[currentQuestion];
+        let realIndex = currentQuestion;
+
+        if (retryWrongOnly) {
+            realIndex = wrongQuestions[currentQuestion];
+        }
+
+        const q = found?.questions?.[realIndex];
         currentQuizData = found?.questions || [];
 
         ui(questionId, questLen );
@@ -3245,7 +3253,7 @@ const Adaptiv = (() => {
         
         container.innerHTML = `<div class="row m-0" style="font-size:18px">
                 <div style="width:30px" class="questionHeadingMCQ">
-                    <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${currentQuestion + 1}.</strong>
+                    <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${realIndex  + 1}.</strong>
                 </div>
                 <div class="col questionHeadingMCQ">${q.question}</div>
             </div>
@@ -3253,7 +3261,7 @@ const Adaptiv = (() => {
                 <div class="row mt-2 ml-4">
                 ${q.options.map((opt, i) => {
                     const optionLabel = Activity.translateBulletLabels({lang:lang,ind:i,upperCase:true});
-                    const isSelected  = userAnswersAdaptiv[currentQuestion] === i;
+                    const isSelected  = userAnswersAdaptiv[realIndex] === i;
                     let extraClass    = isSelected ? "selected" : "";
                     if (submitted) {
                         if (i === q.answer) extraClass = "correct";
@@ -3262,7 +3270,7 @@ const Adaptiv = (() => {
                     return `
                         <div class="col-md-6 col-sm-12 mb-2">
                             <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
-                                <input type="radio" name="question-${currentQuestion}" ${isSelected ? "checked" : ""} />
+                                <input type="radio" name="question-${realIndex }" ${isSelected ? "checked" : ""} />
                                 <strong>${optionLabel}.</strong> ${opt}
                             </label>
                         </div>
@@ -3276,43 +3284,60 @@ const Adaptiv = (() => {
             optionEl.addEventListener("click", (ev) => {
                 const idxAttr = optionEl.getAttribute('data-option-index');
                 const idx = idxAttr !== null ? parseInt(idxAttr, 10) : 0;
-                selectOption(currentQuestion, idx);
-                // renderQuestion(questionId);
+                selectOption(realIndex, idx);
             });
         });
 
         updateNavButtons();
     }
 
-    const selectOption = (qIndex, optIndex) => {
+    const selectOption = (realIndex, optIndex) => {
         if (submitted) return;
-        if (!Array.isArray(userAnswersAdaptiv) || qIndex < 0) return;
-        userAnswersAdaptiv[qIndex] = optIndex;
-        updateAttemptedCount();
-        if (Array.isArray(currentQuizData) && userAnswersAdaptiv.filter(a => a !== null).length === currentQuizData.length && currentQuestion === currentQuizData.length - 1) {
-            showResultPendinsg = true;
+        if (!Array.isArray(userAnswersAdaptiv) || realIndex < 0) return;
+
+        if (retryWrongOnly && userAnswersAdaptiv[realIndex] === currentQuizData[realIndex]?.answer) {
+            return;
         }
-    }
+
+        userAnswersAdaptiv[realIndex] = optIndex;
+        updateAttemptedCount();
+
+        if (!retryWrongOnly) {
+            const allAnswered = userAnswersAdaptiv.every(ans => ans !== null);
+            if (allAnswered && currentQuestion === currentQuizData.length - 1) {
+                showResultPending = true;
+            }
+        }
+
+        if (retryWrongOnly) {
+            const allWrongAnswered = wrongQuestions.every(i => userAnswersAdaptiv[i] !== null);
+            if (allWrongAnswered) {
+                showResultPending = true;
+            }
+        }
+    };
 
     const nextQuestion = () => {
-        const activity  = Activity.getDefine( Activity.getQid( `.${headerContainer}` ) );
-        const lang      = activity?.lang ?? 'en';
+        const limit = getQuestionLimit();
 
-        if (userAnswersAdaptiv[currentQuestion] === null || userAnswersAdaptiv[currentQuestion] === undefined) {
+        if (userAnswersAdaptiv[currentQuestion] === null) {
+            const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
+            const lang = activity?.lang ?? 'en';
             Swal.fire({
-                title : lang == 'en' ? 'Info' : 'जानकारी',
-                text  : lang == 'en' ? 'Please select an option before next.' : 'अगले पर जाने से पहले कृपया एक विकल्प चुनें।',
-                icon  : 'info'
+                title: lang == 'en' ? 'Info' : 'जानकारी',
+                text: lang == 'en' ? 'Please select an option before next.' : 'अगले पर जाने से पहले कृपया एक विकल्प चुनें।',
+                icon: 'info'
             });
             return;
         }
 
-        if( currentQuestion < (currentQuizData?.length || 0) - 1 ) {
+        if (currentQuestion < limit - 1) {
             currentQuestion++;
-            renderQuestion(Activity.getQid( `.${headerContainer}` ), 'next');
+            renderQuestion(Activity.getQid(`.${headerContainer}`), 'next');
         }
+
         updateNavButtons();
-    }
+    };
 
     const prevQuestion = () => {
         if( currentQuestion > 0 ) {
@@ -3326,11 +3351,15 @@ const Adaptiv = (() => {
         const prevBtn = document.getElementById("prev-btn");
         const nextBtn = document.getElementById("next-btn");
         const subBtn = document.getElementById("sub-btn");
-        const isLast = currentQuestion === (currentQuizData?.length || 0) - 1;
-        const allAnswered = Array.isArray(userAnswersAdaptiv) && userAnswersAdaptiv.length > 0 && userAnswersAdaptiv.every(ans => ans !== null);
+
+        const total = retryWrongOnly ? wrongQuestions.length : currentQuizData.length;
+        const isLast = currentQuestion === total - 1;
+
+        const allAnswered = retryWrongOnly
+            ? wrongQuestions.every(i => userAnswersAdaptiv[i] !== null)
+            : userAnswersAdaptiv.every(ans => ans !== null);
 
         if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
-
         if (nextBtn && subBtn) {
             if (isLast && allAnswered) {
                 nextBtn.style.display = 'none';
@@ -3340,7 +3369,7 @@ const Adaptiv = (() => {
                 subBtn.style.display = 'none';
             }
         }
-    }
+    };
 
     const showResult = () => {
         try {
@@ -3357,6 +3386,14 @@ const Adaptiv = (() => {
             const container = document.getElementById("quizContainerAdaptiv");
             submitted = true;
             attemptCount++;
+
+            wrongQuestions = [];
+            (currentQuizData || []).forEach((q, i) => {
+                if (userAnswersAdaptiv[i] !== q.answer) {
+                    wrongQuestions.push(i);
+                }
+            });
+
             const correct = (userAnswersAdaptiv || []).filter((a, i) => a === (currentQuizData?.[i]?.answer)).length;
             const showAnswerBtn = attemptCount >= 5;
             const showRetryBtn = correct < (currentQuizData?.length || 0);
@@ -3424,10 +3461,18 @@ const Adaptiv = (() => {
             } else {
                 if (hideBtn) hideBtn.style.display = 'inline-block';
             }
+
+            retryWrongOnly = false;
         } catch (e) {
             console.error('Adaptiv.showResult error:', e);
         }
     }
+
+    const getQuestionLimit = () => {
+        return retryWrongOnly
+            ? wrongQuestions.length
+            : currentQuizData?.length || 0;
+    };
 
     const loadNextLevel = () => {
         const levelTextEl = document.getElementById("levelText");
@@ -3470,19 +3515,30 @@ const Adaptiv = (() => {
     }
 
     const retryQuiz = () => {
-        currentQuestion = 0;
         submitted = false;
-        userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);
-        const navButtonsEl = document.getElementById("nav-buttons");
-        if (navButtonsEl) navButtonsEl.style.display = "flex";
-        renderQuestion(Activity.getQid( `.${headerContainer}` ));
+
+        if (wrongQuestions.length > 0) {
+            retryWrongOnly = true;
+            currentQuestion = 0;
+
+            wrongQuestions.forEach(i => {
+                userAnswersAdaptiv[i] = null;
+            });
+        } else {
+            retryWrongOnly = false;
+            currentQuestion = 0;
+            userAnswersAdaptiv = new Array(currentQuizData.length).fill(null);
+        }
+
+        renderQuestion(Activity.getQid(`.${headerContainer}`));
         updateAttemptedCount();
+
         $(".instruc").show();
         $(".submit-info").show();
+
         const levelTextEl = document.getElementById("levelText");
         if (levelTextEl) levelTextEl.style.display = 'block';
-        if (navButtonsEl) navButtonsEl.style.display = "block";
-    }
+    };
 
     const showAnswerPopup = () => {
         const activity  = Activity.getDefine( Activity.getQid(`.${headerContainer}`)  );
@@ -3551,10 +3607,6 @@ const Adaptiv = (() => {
 
     const closeFnAD = () => {
         $("#popupDialogAnsAd").hide();
-    }
-
-    const popupFn = () => {
-        $("#overlay,#popupDialog").show();
     }
 
     const finishMessage = () => {
@@ -5293,19 +5345,28 @@ const DragAndDropMulti = (() => {
                         correctCount++;
                     }
                 } else {
-                    const remaining = [...correctAnswerText];
-                    const match = userAnswer.map(userWord => {
-                        const id    = remaining.indexOf(userWord);
-                        const match = id !== -1;
-                        if (match) remaining.splice(id, 1);
-                        return match;
-                    });
-
+                    let remaining = [...correctAnswerText];
+                    let match = undefined;
+                    if(option_side == 'right'){
+                        remaining = [correctAnswerText];
+                        match = userAnswer.map(userWord => {
+                            const match = userWord === remaining[0];
+                            return match;
+                        });
+                    }else{
+                        match = userAnswer.map(userWord => {
+                            const id    = remaining.indexOf(userWord);
+                            const match = id !== -1;
+                            if (match) remaining.splice(id, 1);
+                            return match;
+                        });
+                    }
+                    
                     match.map( (item) => {
                         if( item == true ) {
                             count++;
                         }
-                        if( count == correctAnswerText.length ) {
+                        if( option_side == "right" ? count == remaining.length : correctAnswerText.length ) {
                             isCorrect = true;
                             correctCount++;
                         }
@@ -5463,13 +5524,13 @@ const DragAndDropMulti = (() => {
 
                     let replacedText = item.text;
 
-                    quesOptions.forEach(ans => {
-                        replacedText = replacedText.replace(
-                            replacement,
-                            `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}" style="width:${inputWidth};"></div>`
-                        );
-                    });
+                    let index = 0;
+                    const replacementRegex = new RegExp(replacement, "g");
 
+                    replacedText = replacedText.replace(replacementRegex, () => {
+                        const ans = quesOptions[index++] || '';
+                        return `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}" style="width:${inputWidth};"></div>`;
+                    });
                     
                     const image = [];
                     if( item.image != undefined ) {
@@ -6072,7 +6133,7 @@ const Shabdkosh = (() => {
             }
 
             parent.innerHTML = `<div class="question">
-                                    <div class="containe pt-3" id="${containerId}">
+                                    <div class="containe" id="${containerId}">
                                         <div class="rowWithAudios font18 fontBold mx-4 mb-4 ${Define.get('head')}"></div>
                                         <div class="question-block mt-3">
                                             <div class="tab-containerz">
@@ -11909,9 +11970,14 @@ const VowelDragAndDrop = (() => {
             }
             if (buffer) parts.push({ text: buffer, editable: false });
         } else {
-            // If no #, treat the whole word as editable (if desired)
-            parts.push({ text: text.trim(), editable: true });
+            const trimmed = text.trim();
+            if (trimmed.split(' ').length === 1) {
+                parts.push({ text: trimmed, editable: true });
+            } else {
+                parts.push({ text: trimmed, editable: false });
+            }
         }
+
         return parts;
     };
 
@@ -12117,7 +12183,21 @@ const VowelDragAndDrop = (() => {
 
         const optionHtml = [];
 
-        const drag_option_html = (item, ind) => `<div class="vowel-container"><div class="drag_${ind} vowel font17 px-2" data-text="${item}">${item}</div></div>`;
+        const drag_option_html = (item, ind) => {
+            if (item === 'र्') {
+                return `
+                    <div class="vowel-container">
+                        <div class="drag_${ind} vowel font17 px-2" data-text="${item}">
+                            <img src="${Activity.pathToCWD()}r_matra.png" alt="र्" style="width: 18px; vertical-align: top;">
+                        </div>
+                    </div>
+                `;
+            }
+            return `<div class="vowel-container">
+                        <div class="drag_${ind} vowel font17 px-2" data-text="${item}">${item}</div>
+                    </div>`;
+        };
+
 
         vowels.forEach((item, ind) => {
             const html = drag_option_html(item, ind);
@@ -12128,53 +12208,40 @@ const VowelDragAndDrop = (() => {
         const questionHtml = [];
         questionHtml.push('<div class="row g-0">');
 
-            words.forEach((item, wordIndex) => {
-        
-            const hasHash = item.text.includes('#');
-            const wordCountWithoutHash = item.text.split(' ').filter(word => !word.includes('#')).length;
-
-            if (!hasHash || wordCountWithoutHash === item.text.split(' ').length) {
-                return;
-            }
-
+        words.forEach((item, wordIndex) => {
             const hasImage = typeof item?.image === 'object';
             const imagePath = hasImage ? item.image.path : null;
 
             let image = '';
             if (hasImage && imagePath) {
-                image = `<img src="${Activity.pathToCWD() + imagePath}" style="width:${item.image.width || '40px'}" class="${isCol ? 'mx-auto' : ''} mb-2" ondragstart="return false">`;
+                image = `<img src="${Activity.pathToCWD() + imagePath}" style="width:${item.image.width || '40px'}" class="mx-auto mb-2" ondragstart="return false">`;
             }
 
             const parts = parseSharpWords(item.text);
-            const answerValue = Array.isArray(item.answer)
-                ? item.answer.join('|')
-                : item.answer;
+            const answerValue = Array.isArray(item.answer) ? item.answer.join('|') : item.answer;
 
             const html = `
-            <div class="my-2 d-flex col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm}">
-                <div class="col-auto p-2">
-                    (${Activity.translateBulletLabels({ lang, ind: wordIndex })})
-                </div>
-                <div class="p-2 col d-flex flex-wrap ${hasImage ? 'flex-column align-items-center' : ''}">
-                    ${image}
-                    <div class="d-flex question-container_2" data-queindex="${wordIndex}" data-ans="${answerValue}">
-                        ${
-                            parts.map(part => {
-                                const isEditable = part.editable;
-                                const text = isEditable ? part.text.replace(/^#|#$/g, '') : part.text;
-                                if (!text.trim()) return '';
-
-                                return `<span class="part-container ${isEditable ? 'editable' : ''}" data-original="${text.trim()}">
-                                    ${splitGraphemes(text).map((letter) => {
-                                        if (letter.trim() === '') return;
-                                        return `<span class="letter" data-original="${letter.trim()}">${letter.trim()}</span>`;
-                                    }).join('')}
-                                </span>&nbsp;`;
-                            }).filter(Boolean).join('')
-                        }
+                <div class="my-2 d-flex col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm}">
+                    <div class="col-auto p-2">
+                        (${Activity.translateBulletLabels({ lang, ind: wordIndex })})
                     </div>
-                </div>
-            </div>`;
+                    <div class="p-2 col d-flex flex-wrap ${hasImage ? 'flex-column align-items-center' : ''}">
+                        ${image}
+                        <div class="d-flex question-container_2" data-queindex="${wordIndex}" data-ans="${answerValue}">
+                            ${
+                                parts.map(part => {
+                                    const isEditable = part.editable;
+                                    const text = part.text.trim();
+                                    if (!text) return '';
+
+                                    return `<span class="part-container ${isEditable ? 'editable' : ''}" data-original="${text}">
+                                        ${splitGraphemes(text).map(letter => `<span class="letter" data-original="${letter}">${letter}</span>`).join('')}
+                                    </span>&nbsp;`;
+                                }).join('')
+                            }
+                        </div>
+                    </div>
+                </div>`;
             questionHtml.push(html);
         });
 
@@ -12186,6 +12253,35 @@ const VowelDragAndDrop = (() => {
         makeDraggable('.vowel');
         initDroppable('.letter');
         DragEnabled = true;
+    };
+
+    const combineVowelMatra = (base, matra) => {
+        const vowelCombinations = {
+            'अ': { 'ा': 'आ', 'ि': 'इ', 'ी': 'ई', 'ु': 'उ', 'ू': 'ऊ', 'े': 'ए', 'ै': 'ऐ', 'ो': 'ओ', 'ौ': 'औ' },
+            'आ': { 'ा': 'आ', 'ि': 'आई', 'ी': 'आई', 'ु': 'आउ', 'ू': 'आऊ', 'े': 'आए', 'ै': 'आऐ', 'ो': 'आओ', 'ौ': 'आऔ' },
+            'इ': { 'ा': 'इा', 'ि': 'इि', 'ी': 'ई', 'ु': 'इु', 'ू': 'इू', 'े': 'इे', 'ै': 'इै', 'ो': 'इो', 'ौ': 'इौ' },
+            'ई': { 'ा': 'ईा', 'ि': 'ईि', 'ी': 'ई', 'ु': 'ईु', 'ू': 'ईू', 'े': 'ईे', 'ै': 'ईै', 'ो': 'ईो', 'ौ': 'ईौ' },
+            'उ': { 'ा': 'उा', 'ि': 'उि', 'ी': 'उी', 'ु': 'ऊ', 'ू': 'ऊ', 'े': 'उे', 'ै': 'उै', 'ो': 'उो', 'ौ': 'उौ' },
+            'ऊ': { 'ा': 'ऊा', 'ि': 'ऊि', 'ी': 'ऊी', 'ु': 'ऊु', 'ू': 'ऊ', 'े': 'ऊे', 'ै': 'ऊै', 'ो': 'ऊो', 'ौ': 'ऊौ' },
+            'ए': { 'ा': 'एा', 'ि': 'एि', 'ी': 'एी', 'ु': 'एु', 'ू': 'एू', 'े': 'ए', 'ै': 'ऐ', 'ो': 'एो', 'ौ': 'एौ' },
+            'ऐ': { 'ा': 'ऐा', 'ि': 'ऐि', 'ी': 'ऐी', 'ु': 'ऐु', 'ू': 'ऐू', 'े': 'ऐे', 'ै': 'ऐ', 'ो': 'ऐो', 'ौ': 'ऐौ' },
+            'ओ': { 'ा': 'ओा', 'ि': 'ओि', 'ी': 'ओी', 'ु': 'ओु', 'ू': 'ओू', 'े': 'ओे', 'ै': 'ओै', 'ो': 'ओ', 'ौ': 'औ' },
+            'औ': { 'ा': 'औा', 'ि': 'औि', 'ी': 'औी', 'ु': 'औु', 'ू': 'औू', 'े': 'औे', 'ै': 'औै', 'ो': 'औो', 'ौ': 'औ' },
+        };
+
+        if (vowelCombinations[base] && vowelCombinations[base][matra]) {
+            return vowelCombinations[base][matra];
+        }
+
+        if (matra === 'ि') {
+            return matra + base;
+        }
+
+        if (matra.endsWith('्')) {
+            return matra + base;
+        }
+    
+        return base + matra;
     };
 
     const makeDraggable = (selector) => {
@@ -12210,22 +12306,12 @@ const VowelDragAndDrop = (() => {
                 drop: function (_, ui) {
                     if (!DragEnabled) return;
 
-                    const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
-                    const vowels = activity?.content?.vowels || [];
-
                     let base = $(this).attr('data-original');
                     const swar = ui.draggable.attr('data-text');
 
-                    vowels.forEach((v) => {
-                        base = base.replace(v, '');
-                    })
+                    const combined = combineVowelMatra(base, swar);
 
-                    const regex = /[^\u0900-\u097F#\u0964\u0965\w\s]/g;
-                    const symbols = $(this).text().match(regex);
-
-                    if(symbols != null && symbols.length > 0) return;
-
-                    $(this).text(base + swar);
+                    $(this).text(combined);
                 }
             });
         } catch (e) {

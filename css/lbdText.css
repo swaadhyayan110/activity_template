@@ -41,7 +41,7 @@ body {
   background: #fff;
   height: 93vh;
   border-radius: 15px;
-  overflow: auto;
+  overflow: hidden;
   position: relative;
 }
 
@@ -71,7 +71,7 @@ body {
   align-items: center;
   justify-content: center;
   font-family: 'PoppinsLight';
-  padding-bottom: 17px;
+  /* padding-bottom: 17px; */
 }
 
 .boxQ {
@@ -388,6 +388,7 @@ body {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
 }
 
 /* Neon border glow */
@@ -931,6 +932,11 @@ body {
 
 
 /* Listening Common CSS End */
+
+.question-container{
+  height: 80vh;
+  overflow: auto;
+}
 
 /* Page Load Animation */
 @keyframes slideIn {

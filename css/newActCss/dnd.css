@@ -82,7 +82,7 @@
   gap: 6px;
   flex-wrap: wrap;
   position: sticky;
-  top: 15%;
+  top: 0;
   z-index: 99;
 }
 
@@ -267,13 +267,10 @@
 
 .vowel-correct {
   background-color: #a2f09c;
-  /* padding: 5px; */
-
 }
 
 .vowel-incorrect {
   background-color: #fca5a5;
-  /* padding: 5px; */
 }
 
 /* vowe Drag and Drop end*/
@@ -297,6 +294,12 @@
   }
 
   .wordDrag {
+    font-size: 15px;
+    padding: 6px 10px;
+    margin: 1px;
+  }
+
+  .vowel-container {
     font-size: 15px;
     padding: 6px 10px;
     margin: 1px;
