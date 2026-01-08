@@ -5328,6 +5328,7 @@ const DragAndDropMulti = (() => {
             }
             compareAnswerArrays( type_set?.answers, userAns )
         } else {
+            console.log('no set');
             shuffledQuestions.forEach((item, i) => {
                 const userAnswer = userAns[i];
                 let count = 0;
@@ -5345,6 +5346,7 @@ const DragAndDropMulti = (() => {
                         correctCount++;
                     }
                 } else {
+                    console.log('strict false');
                     let remaining = [...correctAnswerText];
                     let match = undefined;
                     if(option_side == 'right'){
@@ -5366,7 +5368,8 @@ const DragAndDropMulti = (() => {
                         if( item == true ) {
                             count++;
                         }
-                        if( option_side == "right" ? count == remaining.length : correctAnswerText.length ) {
+                        const ansLen = option_side == "right" ? remaining.length : correctAnswerText.length;
+                        if( count == ansLen ) {
                             isCorrect = true;
                             correctCount++;
                         }
