@@ -1923,7 +1923,7 @@ const FillInTheBlanksHindiKb = (() => {
                 const subQuestion = __subQuestions?.filter( subques => subques.qid === question.qid ) ?? [];                
                 const questionId  = question?.qid !== undefined ? question?.qid : (qIndex + 1);
                 const mainBullet  = Activity.translateBulletLabels({lang:lang, ind:qIndex});
-                const html        = [ `${mainBullet}) ` ];
+                const html        = [ content?.questions.length != 1 ? `${mainBullet}) `: null ];
 
                 const div = document.createElement('div');
                 div.classList.add('questionFILL'); 

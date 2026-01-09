@@ -72,6 +72,7 @@ body {
   justify-content: center;
   font-family: 'PoppinsLight';
   /* padding-bottom: 17px; */
+  overflow: hidden !important;
 }
 
 .boxQ {
@@ -934,7 +935,7 @@ body {
 /* Listening Common CSS End */
 
 .question-container{
-  height: 80vh;
+  height: 84vh;
   overflow: auto;
 }
 
