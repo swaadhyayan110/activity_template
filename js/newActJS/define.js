@@ -52,6 +52,7 @@ const Define = (() => {
         { qid : 39, text : ['Q-39', 'Spell It out'], module : 38 },
         { qid : 40, text : ['Q-40', 'Vowel Drag and Drop'], module : 39 },
         { qid : 41, text : ['Q-41', 'Shabdkosh type-2'], module : 19 },
+        { qid : 42, text : ['Q-42', 'Virtual Tour'], module : 40 },
     ];
 
     // DEFINE QUESTIONS
@@ -1084,6 +1085,162 @@ const Define = (() => {
                     ]
                 }
             ]
+        },
+        {
+            id      : 42,
+            head    : 'Template : 40, VirtualTour',
+            content : {
+                config : {
+                    image : {
+                        width : '100%'
+                    },
+                    col : {       // [-- works for virtual tour only --]
+                        md : 4,
+                        sm : 6,
+                        col : 3,
+                    }
+                },
+                questions : [
+                    { 
+                        id : 3,
+                        title : {
+                            main : {
+                                text : '1-here some title text'
+                            },
+                            sub  : {
+                                text : 'here some sub title text',
+                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                            }
+                        },
+                        set : {
+                            virtualTour : false,
+                            questions   : [
+                                {
+                                    head : 'head - text',
+                                    sentence : 'question set sentencehere and item size lorem.',
+                                    image : {
+                                        position : 'top',
+                                        path  : 'img/1.png',
+                                        width : '15%'
+                                    }
+                                },
+                                {
+                                    head : 'head - text - 2',
+                                    sentence : 'question set sentence here and item size lorem.',
+                                    image : {
+                                        position : 'left',
+                                        path  : 'img/3.png',
+                                        width : '150px'
+                                    }
+                                },
+                                {
+                                    head : 'head - text - 3',
+                                    sentence : 'question set sentence here and item size lorem.',
+                                    image : {
+                                        position : 'bottom',
+                                        path  : 'img/2.png',
+                                        width : '20%'
+                                    }
+                                },
+                                {
+                                    head : 'head - text - 4',
+                                    sentence : 'question set sentence here and item size lorem.',
+                                    image : {
+                                        position : 'right',
+                                        path  : 'img/5.png',
+                                        width : '200px'
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    { 
+                        id : 1,
+                        title : {
+                            main : {
+                                text : '1-here some title text'
+                            },
+                            sub  : {
+                                text : 'here some sub title text',
+                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                            }
+                        },
+                        set : {
+                            virtualTour : true,
+                            images : [ 'img/1.png', 'img/2.png', 'img/3.png', 'img/4.png', 'img/5.png' ]
+                        }
+                    },
+                    {
+                        id : 2,
+                        title : {
+                            main : {
+                                text : '1-here some title text'
+                            },
+                            sub  : {
+                                text : 'here some sub title text',
+                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                            }
+                        },
+                        set : {
+                            virtualTour : true,
+                            images : [ 'img/2.png', 'img/1.png', 'img/3.png', 'img/5.png', 'img/4.png' ]
+                        }
+                    },
+                    {
+                        id : 3,
+                        title : {
+                            main : {
+                                text : '1-here some title text'
+                            },
+                            sub  : {
+                                text : 'here some sub title text',
+                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                            }
+                        },
+                        set : {
+                            virtualTour : false,
+                            questions   : [
+                                {
+                                    head : 'head - text',
+                                    sentence : 'question set sentencehere and item size lorem.',
+                                    image : {
+                                        position : 'top',
+                                        path  : 'img/2.png',
+                                        width : '15%'
+                                    }
+                                },
+                                {
+                                    head : 'head - text - 2',
+                                    sentence : 'question set sentence here and item size lorem.',
+                                    image : {
+                                        position : 'left',
+                                        path  : 'img/4.png',
+                                        width : '150px'
+                                    }
+                                },
+                                {
+                                    head : 'head - text - 3',
+                                    sentence : 'question set sentence here and item size lorem.',
+                                    image : {
+                                        position : 'bottom',
+                                        path  : 'img/3.png',
+                                        width : '20%'
+                                    }
+                                },
+                                {
+                                    head : 'head - text - 4',
+                                    sentence : 'question set sentence here and item size lorem.',
+                                    image : {
+                                        position : 'right',
+                                        path  : 'img/1.png',
+                                        width : '200px'
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         },
     ];
 

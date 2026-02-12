@@ -41,6 +41,7 @@ const Templates = (() => {
         { id : 37, template : 'SpellCheck' },
         { id : 38, template : 'SpellItOut' },
         { id : 39, template : 'VowelDragAndDrop' },
+        { id : 40, template : 'VirtualTour' },
     ];
 
     const store = {

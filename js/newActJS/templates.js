@@ -40,11 +40,18 @@ const Helper = (()=> {
         __audio.src = src;
     }
 
+    const defaultCol = {
+        md : 4,
+        sm : 6,
+        col : 12
+    };
+
     return {
         setAudio,
         playAudio,
         stopAudio,
-        pauseAudio
+        pauseAudio,
+        defaultCol
     }
 })();
 
@@ -12321,6 +12328,253 @@ const VowelDragAndDrop = (() => {
             console.error('initDroppable:', e);
         }
     };
+
+    return {
+        render: render
+    };
+
+})();
+
+const VirtualTour = (() => {
+
+    const containerId       = 'virtualTour';
+    const titleWrapperId    = 'title-wrapper';
+    const imageContainerCls = 'question-image-container';    
+
+    let __currentIndex = 0;
+    let __questions    = undefined;
+    let __prevBtn      = undefined;
+    let __nextBtn      = undefined;
+
+    const style = () => {
+        const purpleColor = "#771360";
+        const titleStyle  = `border:1px solid ${purpleColor};background-color:${purpleColor};`;
+
+        const store = {
+            colors : {
+                purple : purpleColor
+            },
+            css : {
+                title : titleStyle
+            }
+        };
+
+        return { get : store };
+    }
+
+    const defaultCol = Helper?.defaultCol ?? {};
+
+    const ui = (questionId) => {
+        try {
+            const containerSelector = Define.get('questionContainer');
+            const parent = document.querySelector(containerSelector);
+            if (!parent) {
+                console.error("ui container not found:", containerSelector);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId) ?? {};
+            const content  = activity?.content ?? {};
+
+            parent.innerHTML = `<div class="question">
+                                    <div class="container w-75 mx-auto">
+                                        <div class="p-2 rounded-3 border bg-light text-center ${Define.get('head')}"></div>
+                                        <div id="${containerId}" class="py-2 mt-2">
+                                            <div class="text-end">
+                                                <button id="previousBtn" class="btn btn-outline-primary rounded m-1" disabled>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                                    </svg>
+                                                    Previous
+                                                </button>
+                                                <button id="nextBtn" class="btn btn-outline-primary rounded m-1" disabled>
+                                                    Next
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="question-content-container">
+                                                <div id="${titleWrapperId}"></div>
+                                                <div class="row g-0 ${imageContainerCls}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+            // ..
+
+            __prevBtn = document.querySelector( '#previousBtn' );
+            __nextBtn = document.querySelector( '#nextBtn' );
+
+            if( __prevBtn ) __prevBtn.addEventListener( 'click', renderPrev );
+            if( __nextBtn ) __nextBtn.addEventListener( 'click', renderNext );
+            
+            Activity.setHeader(questionId);
+
+            if( content?.questions?.length > 1 ) __nextBtn.disabled = false;
+
+        } catch (e) {
+            console.error('VirtualTour.ui :', e);
+        }
+    };    
+
+    const render = (questionId) => {
+        __currentIndex = 0;
+        __questions    = undefined;
+        __prevBtn      = undefined;
+        __nextBtn      = undefined;
+
+        ui(questionId);
+        if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+
+        renderQuestion();        
+    };
+
+    const renderQuestion = () => {
+
+        const questionId = Activity.getQid( `#${containerId}` );
+        const activity   = Activity.getDefine(questionId) ?? {};
+        const content    = activity?.content ?? {};
+        const config     = content?.config ?? {};
+        const definedCol = config?.col ?? {};
+        const questions  = content?.questions ?? [];
+        const imageWidth = ( config?.image?.width != null && config.image.width !== '')
+                                ? config.image.width
+                                : '100%';
+        // ..
+        
+        if( !__questions ) __questions = questions;
+
+        const col = {
+            md  : definedCol?.md ?? defaultCol.md,
+            sm  : definedCol?.sm ?? defaultCol.sm,
+            col : definedCol?.col ?? defaultCol.col
+        };
+
+        const currentQuestion = questions[__currentIndex];
+
+        const titleWrapper = document.querySelector( `#${titleWrapperId}` );
+        const renderTitle = () => {
+            const title = currentQuestion?.title ?? {};
+            
+            return title && ( title.hasOwnProperty('main') || title.hasOwnProperty('sub') )
+                ? `
+                    <div class="question-text-container row g-0 gap-2 my-2 fs-5">
+                        ${ title?.main?.text && title.main.text != ''
+                            ? `
+                                <div 
+                                    class="col-auto p-3 fw-bold text-light text-uppercase rounded-3" 
+                                    style="${style().get.css.title}"
+                                >${title.main.text}</div>
+                            ` : ''
+                        }
+                        ${ title?.sub?.text && title.sub.text != ''
+                            ? `
+                                <div 
+                                    class="col d-flex align-items-center ${ title?.sub?.classes ? title?.sub?.classes : '' } ${ title?.main?.text ? '' : 'justify-content-center' } px-3"
+                                >${title.sub.text}</div>
+                            ` : ''
+                        }
+                    </div>
+                ` : ''
+        }
+        titleWrapper.innerHTML = renderTitle();
+        
+        const containerHtml = document.querySelector( `.${imageContainerCls}` );
+
+        containerHtml.innerHTML = '';
+
+        if( currentQuestion?.set?.virtualTour === true ) {
+            containerHtml.innerHTML = currentQuestion.set?.images.map( path => {
+                return `
+                    <div class="col-${col.col} col-md-${col.md} col-sm-${col.sm} p-3 text-center animate__animated animate__fadeInDown">
+                        <img 
+                            src="${Activity.pathToCWD()}${path}" 
+                            class="rounded-2" 
+                            style="width:${imageWidth};border:2px solid ${style().get.colors.purple}" 
+                            ondragstart="return false;"
+                        >
+                    </div>
+                `;
+            }).join( '' ) ?? '';
+        }
+
+        if( currentQuestion?.set?.virtualTour === false ) {
+            const replacement = currentQuestion?.set?.replacement ?? '#img#';
+
+            containerHtml.innerHTML = currentQuestion?.set?.questions?.map( question => {
+
+                const imageWidth = question?.image?.width ?? '100px';
+                const imagePos   = question?.image?.position ?? 'top';
+
+                let imageClass = 'col-auto';
+                if( imagePos == 'top' || imagePos == 'bottom' ) {
+                    imageClass = 'col-12 text-center';
+                }
+                imageClass += ' d-flex align-items-center justify-content-center';
+
+                let textClass = 'col-12';
+                if( imagePos == 'left' || imagePos == 'right' ) {
+                    textClass = 'col';
+                }
+
+                const image = question?.image?.path && question?.image?.path != '' 
+                    ? `<div class="${imageClass}">
+                            <img 
+                                src="${question.image.path}"
+                                style="width:${imageWidth};" 
+                                class="border border-success-subtle rounded"
+                                ondragstart="return false";
+                            >
+                        </div>
+                    ` : ''
+                // ..
+                return `
+                    ${ question?.head || question?.sentence || image ? `
+                            <div class="row g-0 border-secondary-subtle border rounded py-2 bg-light-subtle px-1 my-2 animate__animated animate__fadeInDown">
+                                ${imagePos == 'top' || imagePos == 'left' ? image : ''}
+                                ${ question?.head || question?.sentence ? `
+                                    <div class="${textClass}">
+                                        ${ question?.head ? `
+                                                <div class="fs-5 text-danger-emphasis p-1">${question.head}</div>
+                                            ` : ''
+                                        }
+                                        ${ question?.sentence ? `
+                                                <div class="p-1">${question.sentence}</div>
+                                            ` : ''
+                                        }
+                                    </div>` : ''
+                                }
+                                ${imagePos == 'bottom' || imagePos == 'right' ? image : ''}
+                            </div>
+                            ` : ''
+                    }
+                `
+            }).join( '' ) ?? '';
+        }
+    };
+
+    const renderNext = () => {
+        __currentIndex++;
+        __prevBtn.disabled = false;
+        renderQuestion();
+
+        if( !__questions[__currentIndex+1] ) {
+            __nextBtn.disabled = true;
+            return;
+        }
+    }
+
+    const renderPrev = () => {
+        __currentIndex--;
+        __nextBtn.disabled = false;
+        renderQuestion();
+
+        if( !__questions[__currentIndex-1] ) {
+            __prevBtn.disabled = true;
+            return;
+        }
+    }
 
     return {
         render: render
