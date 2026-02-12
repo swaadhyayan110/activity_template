@@ -4,19 +4,23 @@ const Helper = (()=> {
 
     const __audio = new Audio();
 
-    const playAudio = () => {
+    const playAudio = ({playBtn='.common_playBtn',pauseBtn='.common_pauseBtn'}={}) => {
         $('#listening_container').hide();
         $('#question_header_container').show();
 
-        $('.common_playBtn').hide();
-        $('.common_pauseBtn').show();
+        $(playBtn).hide();
+        $(pauseBtn).show();
 
         __audio.currentTime = 0;
-        __audio.play();
+        __audio.play()
+            .then(() => {})
+            .catch(err => {
+                console.error('Playback failed:', err);
+            });
+        // ..
 
-        __audio.addEventListener('ended', () => {
-            pauseAudio();
-        });
+        __audio.removeEventListener('ended', pauseAudio);
+        __audio.addEventListener('ended', pauseAudio );
     }
 
     const pauseAudio = () => {
@@ -12339,6 +12343,7 @@ const VirtualTour = (() => {
 
     const containerId       = 'virtualTour';
     const titleWrapperId    = 'title-wrapper';
+    const audioWrapperId    = 'audio-wrapper';
     const imageContainerCls = 'question-image-container';    
 
     let __currentIndex = 0;
@@ -12402,6 +12407,7 @@ const VirtualTour = (() => {
                                             }
                                             <div class="question-content-container">
                                                 <div id="${titleWrapperId}"></div>
+                                                <div id="${audioWrapperId}"></div>
                                                 <div class="row g-0 ${imageContainerCls}"></div>
                                             </div>
                                         </div>
@@ -12461,6 +12467,8 @@ const VirtualTour = (() => {
 
     const renderQuestion = () => {
 
+        Helper.stopAudio();
+
         const questionId = Activity.getQid( `#${containerId}` );
         const activity   = Activity.getDefine(questionId) ?? {};
         const content    = activity?.content ?? {};
@@ -12505,6 +12513,9 @@ const VirtualTour = (() => {
         if( !containerHtml ) return false;
         containerHtml.innerHTML = '';
 
+        const wrapper = document.querySelector( '#'+audioWrapperId );
+        if( wrapper ) wrapper.innerHTML = '';
+
         if( currentQuestion?.set?.virtualTour === true ) {
             const definedCol = currentQuestion?.set?.col ?? {};
             const col = {
@@ -12512,6 +12523,34 @@ const VirtualTour = (() => {
                 sm  : definedCol?.sm ?? defaultCol.sm,
                 col : definedCol?.col ?? defaultCol.col
             };
+
+            const audioPath = currentQuestion?.set?.audio && currentQuestion?.set?.audio?.path
+                ? currentQuestion.set.audio.path
+                : undefined;
+            // ..
+
+            if( audioPath ) {
+
+                const audioView = `<div class="text-end">
+                                    <svg class="common_playBtn" id="playAudio" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16" role="button">
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/>
+                                    </svg>
+                                    <svg class="common_pauseBtn" style="display:none;" id="pauseAudio" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-pause-circle-fill" viewBox="0 0 16 16" role="button">
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5"/>
+                                    </svg>
+                                </div>`;
+                // ..
+
+                if( wrapper ) wrapper.innerHTML = audioView;
+
+                Helper.setAudio( Activity.pathToCWD() + audioPath );
+
+                const playAudio  = document.querySelector( '#playAudio' );
+                const pauseAudio = document.querySelector( '#pauseAudio' );
+
+                if( playAudio ) playAudio.addEventListener( 'click', Helper.playAudio );
+                if( pauseAudio ) pauseAudio.addEventListener( 'click', Helper.pauseAudio );
+            }
 
             const imageWidth = ( currentQuestion?.set?.imageWidth && currentQuestion?.set?.imageWidth !== '')
                                     ? currentQuestion.set.imageWidth
@@ -12566,7 +12605,7 @@ const VirtualTour = (() => {
                     if( !__renderAll && index > 0 ) return;
                     
                     return image?.path && image?.path != ''
-                        ? `<div class="${imageClass}">
+                        ? `<div class="${imageClass} my-1 px-1">
                                 <div class="col-12 text-center">
                                     ${renderImage({path:image.path, imageWidth:imageWidth})}
                                 </div>
@@ -12579,10 +12618,15 @@ const VirtualTour = (() => {
                     // ..
                 }).join( '' );
 
+                const imageHtmlContainer = imageHtmlSet != '' 
+                    ? `<div class="row g-0 justify-content-center">${imageHtmlSet}</div>`
+                    : ''
+                // ..
+
                 return `
                     ${ question?.head || question?.sentence || imageHtmlSet ? `
                             <div class="row g-0 border-secondary-subtle border rounded py-2 bg-light-subtle px-1 my-2 animate__animated animate__fadeInDown">
-                                ${imagePos == 'top' || imagePos == 'left' ? imageHtmlSet : ''}
+                                ${imagePos == 'top' || imagePos == 'left' ? imageHtmlContainer : ''}
                                 ${ question?.head || question?.sentence ? `
                                     <div class="${textClass} my-2">
                                         ${ question?.head ? `
@@ -12597,7 +12641,7 @@ const VirtualTour = (() => {
                                         }
                                     </div>` : ''
                                 }
-                                ${imagePos == 'bottom' || imagePos == 'right' ? imageHtmlSet : ''}
+                                ${imagePos == 'bottom' || imagePos == 'right' ? imageHtmlContainer : ''}
                             </div>
                             ` : ''
                     }
@@ -12615,7 +12659,7 @@ const VirtualTour = (() => {
             __nextBtn.disabled = true;
             return;
         }
-    }
+    };
 
     const renderPrev = () => {
         __currentIndex--;
@@ -12626,7 +12670,7 @@ const VirtualTour = (() => {
             __prevBtn.disabled = true;
             return;
         }
-    }
+    };
 
     return {
         render: render

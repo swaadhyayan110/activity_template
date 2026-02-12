@@ -1092,6 +1092,35 @@ const Define = (() => {
             content : {
                 questions : [
                     {
+                        id : 2,
+                        title : {
+                            main : {
+                                text : 'Virtual Tour'
+                            },
+                            sub  : {
+                                text : 'here some sub title text',
+                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                            }
+                        },
+                        set : {
+                            virtualTour : true,
+                            imageWidth  : '100%',
+                            col : {
+                                md  : 4,
+                                sm  : 6,
+                                col : 3,
+                            },
+                            images : [ 
+                                { path : 'img/1.png', caption : 'text-1' },
+                                { path : 'img/2.png', caption : 'text-2' },
+                                { path : 'img/3.png', caption : 'text-3' },
+                                { path : 'img/4.png', caption : 'text-4' },
+                                { path : 'img/5.png', caption : 'text-5' }
+                            ],
+                            audio : { path : 'bg.mp3' }
+                        }
+                    },
+                    {
                         id : 1,
                         title : {
                             main : {
@@ -1115,6 +1144,7 @@ const Define = (() => {
                                         images   : [
                                             { path  : 'img/1.png', caption : 'police-man-1' },
                                             { path  : 'img/2.png', caption : 'police-man-2' },
+                                            { path  : 'img/3.png', caption : 'police-man-3' },
                                             { path  : 'img/3.png', caption : 'police-man-3' }
                                         ]
                                     }
@@ -1151,35 +1181,7 @@ const Define = (() => {
                                 }
                             ]
                         }
-                    },
-                    {
-                        id : 2,
-                        title : {
-                            main : {
-                                text : 'Virtual Tour'
-                            },
-                            sub  : {
-                                text : 'here some sub title text',
-                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
-                            }
-                        },
-                        set : {
-                            virtualTour : true,
-                            imageWidth  : '100%',
-                            col : {
-                                md  : 4,
-                                sm  : 6,
-                                col : 3,
-                            },
-                            images : [ 
-                                { path : 'img/1.png', caption : 'text-1' },
-                                { path : 'img/2.png', caption : 'text-2' },
-                                { path : 'img/3.png', caption : 'text-3' },
-                                { path : 'img/4.png', caption : 'text-4' },
-                                { path : 'img/5.png', caption : 'text-5' }
-                            ]
-                        }
-                    }
+                    }                    
                 ]
             }
         },
