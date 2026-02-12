@@ -12373,27 +12373,33 @@ const VirtualTour = (() => {
                 return;
             }
 
-            const activity = Activity.getDefine(questionId) ?? {};
-            const content  = activity?.content ?? {};
+            const activity  = Activity.getDefine(questionId) ?? {};
+            const content   = activity?.content ?? {};
+            const questions = content?.questions ?? [];
+            const questionsLength = questions.length;
 
             parent.innerHTML = `<div class="question">
                                     <div class="container w-75 mx-auto">
                                         <div class="p-2 rounded-3 border bg-light text-center ${Define.get('head')}"></div>
                                         <div id="${containerId}" class="py-2 mt-2">
-                                            <div class="text-end">
-                                                <button id="previousBtn" class="btn btn-outline-primary rounded m-1" disabled>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                                                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                                                    </svg>
-                                                    Previous
-                                                </button>
-                                                <button id="nextBtn" class="btn btn-outline-primary rounded m-1" disabled>
-                                                    Next
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                                                    </svg>
-                                                </button>
-                                            </div>
+                                            ${ questionsLength > 1 
+                                                ? `
+                                                    <div class="text-end">
+                                                        <button id="previousBtn" class="btn btn-outline-primary rounded m-1" disabled>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                                            </svg>
+                                                            Previous
+                                                        </button>
+                                                        <button id="nextBtn" class="btn btn-outline-primary rounded m-1" disabled>
+                                                            Next
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                ` : ''
+                                            }
                                             <div class="question-content-container">
                                                 <div id="${titleWrapperId}"></div>
                                                 <div class="row g-0 ${imageContainerCls}"></div>
@@ -12440,6 +12446,19 @@ const VirtualTour = (() => {
         else return '';
     }
 
+    const renderImage = ({path='', imageWidth='50%', border=false}={}) => {
+        const borderStyle = ( border == true ) ? `border:2px solid ${style().get.colors.purple}` : '';
+        const img = `
+            <img 
+                src="${Activity.pathToCWD()}${path}" 
+                class="rounded-2" 
+                style="width:${imageWidth};${borderStyle}" 
+                ondragstart="return false;"
+            ></img>`
+        // ..
+        return img;
+    }
+
     const renderQuestion = () => {
 
         const questionId = Activity.getQid( `#${containerId}` );
@@ -12451,10 +12470,11 @@ const VirtualTour = (() => {
 
         const currentQuestion = questions[__currentIndex];
 
-        const titleWrapper = document.querySelector( `#${titleWrapperId}` );
         (() => {
-            const title = currentQuestion?.title ?? {};
-            
+            const titleWrapper = document.querySelector( `#${titleWrapperId}` );
+            if( !titleWrapper ) return false;
+
+            const title = currentQuestion?.title ?? {};            
             const titleHtml = 
                 title && ( title.hasOwnProperty('main') || title.hasOwnProperty('sub') )
                     ? `
@@ -12478,37 +12498,32 @@ const VirtualTour = (() => {
                     ` : '';
             // ..
 
-            if( titleWrapper ) titleWrapper.innerHTML = titleHtml;
+            titleWrapper.innerHTML = titleHtml;
         })();
         
         const containerHtml = document.querySelector( `.${imageContainerCls}` );
         if( !containerHtml ) return false;
         containerHtml.innerHTML = '';
 
-        const definedCol = currentQuestion?.set?.col ?? {};
-        const col = {
-            md  : definedCol?.md ?? defaultCol.md,
-            sm  : definedCol?.sm ?? defaultCol.sm,
-            col : definedCol?.col ?? defaultCol.col
-        };
-
-        const imageWidth = ( currentQuestion?.set?.imageWidth && currentQuestion?.set?.imageWidth !== '')
-                                ? currentQuestion.set.imageWidth
-                                : '100%';
-        // ..
-
         if( currentQuestion?.set?.virtualTour === true ) {
+            const definedCol = currentQuestion?.set?.col ?? {};
+            const col = {
+                md  : definedCol?.md ?? defaultCol.md,
+                sm  : definedCol?.sm ?? defaultCol.sm,
+                col : definedCol?.col ?? defaultCol.col
+            };
+
+            const imageWidth = ( currentQuestion?.set?.imageWidth && currentQuestion?.set?.imageWidth !== '')
+                                    ? currentQuestion.set.imageWidth
+                                    : '100%';
+            // ..
+            
             containerHtml.classList.add( 'justify-content-center' );
 
             containerHtml.innerHTML = currentQuestion.set?.images.map( obj => {
                 return `
                     <div class="col-${col.col} col-md-${col.md} col-sm-${col.sm} p-3 text-center animate__animated animate__fadeInDown">
-                        <img 
-                            src="${Activity.pathToCWD()}${obj.path}" 
-                            class="rounded-2" 
-                            style="width:${imageWidth};border:2px solid ${style().get.colors.purple}" 
-                            ondragstart="return false;"
-                        >
+                        ${renderImage({path:obj?.path,imageWidth:imageWidth,border:true})}
                         ${
                             obj?.caption && obj?.caption != ''
                                 ? captionTextView(obj.caption) : ''
@@ -12521,45 +12536,59 @@ const VirtualTour = (() => {
         if( currentQuestion?.set?.virtualTour === false ) {
             containerHtml.innerHTML = currentQuestion?.set?.questions?.map( question => {
 
-                const imageWidth = question?.image?.width ?? '100px';
-                const imagePos   = question?.image?.position ?? 'top';
+                const imageLayout = question?.imageLayout ?? {};
 
-                let imageClass = 'col-auto text-center';
-                if( imagePos == 'top' || imagePos == 'bottom' ) {
-                    imageClass = 'col-12 text-center';
-                }
-                imageClass += ' row g-0 align-items-center justify-content-center';
+                const imageWidth = imageLayout?.width ?? '100px';
+                const imagePos   = imageLayout?.position ?? 'top';
+                const images     = imageLayout?.images ?? [];
+                const colSize    = imageLayout?.colSize ?? 12;
 
-                let textClass = 'col-12';
-                if( imagePos == 'left' || imagePos == 'right' ) {
-                    textClass = 'col';
-                }
-
-                const image = question?.image?.path && question?.image?.path != '' 
-                    ? `<div class="${imageClass}">
-                            <div class="col-12 text-center">
-                                <img 
-                                    src="${Activity.pathToCWD()}${question.image.path}"
-                                    style="width:${imageWidth};" 
-                                    class="border border-success-subtle rounded"
-                                    ondragstart="return false";
-                                >
-                            </div>
-                            ${
-                                question.image?.caption && question.image?.caption != ''
-                                    ? captionTextView(question.image.caption) : ''
-                            }
-                        </div>
-                    ` : ''
+                const imageClass = `
+                    ${
+                        imagePos === 'top' || imagePos === 'bottom'
+                            ? images.length > 1
+                                ? `col-${colSize}`
+                                : 'col-12'
+                            : 'col-auto'
+                    } row g-0 align-items-center justify-content-center
+                `;
                 // ..
+
+                const textClass = ( imagePos == 'left' || imagePos == 'right' )
+                    ? 'col'
+                    : 'col-12';
+                // ..
+
+                let __renderAll = true;
+                const imageHtmlSet = images?.map( (image, index) => {
+                    if( imagePos == 'left' || imagePos == 'right' ) __renderAll = false;
+
+                    if( !__renderAll && index > 0 ) return;
+                    
+                    return image?.path && image?.path != ''
+                        ? `<div class="${imageClass}">
+                                <div class="col-12 text-center">
+                                    ${renderImage({path:image.path, imageWidth:imageWidth})}
+                                </div>
+                                ${
+                                    image?.caption && image?.caption != ''
+                                        ? captionTextView(image.caption) : ''
+                                }
+                            </div>
+                        ` : ''
+                    // ..
+                }).join( '' );
+
                 return `
-                    ${ question?.head || question?.sentence || image ? `
+                    ${ question?.head || question?.sentence || imageHtmlSet ? `
                             <div class="row g-0 border-secondary-subtle border rounded py-2 bg-light-subtle px-1 my-2 animate__animated animate__fadeInDown">
-                                ${imagePos == 'top' || imagePos == 'left' ? image : ''}
+                                ${imagePos == 'top' || imagePos == 'left' ? imageHtmlSet : ''}
                                 ${ question?.head || question?.sentence ? `
-                                    <div class="${textClass}">
+                                    <div class="${textClass} my-2">
                                         ${ question?.head ? `
-                                                <div class="fs-5 text-danger-emphasis p-1">${question.head}</div>
+                                                <div class="fs-5 text-danger-emphasis p-1">
+                                                    ${question.head}
+                                                </div>
                                             ` : ''
                                         }
                                         ${ question?.sentence ? `
@@ -12568,7 +12597,7 @@ const VirtualTour = (() => {
                                         }
                                     </div>` : ''
                                 }
-                                ${imagePos == 'bottom' || imagePos == 'right' ? image : ''}
+                                ${imagePos == 'bottom' || imagePos == 'right' ? imageHtmlSet : ''}
                             </div>
                             ` : ''
                     }

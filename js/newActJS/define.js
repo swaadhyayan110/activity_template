@@ -1091,7 +1091,7 @@ const Define = (() => {
             head    : 'Template : 40, VirtualTour',
             content : {
                 questions : [
-                    { 
+                    {
                         id : 1,
                         title : {
                             main : {
@@ -1108,47 +1108,51 @@ const Define = (() => {
                                 {
                                     head     : 'image - position - top',
                                     sentence : 'question set sentencehere and item size lorem.',
-                                    image    : {
+                                    imageLayout : {
+                                        colSize  : 4,
                                         position : 'top',
-                                        path  : 'img/1.png',
-                                        width : '15%',
-                                        caption : 'police-man'
-                                    }
-                                },
-                                {
-                                    head     : 'image - position - left',
-                                    sentence : 'question set sentence here and item size lorem.',
-                                    image    : {
-                                        position : 'left',
-                                        path  : 'img/3.png',
-                                        width : '150px',
-                                        caption : 'advocate'
-                                    }
-                                },
-                                {
-                                    head     : 'image - position - bottom',
-                                    sentence : 'question set sentence here and item size lorem.',
-                                    image    : {
-                                        position : 'bottom',
-                                        path  : 'img/2.png',
-                                        width : '20%',
-                                        caption : 'sample'
-                                    }
-                                },
-                                {
-                                    head     : 'image - position - right',
-                                    sentence : 'question set sentence here and item size lorem.',
-                                    image    : {
-                                        position : 'right',
-                                        path  : 'img/5.png',
-                                        width : '200px',
-                                        caption : 'magic'
+                                        width    : '50%',
+                                        images   : [
+                                            { path  : 'img/1.png', caption : 'police-man-1' },
+                                            { path  : 'img/2.png', caption : 'police-man-2' },
+                                            { path  : 'img/3.png', caption : 'police-man-3' }
+                                        ]
                                     }
                                 }
                             ]
                         }
                     },
-                    { 
+                    {
+                        id : 2,
+                        title : {
+                            main : {
+                                text : 'Fascinating Facts-2'
+                            },
+                            sub  : {
+                                text : 'here some sub title text',
+                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                            }
+                        },
+                        set : {
+                            virtualTour : false,
+                            questions   : [
+                                {
+                                    head     : 'image - position - left',
+                                    sentence : 'question set sentencehere and item size lorem.',
+                                    imageLayout : {
+                                        position : 'left',
+                                        width    : '150px',
+                                        images   : [
+                                            { path  : 'img/1.png', caption : 'police-man-1' },
+                                            { path  : 'img/2.png', caption : 'police-man-2' },
+                                            { path  : 'img/3.png', caption : 'police-man-3' }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
                         id : 2,
                         title : {
                             main : {
@@ -1175,7 +1179,7 @@ const Define = (() => {
                                 { path : 'img/5.png', caption : 'text-5' }
                             ]
                         }
-                    }                    
+                    }
                 ]
             }
         },
