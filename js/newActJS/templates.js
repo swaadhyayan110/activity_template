@@ -12430,88 +12430,105 @@ const VirtualTour = (() => {
         renderQuestion();        
     };
 
+    const captionTextView = (text='') => {
+        const caption = `
+            <div class="col-12 text-decoration-underline text-capitalize text-muted text-center">
+                <small>${text}</small>
+            </div>`
+        // ..
+        if( text != '' ) return caption;
+        else return '';
+    }
+
     const renderQuestion = () => {
 
         const questionId = Activity.getQid( `#${containerId}` );
         const activity   = Activity.getDefine(questionId) ?? {};
         const content    = activity?.content ?? {};
-        const config     = content?.config ?? {};
-        const definedCol = config?.col ?? {};
         const questions  = content?.questions ?? [];
-        const imageWidth = ( config?.image?.width != null && config.image.width !== '')
-                                ? config.image.width
-                                : '100%';
-        // ..
         
         if( !__questions ) __questions = questions;
 
+        const currentQuestion = questions[__currentIndex];
+
+        const titleWrapper = document.querySelector( `#${titleWrapperId}` );
+        (() => {
+            const title = currentQuestion?.title ?? {};
+            
+            const titleHtml = 
+                title && ( title.hasOwnProperty('main') || title.hasOwnProperty('sub') )
+                    ? `
+                        <div class="question-text-container row g-0 gap-2 my-2 fs-5">
+                            ${ title?.main?.text && title.main.text != ''
+                                ? `
+                                    <div 
+                                        class="col-auto p-3 fw-bold text-light text-uppercase rounded-3" 
+                                        style="${style().get.css.title}"
+                                    >${title.main.text}</div>
+                                ` : ''
+                            }
+                            ${ title?.sub?.text && title.sub.text != ''
+                                ? `
+                                    <div 
+                                        class="col d-flex align-items-center ${ title?.sub?.classes ? title?.sub?.classes : '' } ${ title?.main?.text ? '' : 'justify-content-center' } px-3"
+                                    >${title.sub.text}</div>
+                                ` : ''
+                            }
+                        </div>
+                    ` : '';
+            // ..
+
+            if( titleWrapper ) titleWrapper.innerHTML = titleHtml;
+        })();
+        
+        const containerHtml = document.querySelector( `.${imageContainerCls}` );
+        if( !containerHtml ) return false;
+        containerHtml.innerHTML = '';
+
+        const definedCol = currentQuestion?.set?.col ?? {};
         const col = {
             md  : definedCol?.md ?? defaultCol.md,
             sm  : definedCol?.sm ?? defaultCol.sm,
             col : definedCol?.col ?? defaultCol.col
         };
 
-        const currentQuestion = questions[__currentIndex];
-
-        const titleWrapper = document.querySelector( `#${titleWrapperId}` );
-        const renderTitle = () => {
-            const title = currentQuestion?.title ?? {};
-            
-            return title && ( title.hasOwnProperty('main') || title.hasOwnProperty('sub') )
-                ? `
-                    <div class="question-text-container row g-0 gap-2 my-2 fs-5">
-                        ${ title?.main?.text && title.main.text != ''
-                            ? `
-                                <div 
-                                    class="col-auto p-3 fw-bold text-light text-uppercase rounded-3" 
-                                    style="${style().get.css.title}"
-                                >${title.main.text}</div>
-                            ` : ''
-                        }
-                        ${ title?.sub?.text && title.sub.text != ''
-                            ? `
-                                <div 
-                                    class="col d-flex align-items-center ${ title?.sub?.classes ? title?.sub?.classes : '' } ${ title?.main?.text ? '' : 'justify-content-center' } px-3"
-                                >${title.sub.text}</div>
-                            ` : ''
-                        }
-                    </div>
-                ` : ''
-        }
-        titleWrapper.innerHTML = renderTitle();
-        
-        const containerHtml = document.querySelector( `.${imageContainerCls}` );
-
-        containerHtml.innerHTML = '';
+        const imageWidth = ( currentQuestion?.set?.imageWidth && currentQuestion?.set?.imageWidth !== '')
+                                ? currentQuestion.set.imageWidth
+                                : '100%';
+        // ..
 
         if( currentQuestion?.set?.virtualTour === true ) {
-            containerHtml.innerHTML = currentQuestion.set?.images.map( path => {
+            containerHtml.classList.add( 'justify-content-center' );
+
+            containerHtml.innerHTML = currentQuestion.set?.images.map( obj => {
                 return `
                     <div class="col-${col.col} col-md-${col.md} col-sm-${col.sm} p-3 text-center animate__animated animate__fadeInDown">
                         <img 
-                            src="${Activity.pathToCWD()}${path}" 
+                            src="${Activity.pathToCWD()}${obj.path}" 
                             class="rounded-2" 
                             style="width:${imageWidth};border:2px solid ${style().get.colors.purple}" 
                             ondragstart="return false;"
                         >
+                        ${
+                            obj?.caption && obj?.caption != ''
+                                ? captionTextView(obj.caption) : ''
+                        }
                     </div>
                 `;
             }).join( '' ) ?? '';
         }
 
         if( currentQuestion?.set?.virtualTour === false ) {
-            const replacement = currentQuestion?.set?.replacement ?? '#img#';
-
             containerHtml.innerHTML = currentQuestion?.set?.questions?.map( question => {
 
                 const imageWidth = question?.image?.width ?? '100px';
                 const imagePos   = question?.image?.position ?? 'top';
 
-                let imageClass = 'col-auto';
+                let imageClass = 'col-auto text-center';
                 if( imagePos == 'top' || imagePos == 'bottom' ) {
                     imageClass = 'col-12 text-center';
                 }
-                imageClass += ' d-flex align-items-center justify-content-center';
+                imageClass += ' row g-0 align-items-center justify-content-center';
 
                 let textClass = 'col-12';
                 if( imagePos == 'left' || imagePos == 'right' ) {
@@ -12520,12 +12537,18 @@ const VirtualTour = (() => {
 
                 const image = question?.image?.path && question?.image?.path != '' 
                     ? `<div class="${imageClass}">
-                            <img 
-                                src="${question.image.path}"
-                                style="width:${imageWidth};" 
-                                class="border border-success-subtle rounded"
-                                ondragstart="return false";
-                            >
+                            <div class="col-12 text-center">
+                                <img 
+                                    src="${Activity.pathToCWD()}${question.image.path}"
+                                    style="width:${imageWidth};" 
+                                    class="border border-success-subtle rounded"
+                                    ondragstart="return false";
+                                >
+                            </div>
+                            ${
+                                question.image?.caption && question.image?.caption != ''
+                                    ? captionTextView(question.image.caption) : ''
+                            }
                         </div>
                     ` : ''
                 // ..
