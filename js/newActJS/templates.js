@@ -12580,13 +12580,18 @@ const VirtualTour = (() => {
                 const imageWidth = imageLayout?.width ?? '100px';
                 const imagePos   = imageLayout?.position ?? 'top';
                 const images     = imageLayout?.images ?? [];
-                const colSize    = imageLayout?.colSize ?? 12;
+                const definedCol = imageLayout?.col ?? {};
+                const col = {
+                    md  : definedCol?.md ?? defaultCol.md,
+                    sm  : definedCol?.sm ?? defaultCol.sm,
+                    col : definedCol?.col ?? defaultCol.col
+                };
 
                 const imageClass = `
                     ${
                         imagePos === 'top' || imagePos === 'bottom'
                             ? images.length > 1
-                                ? `col-${colSize}`
+                                ? `col-${col.col} col-sm-${col.sm} col-md-${col.md}`
                                 : 'col-12'
                             : 'col-auto'
                     } row g-0 align-items-center justify-content-center

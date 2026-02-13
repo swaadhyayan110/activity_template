@@ -1109,7 +1109,7 @@ const Define = (() => {
                                     head     : 'image - position - top',
                                     sentence : 'question set sentencehere and item size lorem.',
                                     imageLayout : {
-                                        colSize  : 4,
+                                        col      : { md : 4, sm : 6, col : 12 },
                                         position : 'top',
                                         width    : '50%',
                                         images   : [
