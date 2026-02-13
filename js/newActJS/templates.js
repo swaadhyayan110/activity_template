@@ -12619,7 +12619,9 @@ const VirtualTour = (() => {
                 }).join( '' );
 
                 const imageHtmlContainer = imageHtmlSet != '' 
-                    ? `<div class="row g-0 justify-content-center">${imageHtmlSet}</div>`
+                    ? images.length > 1 && ( imagePos == 'top' || imagePos == 'bottom' )
+                        ? `<div class="row g-0 justify-content-center">${imageHtmlSet}</div>`
+                        : imageHtmlSet
                     : ''
                 // ..
 
