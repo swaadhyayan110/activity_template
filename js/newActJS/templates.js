@@ -3105,6 +3105,7 @@ const Adaptiv = (() => {
     let showResultPending  = false;    
     let retryWrongOnly = false;
     let wrongQuestions = [];
+    let __activity     = undefined;
 
     const ui = ( questionId, totalQues ) => {
         try {
@@ -3218,9 +3219,13 @@ const Adaptiv = (() => {
         const lang      = activity?.lang ?? 'en';
         const content   = activity?.content;
         const data      = content?.levels;
+        const skipOptions = content?.skipOptions ?? false;
+        const skipQuestionSequence = content?.skipQuestionSequence ?? false;
         const found     = (data || []).find( lvl => lvl.level === level );
         const questLen  = found?.questions?.length || 0;
         let realIndex = currentQuestion;
+
+        __activity = activity;
 
         if (retryWrongOnly) {
             realIndex = wrongQuestions[currentQuestion];
@@ -3263,41 +3268,49 @@ const Adaptiv = (() => {
         }
         
         container.innerHTML = `<div class="row m-0" style="font-size:18px">
-                <div style="width:30px" class="questionHeadingMCQ">
-                    <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${realIndex  + 1}.</strong>
-                </div>
+                ${ !skipQuestionSequence ? `
+                    <div style="width:30px" class="questionHeadingMCQ">
+                        <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${realIndex  + 1}.</strong>
+                    </div>
+                    ` : ''
+                }
                 <div class="col questionHeadingMCQ">${q.question}</div>
             </div>
-            <div class="row mt-3">
-                <div class="row mt-2 ml-4">
-                ${q.options.map((opt, i) => {
-                    const optionLabel = Activity.translateBulletLabels({lang:lang,ind:i,upperCase:true});
-                    const isSelected  = userAnswersAdaptiv[realIndex] === i;
-                    let extraClass    = isSelected ? "selected" : "";
-                    if (submitted) {
-                        if (i === q.answer) extraClass = "correct";
-                        else if (isSelected && i !== q.answer) extraClass = "incorrect";
-                    }
-                    return `
-                        <div class="col-md-6 col-sm-12 mb-2">
-                            <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
-                                <input type="radio" name="question-${realIndex }" ${isSelected ? "checked" : ""} />
-                                <strong>${optionLabel}.</strong> ${opt}
-                            </label>
+            ${ !skipOptions ? `
+                    <div class="row mt-3">
+                        <div class="row mt-2 ml-4">
+                        ${q.options.map((opt, i) => {
+                            const optionLabel = Activity.translateBulletLabels({lang:lang,ind:i,upperCase:true});
+                            const isSelected  = userAnswersAdaptiv[realIndex] === i;
+                            let extraClass    = isSelected ? "selected" : "";
+                            if (submitted) {
+                                if (i === q.answer) extraClass = "correct";
+                                else if (isSelected && i !== q.answer) extraClass = "incorrect";
+                            }
+                            return `
+                                <div class="col-md-6 col-sm-12 mb-2">
+                                    <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
+                                        <input type="radio" name="question-${realIndex }" ${isSelected ? "checked" : ""} />
+                                        <strong>${optionLabel}.</strong> ${opt}
+                                    </label>
+                                </div>
+                            `;
+                        }).join('')}
                         </div>
-                    `;
-                }).join('')}
-                </div>
-            </div>
+                    </div>
+                ` : ''
+            }
         `;
         
-        Array.from(document.querySelectorAll('.option-btnAdpt')).forEach((optionEl) => {
-            optionEl.addEventListener("click", (ev) => {
-                const idxAttr = optionEl.getAttribute('data-option-index');
-                const idx = idxAttr !== null ? parseInt(idxAttr, 10) : 0;
-                selectOption(realIndex, idx);
+        if( !skipOptions ) {
+            Array.from(document.querySelectorAll('.option-btnAdpt')).forEach((optionEl) => {
+                optionEl.addEventListener("click", (ev) => {
+                    const idxAttr = optionEl.getAttribute('data-option-index');
+                    const idx = idxAttr !== null ? parseInt(idxAttr, 10) : 0;
+                    selectOption(realIndex, idx);
+                });
             });
-        });
+        }
 
         updateNavButtons();
     }
@@ -3330,8 +3343,11 @@ const Adaptiv = (() => {
 
     const nextQuestion = () => {
         const limit = getQuestionLimit();
+        const skipOptions = __activity?.content?.skipOptions ?? false;
 
-        if (userAnswersAdaptiv[currentQuestion] === null) {
+        if( skipOptions ) userAnswersAdaptiv[currentQuestion] = true;
+
+        if( userAnswersAdaptiv[currentQuestion] === null ) {
             const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
             const lang = activity?.lang ?? 'en';
             Swal.fire({
@@ -3366,13 +3382,15 @@ const Adaptiv = (() => {
         const total = retryWrongOnly ? wrongQuestions.length : currentQuizData.length;
         const isLast = currentQuestion === total - 1;
 
+        const skipOptions = __activity?.content?.skipOptions ?? false;
+
         const allAnswered = retryWrongOnly
             ? wrongQuestions.every(i => userAnswersAdaptiv[i] !== null)
             : userAnswersAdaptiv.every(ans => ans !== null);
 
         if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
         if (nextBtn && subBtn) {
-            if (isLast && allAnswered) {
+            if (isLast && ( allAnswered || skipOptions ) ) {
                 nextBtn.style.display = 'none';
                 subBtn.style.display = 'inline-block';
             } else {
@@ -3391,6 +3409,7 @@ const Adaptiv = (() => {
             const skiplevels  = content?.skiplevels ?? false;
             const skipansbtn  = content?.skipanswerbutton ?? false;
             const skipnextbtn = content?.skipnextlevel ?? false;
+            const skipOptions = __activity?.content?.skipOptions ?? false;
 
             const levelTextEl = document.getElementById("levelText");
             if (levelTextEl) levelTextEl.style.display = 'none';
@@ -3408,7 +3427,7 @@ const Adaptiv = (() => {
             const correct = (userAnswersAdaptiv || []).filter((a, i) => a === (currentQuizData?.[i]?.answer)).length;
             const showAnswerBtn = attemptCount >= 5;
             const showRetryBtn = correct < (currentQuizData?.length || 0);
-            const showNextLevel = correct === (currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0;
+            const showNextLevel = correct === skipnextbtn || skipOptions || ( (currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0 );
             const finished = currentLevel === levels.length;
             const whenCompleteLevel = showNextLevel ? ( lang == 'en' ? 'completed.' : 'पूरा हुआ' ) : "";
             const navButtonsEl = document.getElementById("nav-buttons");
@@ -3421,18 +3440,52 @@ const Adaptiv = (() => {
             container.innerHTML = `
                 <div class="result-box">
                     ${ !skipnextbtn ? `<h4><strong class="fs-1">${ lang == 'en' ? 'Level' : 'स्तर' } ${currentLevel} ${whenCompleteLevel}</strong></h4>` : '' }
-                    <p class="text-danger my-3">${ lang == 'en' ? 'Total Questions' : 'कुल प्रश्न' }: ${currentQuizData?.length || 0}</p>
-                    <p class="text-success my-3">${ lang == 'en' ? 'Correct Answers' : 'सही उत्तर' }: ${correct}</p>
-                    <p class="text-success my-3">${ lang == 'en' ? 'Attempt No' : 'प्रयास संख्या' }: ${attemptCount}</p>
+                    ${ !skipOptions ? `
+                        <p class="text-danger my-3">
+                            ${ lang == 'en' ? 'Total Questions' : 'कुल प्रश्न' } : 
+                            ${currentQuizData?.length || 0}
+                        </p>
+                        <p class="text-success my-3">
+                            ${ lang == 'en' ? 'Correct Answers' : 'सही उत्तर' }: ${correct}
+                        </p>
+                        <p class="text-success my-3">
+                            ${ lang == 'en' ? 'Attempt No' : 'प्रयास संख्या' }: ${attemptCount}
+                        </p>
+                        ` : ''
+                    }
                     <div class="rowBtns">
-                        ${( ( showNextLevel || skiplevels ) && !skipnextbtn ) ?
-                            `<button class='btn btn-success mt-3 mx-3' id='btn-next-level'>${ lang == 'en' ? `Go To Level ${currentLevel + 1}` : `स्तर ${currentLevel + 1} पर जाएँ` }</button>` : ''}
-                        ${(showRetryBtn || showNextLevel) ?
-                            `<button class='btn btn-primary mt-3 mx-3' id='btn-retry'>${btnLabel.try}</button>` : ''}
-                        ${( showAnswerBtn || showNextLevel || skipansbtn ) ?
-                            `<button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>${btnLabel.show}</button>` : ''}
-                        ${( finished && showNextLevel  && !skipnextbtn ) ?
-                            `<button class='btn btn-success mt-3 mx-3' id='btn-finish'>${ lang == 'en' ? 'Finished' : 'समाप्त' }</button>` : ''}
+                        ${( ( showNextLevel || skiplevels ) && !skipnextbtn ) ? `
+                            <button class='btn btn-success mt-3 mx-3' id='btn-next-level'>
+                                ${ 
+                                    lang == 'en' 
+                                        ? `
+                                            Go To Level ${currentLevel + 1}
+                                        ` 
+                                        : `स्तर ${currentLevel + 1} पर जाएँ` 
+                                    }
+                            </button>` : ''
+                        }
+                        ${ (showRetryBtn || showNextLevel) ? `
+                                <button class='btn btn-primary mt-3 mx-3' id='btn-retry'>
+                                    ${btnLabel.try}
+                                </button>
+                            ` : ''
+                        }
+                        ${ !skipOptions ? `
+                            ${( !skipOptions || showAnswerBtn || showNextLevel || skipansbtn ) ? `
+                                    <button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>
+                                        ${btnLabel.show}
+                                    </button>
+                                ` : ''
+                            }
+                            ` : ''
+                        }
+                        ${( finished && showNextLevel && !skipnextbtn ) ? `
+                                <button class='btn btn-success mt-3 mx-3' id='btn-finish'>
+                                    ${ lang == 'en' ? 'Finished' : 'समाप्त' }
+                                </button>
+                            ` : ''
+                        }
                     </div>
                 </div>`;
             
@@ -3488,7 +3541,7 @@ const Adaptiv = (() => {
     const loadNextLevel = () => {
         const levelTextEl = document.getElementById("levelText");
         if (levelTextEl) levelTextEl.style.display = 'block';
-        currentLevel++;
+        if( currentLevel < 3 )currentLevel++;
         
         if (currentLevel === 2 && typeof quizDataLevelB !== 'undefined') currentQuizData = quizDataLevelB;
         if (currentLevel === 3 && typeof quizDataLevelC !== 'undefined') currentQuizData = quizDataLevelC;

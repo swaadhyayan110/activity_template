@@ -296,7 +296,9 @@ const Define = (() => {
             content : {
                 skiplevels : true,
                 skipanswerbutton : true,
-                skipnextlevel : true,
+                skipnextlevel : false,
+                skipOptions : false,
+                skipQuestionSequence : false,
                 headings : {
                     left : 'स्तर',
                     mid  : {
@@ -317,7 +319,11 @@ const Define = (() => {
                     {
                         level : 1,
                         questions : [
-                            { question: 'कवि धरती के किन सपूतों को पुकारता है?', options: ['सैनिकों को', 'किसान सपूतों को', 'अमर सपूतों को', 'बच्चों को'], answer: 3 },
+                            { 
+                                question: 'कवि धरती के किन सपूतों को पुकारता है?', 
+                                options: ['सैनिकों को', 'किसान सपूतों को', 'अमर सपूतों को', 'बच्चों को'], 
+                                answer: 3 
+                            },
                             { question: 'कविता में ‘नव निर्माण’ का अर्थ है -', options: ['नया खाना बनाना', 'नई इमारत बनाना', 'समाज का पुनर्निर्माण करना', 'नई सड़क बनाना'], answer: 3 },
                             { question: '‘उठो’ शब्द से कवि क्या करना चाहता है?', options: ['जगाना', 'सुलाना', 'डराना', 'चुप कराना'], answer: 3 },
                             { question: '‘नव प्रात’ का अर्थ है -', options: ['नया गाँव', 'नई सुबह', 'नया जीवन', 'नया काम'], answer: 3 },
