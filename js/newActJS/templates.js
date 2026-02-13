@@ -2878,7 +2878,7 @@ const Mcq_PathKaSaar = (() => {
                 
                 const path  = question?.image ?? undefined;
                 const image = path != undefined ? 
-                    question_image(Activity.pathToCWD()+path)
+                    render_image(Activity.pathToCWD()+path)
                     : undefined;
                 // ..
                 const replacement  = question?.replacement ?? '#_#';
@@ -2934,15 +2934,14 @@ const Mcq_PathKaSaar = (() => {
         } catch( e ) {
             console.error( 'Mcq.renderAllQuestionsMCQ', e );
         }
-    }    
+    }
 
-    const question_image = (src) => `<img src="${src}" style="height:100px; width:100px; object-fit:contain;">`;
-    const option_image   = (src) => `<img src="${src}" style="height:150px; width:150px; object-fit:contain;">`;
+    const render_image = (src) => `<img src="${src}" style="height:150px; width:150px; object-fit:contain;" ondragstart="return false;">`;
 
     const option_text = (option) => {
         const path  = option?.image ?? undefined;
         const image = path != undefined ? 
-            option_image(Activity.pathToCWD()+path) :
+            render_image(Activity.pathToCWD()+path) :
             undefined;
         // ..
         const optionText = path != undefined ? image : option?.text ?? '';
