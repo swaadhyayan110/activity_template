@@ -12539,7 +12539,7 @@ const VirtualTour = (() => {
             const titleHtml = 
                 title && ( title.hasOwnProperty('main') || title.hasOwnProperty('sub') )
                     ? `
-                        <div class="question-text-container row g-0 gap-2 my-2 fs-5">
+                        <div class="question-text-container row g-0 gap-2 my-2 fs-5 align-items-start">
                             ${ title?.main?.text && title.main.text != ''
                                 ? `
                                     <div 
@@ -12551,7 +12551,7 @@ const VirtualTour = (() => {
                             ${ title?.sub?.text && title.sub.text != ''
                                 ? `
                                     <div 
-                                        class="col d-flex align-items-center ${ title?.sub?.classes ? title?.sub?.classes : '' } ${ title?.main?.text ? '' : 'justify-content-center' } px-3"
+                                        class="col d-flex align-items-center ${ title?.sub?.classes ? title?.sub?.classes : '' } ${ title?.main?.text ? '' : 'justify-content-center' } p-3"
                                     >${title.sub.text}</div>
                                 ` : ''
                             }

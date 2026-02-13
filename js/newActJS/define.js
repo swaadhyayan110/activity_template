@@ -1105,7 +1105,7 @@ const Define = (() => {
                             },
                             sub  : {
                                 text : 'here some sub title text',
-                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                                classes : 'text-success bg-success-subtle border-success border rounded-3 w-50 text-uppercase p-2'
                             }
                         },
                         set : {
