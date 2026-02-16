@@ -1829,6 +1829,8 @@ const FillInTheBlanksHindiKb = (() => {
             const audio = content?.audio ?? false;
             const audioSrc = audio != false ? audio : '';
 
+            const definedCol = content?.questionGridSize ?? {};
+
             parent.innerHTML = `<div class="question">
                                     <div class="container">
                                         ${
@@ -1857,7 +1859,16 @@ const FillInTheBlanksHindiKb = (() => {
                                         <div id='question-container-box' ${audioSrc? `style="display: none"`: ''}>
                                             <div id="fill-img-container" class="text-center"></div>
                                             <div id="fill-hint-container" class="text-center instForFillText shadow-sm"></div>
-                                            <div id="${quizContainerID}"></div>
+                                            ${
+                                                definedCol instanceof Object && 
+                                                Object.entries(definedCol).length
+                                                ? `
+                                                    <div id="${quizContainerID}" class="row g-0"></div>
+                                                `
+                                                : `
+                                                    <div id="${quizContainerID}"></div>
+                                                `
+                                            }
                                             <div class="buttons machiNgs">
                                                 <button class="submit-btn check_1">${buttonLabel.check}</button>
                                                 <button class="show-btn">${buttonLabel.show}</button>
@@ -1900,7 +1911,7 @@ const FillInTheBlanksHindiKb = (() => {
             if( content?.subquestions ) __subQuestions = content?.subquestions;
 
             const placeholder = Activity.translateWriteAnsLabel(lang);
-            const renderInput = ({qID='', sqID='', inputIndex='', classes=''}={}) => {
+            const renderInput = ({qID='', sqID='', inputIndex='', classes='', style=''}={}) => {
                 const inputHtml = `
                             <input 
                                 class="hindiInput inPutHindiNew ${classes}" 
@@ -1910,6 +1921,7 @@ const FillInTheBlanksHindiKb = (() => {
                                 autocomplete="off" 
                                 type="text" 
                                 placeholder="${placeholder}"
+                                style="${style}"
                             >
                         `;
                 return inputHtml;
@@ -1930,20 +1942,29 @@ const FillInTheBlanksHindiKb = (() => {
                 $('#fill-hint-container').remove();
             }
 
+            const defaultCol = Helper?.defaultCol ?? {};
+            const definedCol = content?.questionGridSize ?? {};
+            const col = {
+                md  : definedCol?.md ?? defaultCol.md,
+                sm  : definedCol?.sm ?? defaultCol.sm,
+                col : definedCol?.col ?? defaultCol.col
+            };
+
             content?.questions.forEach((question, qIndex) => {
                 const subQuestion = __subQuestions?.filter( subques => subques.qid === question.qid ) ?? [];                
                 const questionId  = question?.qid !== undefined ? question?.qid : (qIndex + 1);
                 const mainBullet  = Activity.translateBulletLabels({lang:lang, ind:qIndex});
-                const html        = [ content?.questions.length != 1 ? `${mainBullet}) `: null ];
+                const html        = [ content?.questions.length != 1 ? `${mainBullet}) `: null ];                
 
                 const div = document.createElement('div');
-                div.classList.add('questionFILL'); 
+                div.classList.add('questionFILL');
+                
+                const colCondition = definedCol instanceof Object && Object.entries( definedCol ).length;
+                if( colCondition ) div.classList.add(`col-sm-${col.sm}`, `col-md-${col.md}`, `col-${col.col}`);
 
                 const inputBelowCondition = question?.inputBelow === true && question?.answers;
                 
-                if( subQuestion.length || inputBelowCondition ) {
-                    html.push( question?.question ?? '' );
-                }
+                if( subQuestion.length || inputBelowCondition ) html.push( question?.question ?? '' );
 
                 if( subQuestion.length ) {
                     if( html.length > 2 ) return false;
@@ -1965,7 +1986,8 @@ const FillInTheBlanksHindiKb = (() => {
                                                             qID:questionId,
                                                             sqID:subquesID,
                                                             inputIndex:i,
-                                                            classes:'w-100 my-2'
+                                                            classes:'w-100 my-2',
+                                                            style:'text-align:left !important'
                                                         })}
                                                     </div>
                                                     `;
@@ -1973,12 +1995,15 @@ const FillInTheBlanksHindiKb = (() => {
                                 multiInput.push( belowInput );
                             });
                         } else {
+                            const width = subques?.inputWidth ?? '';
+                            const style = `width:${width} !important;max-width:${width} !important;`
                             let idx = 0;
                             const view = subques?.text.replaceAll(replacement, () =>
                                 renderInput({
                                     qID: questionId,
                                     sqID: subquesID,
-                                    inputIndex: idx++
+                                    inputIndex: idx++,
+                                    style:style
                                 })
                             );
                             subQuesText.push( view );
@@ -2010,11 +2035,15 @@ const FillInTheBlanksHindiKb = (() => {
                         });
                     } else {
                         let idx = 0;
-                        const view = question?.question?.replaceAll(replacement, () =>
+                        const width = question?.inputWidth ?? '';
+                        const style = `width:${width} !important;max-width:${width} !important;`
+                        const view  = question?.question?.replaceAll(replacement, () =>
                             renderInput({
                                 qID: questionId,
                                 sqID: false,
-                                inputIndex: idx++
+                                inputIndex: idx++,
+                                width:width,
+                                style:style
                             })
                         );
                         html.push( view );

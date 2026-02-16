@@ -154,24 +154,26 @@ const Define = (() => {
             lang    : 'en',
             head    : 'Template : 5',
             content : {
+                imageReplacement : '#img#',
                 replacement  : '#_#',
                 image        : {
                     path  : 'img/1.png',
                     width : '10%'
                 },
+                questionGridSize : { md : 6, sm : 12, col : 12 }, // [OPTIONAL]
                 hint         : 'आदरणीया चाची जी, गर्मियों की छुट्टियाँ, बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
                 questions    : [
                     { qid : 1, question : 'हमारे #_# देश का नाम #_# है।', answers : ['हिंदी'] },
                     { qid : 2, question : 'भारत की राजधानी #_# है।' },
-                    { question : 'भारत की #_# राजभाषा #_# है।', answers : ['हिंदी', 'djf', 'sfdsf'], inputBelow : false },
-                    { qid : 4, question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', answers : ['किताब'] },
+                    { question : 'भारत की #_# राजभाषा #_# है।', inputWidth : '50px', answers : ['हिंदी', 'djf', 'sfdsf'], inputBelow : false },
+                    { qid : 4, inputWidth : '80px', question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', answers : ['किताब'] },
                     { qid : 5, question : 'जहाँ पढ़ाई होती है उसे #_# कहते हैं।', answers : ['विद्यालय'] }
                 ],
                 subquestions : [
-                    { sqid : 1, qid : 1, text : '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['~पंख'] },
-                    { sqid : 2, qid : 1, text : '! सितार बनाने #_# तारों को #_# से बाँधा गया।', answers : ['!पंख', '!पंख'] },
+                    { sqid : 1, qid : 1, inputWidth : '80px', text : '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['~पंख'] },
+                    { sqid : 2, qid : 1, inputWidth : '180px', text : '! सितार बनाने #_# तारों को #_# से बाँधा गया।', answers : ['!पंख', '!पंख'] },
                     { sqid : 3, qid : 2, text : '@ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['@पंख', '@नाचने'], inputBelow : true },
-                    { sqid : 4, qid : 2, text : '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['#पंख'] },
+                    { sqid : 4, qid : 2, inputWidth : '40px', text : '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['#पंख'] },
                     { sqid : 5, qid : 2, text : '$ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['$पंख'] }
                 ],
                 audios: 'audio/1.mp3'
