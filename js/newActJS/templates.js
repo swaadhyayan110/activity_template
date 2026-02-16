@@ -3219,8 +3219,8 @@ const Adaptiv = (() => {
         const imagePath  = imageData?.path ?? [];
         const text       = data?.text ?? '';
 
-        if( !text || !imagePath.length ) return '';
-
+        if( !text && !imagePath.length ) return '';
+        
         const regex = new RegExp(replacement, 'g');
 
         let index = 0;

@@ -336,11 +336,8 @@ const Define = (() => {
                                         }
                                     }, 
                                     { 
-                                        text : '#img#', 
-                                        images : {
-                                            path : [ 'img/3.png' ]
-                                        }
-                                    }, 
+                                        text : 'another sample text'
+                                    },
                                     'this is sample text'
                                 ],
                                 answer: 1 
