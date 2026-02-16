@@ -3220,7 +3220,9 @@ const Adaptiv = (() => {
         const text       = data?.text ?? '';
 
         if( !text && !imagePath.length ) return '';
-        
+
+        if( !imagePath.length ) return text;
+
         const regex = new RegExp(replacement, 'g');
 
         let index = 0;
@@ -3282,16 +3284,43 @@ const Adaptiv = (() => {
         }
 
         const imageReplacement = q?.imageReplacement ?? '#img#';
+
+        const __renderQuestionText = (data) => {
+
+            const imageData = data?.images ?? {};
+            const imagePath = imageData?.path ?? [];
+            const text      = data?.text ?? '';
+
+            if( !text && !imagePath.length ) return '';
+
+            if( !imagePath.length ) return text;
+
+            const __image = (src) => `<img src="${Activity.pathToCWD()}${src}" style="height:50px; width:50px; object-fit:contain;" ondragstart="return false;">`;
+
+            const regex = new RegExp(imageReplacement, 'g');
+
+            let index = 0;
+            return text.replace(regex, () => __image(imagePath[index++]) );            
+        }
+
+        const questionText = ( q?.question && typeof q?.question === 'string' ) 
+            ? q.question
+            : __renderQuestionText(q.question);
+        // ..
         
-        container.innerHTML = `<div class="row m-0" style="font-size:18px">
-                ${ !skipQuestionSequence ? `
-                    <div style="width:30px" class="questionHeadingMCQ">
-                        <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${realIndex  + 1}.</strong>
+        container.innerHTML = `${ questionText != '' 
+                ? `
+                    <div class="row m-0 align-items-center" style="font-size:18px">
+                        ${ !skipQuestionSequence ? `
+                            <div style="width:30px" class="questionHeadingMCQ">
+                                <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${realIndex  + 1}.</strong>
+                            </div>
+                            ` : ''
+                        }
+                        <div class="col questionHeadingMCQ">${questionText}</div>
                     </div>
-                    ` : ''
-                }
-                <div class="col questionHeadingMCQ">${q.question}</div>
-            </div>
+                ` : ''
+            }
             ${ !skipOptions ? `
                     <div class="row mt-3">
                         <div class="row mt-2 ml-4">
@@ -3650,8 +3679,6 @@ const Adaptiv = (() => {
         const label = index => Activity.translateBulletLabels({lang:lang, ind:index, upperCase:true});
         (currentQuizData || []).forEach((q, i) => {
             const userIndex = userAnswersAdaptiv?.[i];
-            // const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}. ${q.options[userIndex]}` : "Not attempted";
-            // const correctAnswerText = `${label(q.answer)}. ${q.options[q.answer]}`;
             const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}` : "Not attempted";
             const correctAnswerText = `${label(q.answer)}`;
             if (userAnswerText === correctAnswerText) totalCorrect++;

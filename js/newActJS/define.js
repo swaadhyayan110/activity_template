@@ -320,8 +320,13 @@ const Define = (() => {
                         level : 1,
                         questions : [
                             {
-                                question: 'कवि धरती के किन सपूतों को पुकारता है?',
                                 imageReplacement : '#img#',
+                                question : { 
+                                    text : 'कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
+                                    images : {
+                                        path : [ 'img/1.png', 'img/2.png' ]
+                                    }
+                                },
                                 options: [
                                     { 
                                         text : '#img# सैनिकों को #img#', 
