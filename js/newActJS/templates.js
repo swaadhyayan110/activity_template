@@ -3212,6 +3212,21 @@ const Adaptiv = (() => {
         }
     }
 
+    const __image = (src) => `<img src="${Activity.pathToCWD()}${src}" style="height:150px; width:150px; object-fit:contain;" ondragstart="return false;">`;
+
+    const __option_images  = ({data,replacement}={}) => {
+        const imageData  = data?.images ?? {};
+        const imagePath  = imageData?.path ?? [];
+        const text       = data?.text ?? '';
+
+        if( !text || !imagePath.length ) return '';
+
+        const regex = new RegExp(replacement, 'g');
+
+        let index = 0;
+        return text.replace(regex, () => __image(imagePath[index++]) );
+    }
+
     const renderQuestion = (questionId, direction) => {
         const level     = currentLevel;
         const activity  = Activity.getDefine(questionId);
@@ -3265,6 +3280,8 @@ const Adaptiv = (() => {
             updateNavButtons();
             return;
         }
+
+        const imageReplacement = q?.imageReplacement ?? '#img#';
         
         container.innerHTML = `<div class="row m-0" style="font-size:18px">
                 ${ !skipQuestionSequence ? `
@@ -3282,18 +3299,33 @@ const Adaptiv = (() => {
                             const optionLabel = Activity.translateBulletLabels({lang:lang,ind:i,upperCase:true});
                             const isSelected  = userAnswersAdaptiv[realIndex] === i;
                             let extraClass    = isSelected ? "selected" : "";
-                            if (submitted) {
-                                if (i === q.answer) extraClass = "correct";
-                                else if (isSelected && i !== q.answer) extraClass = "incorrect";
+
+                            if( typeof opt === 'string' ) {
+                                if( submitted ) {
+                                    if (i === q.answer) extraClass = "correct";
+                                    else if (isSelected && i !== q.answer) extraClass = "incorrect";
+                                }
+                                return `
+                                    <div class="col-md-6 col-sm-12 mb-2">
+                                        <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
+                                            <input type="radio" name="question-${realIndex }" ${isSelected ? "checked" : ""} />
+                                            <strong>${optionLabel}.</strong>
+                                            ${opt}
+                                        </label>
+                                    </div>
+                                `;
+                            } else if( opt instanceof Object ) {
+                                const optionText = __option_images({data:opt, replacement:imageReplacement});
+                                return `
+                                    <div class="col-md-6 col-sm-12 mb-2">
+                                        <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
+                                            <input type="radio" name="question-${realIndex }" ${isSelected ? "checked" : ""} />
+                                            <strong>${optionLabel}.</strong> 
+                                            ${optionText}
+                                        </label>
+                                    </div>
+                                `;
                             }
-                            return `
-                                <div class="col-md-6 col-sm-12 mb-2">
-                                    <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
-                                        <input type="radio" name="question-${realIndex }" ${isSelected ? "checked" : ""} />
-                                        <strong>${optionLabel}.</strong> ${opt}
-                                    </label>
-                                </div>
-                            `;
                         }).join('')}
                         </div>
                     </div>
@@ -3618,16 +3650,25 @@ const Adaptiv = (() => {
         const label = index => Activity.translateBulletLabels({lang:lang, ind:index, upperCase:true});
         (currentQuizData || []).forEach((q, i) => {
             const userIndex = userAnswersAdaptiv?.[i];
-            const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}. ${q.options[userIndex]}` : "Not attempted";
-            const correctAnswerText = `${label(q.answer)}. ${q.options[q.answer]}`;
+            // const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}. ${q.options[userIndex]}` : "Not attempted";
+            // const correctAnswerText = `${label(q.answer)}. ${q.options[q.answer]}`;
+            const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}` : "Not attempted";
+            const correctAnswerText = `${label(q.answer)}`;
             if (userAnswerText === correctAnswerText) totalCorrect++;
             totalQuestion++;
-            const status = (userAnswerText === correctAnswerText) ? '✔' : '✘';
+            
+            let resultSymbol = '✘';
+            let resultClass  = 'text-danger';
+            if( userAnswerText === correctAnswerText) {
+                resultSymbol = '✔' ;
+                resultClass  = 'text-success';
+            }
+
             midData2 += `<tr class="trData">
                 <th>${ lang == 'hi' ? 'प्र' : 'Q' }${totalQuestion}.</th>
                 <td class="text-danger">${userAnswerText}</td>
                 <td class="text-success">${correctAnswerText}</td>
-                <td class="text-danger">${status}</td>
+                <td class="${resultClass}">${resultSymbol}</td>
             </tr>`;
         });
 
@@ -12550,7 +12591,7 @@ const VirtualTour = (() => {
                             ${ title?.sub?.text && title.sub.text != ''
                                 ? `
                                     <div 
-                                        class="col d-flex align-items-center ${ title?.sub?.classes ? title?.sub?.classes : '' } ${ title?.main?.text ? '' : 'justify-content-center' } p-3"
+                                        class="col row g-0 align-items-center ${ title?.sub?.classes ? title?.sub?.classes : '' } ${ title?.main?.text ? '' : 'justify-content-center' } p-3"
                                     >${title.sub.text}</div>
                                 ` : ''
                             }

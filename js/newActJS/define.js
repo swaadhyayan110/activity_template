@@ -319,10 +319,31 @@ const Define = (() => {
                     {
                         level : 1,
                         questions : [
-                            { 
-                                question: 'कवि धरती के किन सपूतों को पुकारता है?', 
-                                options: ['सैनिकों को', 'किसान सपूतों को', 'अमर सपूतों को', 'बच्चों को'], 
-                                answer: 3 
+                            {
+                                question: 'कवि धरती के किन सपूतों को पुकारता है?',
+                                imageReplacement : '#img#',
+                                options: [
+                                    { 
+                                        text : '#img# सैनिकों को #img#', 
+                                        images : {
+                                            path : [ 'img/1.png', 'img/5.png' ]
+                                        }
+                                    }, 
+                                    { 
+                                        text : 'किसान #img# सपूतों को', 
+                                        images : {
+                                            path : [ 'img/2.png' ]
+                                        }
+                                    }, 
+                                    { 
+                                        text : '#img#', 
+                                        images : {
+                                            path : [ 'img/3.png' ]
+                                        }
+                                    }, 
+                                    'this is sample text'
+                                ],
+                                answer: 1 
                             },
                             { question: 'कविता में ‘नव निर्माण’ का अर्थ है -', options: ['नया खाना बनाना', 'नई इमारत बनाना', 'समाज का पुनर्निर्माण करना', 'नई सड़क बनाना'], answer: 3 },
                             { question: '‘उठो’ शब्द से कवि क्या करना चाहता है?', options: ['जगाना', 'सुलाना', 'डराना', 'चुप कराना'], answer: 3 },
