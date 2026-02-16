@@ -3307,6 +3307,14 @@ const Adaptiv = (() => {
             ? q.question
             : __renderQuestionText(q.question);
         // ..
+
+         const imageAboveOption = ( q?.imageAboveOption && q?.imageAboveOption?.image != '' ) ?
+                    `
+                        <div class="text-center my-1">
+                            <img src="${Activity.pathToCWD()}${q.imageAboveOption.image}" style="width :${q.imageAboveOption.width ?? '150px'};">
+                        </div>
+                    ` : '';
+        // ..
         
         container.innerHTML = `${ questionText != '' 
                 ? `
@@ -3321,6 +3329,7 @@ const Adaptiv = (() => {
                     </div>
                 ` : ''
             }
+            ${imageAboveOption}
             ${ !skipOptions ? `
                     <div class="row mt-3">
                         <div class="row mt-2 ml-4">

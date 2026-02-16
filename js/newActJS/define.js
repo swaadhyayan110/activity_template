@@ -321,6 +321,10 @@ const Define = (() => {
                         questions : [
                             {
                                 imageReplacement : '#img#',
+                                imageAboveOption : {
+                                    image : 'img/2.png',
+                                    width : '10%'
+                                },
                                 question : { 
                                     text : 'कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
                                     images : {
