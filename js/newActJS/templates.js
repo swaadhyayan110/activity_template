@@ -45,8 +45,8 @@ const Helper = (()=> {
     }
 
     const defaultCol = {
-        md : 4,
-        sm : 6,
+        md  : 12,
+        sm  : 12,
         col : 12
     };
 
@@ -1906,7 +1906,8 @@ const FillInTheBlanksHindiKb = (() => {
             const activity    = Activity.getDefine(questionId);
             const content     = activity?.content;
             const lang        = activity?.lang ?? 'en';
-            const replacement = content?.replacement;
+            const replacement = content?.replacement ?? '#_#';
+            const imageReplacement = content?.imageReplacement ?? '#img#';
             
             if( content?.subquestions ) __subQuestions = content?.subquestions;
 
@@ -1936,10 +1937,46 @@ const FillInTheBlanksHindiKb = (() => {
                 $('#fill-img-container').remove();
             }
 
-            if( content?.hint ) {
-                $('#fill-hint-container').html( content?.hint );
-            }else{
-                $('#fill-hint-container').remove();
+            const hint = content?.hint;
+            const fillContainer = document.querySelector('#fill-hint-container')
+            if( fillContainer ) {
+                const isText = hint?.text;
+                if( hint && typeof hint === 'string' ) {
+                    fillContainer.innerHTML = hint;
+                } else if( isText && hint && hint instanceof Object ) {
+
+                    const __image  = (src,width) => {
+                        const imageWidth = width == '' ? '150px' : width;
+                        const img = `
+                            <img 
+                                src="${Activity.pathToCWD()}${src}" 
+                                style="width:${imageWidth};" 
+                                ondragstart="return false;"
+                            >
+                        `;
+                        return img;
+                    }
+
+                    const __render = () => {
+                        let index    = 0;
+                        const text   = hint?.text ?? '';
+                        const images = hint?.images ?? [];
+                        const regex  = new RegExp(imageReplacement, 'g');
+
+                        const __itr = () => {
+                            const imageData  = images[index++];
+                            const imagePath  = imageData?.path;
+                            const imageWidth = imageData?.width ?? '';
+                            return imagePath ? __image(imagePath,imageWidth) : '';
+                        }
+
+                        return text.replace(regex, __itr );
+                    }
+
+                    fillContainer.innerHTML = __render();
+                } else {
+                    fillContainer.remove();
+                }
             }
 
             const defaultCol = Helper?.defaultCol ?? {};
@@ -2009,10 +2046,12 @@ const FillInTheBlanksHindiKb = (() => {
                             subQuesText.push( view );
                         }
 
-                        const bullet = Activity.translateBulletLabels({lang:'ro', ind:subind, upperCase:false});
+                        const bullet = subQuestion.length > 1 
+                            ? Activity.translateBulletLabels({lang:'ro', ind:subind, upperCase:false}) + ')'
+                            : '';
                         const final  = `
                                             <div class="my-2">
-                                                ${bullet}) ${subQuesText.join('')}
+                                                ${bullet} ${subQuesText.join('')}
                                             </div>
                                             ${multiInput.join('')}
                                         `;
@@ -2028,7 +2067,8 @@ const FillInTheBlanksHindiKb = (() => {
                                     qID:questionId,
                                     sqID:false,
                                     inputIndex:i,
-                                    classes:'w-100 my-2'
+                                    classes:'w-100 my-2',
+                                    style:'text-align:left !important'
                                 })}
                             </div>`;
                             html.push( belowInput );

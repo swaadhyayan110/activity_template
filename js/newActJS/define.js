@@ -155,17 +155,23 @@ const Define = (() => {
             head    : 'Template : 5',
             content : {
                 imageReplacement : '#img#',
-                replacement  : '#_#',
-                image        : {
+                replacement : '#_#',
+                image : {
                     path  : 'img/1.png',
                     width : '10%'
                 },
-                questionGridSize : { md : 6, sm : 12, col : 12 }, // [OPTIONAL]
-                hint         : 'आदरणीया चाची जी, गर्मियों की छुट्टियाँ, बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
-                questions    : [
+                questionGridSize : { md : 12, sm : 12, col : 12 },    // [OPTIONAL]
+                hint : {  // ['string' || {}]
+                    text   : 'आदरणीया चाची जी, #img#; गर्मियों की छुट्टियाँ, #img# <br> बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
+                    images : [
+                        { path : 'img/2.png', width : '15%' },
+                        { path : 'img/3.png' },
+                    ]
+                },
+                questions : [
                     { qid : 1, question : 'हमारे #_# देश का नाम #_# है।', answers : ['हिंदी'] },
                     { qid : 2, question : 'भारत की राजधानी #_# है।' },
-                    { question : 'भारत की #_# राजभाषा #_# है।', inputWidth : '50px', answers : ['हिंदी', 'djf', 'sfdsf'], inputBelow : false },
+                    { question : 'भारत की #_# राजभाषा #_# है।', inputWidth : '50px', answers : ['हिंदी', 'djf', 'sfdsf'], inputBelow : true },
                     { qid : 4, inputWidth : '80px', question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', answers : ['किताब'] },
                     { qid : 5, question : 'जहाँ पढ़ाई होती है उसे #_# कहते हैं।', answers : ['विद्यालय'] }
                 ],
