@@ -1898,6 +1898,33 @@ const FillInTheBlanksHindiKb = (() => {
         }
     }
 
+    const __questionImageTemplate  = (src,width) => {
+        const imageWidth = width ? width : '50px';
+        const img = `
+            <img 
+                src="${Activity.pathToCWD()}${src}" 
+                style="width:${imageWidth};" 
+                ondragstart="return false;"
+            >
+        `;
+        return img;
+    }
+
+    const __renderImageInQuestionText = ({data,text,imageReplacement}) => {
+        let index    = 0;
+        const images = data?.images ?? [];
+        const regex  = new RegExp(imageReplacement, 'g');
+
+        const __itr = () => {
+            const imageData  = images[index++];
+            const imagePath  = imageData?.path;
+            const imageWidth = imageData?.width;
+            return imagePath ? __questionImageTemplate(imagePath,imageWidth) : '';
+        }
+
+        return text.replace(regex, __itr );
+    }
+
     const fillInTheBlanks = (questionId) => {
         try {
 
@@ -1945,7 +1972,7 @@ const FillInTheBlanksHindiKb = (() => {
                     fillContainer.innerHTML = hint;
                 } else if( isText && hint && hint instanceof Object ) {
 
-                    const __image  = (src,width) => {
+                    const __image  = (src,width='') => {
                         const imageWidth = width == '' ? '150px' : width;
                         const img = `
                             <img 
@@ -2001,7 +2028,14 @@ const FillInTheBlanksHindiKb = (() => {
 
                 const inputBelowCondition = question?.inputBelow === true && question?.answers;
                 
-                if( subQuestion.length || inputBelowCondition ) html.push( question?.question ?? '' );
+                if( subQuestion.length || inputBelowCondition ) {
+                    const imageView = __renderImageInQuestionText({
+                        data:question,
+                        text:question?.question ?? '',
+                        imageReplacement:imageReplacement
+                    });
+                    html.push( imageView );
+                }
 
                 if( subQuestion.length ) {
                     if( html.length > 2 ) return false;
@@ -2077,7 +2111,7 @@ const FillInTheBlanksHindiKb = (() => {
                         let idx = 0;
                         const width = question?.inputWidth ?? '';
                         const style = `width:${width} !important;max-width:${width} !important;`
-                        const view  = question?.question?.replaceAll(replacement, () =>
+                        const inputView = question?.question?.replaceAll(replacement, () =>
                             renderInput({
                                 qID: questionId,
                                 sqID: false,
@@ -2086,7 +2120,14 @@ const FillInTheBlanksHindiKb = (() => {
                                 style:style
                             })
                         );
-                        html.push( view );
+                        
+                        const imageView = __renderImageInQuestionText({
+                            data:question,
+                            text:inputView,
+                            imageReplacement:imageReplacement
+                        });
+
+                        html.push( imageView );
                     }
                 }
 

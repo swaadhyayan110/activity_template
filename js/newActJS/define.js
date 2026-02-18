@@ -160,8 +160,8 @@ const Define = (() => {
                     path  : 'img/1.png',
                     width : '10%'
                 },
-                questionGridSize : { md : 12, sm : 12, col : 12 },    // [OPTIONAL]
-                hint : {  // ['string' || {}]
+                questionGridSize : { md : 12, sm : 12, col : 12 },      // [OPTIONAL]
+                hint : {        // ['string' || {}]
                     text   : 'आदरणीया चाची जी, #img#; गर्मियों की छुट्टियाँ, #img# <br> बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
                     images : [
                         { path : 'img/2.png', width : '15%' },
@@ -169,11 +169,43 @@ const Define = (() => {
                     ]
                 },
                 questions : [
-                    { qid : 1, question : 'हमारे #_# देश का नाम #_# है।', answers : ['हिंदी'] },
-                    { qid : 2, question : 'भारत की राजधानी #_# है।' },
-                    { question : 'भारत की #_# राजभाषा #_# है।', inputWidth : '50px', answers : ['हिंदी', 'djf', 'sfdsf'], inputBelow : true },
-                    { qid : 4, inputWidth : '80px', question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', answers : ['किताब'] },
-                    { qid : 5, question : 'जहाँ पढ़ाई होती है उसे #_# कहते हैं।', answers : ['विद्यालय'] }
+                    { 
+                        qid : 1,
+                        question : 'हमारे #_# देश का #img# नाम #_# है। #img#', 
+                        images : [
+                            { path : 'img/5.png', width : '200px' },
+                            { path : 'img/4.png', width : '200px' }
+                        ],
+                        answers : ['हिंदी'] 
+                    },
+                    { 
+                        qid : 2, 
+                        question : 'भारत की राजधानी #_# है।' 
+                    },
+                    { 
+                        question : 'भारत की #_# #img# राजभाषा #_# है।', 
+                        images : [
+                            { path : 'img/1.png', width : '200px' }
+                        ],
+                        inputWidth : '50px', 
+                        answers : ['हिंदी', 'djf', 'sfdsf'], 
+                        inputBelow : true 
+                    },
+                    { 
+                        qid : 4, 
+                        inputWidth : '80px', 
+                        question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', 
+                        answers : ['किताब'] 
+                    },
+                    { 
+                        qid : 5, 
+                        question : '#img# जहाँ #img# पढ़ाई होती है उसे #_# कहते हैं।',
+                        images : [
+                            { path : 'img/5.png', width : '200px' },
+                            { path : 'img/2.png' },
+                        ],
+                        answers : ['विद्यालय'] 
+                    }
                 ],
                 subquestions : [
                     { sqid : 1, qid : 1, inputWidth : '80px', text : '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['~पंख'] },
