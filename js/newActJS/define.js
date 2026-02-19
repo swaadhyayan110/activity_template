@@ -358,6 +358,14 @@ const Define = (() => {
                 levels : [
                     {
                         level : 1,
+                        heading : {
+                            text    : 'this is sample heading',
+                            classes : [ 
+                                'text-center', 'fs-4', 'text-capitalize', 
+                                'text-primary-emphasis', 'bg-primary-subtle', 
+                                'rounded-2', 'p-1' 
+                            ],
+                        },
                         questions : [
                             {
                                 imageReplacement : '#img#',
@@ -541,16 +549,25 @@ const Define = (() => {
                 strictMatch : false,
                 replacement : '#_#',
                 option_side : 'top',
+                singleQuestionMode : true,
                 col         : { col : 6, md : 6, sm : 6 },
                 addOptions  : [ 'op1', 'op2', 'op3', 'op1' ],
                 questions   : [
-                    { qid : 1, text : 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', inputWidth : '50%', image : 'img/1.png', width : '25%', options : ['पंख', 'नाचने'], answer : 1 },
+                    {
+                        qid : 1, 
+                        text : 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', 
+                        inputWidth : '100px', 
+                        image : 'img/1.png',
+                        width : '120px',      // image-width
+                        options : ['पंख', 'नाचने'], 
+                        answer : 1 
+                    },
                     { qid : 2, text : 'सितार के सुर #_# में गूँजने लगे।', image : 'img/1.png', options : ['जंगल'], answer : 0 },
                     { qid : 3, text : 'सितार पर खाली जगह पर #_# की गई।', image : 'img/1.png', options : ['नक्काषी'], answer : 0 },
                     { qid : 4, text : 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image : 'img/1.png', options : ['खूँटी'], answer : 0 },
                     { qid : 5, text : 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image : 'img/1.png', options : ['जतन'], answer : 0 }
                 ],
-                audio     : 'audio/1.mp3'
+                // audio     : 'audio/1.mp3'
             }
         },
         {
@@ -799,11 +816,12 @@ const Define = (() => {
             }
         },
         {
-            id      : 28,
-            lang    : 'hi',
-            head    : 'Template : 27',
-            subhead : "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
-            content : {
+            id       : 28,
+            lang     : 'hi',
+            head     : 'Template : 27',
+            hintText : false,
+            subhead  : "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
+            content  : {
                 heading : " • विज्ञान का उद्देश्य मानव जीवन को सरल व कष्टरहित बनाना • विभिन्न क्षेत्रों में चमत्कार • चिकित्सा क्षेत्र में• संचार व परिवहन क्षेत्र में • शिक्षा व कृषि क्षेत्र में • विभिन्न  ष्कारों ने मानव जीवन को सुविधासंपन्न बना दिया है।",
                 answer  : `<div class='headingInDtaAns'>विज्ञान के चमत्कार</div>
                         यदि विज्ञान के क्षेत्र में निरंतर नए-नए आविष्कार न होते तो कदाचित आज मानव प्रगति के सर्वोच्च शिखर पर
@@ -1162,6 +1180,7 @@ const Define = (() => {
         {
             id      : 42,
             head    : 'Template : 40, VirtualTour',
+            lang    : 'en',
             content : {
                 questions : [
                      {

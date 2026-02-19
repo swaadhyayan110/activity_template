@@ -1910,7 +1910,7 @@ const FillInTheBlanksHindiKb = (() => {
         return img;
     }
 
-    const __renderImageInQuestionText = ({data,text,imageReplacement}) => {
+    const __renderImageInQuestionText = ({data,text,imageReplacement}={}) => {
         let index    = 0;
         const images = data?.images ?? [];
         const regex  = new RegExp(imageReplacement, 'g');
@@ -3204,6 +3204,7 @@ const Adaptiv = (() => {
     Activity.css('adaptiv.css');
 
     const headerContainer = 'headersTopT';
+    const levelHeadingID  = 'levelHeading';
 
     let currentLevel    = 1;
     let currentQuestion = 0;
@@ -3267,6 +3268,7 @@ const Adaptiv = (() => {
                                             }
                                         </div>
                                         <div class="container my-5 contAdapt shadow-lg">
+                                            <div class="mb-2" id="${levelHeadingID}"></div>
                                             <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
                                             <div class="buttonection" id="nav-buttons">
                                                 <div class="buttons machiNgs">
@@ -3353,9 +3355,7 @@ const Adaptiv = (() => {
 
         __activity = activity;
 
-        if (retryWrongOnly) {
-            realIndex = wrongQuestions[currentQuestion];
-        }
+        if (retryWrongOnly) realIndex = wrongQuestions[currentQuestion];
 
         const q = found?.questions?.[realIndex];
         currentQuizData = found?.questions || [];
@@ -3373,7 +3373,7 @@ const Adaptiv = (() => {
         }        
 
         const container = document.getElementById("quizContainerAdaptiv");
-        if (!container) return;
+        if( !container ) return;
 
         container.classList.remove('animate__fadeInDown', 'animate__fadeInUp');
 
@@ -3391,6 +3391,16 @@ const Adaptiv = (() => {
             container.innerHTML = `<div class="row m-0"><div class="col">${ lang == 'hi' ? 'प्रश्न उपलब्ध नहीं है' : 'Question not found.' }</div></div>`;
             updateNavButtons();
             return;
+        }
+
+        const levelHeadingText = found?.heading ?? {};
+        const levelHeadContainer = document.querySelector('#'+levelHeadingID);
+        if( levelHeadingText?.text && levelHeadContainer ) {
+            const text = levelHeadingText.text;
+            const classes = levelHeadingText?.classes ?? [];
+            levelHeadContainer.innerHTML = text;
+
+            classes.forEach( cls => levelHeadContainer.classList.add( cls ) );
         }
 
         const imageReplacement = q?.imageReplacement ?? '#img#';
@@ -3418,7 +3428,7 @@ const Adaptiv = (() => {
             : __renderQuestionText(q.question);
         // ..
 
-         const imageAboveOption = ( q?.imageAboveOption && q?.imageAboveOption?.image != '' ) ?
+        const imageAboveOption = ( q?.imageAboveOption && q?.imageAboveOption?.image != '' ) ?
                     `
                         <div class="text-center my-1">
                             <img src="${Activity.pathToCWD()}${q.imageAboveOption.image}" style="width :${q.imageAboveOption.width ?? '150px'};">
@@ -3428,9 +3438,9 @@ const Adaptiv = (() => {
         
         container.innerHTML = `${ questionText != '' 
                 ? `
-                    <div class="row m-0 align-items-center" style="font-size:18px">
+                    <div class="row m-0 g-0 align-items-center" style="font-size:18px">
                         ${ !skipQuestionSequence ? `
-                            <div style="width:30px" class="questionHeadingMCQ">
+                            <div style="min-width:30px;" class="col-auto questionHeadingMCQ me-2">
                                 <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${realIndex  + 1}.</strong>
                             </div>
                             ` : ''
@@ -3760,18 +3770,24 @@ const Adaptiv = (() => {
     const retryQuiz = () => {
         submitted = false;
 
-        if (wrongQuestions.length > 0) {
-            retryWrongOnly = true;
-            currentQuestion = 0;
+        retryWrongOnly = false;
+        currentQuestion = 0;
+        userAnswersAdaptiv = new Array(currentQuizData.length).fill(null);
 
-            wrongQuestions.forEach(i => {
-                userAnswersAdaptiv[i] = null;
-            });
-        } else {
-            retryWrongOnly = false;
-            currentQuestion = 0;
-            userAnswersAdaptiv = new Array(currentQuizData.length).fill(null);
-        }
+        // if( wrongQuestions.length > 0 ) {
+        //     console.log('if')
+        //     retryWrongOnly = true;
+        //     currentQuestion = 0;
+
+        //     wrongQuestions.forEach(i => {
+        //         userAnswersAdaptiv[i] = null;
+        //     });
+        // } else {
+        //     console.log('else')
+        //     retryWrongOnly = false;
+        //     currentQuestion = 0;
+        //     userAnswersAdaptiv = new Array(currentQuizData.length).fill(null);
+        // }
 
         renderQuestion(Activity.getQid(`.${headerContainer}`));
         updateAttemptedCount();
@@ -3780,7 +3796,7 @@ const Adaptiv = (() => {
         $(".submit-info").show();
 
         const levelTextEl = document.getElementById("levelText");
-        if (levelTextEl) levelTextEl.style.display = 'block';
+        if( levelTextEl ) levelTextEl.style.display = 'block';
     };
 
     const showAnswerPopup = () => {
@@ -4336,9 +4352,9 @@ const Circle = (() => {
             span.classList.remove("correct", "wrong");
             if (span.classList.contains("circle")) {
                 if (answers.includes(span.dataset.word)) {
-                span.classList.add("correct");
+                    span.classList.add("correct");
                 } else {
-                span.classList.add("wrong");
+                    span.classList.add("wrong");
                 }
             }
             });
@@ -5421,6 +5437,7 @@ const DragAndDropMulti = (() => {
     let shuffledQuestions;
     let DragEnabled = false;
     let userAns;
+    let __singleQuesIndex = 0;
 
     const ui = (questionId) => {
         try {
@@ -5432,9 +5449,12 @@ const DragAndDropMulti = (() => {
                 return;
             }
 
+            __singleQuesIndex = 0;
+
             const activity = Activity.getDefine(questionId) ?? {};
-            const content = activity?.content ?? {};
+            const content  = activity?.content ?? {};
             const lang     = activity.lang ?? 'en';
+            const singleQuestionMode = content?.singleQuestionMode ?? false;
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -5471,11 +5491,14 @@ const DragAndDropMulti = (() => {
                                                 <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
                                                 <div class="drag-question-box2 mt-3"></div>
                                             </div>
-                                            <div class="buttons machiNgs">
-                                                <button class="submit-btn disable" id="submit2">${buttonLabel.check}</button>
-                                                <button class="show-btn" id="showAns2">${buttonLabel.show}</button>
-                                                <button class="reset-btn">${buttonLabel.try}</button>
-                                            </div>
+                                            ${ !singleQuestionMode ? `
+                                                    <div class="buttons machiNgs">
+                                                        <button class="submit-btn disable" id="submit2">${buttonLabel.check}</button>
+                                                        <button class="show-btn" id="showAns2">${buttonLabel.show}</button>
+                                                        <button class="reset-btn">${buttonLabel.try}</button>
+                                                    </div>
+                                                ` : ''
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -5578,7 +5601,6 @@ const DragAndDropMulti = (() => {
             }
             compareAnswerArrays( type_set?.answers, userAns )
         } else {
-            console.log('no set');
             shuffledQuestions.forEach((item, i) => {
                 const userAnswer = userAns[i];
                 let count = 0;
@@ -5596,7 +5618,6 @@ const DragAndDropMulti = (() => {
                         correctCount++;
                     }
                 } else {
-                    console.log('strict false');
                     let remaining = [...correctAnswerText];
                     let match = undefined;
                     if(option_side == 'right'){
@@ -5695,6 +5716,146 @@ const DragAndDropMulti = (() => {
         $(`#submit2`).addClass('disable');
         DragEnabled = true;
     }
+
+    const canSingleQuestion = ({content,ind,lang,questionItem}={}) => {
+        if( !content ) return;
+
+        const replacement = content?.replacement ?? '#_#';
+        const questions   = content?.questions ?? [];
+        const option_side = content?.option_side ?? 'top';
+        const isCol       = typeof content?.col == 'object' ? true : false;
+        const singleQuestionMode = content?.singleQuestionMode ?? false;
+
+        const defaultCol = {
+            md : 4,
+            sm : 6,
+            col : 12
+        };
+        const col_size = {
+            md: content?.col?.md ?? defaultCol.md,
+            sm: content?.col?.sm ?? defaultCol.sm,
+            col: content?.col?.col ?? defaultCol.col
+        };
+
+        const item = questionItem ?? questions[ind];
+        
+        const inputWidth  = item?.inputWidth ?? '';
+        const quesOptions = item?.options || [];
+
+        let replacedText = item?.text;
+
+        const questionHtml = [];
+        const optionHtml   = [];
+
+        let index = 0;
+        const replacementRegex = new RegExp(replacement, "g");
+
+        replacedText = replacedText.replace(replacementRegex, () => {
+            const ans = quesOptions[index++] || '';
+            return `
+                <div 
+                    class="drop-Box dropBox_2 ui-droppable" 
+                    data-ans="${ans}" 
+                    style="width:${inputWidth};">
+                </div>
+            `;
+        });
+        
+        const image = [];
+        if( item.image != undefined ) {
+            const image_width = item.width ?? '200px';
+            const img = `<img class="" style="width: ${image_width};" src="${Activity.pathToCWD()}${item.image}" ondragstart="return false;"></img>`
+            image.push( img );
+        }
+
+        if( option_side == 'top' && singleQuestionMode ) {
+            const options       = item?.options || [];
+            const addOptions    = Activity.shuffleArray( content?.addOptions || [] ) || [];
+            const mergedOptions = Activity.shuffleArray( [...new Set([...options, ...addOptions])] || [] ) || [];
+            mergedOptions.forEach((item, ind) => {
+                const html = drag_option_html(item, ind);
+                optionHtml.push( html );
+            });
+            $('.drag-container2').html( optionHtml.join( '' ) );
+        }
+            
+        if( option_side == 'right' ) {
+            const options = [];
+            quesOptions.map((item,ind) => {
+                options.push( drag_option_html(item, ind) );
+            });
+            const html = `
+                <div class="row g-0 my-3 align-items-center">
+                    <div class="col-auto me-1">
+                        (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                    </div>
+                    <div class="col d-flex flex-wrap align-items-center question-container_2" data-queindex="${ind}">
+                        ${image.join( '' )}
+                        ${replacedText}
+                        <div class="ms-3 d-flex">
+                            ${options.join( '' )}
+                        </div>
+                    </div>
+                </div>
+            `;
+            questionHtml.push( html );
+        } else {
+            if( isCol === false ) {
+                const html = `
+                    <div class="my-2 p-1">
+                        <div class="row g-0 border rounded h-100 p-2">
+                            <div class="col-auto me-1 d-flex align-items-center">
+                                (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                            </div>
+                            <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
+                                ${image.join( '' )}
+                                ${replacedText}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                questionHtml.push( html );
+            } else {
+                ind == 0 ? questionHtml.push( '<div class="row g-0 my-3">' ) : false;
+
+                replacedText = replacedText.replaceAll( ',', '' );
+
+                const html = `
+                    ${ col_size && !singleQuestionMode ? `
+                            <div class="my-2 col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm} p-1">
+                        ` : `
+                            <div class="my-2 p-1">
+                        `
+                    }
+                        <div class="d-flex h-100 border rounded p-2">
+                            <div class="col-auto p-1 d-flex align-items-center me-1">
+                                (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                            </div>
+                            <div class="d-flex flex-column justify-content-between col question-container_2">
+                                ${ image.length ? `
+                                        <div class="d-flex align-items-center h-100">
+                                            ${image.join( '' )}
+                                        </div>
+                                    ` : ''
+                                }
+                                <div class="row g-0 gap-4 my-3" data-queindex="${ind}">
+                                    ${replacedText}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;                            
+                questionHtml.push( html );
+
+                ind == questions.length ? questionHtml.push( '</div>' ) : false;
+            }
+        }
+
+        return {
+            questionHtml,
+            optionHtml
+        }
+    }
     
     const renderDataDND = (questionId) => {
         try {
@@ -5708,32 +5869,18 @@ const DragAndDropMulti = (() => {
             dragItems.dataset.qid = questionId;
 
             const content     = data?.content ?? {};
-            const replacement = content?.replacement ?? '#_#';
             const option_side = content?.option_side ?? 'top';
             const type_set    = content?.set ?? {};
             const hasTypeSet  = Object.keys(type_set).length > 0;
             const isShuffle   = content?.shuffle ?? true;
-            const isCol       = typeof content?.col == 'object' ? true : false;
-
-            const defaultCol = {
-                md : 4,
-                sm : 6,
-                col : 12
-            };
-            const col_size = {
-                md: content?.col?.md ?? defaultCol.md,
-                sm: content?.col?.sm ?? defaultCol.sm,
-                col: content?.col?.col ?? defaultCol.col
-            }; 
+            const singleQuestionMode = content?.singleQuestionMode ?? false;
             
             const questions_temp = content?.questions ?? [];
 
             const optionHtml = [];
-            const questions  = isShuffle == true ? Activity.shuffleArray( questions_temp ) || [] : questions_temp;
+            const questions  = isShuffle == true ? Activity.shuffleArray( questions_temp ) || [] : questions_temp;            
 
-            const drag_option_html = (item, ind) => `<div class="drag_${ind} wordDrag font17" data-text="${item}" data-ans="${item}">${item}</div>`;
-
-            if( option_side == 'top' && !hasTypeSet ) {
+            if( option_side == 'top' && !hasTypeSet && !singleQuestionMode ) {
                 const options       = Activity.shuffleArray( questions || [] )?.flatMap( obj => obj.options ) || [];
                 const addOptions    = Activity.shuffleArray( content?.addOptions || [] ) || [];
                 const mergedOptions = Activity.shuffleArray( [...new Set([...options, ...addOptions])] || [] ) || [];
@@ -5771,87 +5918,78 @@ const DragAndDropMulti = (() => {
                 });
             } else {
                 shuffledQuestions = questions;
-                questions.forEach((item, ind) => {
-                    const inputWidth  = item?.inputWidth ?? '';
-                    const quesOptions = item.options || [];
+                if( !singleQuestionMode ) {
+                    questions.forEach((item, ind) => {
+                        const view = canSingleQuestion({
+                            questionItem:item,
+                            content:content, 
+                            ind:ind, 
+                            lang:lang                            
+                        }).questionHtml.join('');
 
-                    let replacedText = item.text;
-
-                    let index = 0;
-                    const replacementRegex = new RegExp(replacement, "g");
-
-                    replacedText = replacedText.replace(replacementRegex, () => {
-                        const ans = quesOptions[index++] || '';
-                        return `<div class="drop-Box dropBox_2 ui-droppable" data-ans="${ans}" style="width:${inputWidth};"></div>`;
+                        questionHtml.push( view );
                     });
-                    
-                    const image = [];
-                    if( item.image != undefined ) {
-                        const image_width = item.width ?? '200px';
-                        const img = `<img class="" style="width: ${image_width};" src="${Activity.pathToCWD()}${item.image}" ondragstart="return false;"></img>`
-                        image.push( img );
-                    }
-                        
-                    if( option_side == 'right' ) {
-                        const options = [];
-                        quesOptions.map((item,ind) => {
-                            options.push( drag_option_html(item, ind) );
-                        });
-                        const html = `
-                            <div class="row g-0 my-3 align-items-center">
-                                <div class="col-auto me-1">
-                                    (${Activity.translateBulletLabels({lang:lang, ind:ind})})
-                                </div>
-                                <div class="col d-flex flex-wrap align-items-center question-container_2" data-queindex="${ind}">
-                                    ${image.join( '' )}
-                                    ${replacedText}
-                                    <div class="ms-3 d-flex">
-                                        ${options.join( '' )}
-                                    </div>
-                                </div>
+                } else {
+                    const view = canSingleQuestion({
+                        content:content, 
+                        ind:__singleQuesIndex, 
+                        lang:lang
+                    }).questionHtml.join('');
+
+                    questionHtml.push( view );
+
+                    if( questions.length == 1 ) return;
+
+                    const toggleBtnContainer = document.querySelector('#question-container-box');
+                    if( !toggleBtnContainer ) return;
+
+                    const toggleBtnsLabel = Activity.translateNextPrevLabel(lang);
+                    const buttonLabel     = Activity.translateButtonLabels(lang);
+
+                    const toggleBtns = `
+                        <div id="toggleQuestions" class="row g-0">
+                            <div class="col text-start">
+                                <button id="previousBtn" class="btn btn-outline-primary rounded m-1" disabled>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                    </svg>
+                                    ${toggleBtnsLabel.prev}
+                                </button>
+                                <button id="nextBtn" class="btn btn-outline-primary rounded m-1" disabled>
+                                    ${toggleBtnsLabel.next}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                    </svg>
+                                </button>
                             </div>
-                        `;
-                        questionHtml.push( html );
-                    } else {
-                        if( isCol === false ) {
-                            const html = `
-                                <div class="row g-0 my-3">
-                                    <div class="col-auto me-1">
-                                        (${Activity.translateBulletLabels({lang:lang, ind:ind})})
-                                    </div>
-                                    <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
-                                        ${image.join( '' )}
-                                        ${replacedText}
-                                    </div>
-                                </div>
-                            `;
-                            questionHtml.push( html );
-                        } else {
-                            ind == 0 ? questionHtml.push( '<div class="row g-0 my-3">' ) : false;
+                            <div class="col-auto text-end">
+                                <button id="showBtn" class="btn btn-outline-success rounded m-1">
+                                    ${buttonLabel.submit}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    // ..
 
-                            replacedText = replacedText.replaceAll( ',', '' );
+                    toggleBtnContainer.insertAdjacentHTML('beforebegin', toggleBtns);
 
-                            const html = `
-                                <div class="d-flex col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm}">
-                                    <div class="col-auto p-1">
-                                        (${Activity.translateBulletLabels({lang:lang, ind:ind})})
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-between col question-container_2">
-                                        <div class="d-flex align-items-center justify-content-center h-100">
-                                            ${image.join( '' )}
-                                        </div>
-                                        <div class="d-flex flex-column justify-content-center align-items-center gap-4 my-3" data-queindex="${ind}">
-                                            ${replacedText}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;                            
-                            questionHtml.push( html );
+                    const toggleQuestionsContainer = document.querySelector( '#toggleQuestions' );
+                    if( !toggleQuestionsContainer ) return;
 
-                            ind == questions.length ? questionHtml.push( '</div>' ) : false;
-                        }
+                    const __toggleBtns = getToggleBtns();
+
+                    const previousBtn = __toggleBtns.prev;
+                    const nextBtn     = __toggleBtns.next;
+                    const showBtn     = __toggleBtns.show;
+                    
+                    if( previousBtn ) previousBtn.addEventListener('click', __previousQuestion);
+                    if( showBtn ) showBtn.addEventListener('click', __showAnswerPopupSingleType);
+                    if( nextBtn ) {
+                        nextBtn.addEventListener('click', __nextQuestion);
+                        nextBtn.disabled = false;
                     }
-                });
+
+                }
             }
             $('.drag-question-box2').html( questionHtml.join( '' ) );
 
@@ -5864,6 +6002,218 @@ const DragAndDropMulti = (() => {
             console.error( 'DragAndDropMulti.renderDataDND :', e );
         }
     }
+
+    const __getQuestionData = () => {
+        const questionId = Activity.getQid( '#'+containerId );
+        const data = Activity.getDefine( questionId );
+        const lang = data?.lang ?? 'en';
+        const content   = data?.content ?? {};
+        const questions = content?.questions ?? [];
+
+        return {
+            lang : lang,
+            content : content,
+            questions : questions
+        }
+    }
+
+    const __setGetUserAttemptedAns = () => {
+        userAns[__singleQuesIndex]?.forEach( (ans, ind) => {
+            $('.drop-Box.dropBox_2').eq(ind).attr('data-val', ans).html( ans );
+        });
+    }
+
+    const __renderSingleQuesWithDataOnChange = () => {
+        const data = __getQuestionData();
+
+        const questionView = canSingleQuestion({
+            content:data.content,
+            ind:__singleQuesIndex, 
+            lang:data.lang
+        }).questionHtml.join('');
+
+        $('.drag-question-box2').html( questionView );
+
+        makeDraggable(`.wordDrag`);
+        initDroppable('.dropBox_2');
+        DragEnabled = true;
+        
+        __setGetUserAttemptedAns();
+    }
+
+    const __previousQuestion = () => {
+        const btns = getToggleBtns();
+        const prev = btns.prev;
+        const next = btns.next;
+
+        if( !prev || !next ) return;
+
+        next.disabled = false;
+
+        if( prev.disabled ) return;
+
+        __singleQuesIndex--;
+
+        prev.disabled = __singleQuesIndex == 0;
+
+        __renderSingleQuesWithDataOnChange();
+    };
+
+    const __nextQuestion = () => {
+        const btns = getToggleBtns();
+        const prev = btns.prev;
+        const next = btns.next;
+
+        if( !prev || !next ) return;
+
+        prev.disabled = false;
+        
+        const data = __getQuestionData();
+
+        const hasQuestion = __singleQuesIndex < data.questions.length;
+
+        if( !hasQuestion ) {
+            next.disabled = true;
+            return;
+        }
+
+        if( next.disabled ) return;
+
+        __singleQuesIndex++;
+
+        next.disabled = __singleQuesIndex == data.questions.length - 1;
+
+        __renderSingleQuesWithDataOnChange();
+    };
+
+    const getToggleBtns = () => {
+
+        const toggleQuestionsContainer = document.querySelector( '#toggleQuestions' );
+        if( !toggleQuestionsContainer ) {
+            return {
+                prev : null,
+                next : null,
+                show : null
+            }
+        };
+
+        const previousBtn = toggleQuestionsContainer.querySelector( '#previousBtn' );
+        const nextBtn     = toggleQuestionsContainer.querySelector( '#nextBtn' );
+        const showBtn     = toggleQuestionsContainer.querySelector( '#showBtn' );
+
+        return {
+            prev : previousBtn,
+            next : nextBtn,
+            show : showBtn,
+        }
+    }
+
+    const __showAnswerPopupSingleType = () => {
+
+        if( !userAns.every( arr => arr.length > 0 && arr.every(v => v != null && v !== "") ) ) {
+            console.log( 'Please attempt all questions' );
+            return;
+        }
+
+        const data = __getQuestionData();
+        const lang = data?.lang ?? 'en';
+        const questions   = data?.questions ?? [];
+        const strictMatch = data?.content?.strictMatch ?? false;
+        const option_side = data?.content?.option_side ?? 'top';
+
+        const tableHeadLabel = Activity.translateTableHeads(lang);
+        let correctCount = 0;
+        let totalQues    = questions.length;
+        const table      = [];
+
+        const tablePartStart = `
+            <div class="table-responsive p-2">
+            <table class="table table-bordered" style="font-size:20px">
+                <thead class="text-light" style="white-space: nowrap;">
+                    <tr>
+                        <th>${tableHeadLabel.sequence}</th>
+                        <th>${tableHeadLabel.attempted}</th>
+                        <th>${tableHeadLabel.correct}</th>
+                        <th>${tableHeadLabel.result}</th>
+                    </tr>
+                </thead>
+            <tbody>
+        `;
+        // ..
+        table.push( tablePartStart );
+
+        questions.forEach((item, i) => {
+            const userAnswer = userAns[i];
+            let count = 0;
+            let isCorrect = false;
+
+            let correctAnswerText = item.options;
+            if ( option_side == 'right' ) {
+                correctAnswerText = item.options[item.answer] ?? '';
+            }
+
+            if( strictMatch ) {
+                isCorrect = userAnswer.toString() === correctAnswerText.toString();
+                if( isCorrect ) {
+                    count++;
+                    correctCount++;
+                }
+            } else {
+                let remaining = [...correctAnswerText];
+                let match = undefined;
+                if(option_side == 'right'){
+                    remaining = [correctAnswerText];
+                    match = userAnswer.map(userWord => {
+                        const match = userWord === remaining[0];
+                        return match;
+                    });
+                }else{
+                    match = userAnswer.map(userWord => {
+                        const id    = remaining.indexOf(userWord);
+                        const match = id !== -1;
+                        if (match) remaining.splice(id, 1);
+                        return match;
+                    });
+                }
+                
+                match.map( (item) => {
+                    if( item == true ) {
+                        count++;
+                    }
+                    const ansLen = option_side == "right" ? remaining.length : correctAnswerText.length;
+                    if( count == ansLen ) {
+                        isCorrect = true;
+                        correctCount++;
+                    }
+                });
+            }
+
+            const body = `
+                <tr clsss='trData'>
+                    <th>(${Activity.translateBulletLabels({lang:lang, ind:i})})</th>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
+                    <td class="text-success">${correctAnswerText.toString()}</td>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
+                </tr>
+            `;
+            table.push( body );
+        });
+
+        const tablePartEnd = `</tbody></table></div>`;
+        table.push( tablePartEnd );
+
+        document.getElementById("answer-review").innerHTML = table.join( '' );
+        document.getElementById("popupDialogAns").style.display = "block";
+
+        const finalText = lang == 'en' ?
+            `You answered ${correctCount} out of ${totalQues} questions correctly!` :
+            `आपको ${totalQues} में से ${correctCount} मिले है`;
+        // ..
+
+        document.getElementById("scoreTextQ1").innerText = finalText;
+    }
+
+    const drag_option_html = (item, ind) => `<div class="drag_${ind} wordDrag font17" data-text="${item}" data-ans="${item}">${item}</div>`;
 
     const makeDraggable = (selector) => {
         try {
@@ -9072,6 +9422,7 @@ const RachnatmakWithKeyboard = (() => {
         const activity = Activity.getDefine(questionId) ?? {};
         const lang     = activity.lang ?? 'en';
         const content  = activity.content ?? {};
+        const hintText = activity.hintText ?? true;
 
         let textareaType = content.textArea?.type ?? "single";
         let textareaClass = textareaType === "multi" ? "multiTextArea" : "singleTextarea";
@@ -9122,7 +9473,10 @@ const RachnatmakWithKeyboard = (() => {
         const html = `
             ${ content?.heading ?
                 `<div class="instForFillText shadow-sm">
-                    <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
+                    ${ hintText ? `
+                            <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
+                        ` : ''
+                    }
                     <p class="saketText">${content?.heading ?? ''}</p>
                 </div>` : ''
             }
@@ -11469,7 +11823,7 @@ const SpellCheck = (() => {
             }
 
         } catch (e) {
-            console.error('Circle.ui :', e);
+            console.error('SpellCheck.ui :', e);
         }
     };
     
@@ -12619,8 +12973,11 @@ const VirtualTour = (() => {
 
             const activity  = Activity.getDefine(questionId) ?? {};
             const content   = activity?.content ?? {};
+            const lang      = activity?.lang ?? 'en';
             const questions = content?.questions ?? [];
             const questionsLength = questions.length;
+
+            const toggleBtns = Activity.translateNextPrevLabel(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container w-75 mx-auto">
@@ -12633,10 +12990,10 @@ const VirtualTour = (() => {
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
                                                                 <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
                                                             </svg>
-                                                            Previous
+                                                            ${toggleBtns.prev}
                                                         </button>
                                                         <button id="nextBtn" class="btn btn-outline-primary rounded m-1" disabled>
-                                                            Next
+                                                            ${toggleBtns.next}
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
                                                                 <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
                                                             </svg>
