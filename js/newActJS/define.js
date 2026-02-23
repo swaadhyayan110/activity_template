@@ -729,16 +729,16 @@ const Define = (() => {
             head    : 'Template : 23',
             content : {
                 questions : [
-                    { sequence : 1, direction : 'v', row : [1, 15], col : [20], question: 'Fossil scientists', answer : 'paLEONTOLOGISTS' },
-                    { sequence : 2, direction : 'v', row : [3, 9], col : [6], question: 'Coins, tools, art', answer : 'SOURCES' },
-                    { sequence : 3, direction : 'h', row : [4], col : [1, 14], question: 'Scientist who studies humans', answer : 'ANTHROPOLOGIST' },
-                    { sequence : 4, direction : 'v', row : [4, 10], col : [13], question: 'Biographies, plays etc', answer : 'SECULAR' },
-                    { sequence : 5, direction : 'v', row : [4, 12], col : [22], question: 'Study of Earth\'s history', answer : 'GEOLOGIST' },
-                    { sequence : 6, direction : 'h', row : [6], col : [5, 15], question: 'Oral accounts from relatives', answer : 'ORALSOURCES' },
-                    { sequence : 7, direction : 'v', row : [8, 14], col : [9], question: 'Facts in time order', answer : 'HISTORY' },
-                    { sequence : 8, direction : 'v', row : [8, 16], col : [25], question: 'Legends & folk stories', answer : 'FOLKLORES' },
-                    { sequence : 9, direction : 'h', row : [9], col : [2, 11], question: 'Old handwritten record', answer : 'MANUSCRIPT' },
-                    { sequence : 10, direction : 'h', row : [10], col : [12, 25], question: 'Remains to study past life', answer : 'ARCHAEOLOGICAL' },
+                    { sequence : 1, direction : 'v', row : [1, 15], col : [20], question: 'Fossil scientists', image: { path: 'img/1.png',  row: 1, col: 17 }, answer : 'paLEONTOLOGISTS' },
+                    { sequence : 2, direction : 'v', row : [3, 9], col : [6], question: 'Coins, tools, art', image: { path: 'img/2.png', row: 1, col: 7 }, answer : 'SOURCES' },
+                    { sequence : 3, direction : 'h', row : [4], col : [1, 14], question: 'Scientist who studies humans', image: { path: 'img/3.png', row: 1, col: 1 }, answer : 'ANTHROPOLOGIST' },
+                    { sequence : 4, direction : 'v', row : [4, 10], col : [13], question: 'Biographies, plays etc', image: { path: 'img/4.png', row: 1, col: 13 }, answer : 'SECULAR' },
+                    { sequence : 5, direction : 'v', row : [4, 12], col : [22], question: 'Study of Earth\'s history', image: { path: 'img/5.png', row: 1, col: 22 }, answer : 'GEOLOGIST' },
+                    { sequence : 6, direction : 'h', row : [6], col : [5, 15], question: 'Oral accounts from relatives', image: { path: 'img/6.png', row: 5, col: 2 }, answer : 'ORALSOURCES' },
+                    { sequence : 7, direction : 'v', row : [8, 14], col : [9], question: 'Facts in time order', image: { path: 'img/414.png', row: 10, col: 6 }, answer : 'HISTORY' },
+                    { sequence : 8, direction : 'v', row : [8, 16], col : [25], question: 'Legends & folk stories', image: { path: 'img/ch4_1.png', row: 5, col: 24 }, answer : 'FOLKLORES' },
+                    { sequence : 9, direction : 'h', row : [9], col : [2, 11], question: 'Old handwritten record', image: { path: 'img/ch4_2.png', row: 10, col: 2 }, answer : 'MANUSCRIPT' },
+                    { sequence : 10, direction : 'h', row : [10], col : [12, 25], question: 'Remains to study past life', image: { path: 'img/ch4_3.png', row: 11, col: 12 }, answer : 'ARCHAEOLOGICAL' },
                 ]
             }
         },

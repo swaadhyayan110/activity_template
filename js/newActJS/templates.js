@@ -7943,26 +7943,28 @@ const TextArea = (() => {
 })();
 
 const CrossWord = (() => {
-    const containerId  = 'cross-word-container';
+    const containerId = 'cross-word-container';
 
     const defaultColor = '#31cde2';
     const correctColor = 'lightgreen';
-    
+
     Activity.css('crossword-puzzle.css');
+
+    let questionSet = null;
 
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             const uiHtml = `<div class="question">
@@ -7987,86 +7989,89 @@ const CrossWord = (() => {
             // ..
             parent.innerHTML = uiHtml;
 
-            Activity.setHeader( questionId );
-			
-			const resetBtn  = parent.querySelector( '.reset-btn' );
-			const showBtn   = parent.querySelector( '.show-btn' );
-			const submitBtn = parent.querySelector( '.submit-btn' );
+            Activity.setHeader(questionId);
 
-			if(resetBtn) resetBtn.addEventListener('click', clearAllInputs);
-			if(showBtn) showBtn.addEventListener('click', fillAllCorrect);
-			if(submitBtn) submitBtn.addEventListener('click', checkAnswers);
-		} catch (err) {
-            console.error( 'CrossWord.ui :', err );
+            const resetBtn = parent.querySelector('.reset-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const submitBtn = parent.querySelector('.submit-btn');
+
+            if (resetBtn) resetBtn.addEventListener('click', clearAllInputs);
+            if (showBtn) showBtn.addEventListener('click', fillAllCorrect);
+            if (submitBtn) submitBtn.addEventListener('click', checkAnswers);
+        } catch (err) {
+            console.error('CrossWord.ui :', err);
         }
     };
 
     const render = (questionId) => {
         try {
             ui(questionId);
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
-            const activity  = Activity.getDefine( questionId );
-            const lang      = activity?.lang ?? 'en';
-            const content   = activity?.content ?? {};
+            const activity = Activity.getDefine(questionId);
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
-            
-            __renderGrid( questions, __renderQuestions(questions) );
-            
+
+            __renderGrid(questions, __renderQuestions(questions));
+
+            questionSet = questions;
+
         } catch (err) {
-            console.error( 'CrossWord.render :', err );
+            console.error('CrossWord.render :', err);
         }
     };
 
-    const __renderQuestions = (questions=[]) => {
+    const __renderQuestions = (questions = []) => {
         const answers = [];
-        const ques    = { across : [], down : [] };
+        const ques = { across: [], down: [] };
 
-        questions.map( item => {
-            answers.push( `<div>${item.sequence}. ${item.answer.toUpperCase()}</div>` );
+        questions.map(item => {
+            answers.push(`<div>${item.sequence}. ${item.answer.toUpperCase()}</div>`);
 
-            if( item.direction === 'h' ) ques.across.push( item );
-            else ques.down.push( item );
+            if (item.direction === 'h') ques.across.push(item);
+            else ques.down.push(item);
         });
-        $('#answer').html( answers.join( '' ) );
+        $('#answer').html(answers.join(''));
 
         const hints = [];
-        if( ques?.across.length ) hints.push( `<div class="criss-item across">ACROSS</div>` );
+        if (ques?.across.length) hints.push(`<div class="criss-item across">ACROSS</div>`);
         ques?.across.map((item) => {
             const html = `
                 <div class="criss-item clues-text">
                     ${item.sequence}. ${item.question}
                 </div>
             `;
-            hints.push( html );
+            hints.push(html);
         });
-        
-        if( ques?.down.length ) hints.push( `<div class="criss-item across">DOWN</div>` );
+
+        if (ques?.down.length) hints.push(`<div class="criss-item across">DOWN</div>`);
         ques?.down.map((item) => {
             const html = `
                 <div class="criss-item clues-text">
                     ${item.sequence}. ${item.question}
                 </div>
             `;
-            hints.push( html );
+            hints.push(html);
         });
-        $('.criss-cross').html( hints.join( '' ) );
+        $('.criss-cross').html(hints.join(''));
 
         return ques;
     };
-    
+
     const __renderGrid = (questions = [], renderedQuestion = {}) => {
-        try {            
+        try {
+
             const allRows = questions.flatMap(q => Array.isArray(q.row) ? q.row : (q.row ? [q.row] : []));
             const allCols = questions.flatMap(q => Array.isArray(q.col) ? q.col : (q.col ? [q.col] : []));
             const maxRow = allRows.length ? Math.max(...allRows) : 0;
             const maxCol = allCols.length ? Math.max(...allCols) : 0;
-            
+
             const horizontal = renderedQuestion?.across ?? [];
-            const vertical   = renderedQuestion?.down ?? [];
+            const vertical = renderedQuestion?.down ?? [];
 
             const startOf = arr => Array.isArray(arr) ? arr[0] : arr;
-            const endOf   = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
+            const endOf = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
 
             const table = ['<table cellspacing="1">'];
             for (let r = 1; r <= maxRow; r++) {
@@ -8089,7 +8094,7 @@ const CrossWord = (() => {
                     }
 
                     table.push('<td>');
-                    if ( __isBox(r, c, renderedQuestion) ) {
+                    if (__isBox(r, c, renderedQuestion)) {
                         table.push(`<span class="num">${num || ''}</span><input type="text" class="box" maxlength="1" />`);
                     } else {
                         table.push('&nbsp;');
@@ -8100,29 +8105,30 @@ const CrossWord = (() => {
             }
             table.push('</table>');
             document.getElementById("puzzle2").innerHTML = table.join('');
+            __renderGridImages(questions);
         } catch (err) {
             console.log('CrossWord.__renderGrid', err);
         }
     };
-    
+
     const __isBox = (row, col, renderedQuestion = {}) => {
         const horizontal = renderedQuestion?.across ?? [];
-        const vertical   = renderedQuestion?.down ?? [];
+        const vertical = renderedQuestion?.down ?? [];
 
         const startOf = arr => Array.isArray(arr) ? arr[0] : arr;
-        const endOf   = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
-        
+        const endOf = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
+
         for (const item of horizontal) {
             const rStart = startOf(item.row);
             const cStart = startOf(item.col);
-            const cEnd   = endOf(item.col);
+            const cEnd = endOf(item.col);
             if (row === rStart && col >= cStart && col <= cEnd) return true;
         }
-        
+
         for (const item of vertical) {
             const cStart = startOf(item.col);
             const rStart = startOf(item.row);
-            const rEnd   = endOf(item.row);
+            const rEnd = endOf(item.row);
             if (col === cStart && row >= rStart && row <= rEnd) return true;
         }
 
@@ -8136,10 +8142,10 @@ const CrossWord = (() => {
         });
 
         const checkBtn = document.querySelector('.submit-btn');
-        if( checkBtn ) {
-            checkBtn.disabled      = false;
+        if (checkBtn) {
+            checkBtn.disabled = false;
             checkBtn.style.opacity = '1';
-            checkBtn.style.cursor  = 'pointer';
+            checkBtn.style.cursor = 'pointer';
             checkBtn.classList.remove('disable');
         }
     };
@@ -8162,8 +8168,8 @@ const CrossWord = (() => {
 
     const fillAllCorrect = () => {
         try {
-            const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
-            const content   = activity?.content ?? {};
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+            const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
 
             questions?.forEach(q => {
@@ -8171,7 +8177,7 @@ const CrossWord = (() => {
                 if (q.direction === 'h') {
                     let r = q.row[0];
                     let start = q.col[0];
-                    
+
                     [...answer].forEach((ch, i) => {
                         const cell = document.querySelector(
                             `#puzzle2 table tr:nth-child(${r}) td:nth-child(${start + i}) input.box`
@@ -8199,21 +8205,21 @@ const CrossWord = (() => {
             });
 
             const checkBtn = document.querySelector('.submit-btn');
-            if( checkBtn ) {
-                checkBtn.disabled      = true;
+            if (checkBtn) {
+                checkBtn.disabled = true;
                 checkBtn.style.opacity = '1';
-                checkBtn.style.cursor  = 'pointer';
+                checkBtn.style.cursor = 'pointer';
                 checkBtn.classList.add('disable');
             }
         } catch (err) {
             console.error('CrossWord.fillAllCorrect:', err);
         }
     };
-    
+
     const checkAnswers = () => {
         try {
-            const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
-            const content   = activity?.content ?? {};
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+            const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
 
             let allEmpty = true;
@@ -8229,12 +8235,12 @@ const CrossWord = (() => {
                 });
                 return;
             }
-            
+
             let total = 0;
             let correctCount = 0;
-            
+
             const startOf = arr => Array.isArray(arr) ? arr[0] : arr;
-            const endOf   = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
+            const endOf = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
 
             questions?.forEach(q => {
                 const answer = (q.answer || '').toUpperCase().replace(/\s+/g, '');
@@ -8243,7 +8249,7 @@ const CrossWord = (() => {
                 if (q.direction === 'h') {
                     const r = startOf(q.row);
                     const cStart = startOf(q.col);
-                    
+
                     [...answer].forEach((ch, i) => {
                         const c = cStart + i;
                         const selector = `#puzzle2 table tr:nth-child(${r}) td:nth-child(${c}) input.box`;
@@ -8276,9 +8282,9 @@ const CrossWord = (() => {
                     });
                 }
             });
-            
+
             if (correctCount === total && total > 0) {
-                showCorrectPopup();                
+                showCorrectPopup();
             } else {
                 Swal.fire({
                     icon: "info",
@@ -8292,7 +8298,47 @@ const CrossWord = (() => {
             console.log('CrossWord.checkAnswers :', err);
         }
     };
-        
+
+    const __renderGridImages = (questions = []) => {
+
+        const wrapper = document.getElementById("puzzle2");
+        if (!wrapper) return;
+
+        wrapper.style.position = "relative";
+
+        wrapper.querySelectorAll(".floating-grid-image").forEach(img => img.remove());
+
+        questions.forEach(q => {
+
+            if (!q.image?.path || !q.image?.row || !q.image?.col) return;
+
+            const { row, col, path } = q.image;
+
+            const cell = document.querySelector(
+                `#puzzle2 table tr:nth-child(${row}) td:nth-child(${col})`
+            );
+
+            if (!cell) return;
+
+            const img = document.createElement("img");
+            img.src = Activity.pathToCWD() + path;
+            img.className = "floating-grid-image";
+
+            img.style.position = "absolute";
+            img.style.pointerEvents = "none";
+            img.style.height = "auto";
+
+            img.style.width = (cell.offsetWidth * 2) + "px";
+
+            wrapper.appendChild(img);
+
+            img.onload = () => {
+                img.style.top = cell.offsetTop + 10 + "px";
+                img.style.left = cell.offsetLeft + 10 + "px";
+            };
+        });
+    };
+
     const closePopup = () => {
         const popup = document.getElementById('centerPopup');
         if (popup) {
@@ -8300,6 +8346,11 @@ const CrossWord = (() => {
             popup.setAttribute('aria-hidden', 'true');
         }
     };
+
+    window.addEventListener("resize", () => {
+        document.querySelectorAll(".floating-grid-image").forEach(el => el.remove());
+        __renderGridImages(questionSet);
+    });
 
     return {
         render
