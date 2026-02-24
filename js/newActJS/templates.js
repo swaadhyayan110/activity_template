@@ -1,10 +1,10 @@
 const activities = {};
 
-const Helper = (()=> {
+const Helper = (() => {
 
     const __audio = new Audio();
 
-    const playAudio = ({playBtn='.common_playBtn',pauseBtn='.common_pauseBtn'}={}) => {
+    const playAudio = ({ playBtn = '.common_playBtn', pauseBtn = '.common_pauseBtn' } = {}) => {
         $('#listening_container').hide();
         $('#question_header_container').show();
 
@@ -13,21 +13,21 @@ const Helper = (()=> {
 
         __audio.currentTime = 0;
         __audio.play()
-            .then(() => {})
+            .then(() => { })
             .catch(err => {
                 console.error('Playback failed:', err);
             });
         // ..
 
         __audio.removeEventListener('ended', pauseAudio);
-        __audio.addEventListener('ended', pauseAudio );
+        __audio.addEventListener('ended', pauseAudio);
     }
 
     const pauseAudio = () => {
-        
+
         __audio.currentTime = 0;
         __audio.pause();
-        
+
         $('.common_playBtn').show();
         $('.common_pauseBtn').hide();
 
@@ -40,14 +40,14 @@ const Helper = (()=> {
     }
 
     const setAudio = (src) => {
-        if( !src ) return;
+        if (!src) return;
         __audio.src = src;
     }
 
     const defaultCol = {
-        md  : 12,
-        sm  : 12,
-        col : 12
+        md: 12,
+        sm: 12,
+        col: 12
     };
 
     return {
@@ -65,20 +65,20 @@ const Activity = (() => {
 
     const css = (href) => {
         try {
-            if( !href ) return;            
+            if (!href) return;
 
-            const completePath = 'css/newActCss/' + href;            
+            const completePath = 'css/newActCss/' + href;
             const exists = [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes(completePath));
 
-            if( exists ) return;
+            if (exists) return;
 
             const link = document.createElement('link');
-            link.rel   = 'stylesheet';
-            link.type  = 'text/css';
-            link.href  = completePath;
-            document.head.appendChild(link);            
-        } catch( err ) {
-            console.error( 'Activity.css : ', err );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = completePath;
+            document.head.appendChild(link);
+        } catch (err) {
+            console.error('Activity.css : ', err);
         }
     };
 
@@ -86,16 +86,16 @@ const Activity = (() => {
         try {
             const found = Templates.get('templates')?.find(t => t.id === tid);
             return found ? found.template : null;
-        } catch ( err ) {
-            console.error( 'Activity.template : ', err );
+        } catch (err) {
+            console.error('Activity.template : ', err);
         }
     };
-    
+
     const getDefine = (questionId) => {
         try {
             return Define.get('questions')?.find(q => q.id == questionId);
-        } catch ( err ) {
-            console.error( 'Activity.getDefine : ', err );
+        } catch (err) {
+            console.error('Activity.getDefine : ', err);
         }
     };
 
@@ -107,15 +107,15 @@ const Activity = (() => {
                 [arr[i], arr[j]] = [arr[j], arr[i]];
             }
             return arr;
-        } catch ( err ) {
-            console.error( 'Activity.shuffleArray : ', err );
+        } catch (err) {
+            console.error('Activity.shuffleArray : ', err);
             return [];
         }
     };
 
     const shuffleWords = (words) => {
         try {
-            if( !Array.isArray(words) ) return words;
+            if (!Array.isArray(words)) return words;
 
             const arr = [...words];
             do {
@@ -125,8 +125,8 @@ const Activity = (() => {
                 }
             } while (JSON.stringify(arr) === JSON.stringify(words) && words.length > 1);
             return arr;
-        } catch ( err ) {
-            console.error( 'Activity.shuffleWords : ', err );
+        } catch (err) {
+            console.error('Activity.shuffleWords : ', err);
         }
     };
 
@@ -137,68 +137,68 @@ const Activity = (() => {
 
     const setQid = (selector, questionId) => {
         const ele = document.querySelector(selector);
-        if( ele ) {
+        if (ele) {
             ele.dataset.qid = questionId;
             return true;
         } else {
-            console.warn( '[WARNING]', 'Unable to set qid' );
+            console.warn('[WARNING]', 'Unable to set qid');
             return false;
         }
     };
 
-    const setHeader = ( questionID ) => {
+    const setHeader = (questionID) => {
         try {
-            const data = getDefine( questionID );
+            const data = getDefine(questionID);
             const container = document.querySelector(Define.get('questionContainer'));
-            if( !container ) {
+            if (!container) {
                 console.warn('setHeader: container not found:', container);
                 return;
             }
 
-            const head    = Define.get('head');
+            const head = Define.get('head');
             const subHead = Define.get('subHead');
-            const eleArr  = [ head, subHead ].map(item => `.${item}`);
+            const eleArr = [head, subHead].map(item => `.${item}`);
 
             const elements = {};
-            
+
             const elHead = container.querySelector(eleArr[0]);
-            const elSub  = container.querySelector(eleArr[1]);
+            const elSub = container.querySelector(eleArr[1]);
 
             if (elHead) elHead.innerHTML = data.head || elHead.remove();
-            if (elSub) elSub.innerHTML   = data.subhead || elSub.remove();
+            if (elSub) elSub.innerHTML = data.subhead || elSub.remove();
 
-            elements.head    = document.contains(elHead);
+            elements.head = document.contains(elHead);
             elements.subhead = document.contains(elSub);
 
             return elements;
 
-        } catch( err ) {
-            console.error( 'Activity.setHeader :- ', err );
+        } catch (err) {
+            console.error('Activity.setHeader :- ', err);
         }
     };
 
     const toggleCheckBtn = (selector, disable) => {
         try {
-            const container = document.querySelector( Define.get('questionContainer') );
-            const btn       = container.querySelector(selector);        
-            if( !btn ) return;
+            const container = document.querySelector(Define.get('questionContainer'));
+            const btn = container.querySelector(selector);
+            if (!btn) return;
             btn.disabled = disable;
             btn.style.opacity = disable ? "0.5" : "1";
             btn.style.pointerEvents = disable ? "none" : "auto";
-        } catch ( err ) {
-            console.error( 'Activity.toggleCheckBtn : ', err );
+        } catch (err) {
+            console.error('Activity.toggleCheckBtn : ', err);
         }
     };
 
-    const translateBulletLabels = ({ lang='mt', ind=0, upperCase=false } = {}) => {
+    const translateBulletLabels = ({ lang = 'mt', ind = 0, upperCase = false } = {}) => {
         const bullets = {
             en: [...'abcdefghijklmnopqrstuvwxyz'],
             hi: [...'कखगघङचछजझञटठडढणतथदधनपफबभमय'],
             mt: Array.from({ length: 26 }, (_, i) => (i + 1).toString()),
             ro: [
-                'i','ii','iii','iv','v','vi','vii','viii','ix','x',
-                'xi','xii','xiii','xiv','xv','xvi','xvii','xviii','xix','xx',
-                'xxi','xxii','xxiii','xxiv','xxv','xxvi'
+                'i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x',
+                'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx',
+                'xxi', 'xxii', 'xxiii', 'xxiv', 'xxv', 'xxvi'
             ]
 
         }
@@ -209,54 +209,54 @@ const Activity = (() => {
         return (ind !== undefined && cased[ind] !== undefined) ? cased[ind] : '-';
     };
 
-    const translateButtonLabels = (lang='hi') => {
-        if( lang == 'hi' ) {
-            return { 
-                check  : 'उत्तर जाँचिए',
-                show   : 'उत्तर देखो',
-                submit : 'सबमिट करें',
-                replay : 'दुबारा खेलें',
-                try    : 'पुनः प्रयास करें'
+    const translateButtonLabels = (lang = 'hi') => {
+        if (lang == 'hi') {
+            return {
+                check: 'उत्तर जाँचिए',
+                show: 'उत्तर देखो',
+                submit: 'सबमिट करें',
+                replay: 'दुबारा खेलें',
+                try: 'पुनः प्रयास करें'
             };
         } else {
-            return { 
-                check  : 'Check Answers',
-                show   : 'Show Answers',
-                submit : 'Submit',
-                replay : 'Replay',
-                try    : 'Try Again'
+            return {
+                check: 'Check Answers',
+                show: 'Show Answers',
+                submit: 'Submit',
+                replay: 'Replay',
+                try: 'Try Again'
             };
         }
     };
 
-    const translateTableHeads = (lang='hi') => {
-        if( lang == 'hi' ) {
+    const translateTableHeads = (lang = 'hi') => {
+        if (lang == 'hi') {
             return {
-                sequence  : 'प्रश्‍न संख्या',
-                attempted : 'आपका उत्तर',
-                correct   : 'सही उत्तर',
-                result    : 'परिणाम'
+                sequence: 'प्रश्‍न संख्या',
+                attempted: 'आपका उत्तर',
+                correct: 'सही उत्तर',
+                result: 'परिणाम'
             };
         } else {
             return {
-                sequence  : 'Question No.',
-                attempted : 'Your Answer',
-                correct   : 'Correct Answer',
-                result    : 'Result'
+                sequence: 'Question No.',
+                attempted: 'Your Answer',
+                correct: 'Correct Answer',
+                result: 'Result'
             };
         }
     };
 
-    const translateNextPrevLabel = (lang='hi') => {
-        if( lang == 'hi' ) {
-            return { 
-                next : 'अगला',
-                prev : 'पिछला'
+    const translateNextPrevLabel = (lang = 'hi') => {
+        if (lang == 'hi') {
+            return {
+                next: 'अगला',
+                prev: 'पिछला'
             };
         } else {
-            return { 
-                next : 'Next',
-                prev : 'Prev'
+            return {
+                next: 'Next',
+                prev: 'Prev'
             };
         }
     };
@@ -286,16 +286,16 @@ const Activity = (() => {
             ]
         };
     };
-    
-    const translateBooleanLabels = (lang='hi') => lang == 'hi' ? ['सही', 'गलत'] : ['True', 'False'] ;
-    const translateWordLabel     = (lang='hi') => lang == 'hi' ? 'शब्द' : 'Word';
-    const translateSentenceLabel = (lang='hi') => lang == 'hi' ? 'वाक्य' : 'Sentence';
-    const translateMeaningLabel  = (lang='hi') => lang == 'hi' ? 'अर्थ' : 'Meaning';
-    const translateColumnLabel   = (lang='hi') => lang == 'hi' ? 'खंड' : 'Column';
-    const translateBoxLabel      = (lang='hi') => lang == 'hi' ? 'बॉक्स' : 'Box';
-    const translateHintLabel     = (lang='hi') => lang == 'hi' ? 'संकेत' : 'Hint';
-    const translateWriteAnsLabel = (lang='hi') => lang == 'hi' ? 'उत्तर लिखें' : 'write answer';
-    
+
+    const translateBooleanLabels = (lang = 'hi') => lang == 'hi' ? ['सही', 'गलत'] : ['True', 'False'];
+    const translateWordLabel = (lang = 'hi') => lang == 'hi' ? 'शब्द' : 'Word';
+    const translateSentenceLabel = (lang = 'hi') => lang == 'hi' ? 'वाक्य' : 'Sentence';
+    const translateMeaningLabel = (lang = 'hi') => lang == 'hi' ? 'अर्थ' : 'Meaning';
+    const translateColumnLabel = (lang = 'hi') => lang == 'hi' ? 'खंड' : 'Column';
+    const translateBoxLabel = (lang = 'hi') => lang == 'hi' ? 'बॉक्स' : 'Box';
+    const translateHintLabel = (lang = 'hi') => lang == 'hi' ? 'संकेत' : 'Hint';
+    const translateWriteAnsLabel = (lang = 'hi') => lang == 'hi' ? 'उत्तर लिखें' : 'write answer';
+
     const pathToCWD = () => assets_url;
 
     const get = (key) => store[key];
@@ -303,41 +303,41 @@ const Activity = (() => {
     const register = (name, mod) => {
         try {
             store.templates[name] = mod;
-        } catch ( err ) {
-            console.error( 'Activity.register : ', err );
+        } catch (err) {
+            console.error('Activity.register : ', err);
         }
     };
-  
-    const render = (templateId, questionId, activityId=null) => {
+
+    const render = (templateId, questionId, activityId = null) => {
         try {
-            
+
             Helper.stopAudio();
 
             const templateName = template(templateId);
-            if( !templateName ) {
+            if (!templateName) {
                 console.error('Activity.render: unknown templateId', templateId);
                 return;
-            }       
+            }
 
             const temp = store.templates[templateName];
-            if( !temp || !temp.render ) {
+            if (!temp || !temp.render) {
                 console.error('Activity.render: module not registered:', templateName);
                 return;
             }
 
-            const qObj = getDefine( questionId );
-            if( !qObj ) {
-                console.error('Activity.render: no question found for', questionId );
+            const qObj = getDefine(questionId);
+            if (!qObj) {
+                console.error('Activity.render: no question found for', questionId);
                 return;
             }
-            
-            if( !activityId ) {
+
+            if (!activityId) {
                 activityId = templateName === 'MatchLeftToRight' ? `m${qObj.id}` : `act${qObj.id}`;
-            }        
-            
-            temp.render( questionId, activityId );
-        } catch ( err ) {
-            console.error( 'Activity.render : ', err );
+            }
+
+            temp.render(questionId, activityId);
+        } catch (err) {
+            console.error('Activity.render : ', err);
         }
     };
 
@@ -368,25 +368,25 @@ const Activity = (() => {
         translateSentenceLabel,
         translateBooleanLabels,
         translateNextPrevLabel
-    };    
+    };
 })();
 
 const MatchLeftToRight = (() => {
 
     const drawArrow = (activityId, fromElement, toElement, color = "green") => {
         try {
-    
-            const svg = document.querySelector(`.matching-area.${activityId} svg`);
-            if( !svg || !fromElement || !toElement ) return;
 
-            const leftId  = fromElement.dataset.id;
+            const svg = document.querySelector(`.matching-area.${activityId} svg`);
+            if (!svg || !fromElement || !toElement) return;
+
+            const leftId = fromElement.dataset.id;
             const rightId = toElement.dataset.id;
-            
+
             svg.querySelectorAll(`line[data-from="${leftId}"], line[data-to="${rightId}"]`)
-            .forEach(l => l.remove());
+                .forEach(l => l.remove());
 
             const fromRect = fromElement.getBoundingClientRect();
-            const toRect   = toElement.getBoundingClientRect();
+            const toRect = toElement.getBoundingClientRect();
             const containerRect = fromElement.closest(".matching-area").getBoundingClientRect();
 
             const x1 = fromRect.right - containerRect.left;
@@ -404,34 +404,34 @@ const MatchLeftToRight = (() => {
             line.dataset.from = leftId;
             line.dataset.to = rightId;
 
-            if( color == 'green' ) {
+            if (color == 'green') {
                 line.setAttribute("marker-end", "url(#arrowhead)");
             } else {
                 line.setAttribute("marker-end", "url(#arrowheadRed)");
             }
 
             svg.appendChild(line);
-        } catch( err ) {
-            console.error( 'MatchLeftToRight.drawArrow :', err );
+        } catch (err) {
+            console.error('MatchLeftToRight.drawArrow :', err);
         }
     };
-    
+
     const checkAnswers = (activityId) => {
         try {
             const activity = activities[activityId];
-            if( !activity ) return;
+            if (!activity) return;
 
             const correctMatches = activity.correctMatches || {};
-            let correctCount     = 0;
+            let correctCount = 0;
 
             const area = document.querySelector(`.matching-area.${activityId}`);
-            if( !area ) return;
+            if (!area) return;
 
             area.querySelectorAll(".item").forEach(item => {
                 item.classList.remove("correct", "wrong");
             });
 
-            for( const leftId in correctMatches ) {
+            for (const leftId in correctMatches) {
                 const rightId = activity.userMatches[leftId];
                 const leftItem = area.querySelector(`.left-items .item[data-id="${leftId}"]`);
                 const rightItem = area.querySelector(`.right-items .item[data-id="${rightId}"]`);
@@ -458,8 +458,8 @@ const MatchLeftToRight = (() => {
             } else {
                 Swal.fire({ icon: "info", title: "Almost!", text: `You got ${correctCount} out of ${total} correct ✅` });
             }
-        } catch( err ) {
-            console.error( 'MatchLeftToRight.checkAnswers :', err );
+        } catch (err) {
+            console.error('MatchLeftToRight.checkAnswers :', err);
         }
     };
 
@@ -467,17 +467,17 @@ const MatchLeftToRight = (() => {
         try {
             resetActivity(activityId);
             const activity = activities[activityId];
-            if( !activity ) return;
+            if (!activity) return;
 
             const correctMatches = activity.correctMatches || {};
             const area = document.querySelector(`.matching-area.${activityId}`);
-            if( !area ) return;
+            if (!area) return;
 
-            for( const leftId in correctMatches ) {
-                const leftItem  = area.querySelector(`.left-items .item[data-id="${leftId}"]`);
+            for (const leftId in correctMatches) {
+                const leftItem = area.querySelector(`.left-items .item[data-id="${leftId}"]`);
                 const rightItem = area.querySelector(`.right-items .item[data-id="${correctMatches[leftId]}"]`);
 
-                if( !leftItem || !rightItem ) continue;
+                if (!leftItem || !rightItem) continue;
 
                 drawArrow(activityId, leftItem, rightItem, "green");
 
@@ -485,17 +485,17 @@ const MatchLeftToRight = (() => {
                 rightItem.classList.add("correct");
                 activities[activityId].userMatches[leftId] = correctMatches[leftId];
             }
-            
-            Activity.toggleCheckBtn( '.submit-btn', true );
-        } catch( err ) {
-            console.error( 'MatchLeftToRight.showAnswers :', err );
+
+            Activity.toggleCheckBtn('.submit-btn', true);
+        } catch (err) {
+            console.error('MatchLeftToRight.showAnswers :', err);
         }
     };
 
     const resetActivity = (activityId) => {
         try {
             const svg = document.querySelector(`.matching-area.${activityId} svg`);
-            if( svg ) {
+            if (svg) {
                 const defs = svg.querySelector("defs");
                 svg.innerHTML = "";
                 if (defs) svg.appendChild(defs);
@@ -507,20 +507,20 @@ const MatchLeftToRight = (() => {
 
             const area = document.querySelector(`.matching-area.${activityId}`);
             if (!area) return;
-                area.querySelectorAll(".item").forEach(item => {
+            area.querySelectorAll(".item").forEach(item => {
                 item.classList.remove("correct", "wrong", "selected");
             });
 
-            Activity.toggleCheckBtn( '.submit-btn', false );
-        } catch( err ) {
-            console.error( 'MatchLeftToRight.resetActivity :', err );
+            Activity.toggleCheckBtn('.submit-btn', false);
+        } catch (err) {
+            console.error('MatchLeftToRight.resetActivity :', err);
         }
     };
 
     const checkIfAllAttempted = (activityId) => {
         try {
             const activity = activities[activityId];
-            if( !activity ) return;
+            if (!activity) return;
 
             const correctMatches = activity.correctMatches || {};
             const total = Object.keys(correctMatches).length;
@@ -528,15 +528,15 @@ const MatchLeftToRight = (() => {
             const attempted = Object.keys(activity.userMatches || {}).filter(leftId => activity.userMatches[leftId]).length;
 
             const submitBtn = document.querySelector(`.buttons.machiNgs .submit-btn[data-activity="${activityId}"]`);
-            if( submitBtn ) {
-                if( attempted === total ) {
-                    submitBtn.classList.remove("disable"); 
+            if (submitBtn) {
+                if (attempted === total) {
+                    submitBtn.classList.remove("disable");
                 } else {
                     submitBtn.classList.add("disable");
                 }
             }
-        } catch( err ) {
-            console.error( 'MatchLeftToRight.checkIfAllAttempted :', err );
+        } catch (err) {
+            console.error('MatchLeftToRight.checkIfAllAttempted :', err);
         }
     };
 
@@ -544,30 +544,30 @@ const MatchLeftToRight = (() => {
         try {
             const activity = activities[activityId];
             const svg = document.querySelector(`.matching-area.${activityId} svg`);
-            if( !svg || !activity ) return;
+            if (!svg || !activity) return;
 
             const defs = svg.querySelector("defs");
             svg.innerHTML = "";
-            if( defs ) svg.appendChild(defs);
+            if (defs) svg.appendChild(defs);
 
-            for( const leftId in activity.userMatches ) {
+            for (const leftId in activity.userMatches) {
                 const rightId = activity.userMatches[leftId];
-                const leftEl  = document.querySelector(`.matching-area.${activityId} .left-items .item[data-id="${leftId}"]`);
+                const leftEl = document.querySelector(`.matching-area.${activityId} .left-items .item[data-id="${leftId}"]`);
                 const rightEl = document.querySelector(`.matching-area.${activityId} .right-items .item[data-id="${rightId}"]`);
-                if( leftEl && rightEl ) {
+                if (leftEl && rightEl) {
                     drawArrow(activityId, leftEl, rightEl);
                 }
             }
-        } catch( err ) {
-            console.error( 'MatchLeftToRight.redrawAllArrows :', err );
+        } catch (err) {
+            console.error('MatchLeftToRight.redrawAllArrows :', err);
         }
     };
 
-    const ui = (activityId="m1", questionId) => {
+    const ui = (activityId = "m1", questionId) => {
         try {
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
             const columnLabel = Activity.translateColumnLabel(lang);
 
@@ -579,8 +579,8 @@ const MatchLeftToRight = (() => {
                     </div>
                     <hr/>
                     <div class="forLevelAB">
-                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels({lang:lang, ind:0})}</div>
-                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels({lang:lang, ind:1})}</div>
+                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels({ lang: lang, ind: 0 })}</div>
+                        <div class="levelText">${columnLabel}-${Activity.translateBulletLabels({ lang: lang, ind: 1 })}</div>
                     </div>
                     <div class="content user-select-none">
                         <div class="instructions">
@@ -616,50 +616,50 @@ const MatchLeftToRight = (() => {
             // ..
             const cont = document.querySelector(Define.get('questionContainer'));
             cont.innerHTML = html;
-        } catch( err ) {
-            console.error( 'MatchLeftToRight.ui :', err );
+        } catch (err) {
+            console.error('MatchLeftToRight.ui :', err);
         }
     };
-    
-    const matchLeftToRight = (questionId, activityId="m1") => {
+
+    const matchLeftToRight = (questionId, activityId = "m1") => {
         try {
-            const data = Activity.getDefine( questionId );
-            if( !Object.entries(data).length ) return;
+            const data = Activity.getDefine(questionId);
+            if (!Object.entries(data).length) return;
 
             ui(activityId, questionId);
 
-            const headElem = Activity.setHeader( questionId );
-            if( !headElem.head && !headElem.subhead ) {
+            const headElem = Activity.setHeader(questionId);
+            if (!headElem.head && !headElem.subhead) {
                 document.querySelector('hr').remove();
             }
 
-            const leftContainer  = document.getElementById(`leftItems_${activityId}`);
+            const leftContainer = document.getElementById(`leftItems_${activityId}`);
             const rightContainer = document.getElementById(`rightItems_${activityId}`);
-            const area    = document.querySelector(`.matching-area.${activityId}`);
+            const area = document.querySelector(`.matching-area.${activityId}`);
             const buttons = document.querySelector(`.matching-area.${activityId}`)?.closest('.container')?.querySelector('.buttons.machiNgs');
 
-            const leftFrag  = document.createDocumentFragment();
+            const leftFrag = document.createDocumentFragment();
             const rightFrag = document.createDocumentFragment();
 
-            const questions      = data.content;
+            const questions = data.content;
             const correctMatches = Object.fromEntries(questions.map(q => [String(q.id), String(q.id)]));
 
-            const leftShuffled  = Activity.shuffleArray(questions);
+            const leftShuffled = Activity.shuffleArray(questions);
             const rightShuffled = Activity.shuffleArray(questions);
-            
+
             activities[activityId] = activities[activityId] || { userMatches: {}, selectedLeftItem: null, correctMatches: {} };
             activities[activityId].correctMatches = correctMatches || {};
             activities[activityId].userMatches = {};
-            
+
             leftShuffled.forEach(d => {
-                const div        = document.createElement('div');
-                div.className    = 'item';
-                div.dataset.id   = d.id;
-                
-                const imagePath  = ( typeof d?.left === 'object' && d?.left?.path ) ? d.left.path : false;
-                const imageWidth = ( imagePath != false && d?.left?.width ) ? d.left.width : '50px';
-                const leftImage  = `<img src="${Activity.pathToCWD()+imagePath}" alt="image" style="width:${imageWidth};" class="mx-auto" ondragstart="return false;">`;
-                div.innerHTML    = ( imagePath != false ) ? leftImage : ( typeof d?.left === 'object' ) ? '-' : d.left;
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.dataset.id = d.id;
+
+                const imagePath = (typeof d?.left === 'object' && d?.left?.path) ? d.left.path : false;
+                const imageWidth = (imagePath != false && d?.left?.width) ? d.left.width : '50px';
+                const leftImage = `<img src="${Activity.pathToCWD() + imagePath}" alt="image" style="width:${imageWidth};" class="mx-auto" ondragstart="return false;">`;
+                div.innerHTML = (imagePath != false) ? leftImage : (typeof d?.left === 'object') ? '-' : d.left;
 
                 div.addEventListener('click', (ev) => {
                     leftContainer.querySelectorAll('.item.selected').forEach(i => i.classList.remove('selected'));
@@ -669,22 +669,22 @@ const MatchLeftToRight = (() => {
 
                 leftFrag.appendChild(div);
             });
-            
+
             rightShuffled.forEach(d => {
-                const div      = document.createElement('div');
-                div.className  = 'item';
+                const div = document.createElement('div');
+                div.className = 'item';
                 div.dataset.id = d.id;
 
-                const imagePath  = ( typeof d?.right === 'object' && d?.right?.path ) ? d.right.path : false;
-                const imageWidth = ( imagePath != false && d?.right?.width ) ? d.right.width : '50px';
-                const leftImage  = `<img class="mx-auto" src="${Activity.pathToCWD()+imagePath}" style="width:${imageWidth};" ondragstart="return false;">`;
-                div.innerHTML    = ( imagePath != false ) ? leftImage : d.right;
+                const imagePath = (typeof d?.right === 'object' && d?.right?.path) ? d.right.path : false;
+                const imageWidth = (imagePath != false && d?.right?.width) ? d.right.width : '50px';
+                const leftImage = `<img class="mx-auto" src="${Activity.pathToCWD() + imagePath}" style="width:${imageWidth};" ondragstart="return false;">`;
+                div.innerHTML = (imagePath != false) ? leftImage : d.right;
 
                 div.addEventListener('click', (ev) => {
                     const activity = activities[activityId];
                     if (!activity || !activity.selectedLeftItem) {
-                    Swal.fire({ icon: "error", text: "Please select left item first!" });
-                    return;
+                        Swal.fire({ icon: "error", text: "Please select left item first!" });
+                        return;
                     }
 
                     const leftId = activity.selectedLeftItem.dataset.id;
@@ -692,7 +692,7 @@ const MatchLeftToRight = (() => {
 
                     activity.userMatches[leftId] = rightId;
                     drawArrow(activityId, activity.selectedLeftItem, div);
-                    
+
                     activity.selectedLeftItem.classList.remove('selected');
                     activity.selectedLeftItem = null;
 
@@ -702,32 +702,32 @@ const MatchLeftToRight = (() => {
                 rightFrag.appendChild(div);
             });
 
-            leftContainer.innerHTML  = '';
+            leftContainer.innerHTML = '';
             rightContainer.innerHTML = '';
 
             leftContainer.appendChild(leftFrag);
             rightContainer.appendChild(rightFrag);
-            
-            const submitBtn = document.querySelector(`.buttons.machiNgs .submit-btn[data-activity="${activityId}"]`);
-            const showBtn   = document.querySelector(`.buttons.machiNgs .show-btn`);
-            const resetBtn  = document.querySelector(`.buttons.machiNgs .reset-btn`);
 
-            if( submitBtn ) {
+            const submitBtn = document.querySelector(`.buttons.machiNgs .submit-btn[data-activity="${activityId}"]`);
+            const showBtn = document.querySelector(`.buttons.machiNgs .show-btn`);
+            const resetBtn = document.querySelector(`.buttons.machiNgs .reset-btn`);
+
+            if (submitBtn) {
                 submitBtn.addEventListener('click', () => checkAnswers(activityId));
             }
-            if( showBtn ) {
+            if (showBtn) {
                 showBtn.addEventListener('click', () => showAnswers(activityId));
             }
-            if( resetBtn ) {
+            if (resetBtn) {
                 resetBtn.addEventListener('click', () => resetActivity(activityId));
             }
-        } catch( err ) {
-            console.error( 'MatchLeftToRight.matchLeftToRight :', err );
+        } catch (err) {
+            console.error('MatchLeftToRight.matchLeftToRight :', err);
         }
     };
 
     window.addEventListener('resize', () => {
-        for( const activityId in activities ) redrawAllArrows(activityId);
+        for (const activityId in activities) redrawAllArrows(activityId);
     });
 
     return {
@@ -742,9 +742,9 @@ const MatchLeftToRight = (() => {
 })();
 
 const MatchLeftRightToCenter = (() => {
-    
-    const qS  = (sel, ctx = document) => (ctx && ctx.querySelector) ? ctx.querySelector(sel) : null;
-    const qSA = (sel, ctx = document) => (ctx && ctx.querySelectorAll) ? Array.from(ctx.querySelectorAll(sel)) : [];    
+
+    const qS = (sel, ctx = document) => (ctx && ctx.querySelector) ? ctx.querySelector(sel) : null;
+    const qSA = (sel, ctx = document) => (ctx && ctx.querySelectorAll) ? Array.from(ctx.querySelectorAll(sel)) : [];
 
     const getBoundaryPoint = (rect, targetX, targetY) => {
         try {
@@ -763,7 +763,7 @@ const MatchLeftRightToCenter = (() => {
 
             if (isCircle) {
                 const r = Math.min(w, h) / 2;
-                const len = Math.sqrt(dx*dx + dy*dy);
+                const len = Math.sqrt(dx * dx + dy * dy);
                 const ux = dx / len;
                 const uy = dy / len;
                 return { x: cx + ux * r, y: cy + uy * r };
@@ -779,9 +779,9 @@ const MatchLeftRightToCenter = (() => {
                     const x = cx + dx * t;
                     const y = cy + dy * t;
                     if (edge === 'left' || edge === 'right') {
-                        if (y >= rect.top && y <= rect.bottom) candidates.push({t,x,y});
+                        if (y >= rect.top && y <= rect.bottom) candidates.push({ t, x, y });
                     } else {
-                        if (x >= rect.left && x <= rect.right) candidates.push({t,x,y});
+                        if (x >= rect.left && x <= rect.right) candidates.push({ t, x, y });
                     }
                 };
 
@@ -791,11 +791,11 @@ const MatchLeftRightToCenter = (() => {
                 if (isFinite(ty2)) pushIfValid(ty2, 'bottom');
 
                 if (candidates.length === 0) return { x: cx, y: cy };
-                candidates.sort((a,b) => a.t - b.t);
+                candidates.sort((a, b) => a.t - b.t);
                 return { x: candidates[0].x, y: candidates[0].y };
             }
-        } catch( err ) {
-            console.error( 'MatchLeftRightToCenter.getBoundaryPoint :', err );
+        } catch (err) {
+            console.error('MatchLeftRightToCenter.getBoundaryPoint :', err);
         }
     };
 
@@ -805,21 +805,21 @@ const MatchLeftRightToCenter = (() => {
 
             const fromId = fromEl.dataset.id;
             const toId = toEl.dataset.id;
-            
+
             svg.querySelectorAll(`line[data-from="${tag}~${fromId}"]`).forEach(l => l.remove());
 
             const fromRect = fromEl.getBoundingClientRect();
-            const toRect   = toEl.getBoundingClientRect();        
-            const svgRect  = svg.getBoundingClientRect();
-        
+            const toRect = toEl.getBoundingClientRect();
+            const svgRect = svg.getBoundingClientRect();
+
             const fromCenterX = (fromRect.left + fromRect.right) / 2;
             const fromCenterY = (fromRect.top + fromRect.bottom) / 2;
-            const toCenterX   = (toRect.left + toRect.right) / 2;
-            const toCenterY   = (toRect.top + toRect.bottom) / 2;
-            
+            const toCenterX = (toRect.left + toRect.right) / 2;
+            const toCenterY = (toRect.top + toRect.bottom) / 2;
+
             const p1v = getBoundaryPoint(fromRect, toCenterX, toCenterY);
             const p2v = getBoundaryPoint(toRect, fromCenterX, fromCenterY);
-            
+
             const x1 = p1v.x - svgRect.left;
             const y1 = p1v.y - svgRect.top;
             const x2 = p2v.x - svgRect.left;
@@ -834,15 +834,15 @@ const MatchLeftRightToCenter = (() => {
             line.setAttribute("stroke-width", "2");
             line.setAttribute("stroke-linecap", "round");
             line.dataset.from = `${tag}~${fromId}`;
-            line.dataset.to   = `${tag}~${toId}`;
-            if( color == 'green' ) {
+            line.dataset.to = `${tag}~${toId}`;
+            if (color == 'green') {
                 line.setAttribute("marker-end", "url(#arrowhead2)");
             } else {
                 line.setAttribute("marker-end", "url(#arrowheadRed2)");
             }
             svg.appendChild(line);
-        } catch( err ) {
-            console.error( 'MatchLeftRightToCenter.drawLine :', err );
+        } catch (err) {
+            console.error('MatchLeftRightToCenter.drawLine :', err);
         }
     };
 
@@ -850,8 +850,8 @@ const MatchLeftRightToCenter = (() => {
         try {
             if (!svg) return;
             svg.querySelectorAll("line").forEach(l => l.remove());
-        } catch( err ) {
-            console.error( 'MatchLeftRightToCenter.clearSvg :', err );
+        } catch (err) {
+            console.error('MatchLeftRightToCenter.clearSvg :', err);
         }
     };
 
@@ -879,9 +879,9 @@ const MatchLeftRightToCenter = (() => {
             qSA(".matchItems1 .imgBoxes, .matchItems2 .centerItems, .matchItems3 .imgBoxes", container)
                 .forEach(el => el.classList.remove("correct", "wrong", "selected"));
 
-            Activity.toggleCheckBtn( '.submit-btn', false );
-        } catch( err ) {
-            console.error( 'MatchLeftRightToCenter.resetActivity :', err );
+            Activity.toggleCheckBtn('.submit-btn', false);
+        } catch (err) {
+            console.error('MatchLeftRightToCenter.resetActivity :', err);
         }
     };
 
@@ -946,8 +946,8 @@ const MatchLeftRightToCenter = (() => {
             } else {
                 Swal.fire({ icon: "info", title: "Almost!", text: `You got ${correctCount} out of ${total} correct ✅` });
             }
-        } catch( err ) {
-            console.error( 'MatchLeftRightToCenter.checkAnswers :', err );
+        } catch (err) {
+            console.error('MatchLeftRightToCenter.checkAnswers :', err);
         }
     };
 
@@ -985,12 +985,12 @@ const MatchLeftRightToCenter = (() => {
                 activity.userRightMatches[rightId] = centerId;
             });
 
-            Activity.toggleCheckBtn( '.submit-btn', true );
-        } catch( err ) {
-            console.error( 'MatchLeftRightToCenter.showAnswers :', err );
+            Activity.toggleCheckBtn('.submit-btn', true);
+        } catch (err) {
+            console.error('MatchLeftRightToCenter.showAnswers :', err);
         }
     };
-        
+
     const redrawAll = (activityId) => {
         try {
             const activity = activities[activityId];
@@ -1015,8 +1015,8 @@ const MatchLeftRightToCenter = (() => {
                 const centerEl = qS(`.matchItems2 [data-id="${centerId}"]`, container);
                 if (rightEl && centerEl) drawLine(svg, rightEl, centerEl, "green", "R");
             });
-        } catch( err ) {
-            console.error( 'MatchLeftRightToCenter.redrawAll :', err );
+        } catch (err) {
+            console.error('MatchLeftRightToCenter.redrawAll :', err);
         }
     };
 
@@ -1044,26 +1044,26 @@ const MatchLeftRightToCenter = (() => {
                 svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
                 svg.setAttribute("preserveAspectRatio", "none");
             }
-        } catch( err ) {
-            console.error( 'MatchLeftRightToCenter.sizeAndPlaceSvg :', err );
+        } catch (err) {
+            console.error('MatchLeftRightToCenter.sizeAndPlaceSvg :', err);
         }
     };
 
-    const matchLeftRightToCenter = (questionId, activityId="act1") => {
+    const matchLeftRightToCenter = (questionId, activityId = "act1") => {
         try {
-            const data    = Activity.getDefine( questionId );
+            const data = Activity.getDefine(questionId);
             const content = data.content;
-            const lang    = data?.lang ?? 'en';
+            const lang = data?.lang ?? 'en';
 
-            const btnLabels = Activity.translateButtonLabels( lang );
+            const btnLabels = Activity.translateButtonLabels(lang);
 
-            activities[activityId]                  = activities[activityId] || {};
-            activities[activityId].correctLeft      = content.correctLeft || {};
-            activities[activityId].correctRight     = content.correctRight || {};
-            activities[activityId].userLeftMatches  = {};
+            activities[activityId] = activities[activityId] || {};
+            activities[activityId].correctLeft = content.correctLeft || {};
+            activities[activityId].correctRight = content.correctRight || {};
+            activities[activityId].userLeftMatches = {};
             activities[activityId].userRightMatches = {};
-            activities[activityId].selectedLeft     = null;
-            activities[activityId].selectedRight    = null;
+            activities[activityId].selectedLeft = null;
+            activities[activityId].selectedRight = null;
 
             const container = Define.get('questionContainer');
             const cont = document.querySelector(container);
@@ -1071,7 +1071,7 @@ const MatchLeftRightToCenter = (() => {
                 console.warn("Container not found:", container);
                 return;
             }
-            
+
             cont.innerHTML = `<div id="${activityId}" class="question">
                             <div class="container">
                                 <div class="qSections">
@@ -1113,8 +1113,8 @@ const MatchLeftRightToCenter = (() => {
             } else {
                 activityRoot = cont.querySelector(`#${activityId}`) || cont;
             }
-            
-            const row         = cont.querySelector('.rowM3');
+
+            const row = cont.querySelector('.rowM3');
             const matchItems1 = row.querySelector('.matchItems1');
             const matchItems2 = row.querySelector('.matchItems2');
             const matchItems3 = row.querySelector('.matchItems3');
@@ -1124,7 +1124,7 @@ const MatchLeftRightToCenter = (() => {
                 svg.dataset.activity = activityId;
                 sizeAndPlaceSvg(svg, row);
             }
-            
+
             matchItems1.innerHTML = "";
             matchItems2.innerHTML = "";
             matchItems3.innerHTML = "";
@@ -1135,29 +1135,29 @@ const MatchLeftRightToCenter = (() => {
 
             const returnHtml = (colSeq, item) => {
                 const image_width = item.width ?? '65%';
-                const html = item.text ? 
-                    `<div class="centerItems shadow-sm" data-col="${colSeq}" data-id="${item.id}">${item.text}</div>` : 
+                const html = item.text ?
+                    `<div class="centerItems shadow-sm" data-col="${colSeq}" data-id="${item.id}">${item.text}</div>` :
                     `<div class="imgBoxes shadow" data-col="${colSeq}" data-id="${item.id}"><img src="${Activity.pathToCWD()}${item.img}" alt="" ondragstart="return false"; style="width:${image_width};"></div>`;
                 // ..
                 return html;
             }
-            
-            col1.forEach(item => {                
-                matchItems1.insertAdjacentHTML('beforeend', returnHtml(1, item) );
+
+            col1.forEach(item => {
+                matchItems1.insertAdjacentHTML('beforeend', returnHtml(1, item));
             });
 
             col2.forEach(item => {
-                matchItems2.insertAdjacentHTML('beforeend', returnHtml(2, item) );
+                matchItems2.insertAdjacentHTML('beforeend', returnHtml(2, item));
             });
 
             col3.forEach(item => {
-                matchItems3.insertAdjacentHTML('beforeend', returnHtml(3, item) );
+                matchItems3.insertAdjacentHTML('beforeend', returnHtml(3, item));
             });
 
-            const leftEls   = Array.from(matchItems1.querySelectorAll('[data-col="1"]'));
+            const leftEls = Array.from(matchItems1.querySelectorAll('[data-col="1"]'));
             const centerEls = Array.from(matchItems2.querySelectorAll('[data-col="2"]'));
-            const rightEls  = Array.from(matchItems3.querySelectorAll('[data-col="3"]'));
-            
+            const rightEls = Array.from(matchItems3.querySelectorAll('[data-col="3"]'));
+
             leftEls.forEach(el => {
                 el.addEventListener('click', () => {
                     leftEls.forEach(i => i.classList.remove('selected'));
@@ -1200,20 +1200,20 @@ const MatchLeftRightToCenter = (() => {
                         Swal.fire({ icon: "info", text: "Please select an image from left or right column first." });
                     }
                 });
-            });            
-            
-            const headElem = Activity.setHeader( questionId );
-            if( !headElem.head && !headElem.subhead ) {
+            });
+
+            const headElem = Activity.setHeader(questionId);
+            if (!headElem.head && !headElem.subhead) {
                 document.querySelector('hr').remove();
             }
-            
+
             const btnContainer = cont.querySelector('.buttons.machiNgs');
             if (btnContainer) {
                 const submitBtn = btnContainer.querySelector('.submit-btn');
                 const showBtn = btnContainer.querySelector('.show-btn');
                 const resetBtn = btnContainer.querySelector('.reset-btn');
 
-                if (submitBtn) {                    
+                if (submitBtn) {
                     submitBtn.dataset.activity = activityId;
                     submitBtn.addEventListener('click', () => checkAnswers(activityId));
                 }
@@ -1249,13 +1249,13 @@ const MatchLeftRightToCenter = (() => {
         showAnswers,
         resetActivity,
         redrawAll
-    };    
+    };
 })();
 
 const MatchTopToBottom = (() => {
 
     Activity.css('matchType3.css');
-    
+
     const drawArrow = (activityId, fromEl, toEl, color = "green") => {
         try {
             if (!fromEl || !toEl) return;
@@ -1267,17 +1267,17 @@ const MatchTopToBottom = (() => {
 
             const topId = fromEl.dataset.id;
             const bottomId = toEl.dataset.id;
-            
+
             svg.querySelectorAll(`line[data-from="${topId}"], line[data-to="${bottomId}"]`)
-            .forEach(l => l.remove());
+                .forEach(l => l.remove());
 
             const fromRect = fromEl.getBoundingClientRect();
             const toRect = toEl.getBoundingClientRect();
             const containerRect = area.getBoundingClientRect();
-            
+
             const x1 = (fromRect.left + fromRect.right) / 2 - containerRect.left;
             const y1 = fromRect.bottom - containerRect.top;
-            const x2 = (toRect.left + toRect.right) / 2 -containerRect.left;
+            const x2 = (toRect.left + toRect.right) / 2 - containerRect.left;
             const y2 = toRect.top - containerRect.top;
 
             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -1286,19 +1286,19 @@ const MatchTopToBottom = (() => {
             line.setAttribute("x2", x2);
             line.setAttribute("y2", y2);
             line.setAttribute("stroke", color);
-            line.setAttribute("stroke-width", "2");                        
+            line.setAttribute("stroke-width", "2");
             line.dataset.from = topId;
             line.dataset.to = bottomId;
-            if( color == 'green' ) {
+            if (color == 'green') {
                 line.setAttribute("marker-end", `url(#arrowhead_${activityId})`);
             } else {
                 line.setAttribute("marker-end", `url(#arrowhead_${activityId}_red)`);
             }
             svg.appendChild(line);
-        } catch( err ) {
-            console.error( 'MatchTopToBottom.drawArrow : ', err );
+        } catch (err) {
+            console.error('MatchTopToBottom.drawArrow : ', err);
         }
-    };    
+    };
 
     const checkIfAllAttempted = (activityId) => {
         try {
@@ -1308,11 +1308,11 @@ const MatchTopToBottom = (() => {
             const attempted = Object.keys(act.userMatches || {}).filter(k => act.userMatches[k]).length;
             const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
             if (!area) return;
-            if( attempted === total ) {
-                Activity.toggleCheckBtn( '.submit-btn', false );
+            if (attempted === total) {
+                Activity.toggleCheckBtn('.submit-btn', false);
             }
-        } catch( err ) {
-            console.error( 'MatchTopToBottom.checkIfAllAttempted : ', err );
+        } catch (err) {
+            console.error('MatchTopToBottom.checkIfAllAttempted : ', err);
         }
     };
 
@@ -1334,8 +1334,8 @@ const MatchTopToBottom = (() => {
                 const bottomEl = area.querySelector(`.rowHoriZ.bottItem .item2[data-id="${bottomId}"]`);
                 if (topEl && bottomEl) drawArrow(activityId, topEl, bottomEl);
             }
-        } catch( err ) {
-            console.error( 'MatchTopToBottom.redrawAllArrows : ', err );
+        } catch (err) {
+            console.error('MatchTopToBottom.redrawAllArrows : ', err);
         }
     };
 
@@ -1357,11 +1357,11 @@ const MatchTopToBottom = (() => {
 
             area.querySelectorAll(".item2").forEach(it => it.classList.remove("selected", "correct", "wrong"));
             Activity.toggleCheckBtn('.submit-btn', false);
-        } catch( err ) {
-            console.error( 'MatchTopToBottom.resetActivity : ', err );
+        } catch (err) {
+            console.error('MatchTopToBottom.resetActivity : ', err);
         }
     };
-    
+
     const checkAnswers = (activityId) => {
         try {
             const activity = activities[activityId];
@@ -1400,8 +1400,8 @@ const MatchTopToBottom = (() => {
             } else {
                 Swal.fire({ icon: "info", title: "Not bad", text: `You got ${correctCount} out of ${total} correct.` });
             }
-        } catch( err ) {
-            console.error( 'MatchTopToBottom.checkAnswers : ', err );
+        } catch (err) {
+            console.error('MatchTopToBottom.checkAnswers : ', err);
         }
     };
 
@@ -1424,11 +1424,11 @@ const MatchTopToBottom = (() => {
                 activity.userMatches[topId] = String(correctMatches[topId]);
             }
             Activity.toggleCheckBtn('.submit-btn', true);
-        } catch( err ) {
-            console.error( 'MatchTopToBottom.showAnswers : ', err );
+        } catch (err) {
+            console.error('MatchTopToBottom.showAnswers : ', err);
         }
     };
-    
+
     const ui = (activityId, questionId) => {
         try {
             const container = Define.get('questionContainer');
@@ -1439,7 +1439,7 @@ const MatchTopToBottom = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -1479,50 +1479,50 @@ const MatchTopToBottom = (() => {
                 </div>
                 </div>
             </div>`;
-        } catch( err ) {
-            console.error( 'MatchTopToBottom.ui : ', err );
+        } catch (err) {
+            console.error('MatchTopToBottom.ui : ', err);
         }
-    };  
+    };
 
     const matchTopToBottom = (questionId, activityId = "m3_1") => {
         try {
-            const data = Activity.getDefine( questionId );
+            const data = Activity.getDefine(questionId);
             if (!data || !Array.isArray(data.content) || data.content.length === 0) return;
-            
+
             const questions = data.content.map(q => ({
                 id: String(q.id),
                 top: q.top || "",
                 bottom: q.bottom || "",
                 match: String(q.match !== undefined ? q.match : q.id)
             }));
-            
+
             const correctMatches = Object.fromEntries(questions.map(q => [String(q.id), String(q.match)]));
-            
+
             activities[activityId] = activities[activityId] || { userMatches: {}, selectedTop: null, correctMatches: {} };
             activities[activityId].correctMatches = correctMatches;
             activities[activityId].userMatches = {};
-            
+
             ui(activityId, questionId);
-            Activity.setHeader( questionId );
-            
-            const area            = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
-            const topContainer    = area.querySelector("[data-top]");
+            Activity.setHeader(questionId);
+
+            const area = document.querySelector(`.matching-area3[data-activity="${activityId}"]`);
+            const topContainer = area.querySelector("[data-top]");
             const bottomContainer = area.querySelector("[data-bottom]");
 
-            topContainer.innerHTML    = "";
+            topContainer.innerHTML = "";
             bottomContainer.innerHTML = "";
-            
-            const topList    = Activity.shuffleArray(questions);
+
+            const topList = Activity.shuffleArray(questions);
             const bottomList = Activity.shuffleArray(questions);
-            
+
             topList.forEach(item => {
-                const div         = document.createElement("div");
-                div.className     = "item2";
-                div.dataset.id    = item.id;
+                const div = document.createElement("div");
+                div.className = "item2";
+                div.dataset.id = item.id;
                 div.dataset.match = item.match;
 
-                const inner       = document.createElement("div");
-                inner.className   = "item-text";
+                const inner = document.createElement("div");
+                inner.className = "item-text";
                 inner.textContent = item.top;
                 div.appendChild(inner);
 
@@ -1533,14 +1533,14 @@ const MatchTopToBottom = (() => {
                 });
                 topContainer.appendChild(div);
             });
-            
+
             bottomList.forEach(item => {
-                const div      = document.createElement("div");
-                div.className  = "item2";
+                const div = document.createElement("div");
+                div.className = "item2";
                 div.dataset.id = item.id;
 
-                const inner       = document.createElement("div");
-                inner.className   = "item-text";
+                const inner = document.createElement("div");
+                inner.className = "item-text";
                 inner.textContent = item.bottom;
                 div.appendChild(inner);
 
@@ -1550,7 +1550,7 @@ const MatchTopToBottom = (() => {
                         Swal.fire({ icon: "error", text: "Select top item first" });
                         return;
                     }
-                    const topId    = act.selectedTop.dataset.id;
+                    const topId = act.selectedTop.dataset.id;
                     const bottomId = div.dataset.id;
 
                     act.userMatches[topId] = String(bottomId);
@@ -1566,7 +1566,7 @@ const MatchTopToBottom = (() => {
 
             const containerEl = document.querySelector(Define.get('questionContainer'));
             const checkBtn = containerEl.querySelector(".buttons.machiNgs [data-check]");
-            const showBtn  = containerEl.querySelector(".buttons.machiNgs [data-show]");
+            const showBtn = containerEl.querySelector(".buttons.machiNgs [data-show]");
             const resetBtn = containerEl.querySelector(".buttons.machiNgs [data-reset]");
 
             if (checkBtn) checkBtn.addEventListener("click", () => checkAnswers(activityId));
@@ -1597,18 +1597,18 @@ const FillInTheBlanksWithImage = (() => {
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
-            if( !parent ) {
+            const parent = document.querySelector(container);
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
-            
-            parent.innerHTML= `<div class="question user-select-none">
+
+            parent.innerHTML = `<div class="question user-select-none">
                 <div class="container-fluid">
                     <div class="qSections">
                         <div class="${Define.get('head')}"></div>
@@ -1633,38 +1633,38 @@ const FillInTheBlanksWithImage = (() => {
                 </div>
                 </div>`;
             // ..
-			
-			const checkBtn = parent.querySelector("#checkBtnF");
-			const showBtn  = parent.querySelector("#showBtnF");
-			const resetBtn = parent.querySelector("#resetBtnF");
 
-			if (checkBtn) checkBtn.addEventListener("click", checkAnswerFill);
-			if (showBtn) showBtn.addEventListener("click", showAnswersFill);
-			if (resetBtn) resetBtn.addEventListener("click", resetFill);
-        } catch ( err ) {
-            console.error( 'FillInTheBlanksWithImage.ui : ', err );
+            const checkBtn = parent.querySelector("#checkBtnF");
+            const showBtn = parent.querySelector("#showBtnF");
+            const resetBtn = parent.querySelector("#resetBtnF");
+
+            if (checkBtn) checkBtn.addEventListener("click", checkAnswerFill);
+            if (showBtn) showBtn.addEventListener("click", showAnswersFill);
+            if (resetBtn) resetBtn.addEventListener("click", resetFill);
+        } catch (err) {
+            console.error('FillInTheBlanksWithImage.ui : ', err);
         }
-	};
-	
-	const fillInTheBlanks = (questionId) => {
+    };
+
+    const fillInTheBlanks = (questionId) => {
         try {
-            const data = Activity.getDefine( questionId );
+            const data = Activity.getDefine(questionId);
 
             ui(questionId);
-            Activity.setHeader( questionId );
+            Activity.setHeader(questionId);
 
             document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid = data?.id;
 
             const container2 = document.getElementById("inputsContainer");
             if (!container2) {
                 return;
-            }		
+            }
             container2.innerHTML = "";
-            
+
             const textFrag = document.createDocumentFragment();
             data?.content?.hinttext?.forEach((item) => {
-                const div       = document.createElement('div');
-                div.className   = 'wordBoxesFill shadow-sm';
+                const div = document.createElement('div');
+                div.className = 'wordBoxesFill shadow-sm';
                 div.textContent = item;
 
                 textFrag.appendChild(div);
@@ -1672,10 +1672,10 @@ const FillInTheBlanksWithImage = (() => {
             document.querySelector('.wordRows').appendChild(textFrag);
 
             document.querySelector('.imgBoxFill').innerHTML = `<img src="${Activity.pathToCWD()}${data?.content?.hintimage}" ondragstart="return false";/>`;
-            
+
             let blanksBlock = '';
             data?.content?.blanks.forEach((item, i) => {
-                if( item.img ) {
+                if (item.img) {
                     blanksBlock += `<div class="col-md-4">
                             <div class="fillBox shadow-sm">
                             <img class="imgInboxFill" src="${Activity.pathToCWD()}${item.img}" alt="feature-${i + 1}" ondragstart="return false;"/>
@@ -1698,18 +1698,18 @@ const FillInTheBlanksWithImage = (() => {
                 }
             });
             container2.innerHTML = blanksBlock;
-        } catch ( err ) {
-            console.error( 'FillInTheBlanksWithImage.fillInTheBlanks : ', err );
+        } catch (err) {
+            console.error('FillInTheBlanksWithImage.fillInTheBlanks : ', err);
         }
-	};
-	
-	const checkAnswerFill = () => {
+    };
+
+    const checkAnswerFill = () => {
         try {
             let correct = 0;
             const inputs = document.querySelectorAll(".inputsFills");
             inputs.forEach(input => {
-                const type       = input.dataset.type;
-                const userVal    = input.value.trim().toLowerCase();
+                const type = input.dataset.type;
+                const userVal = input.value.trim().toLowerCase();
                 const correctVal = (input.dataset.ans || "").toLowerCase();
                 if (input.value.trim() === "") {
                     input.classList.add("is-invalid");
@@ -1733,73 +1733,73 @@ const FillInTheBlanksWithImage = (() => {
             });
 
             const questionId = document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid;
-            const dataFills  = Activity.getDefine( questionId )?.content?.blanks;
+            const dataFills = Activity.getDefine(questionId)?.content?.blanks;
 
             Swal.fire({
                 icon: correct === (dataFills || []).length ? "success" : "info",
                 title: correct === (dataFills || []).length ? "Perfect!" : "Checked",
                 text: `You got ${correct} / ${(dataFills || []).length} correct.`
             });
-        } catch ( err ) {
-            console.error( 'FillInTheBlanksWithImage.checkAnswerFill : ', err );
+        } catch (err) {
+            console.error('FillInTheBlanksWithImage.checkAnswerFill : ', err);
         }
-	};
-	
-	const showAnswersFill = () => {
+    };
+
+    const showAnswersFill = () => {
         try {
-            Activity.toggleCheckBtn( '#checkBtnF', true );
+            Activity.toggleCheckBtn('#checkBtnF', true);
             disableAll();
             document.querySelectorAll(".inputsFills").forEach(input => {
                 input.value = input.dataset.ans;
                 input.classList.add("is-valid");
                 input.classList.remove("is-invalid");
             });
-        } catch ( err ) {
-            console.error( 'FillInTheBlanksWithImage.showAnswersFill : ', err );
+        } catch (err) {
+            console.error('FillInTheBlanksWithImage.showAnswersFill : ', err);
         }
-	};
-	
-	const resetFill = () => {
+    };
+
+    const resetFill = () => {
         try {
-            Activity.toggleCheckBtn( '#checkBtnF', false );
+            Activity.toggleCheckBtn('#checkBtnF', false);
             enableAll();
             document.querySelectorAll(".inputsFills").forEach(input => {
                 input.value = "";
                 input.classList.remove("is-valid", "is-invalid");
             });
-        } catch ( err ) {
-            console.error( 'FillInTheBlanksWithImage.resetFill : ', err );
+        } catch (err) {
+            console.error('FillInTheBlanksWithImage.resetFill : ', err);
         }
-	};
+    };
 
-	const disableAll = () => {
+    const disableAll = () => {
         try {
             document.querySelectorAll(".inputsFills").forEach(el => {
                 el.setAttribute("disabled", true);
             });
-        } catch ( err ) {
-            console.error( 'FillInTheBlanksWithImage.disableAll : ', err );
+        } catch (err) {
+            console.error('FillInTheBlanksWithImage.disableAll : ', err);
         }
-	};
+    };
 
-	const enableAll = () => {
+    const enableAll = () => {
         try {
             document.querySelectorAll(".inputsFills").forEach(el => {
                 el.removeAttribute("disabled");
-		    });
-        } catch ( err ) {
-            console.error( 'FillInTheBlanksWithImage.enableAll : ', err );
+            });
+        } catch (err) {
+            console.error('FillInTheBlanksWithImage.enableAll : ', err);
         }
-	};
+    };
 
-	return {
-		render:fillInTheBlanks,
-		checkAnswerFill,
-		showAnswersFill,
-		resetFill,
-		disableAll,
-		enableAll
-	};
+    return {
+        render: fillInTheBlanks,
+        checkAnswerFill,
+        showAnswersFill,
+        resetFill,
+        disableAll,
+        enableAll
+    };
 })();
 
 const FillInTheBlanksHindiKb = (() => {
@@ -1823,8 +1823,8 @@ const FillInTheBlanksHindiKb = (() => {
 
             const activity = Activity.getDefine(questionId) ?? {};
             const content = activity?.content ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
             const audio = content?.audio ?? false;
             const audioSrc = audio != false ? audio : '';
@@ -1833,42 +1833,40 @@ const FillInTheBlanksHindiKb = (() => {
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        ${
-                                            audioSrc?
-                                            `<div class="common_listening_container" id="listening_container">
+                                        ${audioSrc ?
+                    `<div class="common_listening_container" id="listening_container">
                                                 <div class="play-btn common_playBtn">
                                                     <div class="icon"></div>
                                                 </div>
                                             </div>`: ''
-                                        }
-                                        <div id="question_header_container" ${audioSrc? `style="display: none"`: ''}>
+                }
+                                        <div id="question_header_container" ${audioSrc ? `style="display: none"` : ''}>
                                             <div class="qSections row g-0 mt-3 rowWithAudios">
                                                 <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
-                                                ${audioSrc? 
-                                                    `<div class="col-auto" id="listening_common_audio_container">
+                                                ${audioSrc ?
+                    `<div class="col-auto" id="listening_common_audio_container">
                                                         <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
                                                         </svg>
                                                         <svg id="" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16" role="button">
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
                                                         </svg>
-                                                    </div>`:''
-                                                }
+                                                    </div>`: ''
+                }
                                             </div>
                                         </div>
-                                        <div id='question-container-box' ${audioSrc? `style="display: none"`: ''}>
+                                        <div id='question-container-box' ${audioSrc ? `style="display: none"` : ''}>
                                             <div id="fill-img-container" class="text-center"></div>
                                             <div id="fill-hint-container" class="text-center instForFillText shadow-sm"></div>
-                                            ${
-                                                definedCol instanceof Object && 
-                                                Object.entries(definedCol).length
-                                                ? `
+                                            ${definedCol instanceof Object &&
+                    Object.entries(definedCol).length
+                    ? `
                                                     <div id="${quizContainerID}" class="row g-0"></div>
                                                 `
-                                                : `
+                    : `
                                                     <div id="${quizContainerID}"></div>
                                                 `
-                                            }
+                }
                                             <div class="buttons machiNgs">
                                                 <button class="submit-btn check_1">${buttonLabel.check}</button>
                                                 <button class="show-btn">${buttonLabel.show}</button>
@@ -1880,25 +1878,25 @@ const FillInTheBlanksHindiKb = (() => {
                                 </div>`;
             // ..
 
-            Activity.setHeader( questionId );
-            Activity.setQid(`#${quizContainerID}`, questionId);            
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${quizContainerID}`, questionId);
 
-            const submitBtn = parent.querySelector( '.submit-btn' );
-            const showBtn   = parent.querySelector( '.show-btn' );
-            const resetBtn  = parent.querySelector( '.reset-btn' );
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
 
-            if( submitBtn ) submitBtn.addEventListener("click", checkAnswersHandler);
-            if( showBtn ) showBtn.addEventListener("click", showAnswersHandler);
-            if( resetBtn ) resetBtn.addEventListener("click", resetQuizHandler);
+            if (submitBtn) submitBtn.addEventListener("click", checkAnswersHandler);
+            if (showBtn) showBtn.addEventListener("click", showAnswersHandler);
+            if (resetBtn) resetBtn.addEventListener("click", resetQuizHandler);
 
             is_Audio_available(audioSrc);
 
         } catch (e) {
-            console.error( 'FillInTheBlanksHindiKb.ui :', e );
+            console.error('FillInTheBlanksHindiKb.ui :', e);
         }
     }
 
-    const __questionImageTemplate  = (src,width) => {
+    const __questionImageTemplate = (src, width) => {
         const imageWidth = width ? width : '50px';
         const img = `
             <img 
@@ -1910,36 +1908,36 @@ const FillInTheBlanksHindiKb = (() => {
         return img;
     }
 
-    const __renderImageInQuestionText = ({data,text,imageReplacement}={}) => {
-        let index    = 0;
+    const __renderImageInQuestionText = ({ data, text, imageReplacement } = {}) => {
+        let index = 0;
         const images = data?.images ?? [];
-        const regex  = new RegExp(imageReplacement, 'g');
+        const regex = new RegExp(imageReplacement, 'g');
 
         const __itr = () => {
-            const imageData  = images[index++];
-            const imagePath  = imageData?.path;
+            const imageData = images[index++];
+            const imagePath = imageData?.path;
             const imageWidth = imageData?.width;
-            return imagePath ? __questionImageTemplate(imagePath,imageWidth) : '';
+            return imagePath ? __questionImageTemplate(imagePath, imageWidth) : '';
         }
 
-        return text.replace(regex, __itr );
+        return text.replace(regex, __itr);
     }
 
     const fillInTheBlanks = (questionId) => {
         try {
 
-            ui(questionId);            
+            ui(questionId);
 
-            const activity    = Activity.getDefine(questionId);
-            const content     = activity?.content;
-            const lang        = activity?.lang ?? 'en';
+            const activity = Activity.getDefine(questionId);
+            const content = activity?.content;
+            const lang = activity?.lang ?? 'en';
             const replacement = content?.replacement ?? '#_#';
             const imageReplacement = content?.imageReplacement ?? '#img#';
-            
-            if( content?.subquestions ) __subQuestions = content?.subquestions;
+
+            if (content?.subquestions) __subQuestions = content?.subquestions;
 
             const placeholder = Activity.translateWriteAnsLabel(lang);
-            const renderInput = ({qID='', sqID='', inputIndex='', classes='', style=''}={}) => {
+            const renderInput = ({ qID = '', sqID = '', inputIndex = '', classes = '', style = '' } = {}) => {
                 const inputHtml = `
                             <input 
                                 class="hindiInput inPutHindiNew ${classes}" 
@@ -1953,26 +1951,26 @@ const FillInTheBlanksHindiKb = (() => {
                             >
                         `;
                 return inputHtml;
-            }            
-            
-            if( content?.image && content?.image?.path ) {
-                const path  = Activity.pathToCWD() + content.image.path;
+            }
+
+            if (content?.image && content?.image?.path) {
+                const path = Activity.pathToCWD() + content.image.path;
                 const width = content?.image?.width ?? '15%';
                 const image = `<img src="${path}" style="width:${width};" ondragstart="return false;">`
-                $('#fill-img-container').html( image );
-            }else{
+                $('#fill-img-container').html(image);
+            } else {
                 $('#fill-img-container').remove();
             }
 
             const hint = content?.hint;
             const fillContainer = document.querySelector('#fill-hint-container')
-            if( fillContainer ) {
+            if (fillContainer) {
                 const isText = hint?.text;
-                if( hint && typeof hint === 'string' ) {
+                if (hint && typeof hint === 'string') {
                     fillContainer.innerHTML = hint;
-                } else if( isText && hint && hint instanceof Object ) {
+                } else if (isText && hint && hint instanceof Object) {
 
-                    const __image  = (src,width='') => {
+                    const __image = (src, width = '') => {
                         const imageWidth = width == '' ? '150px' : width;
                         const img = `
                             <img 
@@ -1985,19 +1983,19 @@ const FillInTheBlanksHindiKb = (() => {
                     }
 
                     const __render = () => {
-                        let index    = 0;
-                        const text   = hint?.text ?? '';
+                        let index = 0;
+                        const text = hint?.text ?? '';
                         const images = hint?.images ?? [];
-                        const regex  = new RegExp(imageReplacement, 'g');
+                        const regex = new RegExp(imageReplacement, 'g');
 
                         const __itr = () => {
-                            const imageData  = images[index++];
-                            const imagePath  = imageData?.path;
+                            const imageData = images[index++];
+                            const imagePath = imageData?.path;
                             const imageWidth = imageData?.width ?? '';
-                            return imagePath ? __image(imagePath,imageWidth) : '';
+                            return imagePath ? __image(imagePath, imageWidth) : '';
                         }
 
-                        return text.replace(regex, __itr );
+                        return text.replace(regex, __itr);
                     }
 
                     fillContainer.innerHTML = __render();
@@ -2009,61 +2007,61 @@ const FillInTheBlanksHindiKb = (() => {
             const defaultCol = Helper?.defaultCol ?? {};
             const definedCol = content?.questionGridSize ?? {};
             const col = {
-                md  : definedCol?.md ?? defaultCol.md,
-                sm  : definedCol?.sm ?? defaultCol.sm,
-                col : definedCol?.col ?? defaultCol.col
+                md: definedCol?.md ?? defaultCol.md,
+                sm: definedCol?.sm ?? defaultCol.sm,
+                col: definedCol?.col ?? defaultCol.col
             };
 
             content?.questions.forEach((question, qIndex) => {
-                const subQuestion = __subQuestions?.filter( subques => subques.qid === question.qid ) ?? [];                
-                const questionId  = question?.qid !== undefined ? question?.qid : (qIndex + 1);
-                const mainBullet  = Activity.translateBulletLabels({lang:lang, ind:qIndex});
-                const html        = [ content?.questions.length != 1 ? `${mainBullet}) `: null ];                
+                const subQuestion = __subQuestions?.filter(subques => subques.qid === question.qid) ?? [];
+                const questionId = question?.qid !== undefined ? question?.qid : (qIndex + 1);
+                const mainBullet = Activity.translateBulletLabels({ lang: lang, ind: qIndex });
+                const html = [content?.questions.length != 1 ? `${mainBullet}) ` : null];
 
                 const div = document.createElement('div');
                 div.classList.add('questionFILL');
-                
-                const colCondition = definedCol instanceof Object && Object.entries( definedCol ).length;
-                if( colCondition ) div.classList.add(`col-sm-${col.sm}`, `col-md-${col.md}`, `col-${col.col}`);
+
+                const colCondition = definedCol instanceof Object && Object.entries(definedCol).length;
+                if (colCondition) div.classList.add(`col-sm-${col.sm}`, `col-md-${col.md}`, `col-${col.col}`);
 
                 const inputBelowCondition = question?.inputBelow === true && question?.answers;
-                
-                if( subQuestion.length || inputBelowCondition ) {
+
+                if (subQuestion.length || inputBelowCondition) {
                     const imageView = __renderImageInQuestionText({
-                        data:question,
-                        text:question?.question ?? '',
-                        imageReplacement:imageReplacement
+                        data: question,
+                        text: question?.question ?? '',
+                        imageReplacement: imageReplacement
                     });
-                    html.push( imageView );
+                    html.push(imageView);
                 }
 
-                if( subQuestion.length ) {
-                    if( html.length > 2 ) return false;
-                    
-                    const frame = '<div class="my-2 mx-5 ps-3">';
-                    html.push( frame );
-                    subQuestion.map( (subques, subind) => {
-                        const multiInput  = [];
-                        const subQuesText = [];
-                        const subquesID   = subques?.sqid ?? false;
-                        if( subques?.inputBelow === true ) {
-                            const text = subques?.text ?? '';
-                            subQuesText.push( text );
+                if (subQuestion.length) {
+                    if (html.length > 2) return false;
 
-                            subques?.answers.map((_,i) => {
+                    const frame = '<div class="my-2 mx-5 ps-3">';
+                    html.push(frame);
+                    subQuestion.map((subques, subind) => {
+                        const multiInput = [];
+                        const subQuesText = [];
+                        const subquesID = subques?.sqid ?? false;
+                        if (subques?.inputBelow === true) {
+                            const text = subques?.text ?? '';
+                            subQuesText.push(text);
+
+                            subques?.answers.map((_, i) => {
                                 const belowInput = `
                                                     <div class="my-2 mx-4 px-2">
                                                         ${renderInput({
-                                                            qID:questionId,
-                                                            sqID:subquesID,
-                                                            inputIndex:i,
-                                                            classes:'w-100 my-2',
-                                                            style:'text-align:left !important'
-                                                        })}
+                                    qID: questionId,
+                                    sqID: subquesID,
+                                    inputIndex: i,
+                                    classes: 'w-100 my-2',
+                                    style: 'text-align:left !important'
+                                })}
                                                     </div>
                                                     `;
                                 // ..
-                                multiInput.push( belowInput );
+                                multiInput.push(belowInput);
                             });
                         } else {
                             const width = subques?.inputWidth ?? '';
@@ -2074,38 +2072,38 @@ const FillInTheBlanksHindiKb = (() => {
                                     qID: questionId,
                                     sqID: subquesID,
                                     inputIndex: idx++,
-                                    style:style
+                                    style: style
                                 })
                             );
-                            subQuesText.push( view );
+                            subQuesText.push(view);
                         }
 
-                        const bullet = subQuestion.length > 1 
-                            ? Activity.translateBulletLabels({lang:'ro', ind:subind, upperCase:false}) + ')'
+                        const bullet = subQuestion.length > 1
+                            ? Activity.translateBulletLabels({ lang: 'ro', ind: subind, upperCase: false }) + ')'
                             : '';
-                        const final  = `
+                        const final = `
                                             <div class="my-2">
                                                 ${bullet} ${subQuesText.join('')}
                                             </div>
                                             ${multiInput.join('')}
                                         `;
                         // ..
-                        html.push( final );
+                        html.push(final);
                     });
-                    html.push( '</div>' );
+                    html.push('</div>');
                 } else {
-                    if( inputBelowCondition ) {
-                        question?.answers.map((_,i) => {
+                    if (inputBelowCondition) {
+                        question?.answers.map((_, i) => {
                             const belowInput = `<div class="my-1 mx-4 px-2">
                                 ${renderInput({
-                                    qID:questionId,
-                                    sqID:false,
-                                    inputIndex:i,
-                                    classes:'w-100 my-2',
-                                    style:'text-align:left !important'
-                                })}
+                                qID: questionId,
+                                sqID: false,
+                                inputIndex: i,
+                                classes: 'w-100 my-2',
+                                style: 'text-align:left !important'
+                            })}
                             </div>`;
-                            html.push( belowInput );
+                            html.push(belowInput);
                         });
                     } else {
                         let idx = 0;
@@ -2116,46 +2114,46 @@ const FillInTheBlanksHindiKb = (() => {
                                 qID: questionId,
                                 sqID: false,
                                 inputIndex: idx++,
-                                width:width,
-                                style:style
+                                width: width,
+                                style: style
                             })
                         );
-                        
+
                         const imageView = __renderImageInQuestionText({
-                            data:question,
-                            text:inputView,
-                            imageReplacement:imageReplacement
+                            data: question,
+                            text: inputView,
+                            imageReplacement: imageReplacement
                         });
 
-                        html.push( imageView );
+                        html.push(imageView);
                     }
                 }
 
-                div.innerHTML = html.join( '' );
-                $(`#${quizContainerID}`)[0].appendChild( div );
+                div.innerHTML = html.join('');
+                $(`#${quizContainerID}`)[0].appendChild(div);
             });
 
-            if( lang === 'hi' ) {
+            if (lang === 'hi') {
                 $(function () {
                     $.keyboard.layouts["hindiQuiz"] = Activity.hindiKeyboard();
-                    
+
                     $(".hindiInput")
-                    .keyboard({
-                        layout: "hindiQuiz",
-                        usePreview: false,
-                        autoAccept: true,
-                    })
-                    .addTyping({ showTyping: true, delay: 70 })
-                    .addCaret({
-                        caretClass: "ui-keyboard-caret",
-                        animate: true,
-                        blinkRate: 600,
-                    });
+                        .keyboard({
+                            layout: "hindiQuiz",
+                            usePreview: false,
+                            autoAccept: true,
+                        })
+                        .addTyping({ showTyping: true, delay: 70 })
+                        .addCaret({
+                            caretClass: "ui-keyboard-caret",
+                            animate: true,
+                            blinkRate: 600,
+                        });
                 });
             }
 
-        } catch( err ) {
-            console.error( 'FillInTheBlanksHindiKb.fillIntheBlanks :', err );
+        } catch (err) {
+            console.error('FillInTheBlanksHindiKb.fillIntheBlanks :', err);
         }
     }
 
@@ -2165,42 +2163,42 @@ const FillInTheBlanksHindiKb = (() => {
 
     const checkAnswersHandler = () => {
         let __score = 0;
-        
-        const activity     = Activity.getDefine( Activity.getQid( `#${quizContainerID}` ) );
-        const content      = activity?.content ?? {};
-        const questions    = content?.questions ?? [];
+
+        const activity = Activity.getDefine(Activity.getQid(`#${quizContainerID}`));
+        const content = activity?.content ?? {};
+        const questions = content?.questions ?? [];
         const subquestions = content?.subquestions ?? [];
 
-        $('.inPutHindiNew').map( (_, item) => {
+        $('.inPutHindiNew').map((_, item) => {
             const dataset = item.dataset;
-            const qid     = dataset.qid;
-            const sqid    = dataset.sqid;
-            const index   = dataset.index;
-            const input   = $(`.hindiInput.inPutHindiNew[data-qid="${qid}"][data-index="${index}"][data-sqid="${sqid}"]`);
-            
-            if( input[0] === undefined ) return false;
-            
-            if( sqid == 'false' ) {
-                questions.map( (ques, ind) => {
+            const qid = dataset.qid;
+            const sqid = dataset.sqid;
+            const index = dataset.index;
+            const input = $(`.hindiInput.inPutHindiNew[data-qid="${qid}"][data-index="${index}"][data-sqid="${sqid}"]`);
+
+            if (input[0] === undefined) return false;
+
+            if (sqid == 'false') {
+                questions.map((ques, ind) => {
                     const questionID = ques.qid ?? ind + 1;
-                    const condition  = questionID == qid
-                            && (Array.isArray( ques.answers ))
-                            && (ques.answers.length)
-                            && (ques.answers[index]);
+                    const condition = questionID == qid
+                        && (Array.isArray(ques.answers))
+                        && (ques.answers.length)
+                        && (ques.answers[index]);
                     // ..
-                    if( condition && normalizeHindi( input.val() ) == normalizeHindi( ques.answers[index] ) ) {
+                    if (condition && normalizeHindi(input.val()) == normalizeHindi(ques.answers[index])) {
                         __score++;
                         input[0].style.borderColor = 'limegreen';
                     }
                 });
             } else {
-                subquestions.map( (ques) => {
-                    const condition = (ques.qid == qid) 
-                        && (ques.sqid == sqid) 
-                        && (ques.answers.length) 
+                subquestions.map((ques) => {
+                    const condition = (ques.qid == qid)
+                        && (ques.sqid == sqid)
+                        && (ques.answers.length)
                         && (ques.answers[index]);
                     // ..
-                    if( condition && normalizeHindi( input.val() ) == normalizeHindi( ques.answers[index] ) ) {
+                    if (condition && normalizeHindi(input.val()) == normalizeHindi(ques.answers[index])) {
                         __score++;
                         input[0].style.borderColor = 'red';
                     }
@@ -2223,40 +2221,40 @@ const FillInTheBlanksHindiKb = (() => {
     }
 
     const showAnswersHandler = () => {
-        const activity     = Activity.getDefine( Activity.getQid( `#${quizContainerID}` ) );
-        const content      = activity?.content ?? {};
-        const questions    = content?.questions ?? [];
+        const activity = Activity.getDefine(Activity.getQid(`#${quizContainerID}`));
+        const content = activity?.content ?? {};
+        const questions = content?.questions ?? [];
         const subquestions = content?.subquestions ?? [];
 
         $(".check_1").addClass("disable");
 
-        $('.inPutHindiNew').map( (_, item) => {
+        $('.inPutHindiNew').map((_, item) => {
             const dataset = item.dataset;
-            const qid     = dataset.qid;
-            const sqid    = dataset.sqid;
-            const index   = dataset.index;
-            const input   = $(`.hindiInput.inPutHindiNew[data-qid="${qid}"][data-index="${index}"][data-sqid="${sqid}"]`);
-            
+            const qid = dataset.qid;
+            const sqid = dataset.sqid;
+            const index = dataset.index;
+            const input = $(`.hindiInput.inPutHindiNew[data-qid="${qid}"][data-index="${index}"][data-sqid="${sqid}"]`);
+
             input[0] != undefined ? input[0].style.borderColor = 'dodgerblue' : '';
-            
-            if( sqid == 'false' ) {
-                questions.map( (ques, ind) => {
+
+            if (sqid == 'false') {
+                questions.map((ques, ind) => {
                     const questionID = ques.qid ?? ind + 1;
-                    const condition  = questionID == qid
-                            && (Array.isArray( ques.answers ))
-                            && (ques.answers.length)
-                            && (ques.answers[index]);
-                    // ..
-                    if( condition ) input.val( ques.answers[index] );
-                });
-            } else {
-                subquestions.map( (ques) => {
-                    const condition = (ques.qid == qid) 
-                        && (ques.sqid == sqid) 
-                        && (ques.answers.length) 
+                    const condition = questionID == qid
+                        && (Array.isArray(ques.answers))
+                        && (ques.answers.length)
                         && (ques.answers[index]);
                     // ..
-                    if( condition ) input.val( ques.answers[index] );
+                    if (condition) input.val(ques.answers[index]);
+                });
+            } else {
+                subquestions.map((ques) => {
+                    const condition = (ques.qid == qid)
+                        && (ques.sqid == sqid)
+                        && (ques.answers.length)
+                        && (ques.answers[index]);
+                    // ..
+                    if (condition) input.val(ques.answers[index]);
                 });
             }
 
@@ -2274,9 +2272,9 @@ const FillInTheBlanksHindiKb = (() => {
 
     const is_Audio_available = (src) => {
 
-        if(!src && src == '') return;
-        
-        Helper.setAudio( Activity.pathToCWD() + src );
+        if (!src && src == '') return;
+
+        Helper.setAudio(Activity.pathToCWD() + src);
 
         const containerSelector = Define.get('questionContainer');
         const parent = document.querySelector(containerSelector);
@@ -2287,7 +2285,7 @@ const FillInTheBlanksHindiKb = (() => {
         audio_playBtns.forEach(btn => {
             btn.addEventListener('click', Helper.playAudio);
         });
-        
+
         audio_pauseBtn.addEventListener('click', Helper.pauseAudio);
 
     }
@@ -2302,10 +2300,10 @@ const FillInTheBlanksHindiKb = (() => {
 })();
 
 const JumbleLetters = (() => {
-    
-    let isDragging   = false;
+
+    let isDragging = false;
     let lastDragTime = 0;
-    
+
     const shuffle = (word) => {
         try {
             const orig = word.split('');
@@ -2320,8 +2318,8 @@ const JumbleLetters = (() => {
                 }
             } while (arr.join('') === word);
             return arr;
-        } catch( err ) {
-            console.log( 'JumbleLetters.shuffle : ', err );
+        } catch (err) {
+            console.log('JumbleLetters.shuffle : ', err);
         }
     }
 
@@ -2335,7 +2333,7 @@ const JumbleLetters = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -2353,30 +2351,30 @@ const JumbleLetters = (() => {
                 </div>
                 </div>`;
             // ..            
-            
+
             const checkBtn = parent.querySelector("#submit");
-            const showBtn  = parent.querySelector(".show-btn");
+            const showBtn = parent.querySelector(".show-btn");
             const resetBtn = parent.querySelector(".reset-btn");
             if (checkBtn) checkBtn.addEventListener("click", submit);
             if (showBtn) showBtn.addEventListener("click", showAns);
             if (resetBtn) resetBtn.addEventListener("click", reset);
-        } catch( err ) {
-            console.log( 'JumbleLetters.ui : ', err );
+        } catch (err) {
+            console.log('JumbleLetters.ui : ', err);
         }
     }
 
     const loadAllQuestions = (questionId) => {
         try {
 
-            const data = Activity.getDefine( questionId );
+            const data = Activity.getDefine(questionId);
 
-            ui(questionId);        
-            const headElem = Activity.setHeader( questionId );
-            if( !headElem.head && !headElem.subhead ) {
+            ui(questionId);
+            const headElem = Activity.setHeader(questionId);
+            if (!headElem.head && !headElem.subhead) {
                 document.querySelector('hr').remove();
             }
 
-            document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid  = data?.id;        
+            document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid = data?.id;
 
             $("#letterContainer").empty();
 
@@ -2426,11 +2424,11 @@ const JumbleLetters = (() => {
 
                 enableTapSwapFallback($row[0]);
             });
-        } catch( err ) {
-            console.log( 'JumbleLetters.loadAllQuestions : ', err );
+        } catch (err) {
+            console.log('JumbleLetters.loadAllQuestions : ', err);
         }
     }
-    
+
     const enableTapSwapFallback = (container) => {
         try {
             let selected = null;
@@ -2473,28 +2471,28 @@ const JumbleLetters = (() => {
                 $(a).removeClass("ui-state-active");
                 selected = null;
             });
-        } catch( err ) {
-            console.log( 'JumbleLetters.enableTapSwapFallback : ', err );
+        } catch (err) {
+            console.log('JumbleLetters.enableTapSwapFallback : ', err);
         }
     }
-    
+
     const submit = () => {
         try {
             let score = 0;
 
             const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
-            const jumbleData = Activity.getDefine( questionId )?.content;
+            const jumbleData = Activity.getDefine(questionId)?.content;
 
             jumbleData.forEach((word, index) => {
                 let isCorrect = true;
 
                 $(`#letters-${index} .letterjumb`).each(function (i) {
-                if ($(this).text() === word[i]) {
-                    $(this).removeClass("wrong").addClass("correct");
-                } else {
-                    $(this).removeClass("correct").addClass("wrong");
-                    isCorrect = false;
-                }
+                    if ($(this).text() === word[i]) {
+                        $(this).removeClass("wrong").addClass("correct");
+                    } else {
+                        $(this).removeClass("correct").addClass("wrong");
+                        isCorrect = false;
+                    }
                 });
 
                 if (isCorrect) score++;
@@ -2505,27 +2503,27 @@ const JumbleLetters = (() => {
             } else {
                 Swal.fire({ icon: "error", title: "Oops...", text: `You got ${score} out of ${jumbleData.length} correct. Please try again.` });
             }
-        } catch( err ) {
-            console.log( 'JumbleLetters.submit : ', err );
+        } catch (err) {
+            console.log('JumbleLetters.submit : ', err);
         }
     }
-    
+
     const reset = () => {
         try {
-            Activity.toggleCheckBtn( '#submit', false );
+            Activity.toggleCheckBtn('#submit', false);
             const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
-            loadAllQuestions( questionId );
-        } catch( err ) {
-            console.log( 'JumbleLetters.reset : ', err );
+            loadAllQuestions(questionId);
+        } catch (err) {
+            console.log('JumbleLetters.reset : ', err);
         }
     }
-    
+
     const showAns = () => {
         try {
-            Activity.toggleCheckBtn( '#submit', true );
+            Activity.toggleCheckBtn('#submit', true);
 
             const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
-            const jumbleData = Activity.getDefine( questionId )?.content;
+            const jumbleData = Activity.getDefine(questionId)?.content;
 
             jumbleData.forEach((word, index) => {
                 const letterRow = $(`#letters-${index}`);
@@ -2534,13 +2532,13 @@ const JumbleLetters = (() => {
                     letterRow.append(`<div class="letterjumb correct">${letter}</div>`);
                 });
             });
-        } catch( err ) {
-            console.log( 'JumbleLetters.showAns : ', err );
+        } catch (err) {
+            console.log('JumbleLetters.showAns : ', err);
         }
-    }    
-    
+    }
+
     return {
-        render:loadAllQuestions,
+        render: loadAllQuestions,
         enableTapSwapFallback,
         submit,
         reset,
@@ -2556,7 +2554,7 @@ const JumbleWords = (() => {
 
     const idiomContainer = "#idiomContainer";
 
-    let isDraggingIdioms   = false;
+    let isDraggingIdioms = false;
     let lastDragTimeIdioms = 0;
 
     const ui = (questionId) => {
@@ -2569,8 +2567,8 @@ const JumbleWords = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -2586,17 +2584,17 @@ const JumbleWords = (() => {
                                     </div>
                                 </div>`;
             // ..        
-			
-			const checkBtn = parent.querySelector( '.submit-btn' );
-			const showBtn  = parent.querySelector( '.show-btn' );
-			const resetBtn = parent.querySelector( '.reset-btn' );
 
-			if (checkBtn) checkBtn.addEventListener("click", checkAnswersWORD);
-			if (showBtn) showBtn.addEventListener("click", showAnswersWORD);
-			if (resetBtn) resetBtn.addEventListener("click", resetWord);
-           
-		} catch (e) {
-            console.error( 'JumbleWords.ui :', e );
+            const checkBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
+
+            if (checkBtn) checkBtn.addEventListener("click", checkAnswersWORD);
+            if (showBtn) showBtn.addEventListener("click", showAnswersWORD);
+            if (resetBtn) resetBtn.addEventListener("click", resetWord);
+
+        } catch (e) {
+            console.error('JumbleWords.ui :', e);
         }
     }
 
@@ -2609,14 +2607,14 @@ const JumbleWords = (() => {
 
             $container[0].dataset.qid = questionId;
 
-            Activity.setHeader( questionId );
+            Activity.setHeader(questionId);
 
-            const idioms = Activity.shuffleArray( Activity.getDefine( questionId )?.content );
+            const idioms = Activity.shuffleArray(Activity.getDefine(questionId)?.content);
 
             $container[0].dataset.shuffledIdioms = JSON.stringify(idioms);
 
             idioms.forEach((sentence, index) => {
-                const words   = splitWords(sentence);
+                const words = splitWords(sentence);
                 const jumbled = Activity.shuffleWords(words);
 
                 const $row = $(`<div class="rowWordLet" data-index="${index}">
@@ -2636,10 +2634,10 @@ const JumbleWords = (() => {
                     $wordStance.append($el);
                 });
 
-                if( $wordStance.data('ui-sortable') ) {
+                if ($wordStance.data('ui-sortable')) {
                     $wordStance.sortable('destroy');
                 }
-                
+
                 $wordStance.sortable({
                     items: ".word2",
                     placeholder: "word-placeholder",
@@ -2660,11 +2658,11 @@ const JumbleWords = (() => {
                         setTimeout(() => { isDraggingIdioms = false; }, 30);
                     }
                 }).disableSelection();
-            
+
                 enableTapSwapFallback($wordStance[0], index);
             });
-        } catch( err ) {
-            console.error( 'JumbleWords.renderIdioms :', err );
+        } catch (err) {
+            console.error('JumbleWords.renderIdioms :', err);
         }
     }
 
@@ -2672,55 +2670,55 @@ const JumbleWords = (() => {
         try {
             let selected = null;
             $(container).off("click.touchSwap")
-            .on("click.touchSwap touchend.touchSwap", ".word2", function (e) {
-                if( Date.now() - lastDragTimeIdioms < 200 ) return;
-                if( isDraggingIdioms ) return;
-                if( e.type === "touchend" ) e.preventDefault();
+                .on("click.touchSwap touchend.touchSwap", ".word2", function (e) {
+                    if (Date.now() - lastDragTimeIdioms < 200) return;
+                    if (isDraggingIdioms) return;
+                    if (e.type === "touchend") e.preventDefault();
 
-                const a = selected;
-                const b = this;
+                    const a = selected;
+                    const b = this;
 
-                if( !a ) {
-                    selected = this;
-                    $(this).addClass("ui-state-active");
-                    return;
-                }
-                if( a === b ) {
-                    $(this).removeClass("ui-state-active");
+                    if (!a) {
+                        selected = this;
+                        $(this).addClass("ui-state-active");
+                        return;
+                    }
+                    if (a === b) {
+                        $(this).removeClass("ui-state-active");
+                        selected = null;
+                        return;
+                    }
+
+                    const parent = a.parentNode;
+                    const aNext = a.nextSibling;
+                    const bNext = b.nextSibling;
+
+                    if (aNext === b) {
+                        parent.insertBefore(b, a);
+                    } else if (bNext === a) {
+                        parent.insertBefore(a, b);
+                    } else {
+                        parent.insertBefore(a, bNext);
+                        parent.insertBefore(b, aNext);
+                    }
+
+                    $(a).removeClass("ui-state-active");
                     selected = null;
-                    return;
-                }
-
-                const parent = a.parentNode;
-                const aNext  = a.nextSibling;
-                const bNext  = b.nextSibling;
-
-                if( aNext === b ) {
-                    parent.insertBefore(b, a);
-                } else if( bNext === a ) {
-                    parent.insertBefore(a, b);
-                } else {
-                    parent.insertBefore(a, bNext);
-                    parent.insertBefore(b, aNext);
-                }
-
-                $(a).removeClass("ui-state-active");
-                selected = null;
-            });
-        } catch( err ) {
-            console.error( 'JumbleWords.enableTapSwapFallback :', err );
+                });
+        } catch (err) {
+            console.error('JumbleWords.enableTapSwapFallback :', err);
         }
     }
 
     const checkAnswersWORD = () => {
         try {
-            let allRowsCorrect = true;        
-            const idioms = JSON.parse($(idiomContainer)[0].dataset.shuffledIdioms);  
+            let allRowsCorrect = true;
+            const idioms = JSON.parse($(idiomContainer)[0].dataset.shuffledIdioms);
 
             $(".rowWordLet").each(function () {
-                const index   = $(this).data("index");
+                const index = $(this).data("index");
                 const correct = splitWords(idioms[index]);
-                const user    = $(this).find(".word2").map(function () {
+                const user = $(this).find(".word2").map(function () {
                     return $(this).text().trim();
                 }).get();
 
@@ -2729,7 +2727,7 @@ const JumbleWords = (() => {
 
                 let allGood = true;
                 $(this).find(".word2").each(function (i) {
-                    if( $(this).text().trim() === correct[i] ) {
+                    if ($(this).text().trim() === correct[i]) {
                         $(this).addClass("correctWord");
                     } else {
                         $(this).addClass("wrongwrongRORD");
@@ -2744,36 +2742,36 @@ const JumbleWords = (() => {
                 });
 
                 if (allGood) {
-                    
+
                 } else {
-                    
+
                 }
             });
-            
-            if( allRowsCorrect ) {
+
+            if (allRowsCorrect) {
                 Swal.fire({
-                    title : "Correct!",
-                    text  : "All answers are correct!",
-                    icon  : "success"
+                    title: "Correct!",
+                    text: "All answers are correct!",
+                    icon: "success"
                 });
             }
-        } catch( err ) {
-            console.error( 'JumbleWords.checkAnswersWORD :', err );
+        } catch (err) {
+            console.error('JumbleWords.checkAnswersWORD :', err);
         }
     }
 
     const showAnswersWORD = () => {
         try {
             const questionId = $(idiomContainer)[0].dataset.qid;
-            const idioms = Activity.getDefine( questionId )?.content;
+            const idioms = Activity.getDefine(questionId)?.content;
 
-            Activity.toggleCheckBtn( '.submit-btn', true );
+            Activity.toggleCheckBtn('.submit-btn', true);
 
             $(".rowWordLet").each(function () {
-                const index   = $(this).data("index");
-                const words   = splitWords(idioms[index]);
+                const index = $(this).data("index");
+                const words = splitWords(idioms[index]);
                 const $stance = $(this).find(".wordStance");
-                
+
                 const map = {};
                 $stance.find(".word2").each(function () {
                     const txt = $(this).text().trim();
@@ -2781,7 +2779,7 @@ const JumbleWords = (() => {
                     map[txt].push(this);
                 });
                 $(".word2").addClass("correctWord");
-                
+
                 $stance.empty();
                 words.forEach(w => {
                     if (map[w] && map[w].length) {
@@ -2792,32 +2790,32 @@ const JumbleWords = (() => {
                 });
                 $stance.sortable("disable");
             });
-        } catch( err ) {
-            console.error( 'JumbleWords.showAnswersWORD :', err );
+        } catch (err) {
+            console.error('JumbleWords.showAnswersWORD :', err);
         }
     }
 
     const resetWord = () => {
         try {
-            Activity.toggleCheckBtn( '.submit-btn', false );
+            Activity.toggleCheckBtn('.submit-btn', false);
 
             const questionId = $(idiomContainer)[0].dataset.qid;
-            renderIdioms( questionId );
-        } catch( err ) {
-            console.error( 'JumbleWords.resetWord :', err );
+            renderIdioms(questionId);
+        } catch (err) {
+            console.error('JumbleWords.resetWord :', err);
         }
     }
 
-    const splitWords = ( sentence, spliter=' ' ) => {
+    const splitWords = (sentence, spliter = ' ') => {
         try {
-            return sentence.split( spliter ).map( s => s.trim() );
-        } catch( err ) {
-            console.error( 'JumbleWords.splitWords :', err );
+            return sentence.split(spliter).map(s => s.trim());
+        } catch (err) {
+            console.error('JumbleWords.splitWords :', err);
         }
     }
 
     return {
-        render:renderIdioms,
+        render: renderIdioms,
         enableTapSwapFallback,
         checkAnswersWORD,
         showAnswersWORD,
@@ -2847,7 +2845,7 @@ const Mcq_PathKaSaar = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
@@ -2871,11 +2869,11 @@ const Mcq_PathKaSaar = (() => {
                                     </div>
                                 </div>`;
             // ..
-            
-            const closeBtn = parent.querySelector( '#close-popup' );
-            if( closeBtn ) closeBtn.addEventListener("click", closeFnMCQ);
+
+            const closeBtn = parent.querySelector('#close-popup');
+            if (closeBtn) closeBtn.addEventListener("click", closeFnMCQ);
         } catch (e) {
-            console.error( 'Mcq.ui :', e );
+            console.error('Mcq.ui :', e);
         }
     }
 
@@ -2883,19 +2881,19 @@ const Mcq_PathKaSaar = (() => {
         try {
             ui(questionId);
 
-            const headElem = Activity.setHeader( questionId );
-            if( !headElem.head && !headElem.subhead ) {
-                document.querySelector( '.rowWithAudios' ).remove();
+            const headElem = Activity.setHeader(questionId);
+            if (!headElem.head && !headElem.subhead) {
+                document.querySelector('.rowWithAudios').remove();
             }
 
             const headingEl = document.getElementById(heading);
             headingEl.dataset.qid = questionId;
 
-            const activity = Activity.getDefine( questionId );
-            const content  = activity?.content ?? {};
-            const lang     = activity?.lang ?? 'en';
-            const data     = content?.mcq ?? [];
-            
+            const activity = Activity.getDefine(questionId);
+            const content = activity?.content ?? {};
+            const lang = activity?.lang ?? 'en';
+            const data = content?.mcq ?? [];
+
             if (userAnswers.length < data.length) {
                 for (let i = userAnswers.length; i < data.length; i++) userAnswers.push(null);
             } else if (userAnswers.length > data.length) {
@@ -2903,27 +2901,27 @@ const Mcq_PathKaSaar = (() => {
             }
 
             const text = content?.text ?? {};
-            const img  = content?.img ?? {};
+            const img = content?.img ?? {};
 
             const mcqContextContainer = $('.mcq-context');
             mcqContextContainer.empty();
-            
-            const hasText = text && Object.keys(text).length > 0;
-            const hasImg  = img && Object.keys(img).length > 0;
 
-            if ( !hasText && !hasImg ) mcqContextContainer.remove();
-            
+            const hasText = text && Object.keys(text).length > 0;
+            const hasImg = img && Object.keys(img).length > 0;
+
+            if (!hasText && !hasImg) mcqContextContainer.remove();
+
             if (hasText || hasImg) {
                 const textDiv = $('<div class="mcq-text"></div>');
                 const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
-                
+
                 mcqContextContainer.addClass('row g-0');
 
                 const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'left';
                 const side = String(preferredSide).toLowerCase();
 
                 const commonClassText = 'col-md-12 col-lg-7 col-12 col-sm-12';
-                const commonClassImg  = 'col-md-12 col-lg-5 col-sm-12 col-12 text-center';
+                const commonClassImg = 'col-md-12 col-lg-5 col-sm-12 col-12 text-center';
 
                 if (hasText) {
                     mcqContextContainer.append(textDiv);
@@ -2934,7 +2932,7 @@ const Mcq_PathKaSaar = (() => {
                 if (hasImg) {
                     const imageclass = img?.imageclass ?? '';
                     mcqContextContainer.append(imgDiv);
-                    const mcq_img_cont_class = hasText 
+                    const mcq_img_cont_class = hasText
                         ? commonClassImg
                         : `col ${imageclass}`;
                     // ..
@@ -2944,22 +2942,22 @@ const Mcq_PathKaSaar = (() => {
                     imgDiv.addClass(mcq_img_cont_class)
                         .find('img')
                         .attr('src', Activity.pathToCWD() + img.path)
-                        .css({ 'border-radius' : '20px', 'width' : image_width });
+                        .css({ 'border-radius': '20px', 'width': image_width });
                 }
 
-                if( side === 'left' || side === 'right' ) {
+                if (side === 'left' || side === 'right') {
                     mcqContextContainer.css('flex-direction', 'row');
-                    if( side === 'left' ) {
+                    if (side === 'left') {
                         textDiv.css('order', 1);
                         imgDiv.css('order', 2);
-                        
-                        textDiv.removeClass( 'text-end' ).addClass( 'text-start' );
+
+                        textDiv.removeClass('text-end').addClass('text-start');
 
                     } else {
                         textDiv.css('order', 2);
                         imgDiv.css('order', 1);
-                        
-                        textDiv.removeClass( 'text-start' ).addClass( 'text-end' );
+
+                        textDiv.removeClass('text-start').addClass('text-end');
                     }
                 } else if (side === 'top' || side === 'bottom') {
                     mcqContextContainer.css('flex-direction', 'column');
@@ -2971,30 +2969,30 @@ const Mcq_PathKaSaar = (() => {
                         imgDiv.css('order', 1);
                     }
 
-                    textDiv.removeClass( commonClassText ).addClass( 'col my-1' );
-                    imgDiv.removeClass( commonClassImg ).addClass( 'col my-1 text-center' );
+                    textDiv.removeClass(commonClassText).addClass('col my-1');
+                    imgDiv.removeClass(commonClassImg).addClass('col my-1 text-center');
                 } else {
                     mcqContextContainer.css('flex-direction', 'row');
                     textDiv.css('order', 1);
                     imgDiv.css('order', 2);
                 }
-                
-            }            
+
+            }
 
             const html = [];
             data.map((mcq, ind) => {
 
                 const question = mcq?.question ?? {};
-                
-                const path  = question?.image ?? undefined;
-                const image = path != undefined ? 
-                    render_image(Activity.pathToCWD()+path)
+
+                const path = question?.image ?? undefined;
+                const image = path != undefined ?
+                    render_image(Activity.pathToCWD() + path)
                     : undefined;
                 // ..
-                const replacement  = question?.replacement ?? '#_#';
+                const replacement = question?.replacement ?? '#_#';
                 const questionText = path != undefined ?
-                    question?.text.replace(replacement, image ) :
-                    question?.text.replace(replacement, '' );
+                    question?.text.replace(replacement, image) :
+                    question?.text.replace(replacement, '');
                 // ..
 
                 const options = mcq?.options.map((option, oi) => {
@@ -3004,7 +3002,7 @@ const Mcq_PathKaSaar = (() => {
                         <div class="col-md-6 col-sm-12 mb-2">
                         <label class="option-btn ${isSelected} mcq-type" data-oi="${oi}" data-qi="${ind}" >
                             <input type="radio" name="question-${ind}" ${userAnswers[ind] === oi ? "checked" : ""}>
-                            <strong>(${Activity.translateBulletLabels({lang:lang, ind:oi})})</strong> 
+                            <strong>(${Activity.translateBulletLabels({ lang: lang, ind: oi })})</strong> 
                             ${optionText}
                         </label>
                         </div>
@@ -3019,7 +3017,7 @@ const Mcq_PathKaSaar = (() => {
                 // ..
 
                 const ques = `<div class="p-2">
-                                <div class="row m-0 ${ image ? 'align-items-center': ''}" style="font-size:18px">
+                                <div class="row m-0 ${image ? 'align-items-center' : ''}" style="font-size:18px">
                                     <div style="width:30px" class="questionHeadingMCQ"><strong>${ind + 1}.</strong></div>
                                     <div class="col questionHeadingMCQ">${questionText}</div>
                                 </div>
@@ -3028,12 +3026,12 @@ const Mcq_PathKaSaar = (() => {
                             </div>
                             `;
                 // ..
-                html.push( ques );
+                html.push(ques);
             });
 
             const container = document.getElementById(heading);
-            container.innerHTML = html.join( '' );
-            
+            container.innerHTML = html.join('');
+
             Array.from(document.querySelectorAll('.mcq-type')).forEach(mcq => {
                 mcq.addEventListener("click", (ev) => {
                     const qi = parseInt(mcq.dataset.qi, 10);
@@ -3041,17 +3039,17 @@ const Mcq_PathKaSaar = (() => {
                     selectOptionMCQ(qi, oi);
                 });
             });
-        } catch( e ) {
-            console.error( 'Mcq.renderAllQuestionsMCQ', e );
+        } catch (e) {
+            console.error('Mcq.renderAllQuestionsMCQ', e);
         }
     }
 
     const render_image = (src) => `<img src="${src}" style="height:150px; width:150px; object-fit:contain;" ondragstart="return false;">`;
 
     const option_text = (option) => {
-        const path  = option?.image ?? undefined;
-        const image = path != undefined ? 
-            render_image(Activity.pathToCWD()+path) :
+        const path = option?.image ?? undefined;
+        const image = path != undefined ?
+            render_image(Activity.pathToCWD() + path) :
             undefined;
         // ..
         const optionText = path != undefined ? image : option?.text ?? '';
@@ -3062,22 +3060,22 @@ const Mcq_PathKaSaar = (() => {
         try {
             const qi = parseInt(qIndex, 10);
             const oi = parseInt(optIndex, 10);
-            
-            const headingEl  = document.getElementById(heading);
+
+            const headingEl = document.getElementById(heading);
             const questionId = headingEl.dataset.qid;
-            
-            const data = Activity.getDefine( questionId )?.content?.mcq || [];
-            if( userAnswers.length < data.length ) {
-                for( let i = userAnswers.length; i < data.length; i++ ) userAnswers.push(null);
+
+            const data = Activity.getDefine(questionId)?.content?.mcq || [];
+            if (userAnswers.length < data.length) {
+                for (let i = userAnswers.length; i < data.length; i++) userAnswers.push(null);
             }
 
             userAnswers[qi] = oi;
 
-            updateAttemptedCountMCQ();        
-            renderAllQuestionsMCQ( questionId );
+            updateAttemptedCountMCQ();
+            renderAllQuestionsMCQ(questionId);
             checkIfAllAnsweredMCW();
-        } catch( e ) {
-            console.error( 'Mcq.selectOptionMCQ', e );
+        } catch (e) {
+            console.error('Mcq.selectOptionMCQ', e);
         }
     }
 
@@ -3086,11 +3084,11 @@ const Mcq_PathKaSaar = (() => {
             const qi = parseInt(qIndex, 10);
             const oi = parseInt(optIndex, 10);
             userAnswers[qi] = oi;
-            
+
             const questionId = document.getElementById(heading)?.dataset.qid;
             if (questionId) renderAllQuestionsMCQ(questionId);
-        } catch( e ) {
-            console.error( 'Mcq.setUserAnswer', e );
+        } catch (e) {
+            console.error('Mcq.setUserAnswer', e);
         }
     }
 
@@ -3099,12 +3097,12 @@ const Mcq_PathKaSaar = (() => {
     }
 
     const updateAttemptedCountMCQ = () => {
-        const attempted = userAnswers.filter(a => a !== null).length;        
+        const attempted = userAnswers.filter(a => a !== null).length;
     }
 
     const checkIfAllAnsweredMCW = () => {
         const allAnswered = userAnswers.length > 0 && userAnswers.every(ans => ans !== null);
-        if( allAnswered ) {
+        if (allAnswered) {
             showAnswerPopupMCQ();
         }
     }
@@ -3114,10 +3112,10 @@ const Mcq_PathKaSaar = (() => {
             let correctCount = 0;
 
             const questionId = document.getElementById(heading)?.dataset.qid;
-            const activity = Activity.getDefine( questionId );
-            const data     = activity?.content;
-            const lang     = activity?.lang;
-            const mcq      = data?.mcq || [];
+            const activity = Activity.getDefine(questionId);
+            const data = activity?.content;
+            const lang = activity?.lang;
+            const mcq = data?.mcq || [];
             const headLabels = Activity.translateTableHeads(lang);
 
             let totalQues = mcq.length;
@@ -3134,7 +3132,7 @@ const Mcq_PathKaSaar = (() => {
                 </thead>
                 <tbody>`;
             // ..
-            
+
             mcq.forEach((q, i) => {
                 const userIndex = userAnswers[i];
                 const userAnswerText = userIndex !== null && userIndex !== undefined
@@ -3166,11 +3164,11 @@ const Mcq_PathKaSaar = (() => {
             if (scoreText) {
                 scoreText.innerText =
                     lang === "hi"
-                    ? `आपको ${totalQues} में से ${correctCount} अंक मिले हैं`
-                    : `You scored ${correctCount} out of ${totalQues}`;
+                        ? `आपको ${totalQues} में से ${correctCount} अंक मिले हैं`
+                        : `You scored ${correctCount} out of ${totalQues}`;
             }
-        } catch( e ) {
-            console.error( 'Mcq.showAnswerPopupMCQ', e );
+        } catch (e) {
+            console.error('Mcq.showAnswerPopupMCQ', e);
         }
     }
 
@@ -3180,9 +3178,9 @@ const Mcq_PathKaSaar = (() => {
             if (popup) popup.style.display = "none";
             userAnswers = userAnswers.map(() => null);
             const questionId = document.getElementById(heading)?.dataset.qid;
-            if (questionId) renderAllQuestionsMCQ( questionId );
-        } catch( e ) {
-            console.error( 'Mcq.closeFnMCQ', e );
+            if (questionId) renderAllQuestionsMCQ(questionId);
+        } catch (e) {
+            console.error('Mcq.closeFnMCQ', e);
         }
     }
 
@@ -3192,7 +3190,7 @@ const Mcq_PathKaSaar = (() => {
         updateAttemptedCountMCQ,
         checkIfAllAnsweredMCW,
         showAnswerPopupMCQ,
-        closeFnMCQ,        
+        closeFnMCQ,
         getUserAnswers,
         setUserAnswer
     }
@@ -3204,20 +3202,20 @@ const Adaptiv = (() => {
     Activity.css('adaptiv.css');
 
     const headerContainer = 'headersTopT';
-    const levelHeadingID  = 'levelHeading';
+    const levelHeadingID = 'levelHeading';
 
-    let currentLevel    = 1;
+    let currentLevel = 1;
     let currentQuestion = 0;
-    let attemptCount    = 0;
-    let submitted       = false;
-    let currentQuizData    = undefined;
+    let attemptCount = 0;
+    let submitted = false;
+    let currentQuizData = undefined;
     let userAnswersAdaptiv = undefined;
-    let showResultPending  = false;    
+    let showResultPending = false;
     let retryWrongOnly = false;
     let wrongQuestions = [];
-    let __activity     = undefined;
+    let __activity = undefined;
 
-    const ui = ( questionId, totalQues ) => {
+    const ui = (questionId, totalQues) => {
         try {
             const container = Define.get('questionContainer');
             const parent = document.querySelector(container);
@@ -3227,8 +3225,8 @@ const Adaptiv = (() => {
             }
 
             const activity = Activity.getDefine(questionId);
-            const data     = activity?.content;
-            const lang     = activity?.lang ?? 'en';
+            const data = activity?.content;
+            const lang = activity?.lang ?? 'en';
 
             const instructions = [];
             (data?.headings?.right?.instruction || []).forEach((item) => {
@@ -3236,45 +3234,45 @@ const Adaptiv = (() => {
             });
 
             const prevNextLabel = Activity.translateNextPrevLabel(lang);
-            const buttonLabels  = Activity.translateButtonLabels(lang);
+            const buttonLabels = Activity.translateButtonLabels(lang);
             parent.innerHTML = `<div class="question">
                                     <div class="container-fluid">
                                         <div class="${headerContainer}">
                                             ${data?.headings?.left ?
-                                                `<div class="btnAdapt shadow-sm">
+                    `<div class="btnAdapt shadow-sm">
                                                     <span class="level-text">${data?.headings?.left ?? ''}</span>
                                                     - 
                                                     <span class="levelUpdate">${currentLevel}</span>
                                                 </div>`
-                                                : ''
-                                            }
+                    : ''
+                }
                                             ${data?.headings?.mid ?
-                                                `<div class="btnAdapt shadow-sm">
+                    `<div class="btnAdapt shadow-sm">
                                                     <span id="attempted-text">${data?.headings?.mid?.attempted ?? ''}</span> 
                                                     <span class="showD" id="attempted-count"> 0 </span> 
                                                     <span id="outof-text">${data?.headings?.mid?.outof ?? ''}</span>
                                                     <span class="showD" id="total-questions"> ${totalQues ?? 0} </span>
                                                 </div>`
-                                                : ''
-                                            }
-                                            ${data?.headings?.right ? 
-                                                `<div class="btnAdapt shadow-sm" id="nirdesh" style="cursor: pointer;">
+                    : ''
+                }
+                                            ${data?.headings?.right ?
+                    `<div class="btnAdapt shadow-sm" id="nirdesh" style="cursor: pointer;">
                                                     <svg class="iconsIns" fill="currentColor" viewBox="0 0 16 16">
                                                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
                                                     </svg>
                                                     <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
                                                 </div>`
-                                                : ''
-                                            }
+                    : ''
+                }
                                         </div>
                                         <div class="container my-5 contAdapt shadow-lg">
                                             <div class="mb-2" id="${levelHeadingID}"></div>
                                             <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
                                             <div class="buttonection" id="nav-buttons">
                                                 <div class="buttons machiNgs">
-                                                    <button class="submit-btn" id="prev-btn">${ prevNextLabel.prev }</button>
-                                                    <button class="show-btn" id="next-btn">${ prevNextLabel.next }</button>
-                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${ buttonLabels.submit }</button>
+                                                    <button class="submit-btn" id="prev-btn">${prevNextLabel.prev}</button>
+                                                    <button class="show-btn" id="next-btn">${prevNextLabel.next}</button>
+                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${buttonLabels.submit}</button>
                                                 </div>
                                                 <div id="submit-btn-wrapper" class="text-center"></div>
                                             </div>
@@ -3307,50 +3305,50 @@ const Adaptiv = (() => {
 
             updateAttemptedCount();
 
-            const prevBtn    = parent.querySelector( '#prev-btn' );
-            const nextBtn    = parent.querySelector( '#next-btn' );
-            const submitBtn  = parent.querySelector( '#sub-btn' );
-            const nirdeshBtn = parent.querySelector( '#nirdesh' );
-            const closeOverlayBtn = parent.querySelector( '.close-overlay' );
+            const prevBtn = parent.querySelector('#prev-btn');
+            const nextBtn = parent.querySelector('#next-btn');
+            const submitBtn = parent.querySelector('#sub-btn');
+            const nirdeshBtn = parent.querySelector('#nirdesh');
+            const closeOverlayBtn = parent.querySelector('.close-overlay');
 
-            if( closeOverlayBtn ) closeOverlayBtn.addEventListener("click", closeFn);
-            if( prevBtn ) prevBtn.addEventListener("click", prevQuestion);
-            if( nextBtn ) nextBtn.addEventListener("click", nextQuestion);
-            if( submitBtn ) submitBtn.addEventListener("click", showResult);
-            if( nirdeshBtn ) nirdeshBtn.addEventListener("click", openFn);
+            if (closeOverlayBtn) closeOverlayBtn.addEventListener("click", closeFn);
+            if (prevBtn) prevBtn.addEventListener("click", prevQuestion);
+            if (nextBtn) nextBtn.addEventListener("click", nextQuestion);
+            if (submitBtn) submitBtn.addEventListener("click", showResult);
+            if (nirdeshBtn) nirdeshBtn.addEventListener("click", openFn);
 
         } catch (e) {
-            console.error( 'Adaptiv.ui :', e );
+            console.error('Adaptiv.ui :', e);
         }
     }
 
     const __image = (src) => `<img src="${Activity.pathToCWD()}${src}" style="height:150px; width:150px; object-fit:contain;" ondragstart="return false;">`;
 
-    const __option_images  = ({data,replacement}={}) => {
-        const imageData  = data?.images ?? {};
-        const imagePath  = imageData?.path ?? [];
-        const text       = data?.text ?? '';
+    const __option_images = ({ data, replacement } = {}) => {
+        const imageData = data?.images ?? {};
+        const imagePath = imageData?.path ?? [];
+        const text = data?.text ?? '';
 
-        if( !text && !imagePath.length ) return '';
+        if (!text && !imagePath.length) return '';
 
-        if( !imagePath.length ) return text;
+        if (!imagePath.length) return text;
 
         const regex = new RegExp(replacement, 'g');
 
         let index = 0;
-        return text.replace(regex, () => __image(imagePath[index++]) );
+        return text.replace(regex, () => __image(imagePath[index++]));
     }
 
     const renderQuestion = (questionId, direction) => {
-        const level     = currentLevel;
-        const activity  = Activity.getDefine(questionId);
-        const lang      = activity?.lang ?? 'en';
-        const content   = activity?.content;
-        const data      = content?.levels;
+        const level = currentLevel;
+        const activity = Activity.getDefine(questionId);
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content;
+        const data = content?.levels;
         const skipOptions = content?.skipOptions ?? false;
         const skipQuestionSequence = content?.skipQuestionSequence ?? false;
-        const found     = (data || []).find( lvl => lvl.level === level );
-        const questLen  = found?.questions?.length || 0;
+        const found = (data || []).find(lvl => lvl.level === level);
+        const questLen = found?.questions?.length || 0;
         let realIndex = currentQuestion;
 
         __activity = activity;
@@ -3360,20 +3358,20 @@ const Adaptiv = (() => {
         const q = found?.questions?.[realIndex];
         currentQuizData = found?.questions || [];
 
-        ui(questionId, questLen );
+        ui(questionId, questLen);
 
-        if( userAnswersAdaptiv == undefined ) {
+        if (userAnswersAdaptiv == undefined) {
             userAnswersAdaptiv = new Array(questLen).fill(null);
-        } else if( userAnswersAdaptiv.length !== questLen ) {
+        } else if (userAnswersAdaptiv.length !== questLen) {
             const newArr = new Array(questLen).fill(null);
-            for (let i=0;i<Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
+            for (let i = 0; i < Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
                 newArr[i] = userAnswersAdaptiv[i];
             }
             userAnswersAdaptiv = newArr;
-        }        
+        }
 
         const container = document.getElementById("quizContainerAdaptiv");
-        if( !container ) return;
+        if (!container) return;
 
         container.classList.remove('animate__fadeInDown', 'animate__fadeInUp');
 
@@ -3388,19 +3386,19 @@ const Adaptiv = (() => {
         void container.offsetWidth;
 
         if (!q) {
-            container.innerHTML = `<div class="row m-0"><div class="col">${ lang == 'hi' ? 'प्रश्न उपलब्ध नहीं है' : 'Question not found.' }</div></div>`;
+            container.innerHTML = `<div class="row m-0"><div class="col">${lang == 'hi' ? 'प्रश्न उपलब्ध नहीं है' : 'Question not found.'}</div></div>`;
             updateNavButtons();
             return;
         }
 
         const levelHeadingText = found?.heading ?? {};
-        const levelHeadContainer = document.querySelector('#'+levelHeadingID);
-        if( levelHeadingText?.text && levelHeadContainer ) {
+        const levelHeadContainer = document.querySelector('#' + levelHeadingID);
+        if (levelHeadingText?.text && levelHeadContainer) {
             const text = levelHeadingText.text;
             const classes = levelHeadingText?.classes ?? [];
             levelHeadContainer.innerHTML = text;
 
-            classes.forEach( cls => levelHeadContainer.classList.add( cls ) );
+            classes.forEach(cls => levelHeadContainer.classList.add(cls));
         }
 
         const imageReplacement = q?.imageReplacement ?? '#img#';
@@ -3409,89 +3407,89 @@ const Adaptiv = (() => {
 
             const imageData = data?.images ?? {};
             const imagePath = imageData?.path ?? [];
-            const text      = data?.text ?? '';
+            const text = data?.text ?? '';
 
-            if( !text && !imagePath.length ) return '';
+            if (!text && !imagePath.length) return '';
 
-            if( !imagePath.length ) return text;
+            if (!imagePath.length) return text;
 
             const __image = (src) => `<img src="${Activity.pathToCWD()}${src}" style="height:50px; width:50px; object-fit:contain;" ondragstart="return false;">`;
 
             const regex = new RegExp(imageReplacement, 'g');
 
             let index = 0;
-            return text.replace(regex, () => __image(imagePath[index++]) );            
+            return text.replace(regex, () => __image(imagePath[index++]));
         }
 
-        const questionText = ( q?.question && typeof q?.question === 'string' ) 
+        const questionText = (q?.question && typeof q?.question === 'string')
             ? q.question
             : __renderQuestionText(q.question);
         // ..
 
-        const imageAboveOption = ( q?.imageAboveOption && q?.imageAboveOption?.image != '' ) ?
-                    `
+        const imageAboveOption = (q?.imageAboveOption && q?.imageAboveOption?.image != '') ?
+            `
                         <div class="text-center my-1">
                             <img src="${Activity.pathToCWD()}${q.imageAboveOption.image}" style="width :${q.imageAboveOption.width ?? '150px'};">
                         </div>
                     ` : '';
         // ..
-        
-        container.innerHTML = `${ questionText != '' 
-                ? `
+
+        container.innerHTML = `${questionText != ''
+            ? `
                     <div class="row m-0 g-0 align-items-center" style="font-size:18px">
-                        ${ !skipQuestionSequence ? `
+                        ${!skipQuestionSequence ? `
                             <div style="min-width:30px;" class="col-auto questionHeadingMCQ me-2">
-                                <strong>${ lang == 'hi' ? 'प्र' : 'Q' }${realIndex  + 1}.</strong>
+                                <strong>${lang == 'hi' ? 'प्र' : 'Q'}${realIndex + 1}.</strong>
                             </div>
                             ` : ''
-                        }
+            }
                         <div class="col questionHeadingMCQ">${questionText}</div>
                     </div>
                 ` : ''
             }
             ${imageAboveOption}
-            ${ !skipOptions ? `
+            ${!skipOptions ? `
                     <div class="row mt-3">
                         <div class="row mt-2 ml-4">
                         ${q.options.map((opt, i) => {
-                            const optionLabel = Activity.translateBulletLabels({lang:lang,ind:i,upperCase:true});
-                            const isSelected  = userAnswersAdaptiv[realIndex] === i;
-                            let extraClass    = isSelected ? "selected" : "";
+                const optionLabel = Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: true });
+                const isSelected = userAnswersAdaptiv[realIndex] === i;
+                let extraClass = isSelected ? "selected" : "";
 
-                            if( typeof opt === 'string' ) {
-                                if( submitted ) {
-                                    if (i === q.answer) extraClass = "correct";
-                                    else if (isSelected && i !== q.answer) extraClass = "incorrect";
-                                }
-                                return `
+                if (typeof opt === 'string') {
+                    if (submitted) {
+                        if (i === q.answer) extraClass = "correct";
+                        else if (isSelected && i !== q.answer) extraClass = "incorrect";
+                    }
+                    return `
                                     <div class="col-md-6 col-sm-12 mb-2">
                                         <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
-                                            <input type="radio" name="question-${realIndex }" ${isSelected ? "checked" : ""} />
+                                            <input type="radio" name="question-${realIndex}" ${isSelected ? "checked" : ""} />
                                             <strong>${optionLabel}.</strong>
                                             ${opt}
                                         </label>
                                     </div>
                                 `;
-                            } else if( opt instanceof Object ) {
-                                const optionText = __option_images({data:opt, replacement:imageReplacement});
-                                return `
+                } else if (opt instanceof Object) {
+                    const optionText = __option_images({ data: opt, replacement: imageReplacement });
+                    return `
                                     <div class="col-md-6 col-sm-12 mb-2">
                                         <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
-                                            <input type="radio" name="question-${realIndex }" ${isSelected ? "checked" : ""} />
+                                            <input type="radio" name="question-${realIndex}" ${isSelected ? "checked" : ""} />
                                             <strong>${optionLabel}.</strong> 
                                             ${optionText}
                                         </label>
                                     </div>
                                 `;
-                            }
-                        }).join('')}
+                }
+            }).join('')}
                         </div>
                     </div>
                 ` : ''
             }
         `;
-        
-        if( !skipOptions ) {
+
+        if (!skipOptions) {
             Array.from(document.querySelectorAll('.option-btnAdpt')).forEach((optionEl) => {
                 optionEl.addEventListener("click", (ev) => {
                     const idxAttr = optionEl.getAttribute('data-option-index');
@@ -3534,9 +3532,9 @@ const Adaptiv = (() => {
         const limit = getQuestionLimit();
         const skipOptions = __activity?.content?.skipOptions ?? false;
 
-        if( skipOptions ) userAnswersAdaptiv[currentQuestion] = true;
+        if (skipOptions) userAnswersAdaptiv[currentQuestion] = true;
 
-        if( userAnswersAdaptiv[currentQuestion] === null ) {
+        if (userAnswersAdaptiv[currentQuestion] === null) {
             const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
             const lang = activity?.lang ?? 'en';
             Swal.fire({
@@ -3556,9 +3554,9 @@ const Adaptiv = (() => {
     };
 
     const prevQuestion = () => {
-        if( currentQuestion > 0 ) {
+        if (currentQuestion > 0) {
             currentQuestion--;
-            renderQuestion(Activity.getQid( `.${headerContainer}` ), 'prev');
+            renderQuestion(Activity.getQid(`.${headerContainer}`), 'prev');
         }
         updateNavButtons();
     }
@@ -3579,7 +3577,7 @@ const Adaptiv = (() => {
 
         if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
         if (nextBtn && subBtn) {
-            if (isLast && ( allAnswered || skipOptions ) ) {
+            if (isLast && (allAnswered || skipOptions)) {
                 nextBtn.style.display = 'none';
                 subBtn.style.display = 'inline-block';
             } else {
@@ -3591,12 +3589,12 @@ const Adaptiv = (() => {
 
     const showResult = () => {
         try {
-            const activity    = Activity.getDefine(Activity.getQid( `.${headerContainer}` )) ?? {};
-            const lang        = activity?.lang ?? 'en';
-            const content     = activity?.content ?? {};
-            const levels      = content?.levels ?? [];
-            const skiplevels  = content?.skiplevels ?? false;
-            const skipansbtn  = content?.skipanswerbutton ?? false;
+            const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
+            const levels = content?.levels ?? [];
+            const skiplevels = content?.skiplevels ?? false;
+            const skipansbtn = content?.skipanswerbutton ?? false;
             const skipnextbtn = content?.skipnextlevel ?? false;
             const skipOptions = __activity?.content?.skipOptions ?? false;
 
@@ -3616,68 +3614,67 @@ const Adaptiv = (() => {
             const correct = (userAnswersAdaptiv || []).filter((a, i) => a === (currentQuizData?.[i]?.answer)).length;
             const showAnswerBtn = attemptCount >= 5;
             const showRetryBtn = correct < (currentQuizData?.length || 0);
-            const showNextLevel = correct === skipnextbtn || skipOptions || ( (currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0 );
+            const showNextLevel = correct === skipnextbtn || skipOptions || ((currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0);
             const finished = currentLevel === levels.length;
-            const whenCompleteLevel = showNextLevel ? ( lang == 'en' ? 'completed.' : 'पूरा हुआ' ) : "";
+            const whenCompleteLevel = showNextLevel ? (lang == 'en' ? 'completed.' : 'पूरा हुआ') : "";
             const navButtonsEl = document.getElementById("nav-buttons");
             if (navButtonsEl) navButtonsEl.style.display = "none";
             const submitWrapper = document.getElementById("submit-btn-wrapper");
             if (submitWrapper) submitWrapper.innerHTML = '';
             if (!container) return;
-            
+
             const btnLabel = Activity.translateButtonLabels(lang);
             container.innerHTML = `
                 <div class="result-box">
-                    ${ !skipnextbtn ? `<h4><strong class="fs-1">${ lang == 'en' ? 'Level' : 'स्तर' } ${currentLevel} ${whenCompleteLevel}</strong></h4>` : '' }
-                    ${ !skipOptions ? `
+                    ${!skipnextbtn ? `<h4><strong class="fs-1">${lang == 'en' ? 'Level' : 'स्तर'} ${currentLevel} ${whenCompleteLevel}</strong></h4>` : ''}
+                    ${!skipOptions ? `
                         <p class="text-danger my-3">
-                            ${ lang == 'en' ? 'Total Questions' : 'कुल प्रश्न' } : 
+                            ${lang == 'en' ? 'Total Questions' : 'कुल प्रश्न'} : 
                             ${currentQuizData?.length || 0}
                         </p>
                         <p class="text-success my-3">
-                            ${ lang == 'en' ? 'Correct Answers' : 'सही उत्तर' }: ${correct}
+                            ${lang == 'en' ? 'Correct Answers' : 'सही उत्तर'}: ${correct}
                         </p>
                         <p class="text-success my-3">
-                            ${ lang == 'en' ? 'Attempt No' : 'प्रयास संख्या' }: ${attemptCount}
+                            ${lang == 'en' ? 'Attempt No' : 'प्रयास संख्या'}: ${attemptCount}
                         </p>
                         ` : ''
-                    }
+                }
                     <div class="rowBtns">
-                        ${( ( showNextLevel || skiplevels ) && !skipnextbtn ) ? `
+                        ${((showNextLevel || skiplevels) && !skipnextbtn) ? `
                             <button class='btn btn-success mt-3 mx-3' id='btn-next-level'>
-                                ${ 
-                                    lang == 'en' 
-                                        ? `
+                                ${lang == 'en'
+                        ? `
                                             Go To Level ${currentLevel + 1}
-                                        ` 
-                                        : `स्तर ${currentLevel + 1} पर जाएँ` 
-                                    }
+                                        `
+                        : `स्तर ${currentLevel + 1} पर जाएँ`
+                    }
                             </button>` : ''
-                        }
-                        ${ (showRetryBtn || showNextLevel) ? `
+                }
+                        ${(showRetryBtn || showNextLevel) ? `
                                 <button class='btn btn-primary mt-3 mx-3' id='btn-retry'>
                                     ${btnLabel.try}
                                 </button>
                             ` : ''
-                        }
-                        ${ !skipOptions ? `
-                            ${( !skipOptions || showAnswerBtn || showNextLevel || skipansbtn ) ? `
+                }
+                        ${!skipOptions ? `
+                            ${(!skipOptions || showAnswerBtn || showNextLevel || skipansbtn) ? `
                                     <button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>
                                         ${btnLabel.show}
                                     </button>
                                 ` : ''
-                            }
+                    }
                             ` : ''
-                        }
-                        ${( finished && showNextLevel && !skipnextbtn ) ? `
+                }
+                        ${(finished && showNextLevel && !skipnextbtn) ? `
                                 <button class='btn btn-success mt-3 mx-3' id='btn-finish'>
-                                    ${ lang == 'en' ? 'Finished' : 'समाप्त' }
+                                    ${lang == 'en' ? 'Finished' : 'समाप्त'}
                                 </button>
                             ` : ''
-                        }
+                }
                     </div>
                 </div>`;
-            
+
             const btnNextLevel = document.getElementById('btn-next-level');
             const btnRetry = document.getElementById('btn-retry');
             const btnShowAnswers = document.getElementById('btn-show-answers');
@@ -3707,7 +3704,7 @@ const Adaptiv = (() => {
             showResultPending = false;
             $(".instruc").hide();
             $(".submit-info").hide();
-            
+
             const hideBtn = document.getElementById("btn-next-level");
             if (finished && showNextLevel) {
                 if (hideBtn) hideBtn.style.display = 'none';
@@ -3730,8 +3727,8 @@ const Adaptiv = (() => {
     const loadNextLevel = () => {
         const levelTextEl = document.getElementById("levelText");
         if (levelTextEl) levelTextEl.style.display = 'block';
-        if( currentLevel < 3 )currentLevel++;
-        
+        if (currentLevel < 3) currentLevel++;
+
         if (currentLevel === 2 && typeof quizDataLevelB !== 'undefined') currentQuizData = quizDataLevelB;
         if (currentLevel === 3 && typeof quizDataLevelC !== 'undefined') currentQuizData = quizDataLevelC;
         currentQuestion = 0;
@@ -3742,8 +3739,8 @@ const Adaptiv = (() => {
         if (navButtonsEl) navButtonsEl.style.display = "block";
         const levelUpdateEl = document.querySelector(".levelUpdate");
         if (levelUpdateEl && typeof levelHeadings !== 'undefined') levelUpdateEl.textContent = levelHeadings[currentLevel];
-        
-        renderQuestion(Activity.getQid( `.${headerContainer}` ));
+
+        renderQuestion(Activity.getQid(`.${headerContainer}`));
         updateAttemptedCount();
         $(".instruc").show();
         $(".submit-info").show();
@@ -3796,12 +3793,12 @@ const Adaptiv = (() => {
         $(".submit-info").show();
 
         const levelTextEl = document.getElementById("levelText");
-        if( levelTextEl ) levelTextEl.style.display = 'block';
+        if (levelTextEl) levelTextEl.style.display = 'block';
     };
 
     const showAnswerPopup = () => {
-        const activity  = Activity.getDefine( Activity.getQid(`.${headerContainer}`)  );
-        const lang      = activity?.lang ?? 'en';
+        const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
+        const lang = activity?.lang ?? 'en';
 
         let totalCorrect = 0;
         let totalQuestion = 0;
@@ -3810,24 +3807,24 @@ const Adaptiv = (() => {
         let midData2 = ``;
         let midData3 = ``;
         const optionLabel = index => (typeof index === 'number' && index >= 0) ? String.fromCharCode(65 + index) : "";
-        
-        const label = index => Activity.translateBulletLabels({lang:lang, ind:index, upperCase:true});
+
+        const label = index => Activity.translateBulletLabels({ lang: lang, ind: index, upperCase: true });
         (currentQuizData || []).forEach((q, i) => {
             const userIndex = userAnswersAdaptiv?.[i];
             const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}` : "Not attempted";
             const correctAnswerText = `${label(q.answer)}`;
             if (userAnswerText === correctAnswerText) totalCorrect++;
             totalQuestion++;
-            
+
             let resultSymbol = '✘';
-            let resultClass  = 'text-danger';
-            if( userAnswerText === correctAnswerText) {
-                resultSymbol = '✔' ;
-                resultClass  = 'text-success';
+            let resultClass = 'text-danger';
+            if (userAnswerText === correctAnswerText) {
+                resultSymbol = '✔';
+                resultClass = 'text-success';
             }
 
             midData2 += `<tr class="trData">
-                <th>${ lang == 'hi' ? 'प्र' : 'Q' }${totalQuestion}.</th>
+                <th>${lang == 'hi' ? 'प्र' : 'Q'}${totalQuestion}.</th>
                 <td class="text-danger">${userAnswerText}</td>
                 <td class="text-success">${correctAnswerText}</td>
                 <td class="${resultClass}">${resultSymbol}</td>
@@ -3837,10 +3834,10 @@ const Adaptiv = (() => {
         const headLabel = Activity.translateTableHeads(lang);
         topData = `<div class="d-flex justify-content-between align-items-center">
                     <h4 id="scoreTextQ1" class="text-center mb-3">
-                        ${ lang == 'hi'
-                            ? `आपको ${totalQuestion} में से ${totalCorrect} अंक मिले हैं`
-                            : `You scored ${totalCorrect} out of ${totalQuestion}`
-                        }
+                        ${lang == 'hi'
+                ? `आपको ${totalQuestion} में से ${totalCorrect} अंक मिले हैं`
+                : `You scored ${totalCorrect} out of ${totalQuestion}`
+            }
                     </h4>
                     <button class="btn btn-secondary" id="btn-close-answers">X</button>
                 </div>`;
@@ -3896,7 +3893,7 @@ const Adaptiv = (() => {
     }
 
     return {
-        render:renderQuestion,
+        render: renderQuestion,
         userAnswersAdaptiv,
         currentLevel,
         currentQuestion,
@@ -3912,7 +3909,7 @@ const DropDown = (() => {
 
     Activity.css('dd.css');
 
-    const quesClass = 'questionSections';    
+    const quesClass = 'questionSections';
 
     const ui = (questionId) => {
         try {
@@ -3924,7 +3921,7 @@ const DropDown = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -3957,38 +3954,38 @@ const DropDown = (() => {
                                 </div>`;
             // ..
 
-            const submitBtn = parent.querySelector( '.submit-btn' );
-            const showBtn   = parent.querySelector( '.show-btn' );
-            const resetBtn  = parent.querySelector( '.reset-btn' );
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
 
-            if( submitBtn ) submitBtn.addEventListener("click", checkAnswersDD );
-            if( showBtn ) showBtn.addEventListener("click", showAnswersDD );
-            if( resetBtn ) resetBtn.addEventListener("click", resetActivityDD );
+            if (submitBtn) submitBtn.addEventListener("click", checkAnswersDD);
+            if (showBtn) showBtn.addEventListener("click", showAnswersDD);
+            if (resetBtn) resetBtn.addEventListener("click", resetActivityDD);
         } catch (e) {
-            console.error( 'DropDown.ui :', e );
+            console.error('DropDown.ui :', e);
         }
     }
 
     const renderQuestions = (questionId) => {
         ui(questionId);
-        Activity.setHeader( questionId );
+        Activity.setHeader(questionId);
 
-        const container     = document.querySelector(`.${quesClass}`);
+        const container = document.querySelector(`.${quesClass}`);
         container.innerHTML = "";
 
         $(`.${quesClass}`)[0].dataset.qid = questionId;
-        
-        const content     = Activity.getDefine(questionId)?.content;
-        const questions   = content?.questions;
+
+        const content = Activity.getDefine(questionId)?.content;
+        const questions = content?.questions;
         const replacement = content?.replacement;
 
         questions.forEach((q, i) => {
-            const wrapper     = document.createElement("div");
+            const wrapper = document.createElement("div");
             wrapper.className = "qLines";
-            
-            const parts = q.text.split( replacement );
-            
-            if( Array.isArray(q.options[0]) ) {
+
+            const parts = q.text.split(replacement);
+
+            if (Array.isArray(q.options[0])) {
                 parts.forEach((part, blankIndex) => {
                     wrapper.appendChild(document.createTextNode(part));
 
@@ -4011,9 +4008,9 @@ const DropDown = (() => {
     const makeSelect = (qIndex, blankIndex, optionsArr) => {
         const select = document.createElement("select");
         select.setAttribute("data-index", qIndex);
-        if( blankIndex !== null ) select.setAttribute("data-blank", blankIndex);
+        if (blankIndex !== null) select.setAttribute("data-blank", blankIndex);
 
-        const lang = Activity.getDefine(Activity.getQid( `.${quesClass}` ))?.lang;
+        const lang = Activity.getDefine(Activity.getQid(`.${quesClass}`))?.lang;
         const optionSelect = lang == 'hi' ? 'चुनें' : 'choose';
 
         const def = document.createElement("option");
@@ -4043,9 +4040,9 @@ const DropDown = (() => {
         document.getElementById("commonReport").style.display = "block";
         const selects = document.querySelectorAll(`select`);
 
-        const content = Activity.getDefine(Activity.getQid( `.${quesClass}` ))?.content;
-        const lang    = content?.lang;
-        const data    = content?.questions;
+        const content = Activity.getDefine(Activity.getQid(`.${quesClass}`))?.content;
+        const lang = content?.lang;
+        const data = content?.questions;
         const isHindi = lang == 'hi' ? true : false;
 
         const headings = isHindi
@@ -4082,8 +4079,8 @@ const DropDown = (() => {
             const correctAns = norm(correctRaw);
 
             let status = yourAns === correctAns
-            ? headings.correct
-            : (yourAns === headings.unattempted ? headings.unattempted : headings.incorrect);
+                ? headings.correct
+                : (yourAns === headings.unattempted ? headings.unattempted : headings.incorrect);
 
             sel.classList.remove("correct", "incorrect");
             if (status === headings.correct) {
@@ -4127,23 +4124,23 @@ const DropDown = (() => {
 
     const showAnswersDD = () => {
         const container = Define.get('questionContainer');
-        const parent    = document.querySelector(container);
-        const btn       = parent.querySelector( '.show-btn' )
-        const btnGroup  = btn.closest(".buttons");
+        const parent = document.querySelector(container);
+        const btn = parent.querySelector('.show-btn')
+        const btnGroup = btn.closest(".buttons");
         if (btnGroup) {
             const submitBtn = btnGroup.querySelector(".submit-btn");
             if (submitBtn) submitBtn.classList.add("disable");
         }
 
-        const data = Activity.getDefine(Activity.getQid( `.${quesClass}` ))?.content?.questions;
+        const data = Activity.getDefine(Activity.getQid(`.${quesClass}`))?.content?.questions;
         const selects = document.querySelectorAll(`select`);
         selects.forEach(sel => {
-            const qIdx     = parseInt(sel.getAttribute("data-index"), 10) || 0;
+            const qIdx = parseInt(sel.getAttribute("data-index"), 10) || 0;
             const blankIdx = parseInt(sel.getAttribute("data-blank"), 10) || 0;
 
             const correctRaw = Array.isArray(data[qIdx].answer)
-            ? data[qIdx].answer[blankIdx]
-            : data[qIdx].answer;
+                ? data[qIdx].answer[blankIdx]
+                : data[qIdx].answer;
             const correctAns = norm(correctRaw);
 
             let matched = Array.from(sel.options).find(opt => norm(opt.value) === correctAns);
@@ -4154,19 +4151,19 @@ const DropDown = (() => {
 
             sel.classList.remove("incorrect");
             sel.classList.add("correct");
-        });        
-        
+        });
+
     }
 
     const resetActivityDD = () => {
         const container = Define.get('questionContainer');
-        const parent    = document.querySelector(container);
-        const btn       = parent.querySelector( '.reset-btn' )
-        const btnGroup  = btn.closest(".buttons");
+        const parent = document.querySelector(container);
+        const btn = parent.querySelector('.reset-btn')
+        const btnGroup = btn.closest(".buttons");
         if (btnGroup) {
             const submitBtn = btnGroup.querySelector(".submit-btn");
             if (submitBtn) submitBtn.classList.remove("disable");
-        }        
+        }
         const selects = document.querySelectorAll(`select`);
         selects.forEach(sel => {
             sel.selectedIndex = 0;
@@ -4175,7 +4172,7 @@ const DropDown = (() => {
     }
 
     return {
-        render:renderQuestions
+        render: renderQuestions
     };
 
 })();
@@ -4185,10 +4182,10 @@ const Circle = (() => {
     Activity.css('clickTo.css');
 
     const quesClass = 'questInCHeading';
-    const dataKey   = 'c1';
+    const dataKey = 'c1';
     let activitiesClicked = {};
-    let userSelections    = {};
-    
+    let userSelections = {};
+
     const ui = (questionId) => {
         try {
             const containerSelector = Define.get('questionContainer');
@@ -4197,9 +4194,9 @@ const Circle = (() => {
                 console.error("ui container not found:", containerSelector);
                 return;
             }
-            
+
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -4229,20 +4226,20 @@ const Circle = (() => {
                                 </div>`;
             // ..
 
-            const submitBtn = parent.querySelector( '.submit-btn' );
-            const showBtn   = parent.querySelector( '.show-btn' );
-            const resetBtn  = parent.querySelector( '.reset-btn' );
-            const closepop  = parent.querySelector( '#pop-close' );
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
+            const closepop = parent.querySelector('#pop-close');
 
-            if( submitBtn ) submitBtn.addEventListener("click", () => checkCircle(dataKey) );
-            if( showBtn ) showBtn.addEventListener("click", (ev) => showCircle(dataKey, ev.currentTarget) );
-            if( resetBtn ) resetBtn.addEventListener("click", () => resetCircle(dataKey) );
-            if( closepop ) closepop.addEventListener("click", closeReportClick );
+            if (submitBtn) submitBtn.addEventListener("click", () => checkCircle(dataKey));
+            if (showBtn) showBtn.addEventListener("click", (ev) => showCircle(dataKey, ev.currentTarget));
+            if (resetBtn) resetBtn.addEventListener("click", () => resetCircle(dataKey));
+            if (closepop) closepop.addEventListener("click", closeReportClick);
         } catch (e) {
             console.error('Circle.ui :', e);
         }
     };
-    
+
     const renderQuestions = (questionId) => {
         ui(questionId);
         Activity.setHeader(questionId);
@@ -4262,8 +4259,8 @@ const Circle = (() => {
         renderDiv.innerHTML = "";
 
         const activity = Activity.getDefine(questionId);
-        const content  = activity?.content;
-        const lang     = activity?.lang ?? 'en';
+        const content = activity?.content;
+        const lang = activity?.lang ?? 'en';
 
         if (!Array.isArray(content)) {
             console.error("renderQuestions: activity content should be an array", content);
@@ -4275,22 +4272,22 @@ const Circle = (() => {
             questions: content,
             lang: activity?.content?.lang || activity.lang || 'en'
         };
-        
-        if( !userSelections[dataKey] ) userSelections[dataKey] = {};
-        
+
+        if (!userSelections[dataKey]) userSelections[dataKey] = {};
+
         content.forEach((item, ind) => {
             const parts = item.text.split(/(\s+|,)/);
             const html = parts.map((part) => {
-            if (part.trim() === "" || part === ",") return part;
+                if (part.trim() === "" || part === ",") return part;
                 return `<span class="clickable" data-act="${dataKey}" data-id="${item.id}" data-word="${part.trim()}">${part}</span>`;
             }).join("");
             renderDiv.innerHTML += `
             <div class="questInC" data-id="${item.id}">
-                <span class="label">(${Activity.translateBulletLabels({lang:lang, ind:ind})})</span> ${html}
+                <span class="label">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</span> ${html}
             </div>`;
         });
-        
-        if( !document.__circle_click_attached ) {
+
+        if (!document.__circle_click_attached) {
             document.addEventListener("click", function (e) {
                 if (!e.target || !e.target.classList) return;
                 if (e.target.classList.contains("clickable")) {
@@ -4300,22 +4297,22 @@ const Circle = (() => {
                     const word = span.dataset.word;
 
                     const activityMeta = activitiesClicked[act];
-                    if (!activityMeta) {                    
-                        const qid = Activity.getQid( `.${quesClass}` );
+                    if (!activityMeta) {
+                        const qid = Activity.getQid(`.${quesClass}`);
                         const actActivity = Activity.getDefine(qid);
                         const mode = actActivity?.mode || 'multi';
                         activitiesClicked[act] = activitiesClicked[act] || { mode, questions: actActivity?.content || [], lang: actActivity?.lang || 'en' };
                     }
 
                     const mode = activitiesClicked[act].mode;
-                    
+
                     if (!userSelections[act]) userSelections[act] = {};
                     if (!userSelections[act][qId]) userSelections[act][qId] = [];
 
                     if (mode === "single") {
                         const siblings = document.querySelectorAll(`[data-act="${act}"][data-id="${qId}"]`);
                         siblings.forEach(sib => sib.classList.remove("circle"));
-                        
+
                         userSelections[act][qId] = [word];
                         span.classList.add("circle");
                     } else {
@@ -4334,7 +4331,7 @@ const Circle = (() => {
             document.__circle_click_attached = true;
         }
     };
-    
+
     const checkCircle = (dataKeyParam) => {
         const key = dataKeyParam || dataKey;
         const container = document.getElementById(key);
@@ -4349,20 +4346,20 @@ const Circle = (() => {
             const answers = Array.isArray(item.answer) ? item.answer : [item.answer];
             const spans = container.querySelectorAll(`[data-id="${item.id}"] .clickable`);
             spans.forEach((span) => {
-            span.classList.remove("correct", "wrong");
-            if (span.classList.contains("circle")) {
-                if (answers.includes(span.dataset.word)) {
-                    span.classList.add("correct");
-                } else {
-                    span.classList.add("wrong");
+                span.classList.remove("correct", "wrong");
+                if (span.classList.contains("circle")) {
+                    if (answers.includes(span.dataset.word)) {
+                        span.classList.add("correct");
+                    } else {
+                        span.classList.add("wrong");
+                    }
                 }
-            }
             });
         });
 
         showClickReportClick(data, userSelections[key], activity.lang || 'en');
     };
-    
+
     const showCircle = (dataKeyParam, btn) => {
         const key = dataKeyParam || dataKey;
         const container = document.getElementById(key);
@@ -4381,9 +4378,9 @@ const Circle = (() => {
             const answers = Array.isArray(item.answer) ? item.answer : [item.answer];
             const spans = container.querySelectorAll(`[data-id="${item.id}"] .clickable`);
             spans.forEach((span) => {
-            if (answers.includes(span.dataset.word)) {
-                span.classList.add("correct");
-            }
+                if (answers.includes(span.dataset.word)) {
+                    span.classList.add("correct");
+                }
             });
         });
 
@@ -4396,7 +4393,7 @@ const Circle = (() => {
             btn.classList.add("clicked-show");
         }
     };
-    
+
     const resetCircle = (dataKeyParam) => {
         const key = dataKeyParam || dataKey;
         const container = document.getElementById(key);
@@ -4419,7 +4416,7 @@ const Circle = (() => {
 
         userSelections[key] = {};
     };
-    
+
     const showClickReportClick = (clickData, selections = {}, typeLang = 'en') => {
         $("#clickAct").css("display", "block");
         let correctCount = 0;
@@ -4441,15 +4438,15 @@ const Circle = (() => {
             const correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
             const userAns = (selections && selections[q.id]) ? selections[q.id] : [];
             let isCorrect =
-            userAns.length > 0 &&
-            correctAnswers.every(a => userAns.includes(a)) &&
-            userAns.length === correctAnswers.length;
+                userAns.length > 0 &&
+                correctAnswers.every(a => userAns.includes(a)) &&
+                userAns.length === correctAnswers.length;
             if (isCorrect) correctCount++;
 
             const userAnswerText =
-            userAns.length > 0
-                ? userAns.join(", ")
-                : typeLang === "hi" ? "प्रयास नहीं किया" : "Not Attempted";
+                userAns.length > 0
+                    ? userAns.join(", ")
+                    : typeLang === "hi" ? "प्रयास नहीं किया" : "Not Attempted";
             const correctAnswerText = correctAnswers.join(", ");
             tableHTML += `
             <tr>
@@ -4499,7 +4496,7 @@ const ShravanKaushal = (() => {
     const ui = (questionId) => {
         try {
             const containerSelector = Define.get('questionContainer');
-            const btnid  = 'shravanPopupClose'
+            const btnid = 'shravanPopupClose'
             const parent = document.querySelector(containerSelector);
             if (!parent) {
                 console.error("ui container not found:", containerSelector);
@@ -4507,8 +4504,8 @@ const ShravanKaushal = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            const buttonLabel   = Activity.translateButtonLabels(lang);
+            const lang = activity.lang ?? 'en';
+            const buttonLabel = Activity.translateButtonLabels(lang);
             const nextPrevLabel = Activity.translateNextPrevLabel(lang);
 
             parent.innerHTML = `<div class="question">
@@ -4550,15 +4547,15 @@ const ShravanKaushal = (() => {
                                     </div>
                                 </div>`;
             // ..
-            
+
             const closeBtn = document.getElementById(btnid);
             if (closeBtn) {
                 closeBtn.addEventListener('click', closeReportShravan);
             }
-            
+
             const inputEl = document.getElementById(inputDataId);
             if (inputEl) inputEl.dataset.qid = questionId;
-            
+
             audioPlayer = parent.querySelector('#audioPlayer');
 
             const playBtn = parent.querySelector('.play-btn');
@@ -4567,14 +4564,14 @@ const ShravanKaushal = (() => {
             const replayBtn = parent.querySelector('#replayBtns');
             const submiBtn = parent.querySelector('.submit-btn');
             const resetBtn = parent.querySelector('.reset-btn');
-            
+
             if (playBtn) playBtn.addEventListener('click', startShravan);
             if (prevBtn) prevBtn.addEventListener('click', prevStep);
             if (nextBtn) nextBtn.addEventListener('click', nextStep);
             if (replayBtn) replayBtn.addEventListener('click', replayAudio);
             if (submiBtn) submiBtn.addEventListener('click', checkAns);
             if (resetBtn) resetBtn.addEventListener('click', resetAns);
-            
+
             if (playBtn) {
                 playBtn.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -4582,24 +4579,24 @@ const ShravanKaushal = (() => {
                         startShravan();
                     }
                 });
-            }            
+            }
             updateButtons();
         } catch (e) {
             console.error('ShravanKaushal.ui :', e);
         }
-    };    
+    };
 
     const renderQues = (questionId) => {
         ui(questionId);
         Activity.setHeader(questionId);
-        
-        const dataSet = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.questions || [];
+
+        const dataSet = Activity.getDefine(Activity.getQid(`#${inputDataId}`))?.content?.questions || [];
 
         const rowDiv = document.getElementById(inputDataId);
         rowDiv.innerHTML = "";
-        
+
         const popupcontainer = document.querySelector('.ansViews');
-        const popupContent   = [];
+        const popupContent = [];
         dataSet.forEach((item, ind) => {
             const html = `
                 <div class="columan shadow-lg">
@@ -4609,16 +4606,16 @@ const ShravanKaushal = (() => {
             `;
             rowDiv.innerHTML += html;
 
-            const popuprow = `<div class="viewsDivs">${ind+1}. ${item.popuptext} — ${item.text}</div>`;
-            popupContent.push( popuprow );
+            const popuprow = `<div class="viewsDivs">${ind + 1}. ${item.popuptext} — ${item.text}</div>`;
+            popupContent.push(popuprow);
         });
-        popupcontainer.innerHTML = popupContent.join( '' );
-       
+        popupcontainer.innerHTML = popupContent.join('');
+
     }
 
     const startShravan = () => {
         if (!audioPlayer) {
-            
+
             audioPlayer = document.getElementById('audioPlayer');
             if (!audioPlayer) {
                 console.error('audioPlayer not found');
@@ -4626,20 +4623,20 @@ const ShravanKaushal = (() => {
             }
         }
 
-        const qid = Activity.getQid( `#${inputDataId}` );
+        const qid = Activity.getQid(`#${inputDataId}`);
         const src = Activity.getDefine(qid)?.content?.audio?.headsrc
             ?? Activity.getDefine(qid)?.content?.audio?.options?.[0];
         if (src) {
             audioPlayer.src = src;
             audioPlayer.currentTime = 0;
             audioPlayer.play().catch(err => {
-                
+
                 console.warn('Audio play failed (user gesture required?):', err);
             });
         } else {
             console.warn('No audio source found for this activity.');
         }
-        
+
         const startBlock = document.querySelector('.startActBtns');
         const afterBlock = document.querySelector('.afterClicks');
         if (startBlock) startBlock.style.display = 'none';
@@ -4649,7 +4646,7 @@ const ShravanKaushal = (() => {
     };
 
     const updateButtons = () => {
-        const audioList = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.audio?.options || [];
+        const audioList = Activity.getDefine(Activity.getQid(`#${inputDataId}`))?.content?.audio?.options || [];
         const prevBtn = document.getElementById('prevBtns');
         const nextBtn = document.getElementById('nextBtns');
 
@@ -4663,7 +4660,7 @@ const ShravanKaushal = (() => {
             prevBtn.disabled = false;
         }
 
-        if( curntInd >= audioList.length - 1 ) {
+        if (curntInd >= audioList.length - 1) {
             nextBtn.classList.add('cNotAll');
             nextBtn.disabled = true;
         } else {
@@ -4673,29 +4670,29 @@ const ShravanKaushal = (() => {
     };
 
     const nextStep = () => {
-        const audioList = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.audio?.options || [];
-        if( curntInd < audioList.length ) {
+        const audioList = Activity.getDefine(Activity.getQid(`#${inputDataId}`))?.content?.audio?.options || [];
+        if (curntInd < audioList.length) {
             if (!audioPlayer) audioPlayer = document.getElementById('audioPlayer');
 
-            if( curntInd < audioList.length - 1 ) {
+            if (curntInd < audioList.length - 1) {
                 curntInd++;
             }
 
             audioPlayer.src = audioList[curntInd].src;
             audioPlayer.currentTime = 0;
-            audioPlayer.play().catch(() => {});
+            audioPlayer.play().catch(() => { });
         }
         updateButtons();
     };
 
     const prevStep = () => {
-        const audioList = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.audio?.options || [];
-        if( curntInd > 0 ) {
+        const audioList = Activity.getDefine(Activity.getQid(`#${inputDataId}`))?.content?.audio?.options || [];
+        if (curntInd > 0) {
             if (!audioPlayer) audioPlayer = document.getElementById('audioPlayer');
             curntInd--;
             audioPlayer.src = audioList[curntInd].src;
             audioPlayer.currentTime = 0;
-            audioPlayer.play().catch(() => {});
+            audioPlayer.play().catch(() => { });
         }
         updateButtons();
     };
@@ -4704,11 +4701,11 @@ const ShravanKaushal = (() => {
         if (!audioPlayer) audioPlayer = document.getElementById('audioPlayer');
         if (!audioPlayer) return;
         audioPlayer.currentTime = 0;
-        audioPlayer.play().catch(() => {});
+        audioPlayer.play().catch(() => { });
     };
 
     const checkAns = () => {
-        const data    = Activity.getDefine(Activity.getQid( `#${inputDataId}` ));
+        const data = Activity.getDefine(Activity.getQid(`#${inputDataId}`));
         const dataSet = data?.content?.questions || [];
         const isHindi = (data?.lang === 'hi');
 
@@ -4729,9 +4726,9 @@ const ShravanKaushal = (() => {
 
         dataSet.forEach((q, i) => {
             const inputEl = document.getElementById(`f${inputDataId}_${q.id}`);
-            const userAns = parseInt( inputEl.value );
+            const userAns = parseInt(inputEl.value);
             const correctAnswers = Array.isArray(q.ans) ? q.ans : [q.ans];
-            
+
             const isCorrect = userAns && correctAnswers.includes(userAns);
             if (isCorrect) correctCount++;
 
@@ -4772,7 +4769,7 @@ const ShravanKaushal = (() => {
     };
 
     const showAns = () => {
-        const dataSet = Activity.getDefine(Activity.getQid( `#${inputDataId}` ))?.content?.questions || [];
+        const dataSet = Activity.getDefine(Activity.getQid(`#${inputDataId}`))?.content?.questions || [];
         dataSet.forEach(q => {
             const inputEl = document.getElementById(`f${inputDataId}_${q.id}`);
             if (inputEl) {
@@ -4785,7 +4782,7 @@ const ShravanKaushal = (() => {
         const inputs = document.querySelectorAll(`#${inputDataId} input`);
         inputs.forEach(inp => inp.value = "");
     };
-    
+
     const escapeHtml = (str) => {
         if (typeof str !== 'string') return str;
         return str.replace(/[&<>"']/g, (m) => ({
@@ -4817,7 +4814,7 @@ const TrueAndFalse = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             const audio = activity?.add_content?.audio ?? false;
@@ -4825,31 +4822,30 @@ const TrueAndFalse = (() => {
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        ${
-                                            audioSrc?
-                                            `<div class="common_listening_container" id="listening_container">
+                                        ${audioSrc ?
+                    `<div class="common_listening_container" id="listening_container">
                                                 <div class="play-btn common_playBtn">
                                                     <div class="icon"></div>
                                                 </div>
                                             </div>`: ''
-                                        }
-                                        <div id="question_header_container" ${audioSrc? `style="display: none"`: ''}>
+                }
+                                        <div id="question_header_container" ${audioSrc ? `style="display: none"` : ''}>
                                             <div class="qSections row g-0 mt-3">
                                                 <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
-                                                ${audioSrc? 
-                                                    `<div class="col-auto" id="listening_common_audio_container">
+                                                ${audioSrc ?
+                    `<div class="col-auto" id="listening_common_audio_container">
                                                         <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
                                                         </svg>
                                                         <svg id="" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16" role="button">
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
                                                         </svg>
-                                                    </div>`:''
-                                                }
+                                                    </div>`: ''
+                }
                                             </div>
                                             <hr/>
                                         </div>
-                                        <div id='question-container-box' ${audioSrc? `style="display: none"`: ''}>
+                                        <div id='question-container-box' ${audioSrc ? `style="display: none"` : ''}>
                                             <div class="TandF-context p-1 row g-0 justify-content-center"></div>
                                             <div class="marTop5">
                                                 <div id="${inputDataId}"></div>
@@ -4874,46 +4870,46 @@ const TrueAndFalse = (() => {
                                     </div>
                                 </div>`;
             // ..
-            
+
             const inputEl = document.getElementById(inputDataId);
             if (inputEl) inputEl.dataset.qid = questionId;
-            
+
             const submiBtn = parent.querySelector('.submit-btn');
-            const showBtn  = parent.querySelector('.show-btn');
+            const showBtn = parent.querySelector('.show-btn');
             const resetBtn = parent.querySelector('.reset-btn');
             const closePopUpBtn = parent.querySelector('.popUp-close-btn');
-           
-            if (submiBtn) submiBtn.addEventListener('click', showPopUp );
-            if (showBtn) showBtn.addEventListener('click', showAnswersTandF );
-            if (resetBtn) resetBtn.addEventListener('click', resetTrueFalse );
-            if (closePopUpBtn) closePopUpBtn.addEventListener('click', closePopUp );
+
+            if (submiBtn) submiBtn.addEventListener('click', showPopUp);
+            if (showBtn) showBtn.addEventListener('click', showAnswersTandF);
+            if (resetBtn) resetBtn.addEventListener('click', resetTrueFalse);
+            if (closePopUpBtn) closePopUpBtn.addEventListener('click', closePopUp);
 
             is_Audio_available(audioSrc);
 
         } catch (e) {
             console.error('TrueAndFalse.ui :', e);
         }
-    };    
+    };
 
     const render = (questionId) => {
         ui(questionId);
 
-        const qid      = Activity.getQid( `#${inputDataId}` );
-        const headElem = Activity.setHeader( qid );
-        if( !headElem.head && !headElem.subhead ) {
+        const qid = Activity.getQid(`#${inputDataId}`);
+        const headElem = Activity.setHeader(qid);
+        if (!headElem.head && !headElem.subhead) {
             document.querySelector('hr').remove();
         }
 
         const activity = Activity.getDefine(qid) ?? {};
-        const lang     = activity?.lang ?? 'en';
-        const dataSet  = activity?.content ?? [];
-        const replacement  = activity?.replacement ?? '#_#';
+        const lang = activity?.lang ?? 'en';
+        const dataSet = activity?.content ?? [];
+        const replacement = activity?.replacement ?? '#_#';
 
         userAns = new Array(dataSet.length).fill(null);
 
-        const btnLabels  = Activity.translateBooleanLabels(lang);
-        
-        const rowDiv     = document.getElementById(inputDataId);
+        const btnLabels = Activity.translateBooleanLabels(lang);
+
+        const rowDiv = document.getElementById(inputDataId);
         rowDiv.innerHTML = "";
         const rowContent = [];
 
@@ -4922,18 +4918,18 @@ const TrueAndFalse = (() => {
 
         const add_content = activity?.add_content ?? {};
 
-        const image  = add_content?.image ?? {};
-        const hasImg  = image && Object.keys(image).length > 0;
+        const image = add_content?.image ?? {};
+        const hasImg = image && Object.keys(image).length > 0;
         const isPath = image?.path;
 
-        if ( !hasImg || isPath == undefined ){
+        if (!hasImg || isPath == undefined) {
             TandFContextContainer.remove();
-        } 
+        }
 
         if (hasImg && isPath != undefined) {
             const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
 
-            const commonClassImg  = 'col-md-12 col-lg-5 col-sm-12 col-12 text-center';
+            const commonClassImg = 'col-md-12 col-lg-5 col-sm-12 col-12 text-center';
 
             TandFContextContainer.append(imgDiv);
 
@@ -4942,42 +4938,42 @@ const TrueAndFalse = (() => {
             imgDiv.addClass(commonClassImg)
                 .find('img')
                 .attr('src', Activity.pathToCWD() + image.path)
-                .css({ 'border-radius' : '20px', 'width' : image_width });
+                .css({ 'border-radius': '20px', 'width': image_width });
         }
 
-        dataSet.forEach( (item, ind) => {
-            const isImage_Text  = typeof item?.question === 'object' ? true : false;
-            const hasText = isImage_Text == true ? item?.question?.text: false;
-            const hasImage = isImage_Text == true ? item?.question?.image: false;
+        dataSet.forEach((item, ind) => {
+            const isImage_Text = typeof item?.question === 'object' ? true : false;
+            const hasText = isImage_Text == true ? item?.question?.text : false;
+            const hasImage = isImage_Text == true ? item?.question?.image : false;
 
             let question = "";
 
-            if(isImage_Text){
-                if(hasText){
+            if (isImage_Text) {
+                if (hasText) {
                     question += hasText;
                 }
 
-                if(hasImage){
+                if (hasImage) {
                     const imageWidth = item?.question?.width ?? '40px';
-                    const image  = `<img src="${Activity.pathToCWD() + hasImage}" alt="image" style="width:${imageWidth};" class="mx-auto" ondragstart="return false;">`;
-                    if(hasText){
+                    const image = `<img src="${Activity.pathToCWD() + hasImage}" alt="image" style="width:${imageWidth};" class="mx-auto" ondragstart="return false;">`;
+                    if (hasText) {
                         question = question.replaceAll(replacement, image);
-                    }else{
+                    } else {
                         question = image;
                     }
-                }else{
+                } else {
                     question = question.replaceAll(replacement, '');
                 }
 
-            }else{
+            } else {
                 question = item.question;
             }
 
             const html = `
-                <div class="row m-0 mb-3 question-block ${isImage_Text ? 'align-items-center': ''}">
-                    <div style="width:40px">(${Activity.translateBulletLabels({lang:lang, ind:ind})})</div>
+                <div class="row m-0 mb-3 question-block ${isImage_Text ? 'align-items-center' : ''}">
+                    <div style="width:40px">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</div>
                     <div class="col p-0">
-                        <div class="row m-0 ${isImage_Text ? 'align-items-center': ''}">
+                        <div class="row m-0 ${isImage_Text ? 'align-items-center' : ''}">
                             <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${question}</div>
                             <div class="col-auto options mb-2">
                                 <button class="btn btn-sm btn-outline-success tnfBtn" data-answer="true" data-ind="${ind}">${btnLabels[0]}</button>
@@ -4987,16 +4983,16 @@ const TrueAndFalse = (() => {
                     </div>
                 </div>
             `;
-            rowContent.push( html );
+            rowContent.push(html);
         });
 
-        rowDiv.innerHTML = rowContent.join( '' );
+        rowDiv.innerHTML = rowContent.join('');
 
         const containerSelector = Define.get('questionContainer');
-        const parent  = document.querySelector(containerSelector);
+        const parent = document.querySelector(containerSelector);
         const tnfBtns = parent.querySelectorAll('.tnfBtn');
 
-        if( tnfBtns.length > 0 ) {
+        if (tnfBtns.length > 0) {
             tnfBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => selectAnswer(e.currentTarget));
             });
@@ -5004,7 +5000,7 @@ const TrueAndFalse = (() => {
     }
 
     const selectAnswer = (thisObj) => {
-        const ind    = $(thisObj).attr('data-ind');
+        const ind = $(thisObj).attr('data-ind');
         const answer = $(thisObj).attr('data-answer');
         userAns[ind] = answer;
 
@@ -5016,24 +5012,24 @@ const TrueAndFalse = (() => {
 
     const checkIfAllAttempt = () => {
         const allAnswered = userAns.every(ans => ans !== null);
-        const submitBtn   = document.getElementById(`submit4`);
-        if( allAnswered ) {
+        const submitBtn = document.getElementById(`submit4`);
+        if (allAnswered) {
             submitBtn.classList.remove("disable");
         }
     }
 
     const showAnswersTandF = () => {
-        const questions = Activity.getDefine( Activity.getQid( `#${inputDataId}` ) )?.content || [];
+        const questions = Activity.getDefine(Activity.getQid(`#${inputDataId}`))?.content || [];
         $(`.options`).css('pointer-events', 'none');
         $(`#submit4`).addClass('disable');
         questions.map((item, index) => {
             const opt1 = $(`.options`).eq(index).children().eq(0);
             const opt2 = $(`.options`).eq(index).children().eq(1);
 
-            const opt1ans = opt1.attr( 'data-answer' );
-            
+            const opt1ans = opt1.attr('data-answer');
+
             $(`.options`).eq(index).children('button').removeClass('active');
-            
+
             if (item.answer === (opt1ans === 'true')) {
                 $(opt1).removeClass('active').addClass('active');
             } else {
@@ -5043,7 +5039,7 @@ const TrueAndFalse = (() => {
     }
 
     const resetTrueFalse = () => {
-        const questions = Activity.getDefine( Activity.getQid( `#${inputDataId}` ) )?.content || [];  
+        const questions = Activity.getDefine(Activity.getQid(`#${inputDataId}`))?.content || [];
         $(".tnfBtn").removeClass('active');
         $(`.options`).css('pointer-events', 'all');
         userAns = new Array(questions.length).fill(null);
@@ -5051,10 +5047,10 @@ const TrueAndFalse = (() => {
     }
 
     const showPopUp = () => {
-        const activity   = Activity.getDefine( Activity.getQid( `#${inputDataId}` ) ) ?? {};
-        const lang       = activity?.lang ?? 'en';
+        const activity = Activity.getDefine(Activity.getQid(`#${inputDataId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
         const headLabels = Activity.translateTableHeads(lang);
-        const questions  = activity?.content;
+        const questions = activity?.content;
 
         let correctCount = 0;
         const totalQues = questions.length;
@@ -5072,15 +5068,15 @@ const TrueAndFalse = (() => {
                                     </thead>
                                 <tbody>`;
         // ..
-        table.push( tableBodyF );
+        table.push(tableBodyF);
 
         questions.forEach((item, i) => {
             const userAnswer = userAns[i];
             const correctAnswerText = item.answer;
             let count = 0;
             let isCorrect = false;
-            
-            if( item.answer === (userAnswer === 'true') ) {
+
+            if (item.answer === (userAnswer === 'true')) {
                 isCorrect = true;
                 count++;
                 correctCount++;
@@ -5090,24 +5086,24 @@ const TrueAndFalse = (() => {
 
             const textLabels = Activity.translateBooleanLabels(lang);
 
-            const tempUserAnswer    = userAnswer == 'true' ? textLabels[0] : ( userAnswer == 'false' ? textLabels[1] : userAnswerText );
+            const tempUserAnswer = userAnswer == 'true' ? textLabels[0] : (userAnswer == 'false' ? textLabels[1] : userAnswerText);
             const tempCorrectAnswer = correctAnswerText == true ? textLabels[0] : textLabels[1];
-            
+
             const body = `
                 <tr clsss='trData'>
-                    <th>(${Activity.translateBulletLabels({lang:lang, ind:i})})</th>
+                    <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${tempUserAnswer}</td>
                     <td class="text-success">${tempCorrectAnswer}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
                 </tr>
             `;
-            table.push( body );
+            table.push(body);
         });
 
         const tableBodyL = `</tbody></table></div>`;
-        table.push( tableBodyL );
+        table.push(tableBodyL);
 
-        document.getElementById("answer-review").innerHTML = table.join( '' );
+        document.getElementById("answer-review").innerHTML = table.join('');
         document.getElementById("popupDialogAns").style.display = "block";
 
         const finalText = lang == 'en' ?
@@ -5124,9 +5120,9 @@ const TrueAndFalse = (() => {
 
     const is_Audio_available = (src) => {
 
-        if(!src && src == '') return;
-        
-        Helper.setAudio( Activity.pathToCWD() + src );
+        if (!src && src == '') return;
+
+        Helper.setAudio(Activity.pathToCWD() + src);
 
         const containerSelector = Define.get('questionContainer');
         const parent = document.querySelector(containerSelector);
@@ -5137,7 +5133,7 @@ const TrueAndFalse = (() => {
         audio_playBtns.forEach(btn => {
             btn.addEventListener('click', Helper.playAudio);
         });
-        
+
         audio_pauseBtn.addEventListener('click', Helper.pauseAudio);
     }
 
@@ -5151,7 +5147,7 @@ const DragAndDrop = (() => {
 
     Activity.css('dnd.css');
 
-    const containerId       = 'dragItemsQ1';
+    const containerId = 'dragItemsQ1';
     const containerSelector = '#question1';
 
     const ui = (questionId) => {
@@ -5164,8 +5160,8 @@ const DragAndDrop = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -5195,51 +5191,51 @@ const DragAndDrop = (() => {
                                     </div>
                                 </div>`;
             // ..       
-			
-			const checkBtn = parent.querySelector( '.submit-btn' );
-			const showBtn  = parent.querySelector( '.show-btn' );
-			const resetBtn = parent.querySelector( '.reset-btn' );
-            const playSvg  = parent.querySelector( '#playSvg' );
-            const pauseSvg = parent.querySelector( '#pauseSvg' );
 
-			if (checkBtn) checkBtn.addEventListener("click", checkAnswersDnd);
-			if (showBtn) showBtn.addEventListener("click", showAnswersDnd);
-			if (resetBtn) resetBtn.addEventListener("click", resetActivityDnd);
+            const checkBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
+            const playSvg = parent.querySelector('#playSvg');
+            const pauseSvg = parent.querySelector('#pauseSvg');
 
-			if (playSvg)  playSvg.addEventListener("click", () => toggleAudio(true));
+            if (checkBtn) checkBtn.addEventListener("click", checkAnswersDnd);
+            if (showBtn) showBtn.addEventListener("click", showAnswersDnd);
+            if (resetBtn) resetBtn.addEventListener("click", resetActivityDnd);
+
+            if (playSvg) playSvg.addEventListener("click", () => toggleAudio(true));
             if (pauseSvg) pauseSvg.addEventListener("click", () => toggleAudio(false));
-		} catch (e) {
-            console.error( 'DragAndDrop.ui :', e );
+        } catch (e) {
+            console.error('DragAndDrop.ui :', e);
         }
     }
-    
+
     const renderDataDND = (questionId) => {
         try {
             ui(questionId);
-            const data    = Activity.getDefine( questionId );
+            const data = Activity.getDefine(questionId);
             const content = data?.content || {};
 
             const hasAudio = content?.audio;
-            if( !hasAudio ) $('.playsBtns').remove();
+            if (!hasAudio) $('.playsBtns').remove();
 
-            const headElem       = Activity.setHeader( questionId );
+            const headElem = Activity.setHeader(questionId);
             const audioBtnExists = document.contains(document.querySelector('.playsBtns'));
-            if( !headElem.head && !headElem.subhead && !audioBtnExists ) {
+            if (!headElem.head && !headElem.subhead && !audioBtnExists) {
                 document.querySelector('.rowWithAudios').remove();
             }
 
             const dragItems = document.getElementById(containerId);
             dragItems.dataset.qid = questionId;
 
-            const isShuffle   = content?.shuffle ?? true;
-            
-            const head     = [ '<div class="row w-100 justify-content-center">' ];
-            const headings = ( isShuffle == true ) ? Activity.shuffleArray( content?.heading ) : content?.heading;
+            const isShuffle = content?.shuffle ?? true;
+
+            const head = ['<div class="row w-100 justify-content-center">'];
+            const headings = (isShuffle == true) ? Activity.shuffleArray(content?.heading) : content?.heading;
 
             const defaultCol = {
-                md : 4,
-                sm : 6,
-                om : 12
+                md: 4,
+                sm: 6,
+                om: 12
             };
             const col = {
                 md: content?.col?.md ?? defaultCol.md,
@@ -5250,28 +5246,28 @@ const DragAndDrop = (() => {
             headings.forEach((item) => {
                 const html = `<div class="col-md-${col.md} col-sm-${col.sm} col-${col.om}">
                                 <div class="wh1">
-                                    ${(item.text != '' && item.text ) ? `<div class="headingsDND">${item.text}</div>` : ''}
+                                    ${(item.text != '' && item.text) ? `<div class="headingsDND">${item.text}</div>` : ''}
                                     <div class="dropSect" data-accept="${item.accept}"></div> 
                                 </div>
                             </div>`;
                 // ..
-                head.push( html );
+                head.push(html);
             });
-            head.push( '</div>' );
-            $('.dropItems').html( head.join('') );
+            head.push('</div>');
+            $('.dropItems').html(head.join(''));
 
-            const opt     = [];
-            const options = ( isShuffle == true ) ? Activity.shuffleArray( data?.content?.options ) : data?.content?.options;
+            const opt = [];
+            const options = (isShuffle == true) ? Activity.shuffleArray(data?.content?.options) : data?.content?.options;
             options.forEach((item) => {
                 const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
-                opt.push( html );
-            });            
+                opt.push(html);
+            });
             dragItems.innerHTML = opt.join('');
 
             makeDraggable(`#${containerId} .wordDrag`);
             initDroppable(containerSelector);
         } catch (e) {
-            console.error( 'DragAndDrop.renderDataDND :', e );
+            console.error('DragAndDrop.renderDataDND :', e);
         }
     }
 
@@ -5307,7 +5303,7 @@ const DragAndDrop = (() => {
                 });
             });
         } catch (e) {
-            console.error( 'DragAndDrop.makeDraggable :', e );
+            console.error('DragAndDrop.makeDraggable :', e);
         }
     }
 
@@ -5326,7 +5322,7 @@ const DragAndDrop = (() => {
                 }
             });
         } catch (e) {
-            console.error( 'DragAndDrop.initDroppable :', e );
+            console.error('DragAndDrop.initDroppable :', e);
         }
     }
 
@@ -5336,15 +5332,15 @@ const DragAndDrop = (() => {
             const total = $(`${containerSelector} .wordDrag`).length;
 
             $(`${containerSelector} .dropSect`).each(function () {
-                const accept = $(this).attr( 'data-accept' );
+                const accept = $(this).attr('data-accept');
                 const droppedItems = $(this).children('.wordDrag');
-                droppedItems.each(function() {
+                droppedItems.each(function () {
                     let background = '#ffcdd2';
-                    if( $(this).attr( 'data-ans' ) == accept ) {
+                    if ($(this).attr('data-ans') == accept) {
                         background = '#c8e6c9';
                         correct++;
                     }
-                    $(this).css( 'background',  background);
+                    $(this).css('background', background);
                 });
             });
 
@@ -5355,22 +5351,22 @@ const DragAndDrop = (() => {
                 confirmButtonText: "OK"
             });
         } catch (e) {
-            console.error( 'DragAndDrop.checkAnswersDnd :', e );
+            console.error('DragAndDrop.checkAnswersDnd :', e);
         }
     }
 
     const showAnswersDnd = () => {
         try {
-            Activity.toggleCheckBtn( '.submit-btn', true );
+            Activity.toggleCheckBtn('.submit-btn', true);
 
-            const dragItems  = document.getElementById(containerId);
+            const dragItems = document.getElementById(containerId);
             const questionId = dragItems.dataset.qid;
 
             renderDataDND(dragItems.dataset.qid);
 
             $(`${containerSelector} .dropSect`).empty();
-            const data = Activity.getDefine( questionId )?.content?.options;
-            
+            const data = Activity.getDefine(questionId)?.content?.options;
+
             data.forEach((item) => {
                 const $clone = $(`<div class="wordDrag">${item.text}</div>`)
                     .css({ background: "#c8e6c9", position: "relative" })
@@ -5378,31 +5374,31 @@ const DragAndDrop = (() => {
                 $(`${containerSelector} .dropSect[data-accept='${item.ans}']`).append($clone);
             });
         } catch (e) {
-            console.error( 'DragAndDrop.showAnswersDnd :', e );
+            console.error('DragAndDrop.showAnswersDnd :', e);
         }
     }
 
     const resetActivityDnd = () => {
         try {
-            Activity.toggleCheckBtn( '.submit-btn', false );
+            Activity.toggleCheckBtn('.submit-btn', false);
 
             const dragItems = document.getElementById(containerId);
             renderDataDND(dragItems.dataset.qid);
             $(`${containerSelector} .dropSect`).empty();
             $(`${containerSelector} .wordDrag`);
         } catch (e) {
-            console.error( 'DragAndDrop.resetActivityDnd :', e );
+            console.error('DragAndDrop.resetActivityDnd :', e);
         }
     }
 
-    const toggleAudio = ( play=true ) => {
+    const toggleAudio = (play = true) => {
         try {
-            const dragItems  = document.getElementById(containerId);
+            const dragItems = document.getElementById(containerId);
             const questionId = dragItems.dataset.qid;
 
-            const src   = Activity.getDefine( questionId )?.content?.audio;
+            const src = Activity.getDefine(questionId)?.content?.audio;
             const audio = new Audio(src);
-            if( play ) {
+            if (play) {
                 $("#playSvg").hide();
                 $("#pauseSvg").show();
                 audio.play();
@@ -5412,12 +5408,12 @@ const DragAndDrop = (() => {
                 audio.pause();
             }
         } catch (e) {
-            console.error( 'DragAndDrop.toggleAudio :', e );
+            console.error('DragAndDrop.toggleAudio :', e);
         }
     }
-    
+
     return {
-        render:renderDataDND,
+        render: renderDataDND,
         toggleAudio,
         makeDraggable,
         initDroppable,
@@ -5442,9 +5438,9 @@ const DragAndDropMulti = (() => {
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
@@ -5452,8 +5448,8 @@ const DragAndDropMulti = (() => {
             __singleQuesIndex = 0;
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const content  = activity?.content ?? {};
-            const lang     = activity.lang ?? 'en';
+            const content = activity?.content ?? {};
+            const lang = activity.lang ?? 'en';
             const singleQuestionMode = content?.singleQuestionMode ?? false;
 
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -5463,42 +5459,41 @@ const DragAndDropMulti = (() => {
 
             parent.innerHTML = `<div class="question">
                                     <div class="container">
-                                        ${
-                                            audioSrc?
-                                            `<div class="common_listening_container" id="listening_container">
+                                        ${audioSrc ?
+                    `<div class="common_listening_container" id="listening_container">
                                                 <div class="play-btn common_playBtn">
                                                     <div class="icon"></div>
                                                 </div>
                                             </div>`: ''
-                                        }
-                                        <div id="question_header_container" ${audioSrc? `style="display: none"`: ''}>
+                }
+                                        <div id="question_header_container" ${audioSrc ? `style="display: none"` : ''}>
                                             <div class="qSections row g-0 mt-3 rowWithAudios">
                                                 <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
-                                                ${audioSrc? 
-                                                    `<div class="col-auto" id="listening_common_audio_container">
+                                                ${audioSrc ?
+                    `<div class="col-auto" id="listening_common_audio_container">
                                                         <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
                                                         </svg>
                                                         <svg id="" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16" role="button">
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
                                                         </svg>
-                                                    </div>`:''
-                                                }
+                                                    </div>`: ''
+                }
                                             </div>
                                         </div>
-                                        <div id='question-container-box' ${audioSrc? `style="display: none"`: ''}>
+                                        <div id='question-container-box' ${audioSrc ? `style="display: none"` : ''}>
                                             <div class="question-block position-relative">
                                                 <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
                                                 <div class="drag-question-box2 mt-3"></div>
                                             </div>
-                                            ${ !singleQuestionMode ? `
+                                            ${!singleQuestionMode ? `
                                                     <div class="buttons machiNgs">
                                                         <button class="submit-btn disable" id="submit2">${buttonLabel.check}</button>
                                                         <button class="show-btn" id="showAns2">${buttonLabel.show}</button>
                                                         <button class="reset-btn">${buttonLabel.try}</button>
                                                     </div>
                                                 ` : ''
-                                            }
+                }
                                         </div>
                                     </div>
                                 </div>
@@ -5514,39 +5509,39 @@ const DragAndDropMulti = (() => {
                                     </div>
                                 </div>`;
             // ..
-			
-			const submitBtn = parent.querySelector( '.submit-btn' );
-			const showBtn   = parent.querySelector( '.show-btn' );
-			const resetBtn  = parent.querySelector( '.reset-btn' );
-			const popUpCloseBtn = parent.querySelector( '.popUp-close-btn' );
 
-			if (submitBtn) submitBtn.addEventListener("click", showPopUp);
-			if (showBtn) showBtn.addEventListener("click", showDropAnswers);
-			if (resetBtn) resetBtn.addEventListener("click", resetDropBox);
-			if (popUpCloseBtn) popUpCloseBtn.addEventListener("click", closePopUp);
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
+            const popUpCloseBtn = parent.querySelector('.popUp-close-btn');
+
+            if (submitBtn) submitBtn.addEventListener("click", showPopUp);
+            if (showBtn) showBtn.addEventListener("click", showDropAnswers);
+            if (resetBtn) resetBtn.addEventListener("click", resetDropBox);
+            if (popUpCloseBtn) popUpCloseBtn.addEventListener("click", closePopUp);
 
             is_Audio_available(audioSrc);
 
-		} catch (e) {
-            console.error( 'DragAndDropMulti.ui :', e );
+        } catch (e) {
+            console.error('DragAndDropMulti.ui :', e);
         }
     }
 
     const showPopUp = () => {
-        const activity   = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
-        const lang       = activity?.lang ?? 'en';
-        const questions  = activity?.content?.questions ?? [];
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
+        const questions = activity?.content?.questions ?? [];
         const headLabels = Activity.translateTableHeads(lang);
 
         const strictMatch = activity?.content?.strictMatch;
         const option_side = activity?.content?.option_side ?? 'top';
 
-        const type_set    = activity?.content?.set ?? {};
-        const hasTypeSet  = Object.keys(type_set).length > 0;
+        const type_set = activity?.content?.set ?? {};
+        const hasTypeSet = Object.keys(type_set).length > 0;
 
         let correctCount = 0;
-        let totalQues    = questions.length;
-        const table      = [];
+        let totalQues = questions.length;
+        const table = [];
 
         const tableBodyF = `<div class="table-responsive p-2">
                             <table class="table table-bordered" style="font-size:20px">
@@ -5560,46 +5555,46 @@ const DragAndDropMulti = (() => {
                                 </thead>
                             <tbody>`;
         // ..
-        table.push( tableBodyF );
+        table.push(tableBodyF);
 
-        if( hasTypeSet ) {
+        if (hasTypeSet) {
             totalQues = type_set?.answers.length || 0;
-            const compareAnswerArrays = (correctAns=[], userAns=[]) => {
+            const compareAnswerArrays = (correctAns = [], userAns = []) => {
                 const setUserAns = new Set(userAns);
-                const missing    = correctAns.filter(x => !setUserAns.has(x));
-                
+                const missing = correctAns.filter(x => !setUserAns.has(x));
+
                 const counts = userAns.reduce((acc, cur) => {
                     acc[cur] = (acc[cur] || 0) + 1;
                     return acc;
                 }, {});
                 const duplicates = Object.keys(counts).filter(k => counts[k] > 1);
-                
+
                 const setCorrectAns = new Set(correctAns);
                 const extras = userAns.filter(x => !setCorrectAns.has(x));
 
                 const ok = missing.length === 0 && duplicates.length === 0;
 
-                userAns.map( (ans, key) => {
+                userAns.map((ans, key) => {
                     let isCorrect = false;
-                    if( setCorrectAns.has(ans) ) {
+                    if (setCorrectAns.has(ans)) {
                         isCorrect = true;
                         correctCount++;
                     }
 
                     const body = `
                         <tr clsss='trData'>
-                            <th>(${Activity.translateBulletLabels({lang:lang, key:key})})</th>
+                            <th>(${Activity.translateBulletLabels({ lang: lang, key: key })})</th>
                             <td class="${isCorrect ? 'text-success' : 'text-danger'}">${ans.toString()}</td>
                             <td></td>
                             <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
                         </tr>
                     `;
-                    table.push( body );
+                    table.push(body);
                 });
 
                 return { ok, missing, duplicates, extras };
             }
-            compareAnswerArrays( type_set?.answers, userAns )
+            compareAnswerArrays(type_set?.answers, userAns)
         } else {
             shuffledQuestions.forEach((item, i) => {
                 const userAnswer = userAns[i];
@@ -5607,40 +5602,40 @@ const DragAndDropMulti = (() => {
                 let isCorrect = false;
 
                 let correctAnswerText = item.options;
-                if ( option_side == 'right' ) {
+                if (option_side == 'right') {
                     correctAnswerText = item.options[item.answer] ?? '';
                 }
 
-                if( strictMatch ) {
+                if (strictMatch) {
                     isCorrect = userAnswer.toString() === correctAnswerText.toString();
-                    if( isCorrect ) {
+                    if (isCorrect) {
                         count++;
                         correctCount++;
                     }
                 } else {
                     let remaining = [...correctAnswerText];
                     let match = undefined;
-                    if(option_side == 'right'){
+                    if (option_side == 'right') {
                         remaining = [correctAnswerText];
                         match = userAnswer.map(userWord => {
                             const match = userWord === remaining[0];
                             return match;
                         });
-                    }else{
+                    } else {
                         match = userAnswer.map(userWord => {
-                            const id    = remaining.indexOf(userWord);
+                            const id = remaining.indexOf(userWord);
                             const match = id !== -1;
                             if (match) remaining.splice(id, 1);
                             return match;
                         });
                     }
-                    
-                    match.map( (item) => {
-                        if( item == true ) {
+
+                    match.map((item) => {
+                        if (item == true) {
                             count++;
                         }
                         const ansLen = option_side == "right" ? remaining.length : correctAnswerText.length;
-                        if( count == ansLen ) {
+                        if (count == ansLen) {
                             isCorrect = true;
                             correctCount++;
                         }
@@ -5649,25 +5644,25 @@ const DragAndDropMulti = (() => {
 
                 const body = `
                     <tr clsss='trData'>
-                        <th>(${Activity.translateBulletLabels({lang:lang, ind:i})})</th>
+                        <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
                         <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
                         <td class="text-success">${correctAnswerText.toString()}</td>
                         <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
                     </tr>
                 `;
-                table.push( body );
+                table.push(body);
             });
         }
 
         const tableBodyL = `</tbody></table></div>`;
-        table.push( tableBodyL );
+        table.push(tableBodyL);
 
-        document.getElementById("answer-review").innerHTML = table.join( '' );
+        document.getElementById("answer-review").innerHTML = table.join('');
 
-        if( hasTypeSet ) {
+        if (hasTypeSet) {
             document.querySelectorAll("tr").forEach(row => {
                 const cells = row.querySelectorAll("th, td");
-                if( cells.length >= 3 ) {
+                if (cells.length >= 3) {
                     cells[2].remove();
                 }
             });
@@ -5688,21 +5683,21 @@ const DragAndDropMulti = (() => {
     }
 
     const showDropAnswers = () => {
-        const activity    = Activity.getDefine(Activity.getQid( `#${containerId}` )) || {};
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) || {};
         const option_side = activity?.content?.option_side || 'top';
 
-        const type_set    = activity?.content?.set || {};
-        const hasTypeSet  = Object.keys(type_set).length > 0;
-        
+        const type_set = activity?.content?.set || {};
+        const hasTypeSet = Object.keys(type_set).length > 0;
+
         $(`#submit2`).addClass('disable');
         DragEnabled = false;
-        if( option_side == 'right' ) {
-            shuffledQuestions.map( (item, ind) => {
-                $(`.dropBox_2`).eq(ind).html( item.options[item.answer] );
+        if (option_side == 'right') {
+            shuffledQuestions.map((item, ind) => {
+                $(`.dropBox_2`).eq(ind).html(item.options[item.answer]);
             });
-        } else if( hasTypeSet ) {
-            type_set.answers.map( (ans,ind) => {
-                $(`.dropBox_2`).eq(ind).html( ans );
+        } else if (hasTypeSet) {
+            type_set.answers.map((ans, ind) => {
+                $(`.dropBox_2`).eq(ind).html(ans);
             });
         } else {
             for (let i = 0; i < $(`.dropBox_2`).length; i++) {
@@ -5717,19 +5712,19 @@ const DragAndDropMulti = (() => {
         DragEnabled = true;
     }
 
-    const canSingleQuestion = ({content,ind,lang,questionItem}={}) => {
-        if( !content ) return;
+    const canSingleQuestion = ({ content, ind, lang, questionItem } = {}) => {
+        if (!content) return;
 
         const replacement = content?.replacement ?? '#_#';
-        const questions   = content?.questions ?? [];
+        const questions = content?.questions ?? [];
         const option_side = content?.option_side ?? 'top';
-        const isCol       = typeof content?.col == 'object' ? true : false;
+        const isCol = typeof content?.col == 'object' ? true : false;
         const singleQuestionMode = content?.singleQuestionMode ?? false;
 
         const defaultCol = {
-            md : 4,
-            sm : 6,
-            col : 12
+            md: 4,
+            sm: 6,
+            col: 12
         };
         const col_size = {
             md: content?.col?.md ?? defaultCol.md,
@@ -5738,14 +5733,14 @@ const DragAndDropMulti = (() => {
         };
 
         const item = questionItem ?? questions[ind];
-        
-        const inputWidth  = item?.inputWidth ?? '';
+
+        const inputWidth = item?.inputWidth ?? '';
         const quesOptions = item?.options || [];
 
         let replacedText = item?.text;
 
         const questionHtml = [];
-        const optionHtml   = [];
+        const optionHtml = [];
 
         let index = 0;
         const replacementRegex = new RegExp(replacement, "g");
@@ -5760,68 +5755,68 @@ const DragAndDropMulti = (() => {
                 </div>
             `;
         });
-        
+
         const image = [];
-        if( item.image != undefined ) {
+        if (item.image != undefined) {
             const image_width = item.width ?? '200px';
             const img = `<img class="" style="width: ${image_width};" src="${Activity.pathToCWD()}${item.image}" ondragstart="return false;"></img>`
-            image.push( img );
+            image.push(img);
         }
 
-        if( option_side == 'top' && singleQuestionMode ) {
-            const options       = item?.options || [];
-            const addOptions    = Activity.shuffleArray( content?.addOptions || [] ) || [];
-            const mergedOptions = Activity.shuffleArray( [...new Set([...options, ...addOptions])] || [] ) || [];
+        if (option_side == 'top' && singleQuestionMode) {
+            const options = item?.options || [];
+            const addOptions = Activity.shuffleArray(content?.addOptions || []) || [];
+            const mergedOptions = Activity.shuffleArray([...new Set([...options, ...addOptions])] || []) || [];
             mergedOptions.forEach((item, ind) => {
                 const html = drag_option_html(item, ind);
-                optionHtml.push( html );
+                optionHtml.push(html);
             });
-            $('.drag-container2').html( optionHtml.join( '' ) );
+            $('.drag-container2').html(optionHtml.join(''));
         }
-            
-        if( option_side == 'right' ) {
+
+        if (option_side == 'right') {
             const options = [];
-            quesOptions.map((item,ind) => {
-                options.push( drag_option_html(item, ind) );
+            quesOptions.map((item, ind) => {
+                options.push(drag_option_html(item, ind));
             });
             const html = `
                 <div class="row g-0 my-3 align-items-center">
                     <div class="col-auto me-1">
-                        (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                        (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
                     </div>
                     <div class="col d-flex flex-wrap align-items-center question-container_2" data-queindex="${ind}">
-                        ${image.join( '' )}
+                        ${image.join('')}
                         ${replacedText}
                         <div class="ms-3 d-flex">
-                            ${options.join( '' )}
+                            ${options.join('')}
                         </div>
                     </div>
                 </div>
             `;
-            questionHtml.push( html );
+            questionHtml.push(html);
         } else {
-            if( isCol === false ) {
+            if (isCol === false) {
                 const html = `
                     <div class="my-2 p-1">
                         <div class="row g-0 border rounded h-100 p-2">
                             <div class="col-auto me-1 d-flex align-items-center">
-                                (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                                (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
                             </div>
                             <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
-                                ${image.join( '' )}
+                                ${image.join('')}
                                 ${replacedText}
                             </div>
                         </div>
                     </div>
                 `;
-                questionHtml.push( html );
+                questionHtml.push(html);
             } else {
-                ind == 0 ? questionHtml.push( '<div class="row g-0 my-3">' ) : false;
+                ind == 0 ? questionHtml.push('<div class="row g-0 my-3">') : false;
 
-                replacedText = replacedText.replaceAll( ',', '' );
+                replacedText = replacedText.replaceAll(',', '');
 
                 const html = `
-                    ${ col_size && !singleQuestionMode ? `
+                    ${col_size && !singleQuestionMode ? `
                             <div class="my-2 col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm} p-1">
                         ` : `
                             <div class="my-2 p-1">
@@ -5829,25 +5824,25 @@ const DragAndDropMulti = (() => {
                     }
                         <div class="d-flex h-100 border rounded p-2">
                             <div class="col-auto p-1 d-flex align-items-center me-1">
-                                (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                                (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
                             </div>
                             <div class="d-flex flex-column justify-content-between col question-container_2">
-                                ${ image.length ? `
+                                ${image.length ? `
                                         <div class="d-flex align-items-center h-100">
-                                            ${image.join( '' )}
+                                            ${image.join('')}
                                         </div>
                                     ` : ''
-                                }
+                    }
                                 <div class="row g-0 gap-4 my-3" data-queindex="${ind}">
                                     ${replacedText}
                                 </div>
                             </div>
                         </div>
                     </div>
-                `;                            
-                questionHtml.push( html );
+                `;
+                questionHtml.push(html);
 
-                ind == questions.length ? questionHtml.push( '</div>' ) : false;
+                ind == questions.length ? questionHtml.push('</div>') : false;
             }
         }
 
@@ -5856,95 +5851,95 @@ const DragAndDropMulti = (() => {
             optionHtml
         }
     }
-    
+
     const renderDataDND = (questionId) => {
         try {
             ui(questionId);
-            Activity.setHeader( questionId );
+            Activity.setHeader(questionId);
 
-            const data = Activity.getDefine( questionId );
+            const data = Activity.getDefine(questionId);
             const lang = data?.lang ?? 'en';
 
             const dragItems = document.getElementById(containerId);
             dragItems.dataset.qid = questionId;
 
-            const content     = data?.content ?? {};
+            const content = data?.content ?? {};
             const option_side = content?.option_side ?? 'top';
-            const type_set    = content?.set ?? {};
-            const hasTypeSet  = Object.keys(type_set).length > 0;
-            const isShuffle   = content?.shuffle ?? true;
+            const type_set = content?.set ?? {};
+            const hasTypeSet = Object.keys(type_set).length > 0;
+            const isShuffle = content?.shuffle ?? true;
             const singleQuestionMode = content?.singleQuestionMode ?? false;
-            
+
             const questions_temp = content?.questions ?? [];
 
             const optionHtml = [];
-            const questions  = isShuffle == true ? Activity.shuffleArray( questions_temp ) || [] : questions_temp;            
+            const questions = isShuffle == true ? Activity.shuffleArray(questions_temp) || [] : questions_temp;
 
-            if( option_side == 'top' && !hasTypeSet && !singleQuestionMode ) {
-                const options       = Activity.shuffleArray( questions || [] )?.flatMap( obj => obj.options ) || [];
-                const addOptions    = Activity.shuffleArray( content?.addOptions || [] ) || [];
-                const mergedOptions = Activity.shuffleArray( [...new Set([...options, ...addOptions])] || [] ) || [];
+            if (option_side == 'top' && !hasTypeSet && !singleQuestionMode) {
+                const options = Activity.shuffleArray(questions || [])?.flatMap(obj => obj.options) || [];
+                const addOptions = Activity.shuffleArray(content?.addOptions || []) || [];
+                const mergedOptions = Activity.shuffleArray([...new Set([...options, ...addOptions])] || []) || [];
                 mergedOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
-                    optionHtml.push( html );
+                    optionHtml.push(html);
                 });
-                $('.drag-container2').html( optionHtml.join( '' ) );
+                $('.drag-container2').html(optionHtml.join(''));
             }
 
-            if( hasTypeSet ) {
-                const options       = Activity.shuffleArray( type_set?.options || [] ) || [];
+            if (hasTypeSet) {
+                const options = Activity.shuffleArray(type_set?.options || []) || [];
                 const uniqueOptions = [...new Set(options)];
                 uniqueOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
-                    optionHtml.push( html );
+                    optionHtml.push(html);
                 });
-                $('.drag-container2').html( optionHtml.join( '' ) );
+                $('.drag-container2').html(optionHtml.join(''));
             }
 
             const questionHtml = [];
-            if( hasTypeSet ) {
+            if (hasTypeSet) {
                 type_set?.answers.map((item, ind) => {
                     const html = `
                         <div class="row g-0 my-3">
                             <div class="col-auto me-2">
-                                (${Activity.translateBulletLabels({lang:lang, ind:ind})})
+                                (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
                             </div>
                             <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
                                 <div class="drop-Box dropBox_2 ui-droppable"></div>
                             </div>
                         </div>
                     `;
-                    questionHtml.push( html );
+                    questionHtml.push(html);
                 });
             } else {
                 shuffledQuestions = questions;
-                if( !singleQuestionMode ) {
+                if (!singleQuestionMode) {
                     questions.forEach((item, ind) => {
                         const view = canSingleQuestion({
-                            questionItem:item,
-                            content:content, 
-                            ind:ind, 
-                            lang:lang                            
+                            questionItem: item,
+                            content: content,
+                            ind: ind,
+                            lang: lang
                         }).questionHtml.join('');
 
-                        questionHtml.push( view );
+                        questionHtml.push(view);
                     });
                 } else {
                     const view = canSingleQuestion({
-                        content:content, 
-                        ind:__singleQuesIndex, 
-                        lang:lang
+                        content: content,
+                        ind: __singleQuesIndex,
+                        lang: lang
                     }).questionHtml.join('');
 
-                    questionHtml.push( view );
+                    questionHtml.push(view);
 
-                    if( questions.length == 1 ) return;
+                    if (questions.length == 1) return;
 
                     const toggleBtnContainer = document.querySelector('#question-container-box');
-                    if( !toggleBtnContainer ) return;
+                    if (!toggleBtnContainer) return;
 
                     const toggleBtnsLabel = Activity.translateNextPrevLabel(lang);
-                    const buttonLabel     = Activity.translateButtonLabels(lang);
+                    const buttonLabel = Activity.translateButtonLabels(lang);
 
                     const toggleBtns = `
                         <div id="toggleQuestions" class="row g-0">
@@ -5973,53 +5968,53 @@ const DragAndDropMulti = (() => {
 
                     toggleBtnContainer.insertAdjacentHTML('beforebegin', toggleBtns);
 
-                    const toggleQuestionsContainer = document.querySelector( '#toggleQuestions' );
-                    if( !toggleQuestionsContainer ) return;
+                    const toggleQuestionsContainer = document.querySelector('#toggleQuestions');
+                    if (!toggleQuestionsContainer) return;
 
                     const __toggleBtns = getToggleBtns();
 
                     const previousBtn = __toggleBtns.prev;
-                    const nextBtn     = __toggleBtns.next;
-                    const showBtn     = __toggleBtns.show;
-                    
-                    if( previousBtn ) previousBtn.addEventListener('click', __previousQuestion);
-                    if( showBtn ) showBtn.addEventListener('click', __showAnswerPopupSingleType);
-                    if( nextBtn ) {
+                    const nextBtn = __toggleBtns.next;
+                    const showBtn = __toggleBtns.show;
+
+                    if (previousBtn) previousBtn.addEventListener('click', __previousQuestion);
+                    if (showBtn) showBtn.addEventListener('click', __showAnswerPopupSingleType);
+                    if (nextBtn) {
                         nextBtn.addEventListener('click', __nextQuestion);
                         nextBtn.disabled = false;
                     }
 
                 }
             }
-            $('.drag-question-box2').html( questionHtml.join( '' ) );
+            $('.drag-question-box2').html(questionHtml.join(''));
 
             userAns = Array(questions.length).fill([]);
-            
+
             makeDraggable(`.wordDrag`);
             initDroppable('.dropBox_2');
             DragEnabled = true;
         } catch (e) {
-            console.error( 'DragAndDropMulti.renderDataDND :', e );
+            console.error('DragAndDropMulti.renderDataDND :', e);
         }
     }
 
     const __getQuestionData = () => {
-        const questionId = Activity.getQid( '#'+containerId );
-        const data = Activity.getDefine( questionId );
+        const questionId = Activity.getQid('#' + containerId);
+        const data = Activity.getDefine(questionId);
         const lang = data?.lang ?? 'en';
-        const content   = data?.content ?? {};
+        const content = data?.content ?? {};
         const questions = content?.questions ?? [];
 
         return {
-            lang : lang,
-            content : content,
-            questions : questions
+            lang: lang,
+            content: content,
+            questions: questions
         }
     }
 
     const __setGetUserAttemptedAns = () => {
-        userAns[__singleQuesIndex]?.forEach( (ans, ind) => {
-            $('.drop-Box.dropBox_2').eq(ind).attr('data-val', ans).html( ans );
+        userAns[__singleQuesIndex]?.forEach((ans, ind) => {
+            $('.drop-Box.dropBox_2').eq(ind).attr('data-val', ans).html(ans);
         });
     }
 
@@ -6027,17 +6022,17 @@ const DragAndDropMulti = (() => {
         const data = __getQuestionData();
 
         const questionView = canSingleQuestion({
-            content:data.content,
-            ind:__singleQuesIndex, 
-            lang:data.lang
+            content: data.content,
+            ind: __singleQuesIndex,
+            lang: data.lang
         }).questionHtml.join('');
 
-        $('.drag-question-box2').html( questionView );
+        $('.drag-question-box2').html(questionView);
 
         makeDraggable(`.wordDrag`);
         initDroppable('.dropBox_2');
         DragEnabled = true;
-        
+
         __setGetUserAttemptedAns();
     }
 
@@ -6046,11 +6041,11 @@ const DragAndDropMulti = (() => {
         const prev = btns.prev;
         const next = btns.next;
 
-        if( !prev || !next ) return;
+        if (!prev || !next) return;
 
         next.disabled = false;
 
-        if( prev.disabled ) return;
+        if (prev.disabled) return;
 
         __singleQuesIndex--;
 
@@ -6064,20 +6059,20 @@ const DragAndDropMulti = (() => {
         const prev = btns.prev;
         const next = btns.next;
 
-        if( !prev || !next ) return;
+        if (!prev || !next) return;
 
         prev.disabled = false;
-        
+
         const data = __getQuestionData();
 
         const hasQuestion = __singleQuesIndex < data.questions.length;
 
-        if( !hasQuestion ) {
+        if (!hasQuestion) {
             next.disabled = true;
             return;
         }
 
-        if( next.disabled ) return;
+        if (next.disabled) return;
 
         __singleQuesIndex++;
 
@@ -6088,43 +6083,43 @@ const DragAndDropMulti = (() => {
 
     const getToggleBtns = () => {
 
-        const toggleQuestionsContainer = document.querySelector( '#toggleQuestions' );
-        if( !toggleQuestionsContainer ) {
+        const toggleQuestionsContainer = document.querySelector('#toggleQuestions');
+        if (!toggleQuestionsContainer) {
             return {
-                prev : null,
-                next : null,
-                show : null
+                prev: null,
+                next: null,
+                show: null
             }
         };
 
-        const previousBtn = toggleQuestionsContainer.querySelector( '#previousBtn' );
-        const nextBtn     = toggleQuestionsContainer.querySelector( '#nextBtn' );
-        const showBtn     = toggleQuestionsContainer.querySelector( '#showBtn' );
+        const previousBtn = toggleQuestionsContainer.querySelector('#previousBtn');
+        const nextBtn = toggleQuestionsContainer.querySelector('#nextBtn');
+        const showBtn = toggleQuestionsContainer.querySelector('#showBtn');
 
         return {
-            prev : previousBtn,
-            next : nextBtn,
-            show : showBtn,
+            prev: previousBtn,
+            next: nextBtn,
+            show: showBtn,
         }
     }
 
     const __showAnswerPopupSingleType = () => {
 
-        if( !userAns.every( arr => arr.length > 0 && arr.every(v => v != null && v !== "") ) ) {
-            console.log( 'Please attempt all questions' );
+        if (!userAns.every(arr => arr.length > 0 && arr.every(v => v != null && v !== ""))) {
+            console.log('Please attempt all questions');
             return;
         }
 
         const data = __getQuestionData();
         const lang = data?.lang ?? 'en';
-        const questions   = data?.questions ?? [];
+        const questions = data?.questions ?? [];
         const strictMatch = data?.content?.strictMatch ?? false;
         const option_side = data?.content?.option_side ?? 'top';
 
         const tableHeadLabel = Activity.translateTableHeads(lang);
         let correctCount = 0;
-        let totalQues    = questions.length;
-        const table      = [];
+        let totalQues = questions.length;
+        const table = [];
 
         const tablePartStart = `
             <div class="table-responsive p-2">
@@ -6140,7 +6135,7 @@ const DragAndDropMulti = (() => {
             <tbody>
         `;
         // ..
-        table.push( tablePartStart );
+        table.push(tablePartStart);
 
         questions.forEach((item, i) => {
             const userAnswer = userAns[i];
@@ -6148,40 +6143,40 @@ const DragAndDropMulti = (() => {
             let isCorrect = false;
 
             let correctAnswerText = item.options;
-            if ( option_side == 'right' ) {
+            if (option_side == 'right') {
                 correctAnswerText = item.options[item.answer] ?? '';
             }
 
-            if( strictMatch ) {
+            if (strictMatch) {
                 isCorrect = userAnswer.toString() === correctAnswerText.toString();
-                if( isCorrect ) {
+                if (isCorrect) {
                     count++;
                     correctCount++;
                 }
             } else {
                 let remaining = [...correctAnswerText];
                 let match = undefined;
-                if(option_side == 'right'){
+                if (option_side == 'right') {
                     remaining = [correctAnswerText];
                     match = userAnswer.map(userWord => {
                         const match = userWord === remaining[0];
                         return match;
                     });
-                }else{
+                } else {
                     match = userAnswer.map(userWord => {
-                        const id    = remaining.indexOf(userWord);
+                        const id = remaining.indexOf(userWord);
                         const match = id !== -1;
                         if (match) remaining.splice(id, 1);
                         return match;
                     });
                 }
-                
-                match.map( (item) => {
-                    if( item == true ) {
+
+                match.map((item) => {
+                    if (item == true) {
                         count++;
                     }
                     const ansLen = option_side == "right" ? remaining.length : correctAnswerText.length;
-                    if( count == ansLen ) {
+                    if (count == ansLen) {
                         isCorrect = true;
                         correctCount++;
                     }
@@ -6190,19 +6185,19 @@ const DragAndDropMulti = (() => {
 
             const body = `
                 <tr clsss='trData'>
-                    <th>(${Activity.translateBulletLabels({lang:lang, ind:i})})</th>
+                    <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
                     <td class="text-success">${correctAnswerText.toString()}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
                 </tr>
             `;
-            table.push( body );
+            table.push(body);
         });
 
         const tablePartEnd = `</tbody></table></div>`;
-        table.push( tablePartEnd );
+        table.push(tablePartEnd);
 
-        document.getElementById("answer-review").innerHTML = table.join( '' );
+        document.getElementById("answer-review").innerHTML = table.join('');
         document.getElementById("popupDialogAns").style.display = "block";
 
         const finalText = lang == 'en' ?
@@ -6221,13 +6216,13 @@ const DragAndDropMulti = (() => {
                 revert: true,
                 containment: '.container-sub',
                 start: function () {
-                    if( !DragEnabled ) {
+                    if (!DragEnabled) {
                         return false;
                     }
                 }
             });
         } catch (e) {
-            console.error( 'DragAndDropMulti.makeDraggable :', e );
+            console.error('DragAndDropMulti.makeDraggable :', e);
         }
     }
 
@@ -6239,19 +6234,19 @@ const DragAndDropMulti = (() => {
                     const dragVal = ui.draggable.attr('data-ans');
                     $(this).html(dragVal).attr('data-val', `${dragVal}`);
                     const index = $(this).parent().attr('data-queindex');
-                    const qID   = $(`#${containerId}`).attr('data-qid');
+                    const qID = $(`#${containerId}`).attr('data-qid');
 
                     const activity = Activity.getDefine(qID) ?? {};
-                    const hasCol   = typeof activity?.content?.col === 'object' ? true : false;
+                    const hasCol = typeof activity?.content?.col === 'object' ? true : false;
 
-                    if( Array.isArray(userAns[index]) ) {
-                        const totalDropBox = ( hasCol === true )
-                            ? $(this).parent().children() 
+                    if (Array.isArray(userAns[index])) {
+                        const totalDropBox = (hasCol === true)
+                            ? $(this).parent().children()
                             : $(`.question-container_2`).eq(index).children(selector);
                         // ..
-                        
+
                         const tempArr = [];
-                        for( let i = 0; i < totalDropBox.length; i++) {
+                        for (let i = 0; i < totalDropBox.length; i++) {
                             if ($(totalDropBox).eq(i).attr('data-val') != "") {
                                 tempArr.push($(totalDropBox).eq(i).attr('data-val'));
                             }
@@ -6261,13 +6256,13 @@ const DragAndDropMulti = (() => {
                         userAns[index] = dragVal;
                     }
 
-                    if( enableDragCheckSubmitBtn() == $(selector).length ) {
+                    if (enableDragCheckSubmitBtn() == $(selector).length) {
                         $(`#submit2`).removeClass('disable');
                     }
                 }
             });
         } catch (e) {
-            console.error( 'DragAndDropMulti.initDroppable :', e );
+            console.error('DragAndDropMulti.initDroppable :', e);
         }
     }
 
@@ -6283,9 +6278,9 @@ const DragAndDropMulti = (() => {
 
     const is_Audio_available = (src) => {
 
-        if(!src && src == '') return;
-        
-        Helper.setAudio( Activity.pathToCWD() + src );
+        if (!src && src == '') return;
+
+        Helper.setAudio(Activity.pathToCWD() + src);
 
         const containerSelector = Define.get('questionContainer');
         const parent = document.querySelector(containerSelector);
@@ -6296,12 +6291,12 @@ const DragAndDropMulti = (() => {
         audio_playBtns.forEach(btn => {
             btn.addEventListener('click', Helper.playAudio);
         });
-        
+
         audio_pauseBtn.addEventListener('click', Helper.pauseAudio);
     }
-    
+
     return {
-        render:renderDataDND,
+        render: renderDataDND,
     }
 
 })();
@@ -6310,22 +6305,22 @@ const Sorting = (() => {
 
     const containerId = 'sorting-container';
 
-    const sequenceClass    = 'sort-options';
+    const sequenceClass = 'sort-options';
     const quesHeadingClass = 'sort-ques-heading';
 
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -6342,62 +6337,62 @@ const Sorting = (() => {
                                     </div>
                                 </div>`;
             // ..
-			
-			const submitBtn = parent.querySelector( '.submit-btn' );
-			const showBtn   = parent.querySelector( '.show-btn' );
-			const resetBtn  = parent.querySelector( '.reset-btn' );
 
-			if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
-			if (showBtn) showBtn.addEventListener("click", showAnswer);
-			if (resetBtn) resetBtn.addEventListener("click", tryAgain);
-		} catch (e) {
-            console.error( 'Sorting.ui :', e );
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
+
+            if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+            if (showBtn) showBtn.addEventListener("click", showAnswer);
+            if (resetBtn) resetBtn.addEventListener("click", tryAgain);
+        } catch (e) {
+            console.error('Sorting.ui :', e);
         }
     }
 
     const renderQuestion = (questionId) => {
         try {
             ui(questionId);
-            Activity.setHeader( questionId );
+            Activity.setHeader(questionId);
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity?.lang ?? 'en';
+            const lang = activity?.lang ?? 'en';
 
             const dragContainer = document.getElementById(containerId);
             dragContainer.dataset.qid = questionId;
 
-            const content  = activity?.content ?? {};
+            const content = activity?.content ?? {};
             const quesHead = content?.question ?? '';
-            const sequence = Activity.shuffleArray(content?.sequence ?? [] ) ?? [];
+            const sequence = Activity.shuffleArray(content?.sequence ?? []) ?? [];
 
             renderSequence(sequence);
-            
-            $('.'+quesHeadingClass).html( quesHead );
+
+            $('.' + quesHeadingClass).html(quesHead);
 
             dragContainer.querySelectorAll(`.${sequenceClass} li`).forEach(li => {
                 li.addEventListener("dragstart", () => li.classList.add("dragging"));
                 li.addEventListener("dragend", () => li.classList.remove("dragging"));
             });
 
-            const ul = dragContainer.querySelector('.'+sequenceClass);
-            if( ul ) ul.addEventListener("dragover", handleDragOver);
+            const ul = dragContainer.querySelector('.' + sequenceClass);
+            if (ul) ul.addEventListener("dragover", handleDragOver);
 
         } catch (e) {
-            console.error( 'Sorting.renderQuestion :', e );
+            console.error('Sorting.renderQuestion :', e);
         }
     }
 
-    const renderSequence = (seqArray, seqClass='') => {
+    const renderSequence = (seqArray, seqClass = '') => {
         try {
             const seqHtml = [];
-            seqArray.map( (item) => {
+            seqArray.map((item) => {
                 const li = `<li draggable="true" data-text="${item}" class="ddg ${seqClass}">${item}</li>`;
-                seqHtml.push( li );
+                seqHtml.push(li);
             });
 
-            $('.'+sequenceClass).html( seqHtml.join( '' ) );
-        } catch( e ) {
-            console.error( 'Sorting.renderSequence :', e );
+            $('.' + sequenceClass).html(seqHtml.join(''));
+        } catch (e) {
+            console.error('Sorting.renderSequence :', e);
         }
     }
 
@@ -6418,7 +6413,7 @@ const Sorting = (() => {
     const getDragAfterElement = (container, y) => {
         const elements = [...container.querySelectorAll("li:not(.dragging)")];
         return elements.reduce((closest, child) => {
-            const box    = child.getBoundingClientRect();
+            const box = child.getBoundingClientRect();
             const offset = y - box.top - box.height / 2;
             if (offset < 0 && offset > closest.offset) return { offset, element: child };
             else return closest;
@@ -6426,28 +6421,28 @@ const Sorting = (() => {
     }
 
     const showAnswer = () => {
-        const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) || {};
-        const content  = activity?.content ?? {};
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) || {};
+        const content = activity?.content ?? {};
         const sequence = content?.sequence ?? [];
 
-        renderSequence( sequence, 'text-success border-success' );
+        renderSequence(sequence, 'text-success border-success');
 
         const ul = document.querySelector('.' + sequenceClass);
         if (ul) ul.removeEventListener('dragover', handleDragOver);
 
-        $(`.${sequenceClass} li`).map( (i,item) => {
+        $(`.${sequenceClass} li`).map((i, item) => {
             $(item).on('dragstart', (e) => { e.preventDefault(); return false; })
         });
 
-        $( '.submit-btn' ).addClass( 'disable' );
+        $('.submit-btn').addClass('disable');
     }
 
     const tryAgain = () => {
-        const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) || {};
-        const content  = activity?.content ?? {};
-        const sequence = Activity.shuffleArray( content?.sequence ?? [] ) ?? [];
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) || {};
+        const content = activity?.content ?? {};
+        const sequence = Activity.shuffleArray(content?.sequence ?? []) ?? [];
 
-        renderSequence( sequence );
+        renderSequence(sequence);
 
         const ul = document.querySelector('.' + sequenceClass);
         if (ul) {
@@ -6455,8 +6450,8 @@ const Sorting = (() => {
             ul.addEventListener('dragover', handleDragOver);
         }
 
-        $(`.${sequenceClass} li`).map( (i,item) => {
-            $(item).on('dragstart', (e) => {});
+        $(`.${sequenceClass} li`).map((i, item) => {
+            $(item).on('dragstart', (e) => { });
         });
 
         document.querySelectorAll(`.${sequenceClass} li`).forEach(li => {
@@ -6464,33 +6459,33 @@ const Sorting = (() => {
             li.addEventListener("dragend", () => li.classList.remove("dragging"));
         });
 
-        $( '.submit-btn' ).removeClass( 'disable' );
+        $('.submit-btn').removeClass('disable');
     }
 
     const checkAnswer = () => {
-        const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) || {};
-        const content  = activity?.content ?? {};
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) || {};
+        const content = activity?.content ?? {};
         const sequence = content?.sequence ?? [];
 
         const attempt = [];
-        [...$(`.${sequenceClass} li`)]?.map( (item,ind) => {
-            attempt.push( item.innerHTML );
+        [...$(`.${sequenceClass} li`)]?.map((item, ind) => {
+            attempt.push(item.innerHTML);
         });
 
-        if( sequence.toString() === attempt.toString() ) {
+        if (sequence.toString() === attempt.toString()) {
             Swal.fire({
                 title: "Well Done",
                 icon: "success"
             });
 
-            renderSequence( sequence, 'text-success border-success' );
-        } else {            
-            attempt?.map( (item, ind) => {
+            renderSequence(sequence, 'text-success border-success');
+        } else {
+            attempt?.map((item, ind) => {
                 let dragClass = 'text-success border-success';
-                if( sequence[ind] != item ) {
+                if (sequence[ind] != item) {
                     dragClass = 'text-danger border-danger';
                 }
-                $('.ddg').eq(ind).addClass( dragClass );
+                $('.ddg').eq(ind).addClass(dragClass);
             });
 
             Swal.fire({
@@ -6501,27 +6496,27 @@ const Sorting = (() => {
     }
 
     return {
-        render : renderQuestion,
+        render: renderQuestion,
     }
 
 })();
 
 const Pdf = (() => {
-    const containerId = 'pdf-container';    
+    const containerId = 'pdf-container';
 
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -6552,86 +6547,86 @@ const Pdf = (() => {
                                 </div>`;
             // ..
 
-		} catch (e) {
-            console.error( 'Pdf.ui :', e );
+        } catch (e) {
+            console.error('Pdf.ui :', e);
         }
     };
 
-    const toggle_loader = ( show=true ) => {
+    const toggle_loader = (show = true) => {
         try {
-            $( '.spinner-container' ).remove();
-            $( '.viewer' ).addClass( 'position-relative' );
+            $('.spinner-container').remove();
+            $('.viewer').addClass('position-relative');
             const html = `<div class="spinner-container position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-75 z-3 d-flex align-items-start justify-content-center" style="border-radius:20px;padding-top:25vh;">
                             <div class="spinner-border text-primary" role="status"></div>
                         </div>`;
             // ..
-            if( show ) {
-                $( '.viewer' ).append( html );
+            if (show) {
+                $('.viewer').append(html);
             }
-        } catch( err ) {
-            console.log( 'ERROR : Pdf.toggle_loader', err );
+        } catch (err) {
+            console.log('ERROR : Pdf.toggle_loader', err);
         }
     };
 
     const renderPdf = async (questionId) => {
         try {
             ui(questionId);
-            
-            const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity?.lang ?? 'en';
-            const path     = activity?.content?.pdf ? Activity.pathToCWD()+activity?.content?.pdf : '';
 
-            if( !path ) {
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const path = activity?.content?.pdf ? Activity.pathToCWD() + activity?.content?.pdf : '';
+
+            if (!path) {
                 console.warn('No PDF path found');
                 return;
             }
 
-            const downloadBtn     = document.getElementById("downloadBtn");
+            const downloadBtn = document.getElementById("downloadBtn");
             const downloadAllowed = activity?.content?.download;
-            if( downloadBtn && downloadAllowed ) {
+            if (downloadBtn && downloadAllowed) {
                 downloadBtn.onclick = () => {
-                    const a    = document.createElement("a");
-                    a.href     = path;
+                    const a = document.createElement("a");
+                    a.href = path;
                     a.download = path;
                     a.click();
                 };
             } else {
                 downloadBtn.remove();
             }
-            
-            toggle_loader(true);
-            await Define.get( 'loadScript' )('js/pdf.js');
-            await Define.get( 'loadScript' )('js/pdf.worker.js');
 
-            if( window.pdfjsLib && pdfjsLib.GlobalWorkerOptions ) {
+            toggle_loader(true);
+            await Define.get('loadScript')('js/pdf.js');
+            await Define.get('loadScript')('js/pdf.worker.js');
+
+            if (window.pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/pdf.worker.js';
             }
-            
-            const canvas    = document.getElementById("pdfCanvas");
-            const ctx 		= canvas.getContext("2d");
+
+            const canvas = document.getElementById("pdfCanvas");
+            const ctx = canvas.getContext("2d");
             const pageNumInput = document.getElementById("pageNum");
-            const pageCountEl  = document.getElementById("pageCount");
-            
-            let pdfDoc      = null;
+            const pageCountEl = document.getElementById("pageCount");
+
+            let pdfDoc = null;
             let currentPage = 1;
-            let scale       = 1.2;
-            let rotation    = 0;
+            let scale = 1.2;
+            let rotation = 0;
 
             const loadingTask = pdfjsLib.getDocument(path);
             loadingTask.onProgress = (data) => {
-                if( data.total && data.loaded === data.total ) toggle_loader(false);
+                if (data.total && data.loaded === data.total) toggle_loader(false);
             };
 
             try {
                 pdfDoc = await loadingTask.promise;
-                console.info( '[OK] ', 'PDF loaded.');
+                console.info('[OK] ', 'PDF loaded.');
             } catch (err) {
-                console.info( '[ERROR]', 'Failed to load PDF =>', err.message ?? err );
+                console.info('[ERROR]', 'Failed to load PDF =>', err.message ?? err);
                 return;
             }
 
             const togglePdfControls = (enabled) => {
-                const ids = ['prevBtn','nextBtn','zoomInBtn','zoomOutBtn','resetBtn'];
+                const ids = ['prevBtn', 'nextBtn', 'zoomInBtn', 'zoomOutBtn', 'resetBtn'];
                 ids.forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.disabled = !enabled;
@@ -6642,34 +6637,34 @@ const Pdf = (() => {
             const renderPage = async () => {
                 toggle_loader(true);
 
-                if( !pdfDoc ) return;
+                if (!pdfDoc) return;
 
                 let currentRenderTask = null;
                 let isRendering = false;
 
-                if( currentRenderTask ) {
+                if (currentRenderTask) {
                     try {
                         currentRenderTask.cancel();
                         await new Promise(r => setTimeout(r, 0));
-                    } catch (e) {}
+                    } catch (e) { }
                     currentRenderTask = null;
                 }
 
                 togglePdfControls(false);
                 isRendering = true;
-                
+
                 try {
-                    const page 	        = await pdfDoc.getPage(currentPage);
-                    const viewport      = page.getViewport({ scale, rotation });
-                    const outputScale   = window.devicePixelRatio || 1;
-                    canvas.width        = viewport.width * outputScale;
-                    canvas.height       = viewport.height * outputScale;
-                    canvas.style.width  = viewport.width + "px";
+                    const page = await pdfDoc.getPage(currentPage);
+                    const viewport = page.getViewport({ scale, rotation });
+                    const outputScale = window.devicePixelRatio || 1;
+                    canvas.width = viewport.width * outputScale;
+                    canvas.height = viewport.height * outputScale;
+                    canvas.style.width = viewport.width + "px";
                     canvas.style.height = viewport.height + "px";
-                    const transform 	= outputScale !== 1
+                    const transform = outputScale !== 1
                         ? [outputScale, 0, 0, outputScale, 0, 0]
                         : null;
-                        
+
                     await page.render({
                         canvasContext: ctx,
                         viewport,
@@ -6678,8 +6673,8 @@ const Pdf = (() => {
 
                     pageNumInput.value = currentPage;
                     toggle_loader(false);
-                } catch (err) {                    
-                    if( err && err.name === 'RenderingCancelledException' ) {
+                } catch (err) {
+                    if (err && err.name === 'RenderingCancelledException') {
                         console.info('render cancelled');
                     } else {
                         console.error('Error rendering page:', err);
@@ -6689,10 +6684,10 @@ const Pdf = (() => {
                     togglePdfControls(true);
                 }
             }
-            
+
             pageCountEl.textContent = pdfDoc ? `${pdfDoc.numPages}` : 0;
             await renderPage();
-            
+
             document.getElementById("prevBtn").onclick = () => {
                 if (currentPage <= 1) return;
                 currentPage--; renderPage();
@@ -6707,17 +6702,17 @@ const Pdf = (() => {
                 if (v > pdfDoc.numPages) v = pdfDoc.numPages;
                 currentPage = v; renderPage();
             };
-            document.getElementById("zoomInBtn").onclick  = () => { scale *= 1.2; renderPage(); };
+            document.getElementById("zoomInBtn").onclick = () => { scale *= 1.2; renderPage(); };
             document.getElementById("zoomOutBtn").onclick = () => { scale /= 1.2; renderPage(); };
-            document.getElementById("resetBtn").onclick   = () => { scale=1.2; rotation=0; renderPage(); };            
+            document.getElementById("resetBtn").onclick = () => { scale = 1.2; rotation = 0; renderPage(); };
 
         } catch (e) {
             toggle_loader(true);
-            console.error( 'Pdf.renderPdf :', e );
+            console.error('Pdf.renderPdf :', e);
         }
     };
 
-    return { render : renderPdf }
+    return { render: renderPdf }
 })();
 
 const Shabdkosh = (() => {
@@ -6728,9 +6723,9 @@ const Shabdkosh = (() => {
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
@@ -6750,124 +6745,122 @@ const Shabdkosh = (() => {
                                 </div>`;
             // ..
 
-            Activity.setHeader( questionId );
+            Activity.setHeader(questionId);
 
-		} catch (e) {
-            console.error( 'Shabdkosh.ui :', e );
+        } catch (e) {
+            console.error('Shabdkosh.ui :', e);
         }
     };
 
     const renderQuestion = (questionId) => {
         try {
             ui(questionId);
-            
-            const activity = Activity.getDefine(questionId) ?? {};
-            const content  = activity?.content ?? [];
-            const isShuffle   = activity?.shuffle ?? true;
-            const questions  = isShuffle ? Activity.shuffleArray(content) : content;
 
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity?.content ?? [];
+            const isShuffle = activity?.shuffle ?? true;
+            const questions = isShuffle ? Activity.shuffleArray(content) : content;
+
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
             const tabs = [];
             questions.forEach((item, ind) => {
 
-                if( !item.tabtitle || !item.id ) return;
+                if (!item.tabtitle || !item.id) return;
 
                 const titleLower = item.tabtitle.toLowerCase();
-                const tabTitle   = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
+                const tabTitle = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
                 const tab = `
                     <button class="tab-btn" data-id="${item.id}" data-title="${titleLower}">
                         ${tabTitle}
                     </button>
                 `;
-                tabs.push( tab );
+                tabs.push(tab);
             });
             const tabBtn = document.getElementById("tabButtons");
-            if( tabBtn && tabs.length ) tabBtn.innerHTML = tabs.join( '' );
+            if (tabBtn && tabs.length) tabBtn.innerHTML = tabs.join('');
 
-            const tabBtns = document.querySelectorAll( '#tabButtons button' );
-            tabBtns.forEach( (item, ind) => {
+            const tabBtns = document.querySelectorAll('#tabButtons button');
+            tabBtns.forEach((item, ind) => {
                 item.addEventListener('click', (e) => {
                     renderTabContent(e);
                     toggleTabActive(e);
                 });
-                if( ind === 0 ) {
+                if (ind === 0) {
                     item.click();
                 }
             });
 
         } catch (e) {
-            console.error( 'Shabdkosh.renderQuestion :', e );
+            console.error('Shabdkosh.renderQuestion :', e);
         }
     };
 
     const renderTabContent = (thisObj) => {
-        if( typeof thisObj != 'object' &&  typeof thisObj.target != 'object' ) {
-            console.warn( '[WARNING]', 'Invalid selector' );
+        if (typeof thisObj != 'object' && typeof thisObj.target != 'object') {
+            console.warn('[WARNING]', 'Invalid selector');
         }
 
         const id = thisObj.target.dataset.id;
 
-        const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
-        const lang     = activity?.lang ?? 'en';
-        const content  = activity?.content ?? [];
-        const tabitem  = content.filter( x => x.id == id );
-        
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content ?? [];
+        const tabitem = content.filter(x => x.id == id);
+
         const isTitles = tabitem[0]?.titles ? tabitem[0]?.titles.length > 0 : false;
         const titles = isTitles ? tabitem[0]?.titles : tabitem[0];
-        
-        if( !tabitem.length ) {
-            console.warn( '[WARNING]', 'Invalid tab-id' );
+
+        if (!tabitem.length) {
+            console.warn('[WARNING]', 'Invalid tab-id');
             return;
         }
 
-        if( !tabitem[0]?.tabtitle || !tabitem[0]?.id ) return;
-        
+        if (!tabitem[0]?.tabtitle || !tabitem[0]?.id) return;
+
         const titleLower = tabitem[0].tabtitle.toLowerCase();
-        const tabTitle   = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
-        
+        const tabTitle = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
+
         const titlesHtml = [];
         let tabpanecontent = "";
 
-        titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : '' }`);
-    
-        if(!isTitles){
+        titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : ''}`);
+
+        if (!isTitles) {
             tabpanecontent = `
                     ${titles?.meaning ? `<div class="meaning me-1"><b class="me-1 arth">${Activity.translateMeaningLabel(lang)} :</b>${titles.meaning}</div>` : ''}
-                    ${titles?.sentence ? 
-                        `<div class="sentence-use">
+                    ${titles?.sentence ?
+                    `<div class="sentence-use">
                             <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
-                            ${
-                                titles?.sentence ?
-                                    titles?.sentence.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
-                                    : ''
-                            }
-                        </div>` : ''
-                    }
-                    ${titles?.image && titles?.image?.path ?                
-                        `<div class="img-box">
-                            <img style="width:${ titles?.image?.width ?? '40%' };" src="${Activity.pathToCWD() + titles?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
-                        </div>` 
+                            ${titles?.sentence ?
+                        titles?.sentence.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
                         : ''
                     }
+                        </div>` : ''
+                }
+                    ${titles?.image && titles?.image?.path ?
+                    `<div class="img-box">
+                            <img style="width:${titles?.image?.width ?? '40%'};" src="${Activity.pathToCWD() + titles?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
+                        </div>`
+                    : ''
+                }
                 </div>
             `;
             titlesHtml.push(tabpanecontent);
-        }else{
+        } else {
             titles.map((item) => {
                 const labelName = item?.title;
                 const labelText = item?.text;
-                if( !labelName || !labelText ) return;
-                if( labelName.toLowerCase() == Activity.translateSentenceLabel(lang).toLocaleLowerCase() ){
+                if (!labelName || !labelText) return;
+                if (labelName.toLowerCase() == Activity.translateSentenceLabel(lang).toLocaleLowerCase()) {
                     tabpanecontent = `<div class="sentence-use">
                                         <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
-                                        ${
-                                            item?.text ?
-                                                item?.text.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
-                                                : ''
-                                        }
+                                        ${item?.text ?
+                            item?.text.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
+                            : ''
+                        }
                                     </div>`
-                }else{
+                } else {
                     tabpanecontent = `<div class="meaning me-1"><b class="me-1 arth">${labelName} :</b>${item.text}</div>`;
                 }
 
@@ -6875,16 +6868,16 @@ const Shabdkosh = (() => {
 
             });
 
-            if( tabitem[0]?.image && tabitem[0]?.image?.path ){
+            if (tabitem[0]?.image && tabitem[0]?.image?.path) {
                 const image = `<div class="img-box">
-                                    <img style="width:${ tabitem[0]?.image?.width ?? '40%' };" src="${Activity.pathToCWD() + tabitem[0]?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
+                                    <img style="width:${tabitem[0]?.image?.width ?? '40%'};" src="${Activity.pathToCWD() + tabitem[0]?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
                                 </div>`
                 titlesHtml.push(image);
-            }   
+            }
         }
 
         const tabPanes = document.getElementById("tabPanes");
-        if( tabPanes ) tabPanes.innerHTML = titlesHtml.join('');
+        if (tabPanes) tabPanes.innerHTML = titlesHtml.join('');
     };
 
     const toggleTabActive = (thisObj) => {
@@ -6892,53 +6885,53 @@ const Shabdkosh = (() => {
         thisObj.target.classList.add("active");
     };
 
-    return { render : renderQuestion }
+    return { render: renderQuestion }
 })();
 
 const Shrutlekh = (() => {
 
     Activity.css('shrutlekh.css');
 
-    const containerId            = 'shrutlekh-container';
-    const responseAudioContId    = 'response-audio-cont';
-    const correctionBoxContId    = 'correct-box-cont';
-    const questionBtnContId      = 'question-button';
-    const textInputId            = 'singleInput';
-    const textInputParenId       = 'singleSection';
+    const containerId = 'shrutlekh-container';
+    const responseAudioContId = 'response-audio-cont';
+    const correctionBoxContId = 'correct-box-cont';
+    const questionBtnContId = 'question-button';
+    const textInputId = 'singleInput';
+    const textInputParenId = 'singleSection';
     const correctionBoxSectionId = 'correctionSection';
-    const correctWordHintId      = 'correctWordDisplay';
+    const correctWordHintId = 'correctWordDisplay';
 
     const tickIconPath = './images/right1.png';
-    
-    let questionIndex  = 0;
+
+    let questionIndex = 0;
     const currentAudio = new Audio();
-    
+
     const audioBasePath = './audio/commonDictationSong/';
-    const audioBundle   = {
-        clickBtn:          { hi: `${audioBasePath}clickOnbtn-Hn.mp3`, en: `${audioBasePath}clickOnbtn.mp3` },
-        clickNextBtn:      { hi: `${audioBasePath}clickOnNextbtn-Hn.mp3`, en: `${audioBasePath}clickOnNextbtn.mp3` },
-        box1:              { hi: `${audioBasePath}correctInbox1-Hn.mp3`, en: `${audioBasePath}correctInbox1.mp3` },
-        box2:              { hi: `${audioBasePath}correctInbox2-Hn.mp3`, en: `${audioBasePath}correctInbox2.mp3` },
-        box3:              { hi: `${audioBasePath}correctInbox3-Hn.mp3`, en: `${audioBasePath}correctInbox3.mp3` },
-        correct:           { hi: `${audioBasePath}right_ans-Hn.mp3`, en: `${audioBasePath}right_ans.mp3` },
-        incorrect:         { hi: `${audioBasePath}wrong_ans-Hn.mp3`, en: `${audioBasePath}wrong_ans.mp3` },
+    const audioBundle = {
+        clickBtn: { hi: `${audioBasePath}clickOnbtn-Hn.mp3`, en: `${audioBasePath}clickOnbtn.mp3` },
+        clickNextBtn: { hi: `${audioBasePath}clickOnNextbtn-Hn.mp3`, en: `${audioBasePath}clickOnNextbtn.mp3` },
+        box1: { hi: `${audioBasePath}correctInbox1-Hn.mp3`, en: `${audioBasePath}correctInbox1.mp3` },
+        box2: { hi: `${audioBasePath}correctInbox2-Hn.mp3`, en: `${audioBasePath}correctInbox2.mp3` },
+        box3: { hi: `${audioBasePath}correctInbox3-Hn.mp3`, en: `${audioBasePath}correctInbox3.mp3` },
+        correct: { hi: `${audioBasePath}right_ans-Hn.mp3`, en: `${audioBasePath}right_ans.mp3` },
+        incorrect: { hi: `${audioBasePath}wrong_ans-Hn.mp3`, en: `${audioBasePath}wrong_ans.mp3` },
         writeCorrectBelow: { hi: `${audioBasePath}secondAttemptStatement-Hn.mp3`, en: `${audioBasePath}secondAttemptStatement.mp3` }
     };
     const _constructAudio = () => {
-        for( const key in audioBundle ) {
-            for( const lang in audioBundle[key] ) {
+        for (const key in audioBundle) {
+            for (const lang in audioBundle[key]) {
                 const audio = new Audio();
-                audio.src   = audioBundle[key][lang];
+                audio.src = audioBundle[key][lang];
                 audioBundle[key][lang] = audio;
             }
         }
     };
     _constructAudio();
 
-    const playAudio = async (key, lang='en') => {
+    const playAudio = async (key, lang = 'en') => {
         await pauseAllAudio();
         const audio = audioBundle[key]?.[lang];
-        if( audio instanceof HTMLAudioElement ) {
+        if (audio instanceof HTMLAudioElement) {
             try {
                 await audio.play();
             } catch (err) {
@@ -6955,11 +6948,11 @@ const Shrutlekh = (() => {
                 currentAudio.currentTime = 0;
                 currentAudio.pause();
             }
-            
+
             for (const key in audioBundle) {
                 for (const lang in audioBundle[key]) {
                     const audio = audioBundle[key][lang];
-                    if( audio instanceof HTMLAudioElement ) {
+                    if (audio instanceof HTMLAudioElement) {
                         audio.currentTime = 0;
                         audio.pause();
                     }
@@ -6968,24 +6961,24 @@ const Shrutlekh = (() => {
 
             resolve();
         });
-    };    
+    };
 
     const ui = (questionId) => {
         try {
-            
+
             pauseAllAudio();
 
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';            
-            
+            const lang = activity.lang ?? 'en';
+
             const btnLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -7022,159 +7015,159 @@ const Shrutlekh = (() => {
                                     </div>
                                 </div>`;
             // ..
-            Activity.setHeader( questionId );
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
-			
-			const playBtn  = parent.querySelector( '.play-btn' );
-            const checkBtn = parent.querySelector( '#checkSingleBtn' );
-            const checkPracBtn = parent.querySelector( '#checkPracticeBtn' );
-            
-			if (playBtn) playBtn.addEventListener("click", openQuestions);
-			if (checkBtn) checkBtn.addEventListener("click", checkAnswer);
-			if (checkPracBtn) checkPracBtn.addEventListener("click", checkPracAnswer);
-		} catch (err) {
-            console.error( 'Shrutlekh.ui :', err );
+            Activity.setHeader(questionId);
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
+
+            const playBtn = parent.querySelector('.play-btn');
+            const checkBtn = parent.querySelector('#checkSingleBtn');
+            const checkPracBtn = parent.querySelector('#checkPracticeBtn');
+
+            if (playBtn) playBtn.addEventListener("click", openQuestions);
+            if (checkBtn) checkBtn.addEventListener("click", checkAnswer);
+            if (checkPracBtn) checkPracBtn.addEventListener("click", checkPracAnswer);
+        } catch (err) {
+            console.error('Shrutlekh.ui :', err);
         }
     };
 
     const openQuestions = () => {
         try {
-            const activity = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
-            const lang     = activity?.lang ?? 'en';
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
 
             playAudio('clickBtn', lang);
-            
+
             $('.qq-Box').hide();
             $('.question-section').show();
-            
+
             renderWordButton();
-        } catch( err ) {
-            console.log( 'Shrutlekh.openQuestions', err );
+        } catch (err) {
+            console.log('Shrutlekh.openQuestions', err);
         }
     };
 
     const renderWordButton = () => {
         try {
-            const activity  = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
-            const lang      = activity?.lang ?? 'en';
-            const content   = activity?.content ?? {};
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
-            const label     = Activity.translateWordLabel(lang);
+            const label = Activity.translateWordLabel(lang);
 
-            if( questionIndex < questions.length ) {
+            if (questionIndex < questions.length) {
                 const btn = `<div class="word-btn active" data-index="${questionIndex}">
-                                ${label} ${Number( questionIndex + 1 )}
+                                ${label} ${Number(questionIndex + 1)}
                             </div>`;
                 // ..
-                $('#'+questionBtnContId).append(btn);
-                $(`.word-btn[data-index='${questionIndex}']`)[0].addEventListener('click', playAudio_focusInput );
+                $('#' + questionBtnContId).append(btn);
+                $(`.word-btn[data-index='${questionIndex}']`)[0].addEventListener('click', playAudio_focusInput);
             }
-        } catch( err ) {
-            console.log( 'Shrutlekh.renderWordButton', err );
+        } catch (err) {
+            console.log('Shrutlekh.renderWordButton', err);
         }
     };
 
     const toggleNextWord = () => {
-        const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
-        const lang      = activity?.lang ?? 'en';
-        const content   = activity?.content ?? {};
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content ?? {};
         const questions = content?.questions ?? [];
 
         questionIndex++;
 
-        if( questionIndex != questions.length ) {
-            playAudio('clickNextBtn',lang);
+        if (questionIndex != questions.length) {
+            playAudio('clickNextBtn', lang);
             renderWordButton();
         }
 
-        if( $('.word-btn.done').length == questionIndex && questions.length == questionIndex ) {
+        if ($('.word-btn.done').length == questionIndex && questions.length == questionIndex) {
             showFinalCongrats();
         }
     };
-    
+
     const playAudio_focusInput = () => {
         try {
-            const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
-            const lang      = activity?.lang ?? 'en';
-            const content   = activity?.content ?? {};
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
-            const curQues   = questions[questionIndex] ?? {};
+            const curQues = questions[questionIndex] ?? {};
 
-            if( !Object.keys(curQues).length ) return;
-            
-            $('#'+textInputParenId).css('display','block');
+            if (!Object.keys(curQues).length) return;
+
+            $('#' + textInputParenId).css('display', 'block');
 
             pauseAllAudio();
-            
-            if( currentAudio instanceof HTMLAudioElement ) {
-                currentAudio.src = Activity.pathToCWD()+curQues.audio;
+
+            if (currentAudio instanceof HTMLAudioElement) {
+                currentAudio.src = Activity.pathToCWD() + curQues.audio;
                 currentAudio.currentTime = 0;
                 currentAudio.play();
             }
 
-            if( lang == 'hi' ) {
+            if (lang == 'hi') {
                 $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
-                
-                $('#'+textInputId)
-                .keyboard({
-                    layout     : 'hindi',
-                    usePreview : false,
-                    autoAccept : true,
-                })
-                .addTyping({ showTyping: true, delay: 70 })
-                .on('keydown', e => e.preventDefault());
+
+                $('#' + textInputId)
+                    .keyboard({
+                        layout: 'hindi',
+                        usePreview: false,
+                        autoAccept: true,
+                    })
+                    .addTyping({ showTyping: true, delay: 70 })
+                    .on('keydown', e => e.preventDefault());
             }
 
-            $('#'+textInputId).focus().val('');
+            $('#' + textInputId).focus().val('');
 
-        } catch( err ) {
-            console.log( 'Shrutlekh.playAudio_focusInput', err );
+        } catch (err) {
+            console.log('Shrutlekh.playAudio_focusInput', err);
         }
     };
 
     const checkAnswer = () => {
         try {
-            const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
-            const content   = activity?.content ?? {};
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+            const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
-            const curQues   = questions[questionIndex] ?? {};
-            
-            const userInput = $('#'+textInputId)[0].value.trim();
-            if( userInput === curQues?.answer ) correctPopUp();
+            const curQues = questions[questionIndex] ?? {};
+
+            const userInput = $('#' + textInputId)[0].value.trim();
+            if (userInput === curQues?.answer) correctPopUp();
             else wrongPopUp();
-        } catch( err ) {
-            console.log( 'Shrutlekh.checkAnswer', err );
+        } catch (err) {
+            console.log('Shrutlekh.checkAnswer', err);
         }
     };
 
     const checkPracAnswer = async () => {
         try {
-            const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
-            const lang      = activity?.lang ?? 'en';
-            const content   = activity?.content ?? {};
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
-            const curQues   = questions[questionIndex] ?? {};
-            const answer    = curQues?.answer;
+            const curQues = questions[questionIndex] ?? {};
+            const answer = curQues?.answer;
 
             let boxID;
             let boxInput;
             let correctCount = 0;
-            $('.correction-input').each( (ind, item) => {
-                if( item.value == answer ) {
-                    correctCount++;                    
+            $('.correction-input').each((ind, item) => {
+                if (item.value == answer) {
+                    correctCount++;
                     item.style.borderColor = 'green';
                 } else {
                     item.style.borderColor = 'red';
-                    boxID = `box${ind+1}`;
+                    boxID = `box${ind + 1}`;
                     boxInput = item;
                     return false;
                 }
             });
 
-            if( $('.correction-input').length == correctCount && correctCount > 1 ) {
+            if ($('.correction-input').length == correctCount && correctCount > 1) {
 
                 const correctAudio = await playAudio('correct', lang);
-                const timeout      = Math.round( correctAudio.duration * 1000 );
+                const timeout = Math.round(correctAudio.duration * 1000);
 
                 Swal.fire({
                     icon: 'success',
@@ -7186,16 +7179,16 @@ const Shrutlekh = (() => {
                     allowEscapeKey: false,
                     allowEnterKey: false,
                 }).then((res) => {
-                    if( res.isDismissed ) {
-                        $('#'+correctionBoxSectionId).css( 'display', 'none' );
-                        correctPopUp({skipAlert:true});
+                    if (res.isDismissed) {
+                        $('#' + correctionBoxSectionId).css('display', 'none');
+                        correctPopUp({ skipAlert: true });
                     }
                 });
 
             } else {
-                const boxAudio = await playAudio(boxID,lang);
-                const duration = boxAudio instanceof HTMLAudioElement ? boxAudio.duration : 2;                
-                const timeout  = Math.round( duration * 1000 );
+                const boxAudio = await playAudio(boxID, lang);
+                const duration = boxAudio instanceof HTMLAudioElement ? boxAudio.duration : 2;
+                const timeout = Math.round(duration * 1000);
                 Swal.fire({
                     icon: 'error',
                     title: lang == 'hi' ? 'फिर से कोशिश करें!' : 'Try Again!',
@@ -7206,23 +7199,23 @@ const Shrutlekh = (() => {
                     allowEscapeKey: false,
                     allowEnterKey: false,
                 }).then((res) => {
-                    if( res.isDismissed ) {
+                    if (res.isDismissed) {
                         boxInput.focus();
                     }
                 });
             }
 
-        } catch( err ) {
-            console.log( 'Shrutlekh.checkPracAnswer', err );
+        } catch (err) {
+            console.log('Shrutlekh.checkPracAnswer', err);
         }
     };
 
-    const correctPopUp = async ({skipAlert=false}={}) => {
-        const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
-        const lang      = activity?.lang ?? 'en';
-        const content   = activity?.content ?? {};
+    const correctPopUp = async ({ skipAlert = false } = {}) => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content ?? {};
         const questions = content?.questions ?? [];
-        const curQues   = questions[questionIndex] ?? {};
+        const curQues = questions[questionIndex] ?? {};
 
         const btnHtml = `${curQues?.answer}
                         <span class="right-icon">
@@ -7230,14 +7223,14 @@ const Shrutlekh = (() => {
                         </span>`;
         // ..
 
-        $(`.word-btn[data-index='${questionIndex}']`).addClass('done').html( btnHtml );
-        $(`.word-btn[data-index='${questionIndex}']`)[0].removeEventListener('click', playAudio_focusInput );
+        $(`.word-btn[data-index='${questionIndex}']`).addClass('done').html(btnHtml);
+        $(`.word-btn[data-index='${questionIndex}']`)[0].removeEventListener('click', playAudio_focusInput);
 
-        $('#'+textInputParenId)[0].style.display = "none";
+        $('#' + textInputParenId)[0].style.display = "none";
 
-        if( !skipAlert ) {
-            const correctAudio = await playAudio('correct',lang);
-            const timeout      = Math.round( correctAudio.duration ) * 1000;
+        if (!skipAlert) {
+            const correctAudio = await playAudio('correct', lang);
+            const timeout = Math.round(correctAudio.duration) * 1000;
 
             Swal.fire({
                 icon: 'success',
@@ -7248,8 +7241,8 @@ const Shrutlekh = (() => {
                 allowOutsideClick: false,
                 allowEscapeKey: false,
                 allowEnterKey: false,
-            }).then( (res) => {
-                if( res.isDismissed ) {
+            }).then((res) => {
+                if (res.isDismissed) {
                     toggleNextWord();
                 }
             });
@@ -7259,31 +7252,31 @@ const Shrutlekh = (() => {
     };
 
     const wrongPopUp = async () => {
-        const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
-        const lang      = activity?.lang ?? 'en';
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
 
-        const incorrectAudio = await playAudio('incorrect',lang);
+        const incorrectAudio = await playAudio('incorrect', lang);
 
-        const timeout = Math.round( incorrectAudio.duration ) * 1000;
+        const timeout = Math.round(incorrectAudio.duration) * 1000;
         Swal.fire({
             icon: "error",
             title: lang == 'hi' ? 'गलत उत्तर!' : 'Wrong Answer',
             html: lang == 'hi' ? '<small>फिर से कोशिश करें।</small>' : '<small>Try Again</small>',
-            timer: timeout,            
+            timer: timeout,
             showConfirmButton: false,
             allowOutsideClick: false,
             allowEscapeKey: false,
             allowEnterKey: false,
         }).then((res) => {
-            if( res.isDismissed ) {
+            if (res.isDismissed) {
                 renderCorrectionBox();
             }
         });
     };
 
     const showFinalCongrats = () => {
-        const activity  = Activity.getDefine( Activity.getQid( `#${containerId}` ) ) ?? {};
-        const lang      = activity?.lang ?? 'en';
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
 
         const hiHtml = '<b>आपने सभी शब्द सही लिखे!</b><br><small>शानदार प्रदर्शन!</small>';
         const enHtml = '<b>You wrote all the words correctly!</b><br><small>Excellent performance!</small>';
@@ -7299,11 +7292,11 @@ const Shrutlekh = (() => {
             allowOutsideClick: false,
             allowEscapeKey: false,
             allowEnterKey: false,
-        }).then( (res) => {
-            if( res.isConfirmed && res.value ) {
+        }).then((res) => {
+            if (res.isConfirmed && res.value) {
                 playAudio('clickBtn', lang);
 
-                $('#'+questionBtnContId).html( '' );
+                $('#' + questionBtnContId).html('');
                 questionIndex = 0;
                 renderWordButton();
             }
@@ -7311,23 +7304,23 @@ const Shrutlekh = (() => {
     };
 
     const renderCorrectionBox = async () => {
-        const activity  = Activity.getDefine(Activity.getQid( `#${containerId}` )) ?? {};
-        const lang      = activity.lang ?? 'en';
-        const content   = activity?.content ?? {};
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity.lang ?? 'en';
+        const content = activity?.content ?? {};
         const questions = content?.questions ?? [];
-        const curQues   = questions[questionIndex] ?? {};
+        const curQues = questions[questionIndex] ?? {};
 
-        await playAudio('writeCorrectBelow',lang);
-            
+        await playAudio('writeCorrectBelow', lang);
+
         const boxLabel = Activity.translateBoxLabel(lang);
 
-        $('#'+textInputParenId).css( 'display', 'none' ).val('');
-        $('#'+correctionBoxSectionId).css( 'display', 'block' );
+        $('#' + textInputParenId).css('display', 'none').val('');
+        $('#' + correctionBoxSectionId).css('display', 'block');
 
-        $('#'+correctWordHintId).html( curQues?.answer );
+        $('#' + correctWordHintId).html(curQues?.answer);
 
         const box = [];
-        for( let i=1; i<=3; i++ ) {
+        for (let i = 1; i <= 3; i++) {
             const html = `<div class="col-sm-4">
                             <div class="box-wrap">
                                 <label class="box-label">${boxLabel} ${i}</label>
@@ -7335,26 +7328,26 @@ const Shrutlekh = (() => {
                             </div>
                         </div>`;
             // ..
-            box.push( html );
+            box.push(html);
         }
-        $('#'+correctionBoxContId).html( box.join('') );
+        $('#' + correctionBoxContId).html(box.join(''));
 
-        if( lang == 'hi' ) {
+        if (lang == 'hi') {
             $.keyboard.layouts["hindi"] = Activity.hindiKeyboard();
-            
+
             $('.correction-input')
-            .keyboard({
-                layout     : "hindi",
-                usePreview : false,
-                autoAccept : true,
-            })
-            .addTyping({ showTyping: true, delay: 70 })
-            .on('keydown', e => e.preventDefault());
+                .keyboard({
+                    layout: "hindi",
+                    usePreview: false,
+                    autoAccept: true,
+                })
+                .addTyping({ showTyping: true, delay: 70 })
+                .on('keydown', e => e.preventDefault());
         }
     };
-    
+
     return {
-        render:ui
+        render: ui
     }
 
 })();
@@ -7363,28 +7356,28 @@ const WordSearch = (() => {
 
     Activity.css('wordSearch.css');
 
-    const containerId  = 'word-search-container';
+    const containerId = 'word-search-container';
     const puzzleTextId = 'puzzle-text';
-    const puzzleAnsId  = 'answer';
+    const puzzleAnsId = 'answer';
     const puzzleContId = 'puzzle';
 
-    const color_blue   = '#31cde2';
+    const color_blue = '#31cde2';
 
     let __grid;
 
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question word-searched">                                    
@@ -7404,110 +7397,110 @@ const WordSearch = (() => {
                                     </div>
                                 </div>`;
             // ..
-			
-			const resetBtn  = parent.querySelector( '.reset-btn' );
-			const showBtn   = parent.querySelector( '.show-btn' );
-			const submitBtn = parent.querySelector( '.submit-btn' );
 
-			if(resetBtn) resetBtn.addEventListener("click", clearGrid);
-			if(showBtn) showBtn.addEventListener("click", showAnswer);
-			if(submitBtn) submitBtn.addEventListener("click", checkAnswer);
-		} catch (err) {
-            console.error( 'WordSearch.ui :', err );
+            const resetBtn = parent.querySelector('.reset-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const submitBtn = parent.querySelector('.submit-btn');
+
+            if (resetBtn) resetBtn.addEventListener("click", clearGrid);
+            if (showBtn) showBtn.addEventListener("click", showAnswer);
+            if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+        } catch (err) {
+            console.error('WordSearch.ui :', err);
         }
     };
 
     const render = (questionId) => {
         try {
             ui(questionId);
-            Activity.setHeader( questionId );
-                        
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            Activity.setHeader(questionId);
 
-            const activity = Activity.getDefine( questionId );
-            const lang     = activity?.lang ?? 'en';
-            const content  = Activity.shuffleArray( activity?.content ?? [] ) ?? [];
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
+
+            const activity = Activity.getDefine(questionId);
+            const lang = activity?.lang ?? 'en';
+            const content = Activity.shuffleArray(activity?.content ?? []) ?? [];
 
             const puzzle = [];
-            const words  = [];
-            content.forEach( (item, ind) => {
-                puzzle.push( `<li class="hint-item">${item.text}</li>` );
-                words.push( `<div>${Number(ind+1)}. ${item.answer}</div>` );
+            const words = [];
+            content.forEach((item, ind) => {
+                puzzle.push(`<li class="hint-item">${item.text}</li>`);
+                words.push(`<div>${Number(ind + 1)}. ${item.answer}</div>`);
             });
-            $('#'+puzzleTextId).html( puzzle.join( '' ) );
-            $('#'+puzzleAnsId).html( words.join( '' ) );
+            $('#' + puzzleTextId).html(puzzle.join(''));
+            $('#' + puzzleAnsId).html(words.join(''));
 
             renderGrid(content, lang);
         } catch (e) {
-            console.error( 'WordSearch.render :', e );
+            console.error('WordSearch.render :', e);
         }
     }
 
     const renderGrid = () => {
         try {
-            const activity = Activity.getDefine( Activity.getQid( `#${containerId}` ) );
-            const content  = activity?.content ?? [];
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+            const content = activity?.content ?? [];
 
-            const words     = content.filter( puz => puz?.answer ).map( puz => puz.answer.toUpperCase() );            
-            const longest   = Math.max(...words.map(w => w.length));
-            const maxRow    = Math.max(...content.map(p => p.direction === 'h' ? p.row : p.row + (p.answer?.length || 0) - 1));
-            const maxCol    = Math.max(...content.map(p => p.direction === 'v' ? p.col : p.col + (p.answer?.length || 0) - 1));
-            const size      = Math.max(longest + 4, maxRow + 1, maxCol + 1, 15);
-            const grid      = Array.from({ length: size }, () => Array.from({ length: size }, () => ''));            
+            const words = content.filter(puz => puz?.answer).map(puz => puz.answer.toUpperCase());
+            const longest = Math.max(...words.map(w => w.length));
+            const maxRow = Math.max(...content.map(p => p.direction === 'h' ? p.row : p.row + (p.answer?.length || 0) - 1));
+            const maxCol = Math.max(...content.map(p => p.direction === 'v' ? p.col : p.col + (p.answer?.length || 0) - 1));
+            const size = Math.max(longest + 4, maxRow + 1, maxCol + 1, 15);
+            const grid = Array.from({ length: size }, () => Array.from({ length: size }, () => ''));
             const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
             content.forEach((item, index) => {
                 const { row, col, answer, direction } = item;
-                if( !answer || (direction !== 'h' && direction !== 'v') ) return;
+                if (!answer || (direction !== 'h' && direction !== 'v')) return;
 
                 const up = answer.toUpperCase();
-                [...up].forEach( (ch, i) => {
+                [...up].forEach((ch, i) => {
                     const r = direction === 'h' ? row : row + i;
                     const c = direction === 'h' ? col + i : col;
                     const cell = grid[r][c];
-                    if( cell === '' || cell === ch ) grid[r][c] = ch;
+                    if (cell === '' || cell === ch) grid[r][c] = ch;
                 });
             });
 
             const pool = alphabets.toUpperCase();
-            for( let r = 0; r < size; r++ ) {
-                for( let c = 0; c < size; c++ ) {
-                    if( grid[r][c] === '' ) {
-                        const rand = Math.floor( Math.random() * pool.length );
+            for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                    if (grid[r][c] === '') {
+                        const rand = Math.floor(Math.random() * pool.length);
                         grid[r][c] = pool[rand];
                     }
                 }
             }
 
-            const gridHtml = [ '<table>' ];
+            const gridHtml = ['<table>'];
             grid.forEach((rowArr, row) => {
                 gridHtml.push('<tr>');
                 rowArr.forEach((cell, col) => {
                     const data = `<td><input type="button" value="${cell}" data-row="${row}" data-col="${col}" data-selected="0"></td>`;
-                    gridHtml.push( data );
+                    gridHtml.push(data);
                 })
                 gridHtml.push('</tr>');
             });
             gridHtml.push('</table>');
 
-            const puzzleCont     = document.getElementById(puzzleContId);
+            const puzzleCont = document.getElementById(puzzleContId);
             puzzleCont.innerHTML = gridHtml.join('');
-            
+
             puzzleCont.querySelectorAll('input[type="button"]').forEach(btn => {
                 btn.addEventListener('click', selectCell);
             });
 
             __grid = grid.map(row => [...row]);
 
-        } catch( err ) {
-            console.log( 'WordSearch.renderGrid', err );
+        } catch (err) {
+            console.log('WordSearch.renderGrid', err);
         }
     }
 
     const selectCell = (e) => {
         const btn = e.currentTarget;
 
-        if( btn.dataset.selected == 2 ) return;
+        if (btn.dataset.selected == 2) return;
         btn.dataset.selected = btn.dataset.selected == 0 ? 1 : 0;
         btn.style.background = btn.dataset.selected == 1 ? 'yellow' : color_blue;
     }
@@ -7516,29 +7509,29 @@ const WordSearch = (() => {
 
         document.querySelectorAll('input[type="button"]').forEach(btn => {
             btn.dataset.selected = 0;
-            btn.style.color      = 'black';
+            btn.style.color = 'black';
             btn.style.background = color_blue;
         });
 
-        const checkBtn    = document.getElementById('c-check');
+        const checkBtn = document.getElementById('c-check');
         checkBtn.disabled = false;
         checkBtn.style.opacity = 1;
     }
 
     const showAnswer = () => {
         try {
-            const activity = Activity.getDefine(Activity.getQid( `#${containerId}` ));
-            const content  = activity?.content ?? [];
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+            const content = activity?.content ?? [];
             const puzzleCont = document.getElementById(puzzleContId);
 
             if (!puzzleCont) return;
-            
+
             puzzleCont.querySelectorAll('input[type="button"]').forEach(btn => {
                 btn.dataset.selected = 0;
                 btn.style.background = color_blue;
                 btn.style.color = 'black';
             });
-            
+
             content.forEach(item => {
                 const { row, col, answer, direction } = item;
                 if (!answer || (direction !== 'h' && direction !== 'v')) return;
@@ -7547,17 +7540,17 @@ const WordSearch = (() => {
                 [...up].forEach((ch, i) => {
                     const r = direction === 'h' ? row : row + i;
                     const c = direction === 'h' ? col + i : col;
-                    
+
                     const selector = `input[type="button"][data-row="${r}"][data-col="${c}"]`;
                     const btn = puzzleCont.querySelector(selector);
                     if (!btn) return;
 
                     btn.dataset.selected = 1;
                     btn.style.background = 'green';
-                    btn.style.color      = 'white';
+                    btn.style.color = 'white';
                 });
             });
-            
+
             const checkBtn = document.getElementById('c-check');
             if (checkBtn) {
                 checkBtn.disabled = true;
@@ -7568,16 +7561,16 @@ const WordSearch = (() => {
             console.error('WordSearch.showAnswer', err);
         }
     }
-    
+
     const checkAnswer = () => {
         try {
 
-            const activity = Activity.getDefine( Activity.getQid( `#${containerId}` ) );
-            const lang     = activity?.lang ?? 'en';
-            const content  = activity?.content ?? [];
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? [];
 
             const checkBtn = document.getElementById("c-check");
-            
+
             const selected = [...document.querySelectorAll('input[data-selected="1"]')];
             if (selected.length === 0) {
                 Swal.fire({
@@ -7591,40 +7584,40 @@ const WordSearch = (() => {
                     allowEscapeKey: false,
                     allowEnterKey: false,
                 });
-                checkBtn.disabled      = false;
+                checkBtn.disabled = false;
                 checkBtn.style.opacity = 1;
                 return;
             }
-            
+
             const matchedButtons = new Set();
 
-            let correct      = false;
+            let correct = false;
             let correctCount = 0;
             const totalCount = content.length;
 
             content.forEach((item, index) => {
-                let formed  = '';
+                let formed = '';
                 let buttons = [];
 
                 const { row, col, answer, direction } = item;
-                if( !answer || (direction !== 'h' && direction !== 'v') ) return;
+                if (!answer || (direction !== 'h' && direction !== 'v')) return;
 
                 const up = answer.toUpperCase();
-                [...up].forEach( (ch, i) => {
+                [...up].forEach((ch, i) => {
                     const r = direction === 'h' ? row : row + i;
                     const c = direction === 'h' ? col + i : col;
                     const btn = document.querySelector(`input[data-row="${r}"][data-col="${c}"]`);
-                    if ( btn ) buttons.push( btn );
-                    if (btn && btn.dataset.selected == 1 ) formed += btn.value;
+                    if (btn) buttons.push(btn);
+                    if (btn && btn.dataset.selected == 1) formed += btn.value;
                 });
 
-                if( formed === up ) {
+                if (formed === up) {
                     correct = true;
                     correctCount++;
                     buttons.forEach(btn => {
-                        if( btn.dataset.selected == 1 ) {
+                        if (btn.dataset.selected == 1) {
                             btn.style.background = 'limegreen';
-                            btn.style.color      = 'white';
+                            btn.style.color = 'white';
                             btn.dataset.selected = 2;
                             matchedButtons.add(btn);
                         }
@@ -7633,15 +7626,15 @@ const WordSearch = (() => {
             });
 
             selected.forEach(btn => {
-                if( !matchedButtons.has(btn) ) {
+                if (!matchedButtons.has(btn)) {
                     btn.style.background = 'red';
-                    btn.style.color      = 'white';
+                    btn.style.color = 'white';
                     btn.dataset.selected = 3;
                 }
             });
 
             let complete = false;
-            if( correctCount === totalCount ) {
+            if (correctCount === totalCount) {
                 complete = true;
                 if (checkBtn) {
                     checkBtn.disabled = true;
@@ -7649,15 +7642,15 @@ const WordSearch = (() => {
                 }
             }
 
-            popup({ complete:complete, correct:correctCount, total:totalCount, lang:lang });
-            
+            popup({ complete: complete, correct: correctCount, total: totalCount, lang: lang });
+
         } catch (err) {
             console.error('WordSearch.checkAnswer', err);
         }
     };
 
-    const popup = ({complete=false, correct=0, total=0, lang='en'} = {}) => {
-        if( complete ) {
+    const popup = ({ complete = false, correct = 0, total = 0, lang = 'en' } = {}) => {
+        if (complete) {
             const buttonLabels = Activity.translateButtonLabels(lang);
             Swal.fire({
                 title: lang == 'en' ? '🎉 Well Done!' : '🎉बहुत बढ़िया!',
@@ -7668,8 +7661,8 @@ const WordSearch = (() => {
                 allowOutsideClick: false,
                 allowEscapeKey: false,
                 allowEnterKey: false,
-            }).then( (res) => {
-                if( res.isConfirmed ) {
+            }).then((res) => {
+                if (res.isConfirmed) {
                     clearGrid();
                 }
             });
@@ -7685,8 +7678,8 @@ const WordSearch = (() => {
                 allowOutsideClick: false,
                 allowEscapeKey: false,
                 allowEnterKey: false,
-            }).then( (res) => {
-                if( res.isConfirmed ) {
+            }).then((res) => {
+                if (res.isConfirmed) {
                     clearGrid();
                 }
             });
@@ -7696,29 +7689,29 @@ const WordSearch = (() => {
     return {
         render
     }
-    
+
 })();
 
 const TextArea = (() => {
 
     const containerId = 'text-area-container';
-    const quesContId  = 'question-container';
+    const quesContId = 'question-container';
 
     let shuffledQuestions;
 
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
-            
+            const lang = activity.lang ?? 'en';
+
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -7745,76 +7738,76 @@ const TextArea = (() => {
                                 </div>`;
             // ..
 
-            Activity.setHeader( questionId );            
-			
-			const resetBtn  = parent.querySelector( '.reset-btn' );
-			const showBtn   = parent.querySelector( '.show-btn' );
-			const submitBtn = parent.querySelector( '.submit-btn' );
+            Activity.setHeader(questionId);
 
-			if(resetBtn) resetBtn.addEventListener("click", resetAnswers);
-			if(showBtn) showBtn.addEventListener("click", showAnswers);
-			if(submitBtn) submitBtn.addEventListener("click", checkAnswers);
-		} catch (err) {
-            console.error( 'TextArea.ui :', err );
+            const resetBtn = parent.querySelector('.reset-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const submitBtn = parent.querySelector('.submit-btn');
+
+            if (resetBtn) resetBtn.addEventListener("click", resetAnswers);
+            if (showBtn) showBtn.addEventListener("click", showAnswers);
+            if (submitBtn) submitBtn.addEventListener("click", checkAnswers);
+        } catch (err) {
+            console.error('TextArea.ui :', err);
         }
     };
 
     const render = (questionId) => {
         try {
             ui(questionId);
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
-            const activity    = Activity.getDefine( questionId );
-            const lang        = activity?.lang ?? 'en';
-            const content     = activity?.content ?? {};
+            const activity = Activity.getDefine(questionId);
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
             const replacement = content?.replacement ?? '#_#';
-            shuffledQuestions = Activity.shuffleArray( content?.questions ?? [] ) ?? [];
-            
+            shuffledQuestions = Activity.shuffleArray(content?.questions ?? []) ?? [];
+
             const placeholder = Activity.translateWriteAnsLabel(lang);
-            const textArea  = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px;" role="textbox"></textarea>`;
+            const textArea = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px;" role="textbox"></textarea>`;
             const questions = [];
-            shuffledQuestions.forEach( (ques,index) => {
-                const questionText = ques?.text?.replace(replacement, textArea );
+            shuffledQuestions.forEach((ques, index) => {
+                const questionText = ques?.text?.replace(replacement, textArea);
                 const html = `
                         <div class="my-3">
-                            ${Activity.translateBulletLabels({ind:index})}. ${questionText}
+                            ${Activity.translateBulletLabels({ ind: index })}. ${questionText}
                         </div>
                     `;
-                questions.push( html );
+                questions.push(html);
             });
-            $('#'+quesContId).html( questions.join('') );
+            $('#' + quesContId).html(questions.join(''));
 
-            if( lang == 'hi' ) {
-                const inputs = $('#'+quesContId)[0].querySelectorAll( '.hindiInput' );
-                
+            if (lang == 'hi') {
+                const inputs = $('#' + quesContId)[0].querySelectorAll('.hindiInput');
+
                 $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
                 $(inputs)
-                .keyboard({
-                    layout     : 'hindi',
-                    usePreview : false,
-                    autoAccept : true,
-                })
-                .addTyping({ showTyping: true, delay: 70 })
-                .on('keydown', e => e.preventDefault());
+                    .keyboard({
+                        layout: 'hindi',
+                        usePreview: false,
+                        autoAccept: true,
+                    })
+                    .addTyping({ showTyping: true, delay: 70 })
+                    .on('keydown', e => e.preventDefault());
             }
         } catch (err) {
-            console.error( 'TextArea.render :', err );
+            console.error('TextArea.render :', err);
         }
     };
 
     const resetAnswers = () => {
         const input = document.querySelectorAll('textarea.hindiInput');
-        if( input ) input.forEach(input => input.value = '' );
+        if (input) input.forEach(input => input.value = '');
         $('.submit-btn').removeClass('disable');
     };
 
     const checkAnswers = () => {
-        const activity = Activity.getDefine( Activity.getQid(`#${containerId}`) );
-        const lang     = activity?.lang ?? 'en';
-        
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const lang = activity?.lang ?? 'en';
+
         const inputs = document.querySelectorAll('textarea.hindiInput');
-        if( inputs.length ) {
-            let correctCount = 0, wrongCount = 0, emptyCount = 0;            
+        if (inputs.length) {
+            let correctCount = 0, wrongCount = 0, emptyCount = 0;
             let filled = false;
 
             inputs.forEach(input => {
@@ -7823,35 +7816,35 @@ const TextArea = (() => {
                 }
             });
 
-            if( !filled ) {
+            if (!filled) {
                 Swal.fire({
-                    icon  : 'warning',
-                    title : lang == 'hi' ? 'कोई उत्तर नहीं लिखा गया' : 'No answer was written',
-                    text  : lang == 'hi' ? 'कृपया कम से कम एक उत्तर लिखें फिर उत्तर जाँचें।' : 'Please write at least one answer and then check the answer.',
+                    icon: 'warning',
+                    title: lang == 'hi' ? 'कोई उत्तर नहीं लिखा गया' : 'No answer was written',
+                    text: lang == 'hi' ? 'कृपया कम से कम एक उत्तर लिखें फिर उत्तर जाँचें।' : 'Please write at least one answer and then check the answer.',
                     confirmButtonText: 'OK'
                 });
                 return;
             }
-            
-            const tableData = [];
-            inputs.forEach((input,ind) => {
 
-                const { index, flag, correct, user } = getAnswer(input,ind);                
+            const tableData = [];
+            inputs.forEach((input, ind) => {
+
+                const { index, flag, correct, user } = getAnswer(input, ind);
 
                 let resultIcon = '';
-                let userClass  = '';
+                let userClass = '';
 
-                if( user === '' ) {
+                if (user === '') {
                     resultIcon = '⚠ खाली';
-                    userClass  = 'wrong';
+                    userClass = 'wrong';
                     emptyCount++;
-                } else if( user === correct ) {
+                } else if (user === correct) {
                     resultIcon = '✔️';
-                    userClass  = 'correct';
+                    userClass = 'correct';
                     correctCount++;
                 } else {
                     resultIcon = '❌';
-                    userClass  = 'wrong';
+                    userClass = 'wrong';
                     wrongCount++;
                 }
 
@@ -7863,14 +7856,14 @@ const TextArea = (() => {
                         <td style="text-align: center;">${resultIcon}</td>
                     </tr>
                 `;
-                tableData.push( data );
+                tableData.push(data);
             });
-            
-            const tableHead = Activity.translateTableHeads(lang);            
+
+            const tableHead = Activity.translateTableHeads(lang);
 
             const popHtml = `
                     <div class="popup-header d-flex justify-content-between align-items-center py-2">
-                        <h2> ${lang == 'hi' ? 'उत्तर समीक्षा' : 'Answer review' }</h2>    
+                        <h2> ${lang == 'hi' ? 'उत्तर समीक्षा' : 'Answer review'}</h2>    
                         <button id="close-popup" class="btn btn-secondary">X</button>                    
                     </div>
                     <table class="answerdiv table table-bordered w-100" style="font-size:20px">
@@ -7887,9 +7880,9 @@ const TextArea = (() => {
                     </tbody>
                     </table>
                     <div class="d-flex" style="padding:10px; text-align:left;">
-                        <p>${lang == 'hi' ? 'सही' : 'Correct' } :</p> &nbsp;${correctCount} &nbsp;| &nbsp;
-                        <p>${lang == 'hi' ? 'गलत' : 'Wrong' } :</p> &nbsp;${wrongCount} &nbsp;| &nbsp;
-                        <p>${lang == 'hi' ? 'खाली' : 'Empty' } :</p>&nbsp; ${emptyCount}
+                        <p>${lang == 'hi' ? 'सही' : 'Correct'} :</p> &nbsp;${correctCount} &nbsp;| &nbsp;
+                        <p>${lang == 'hi' ? 'गलत' : 'Wrong'} :</p> &nbsp;${wrongCount} &nbsp;| &nbsp;
+                        <p>${lang == 'hi' ? 'खाली' : 'Empty'} :</p>&nbsp; ${emptyCount}
                     </div>
                     `;
             // ..            
@@ -7899,16 +7892,16 @@ const TextArea = (() => {
             if (popup) popup.style.display = "block";
 
             const closeBtn = document.querySelector('#close-popup');
-            if( closeBtn ) closeBtn.addEventListener( 'click', closeFnMCQ );
+            if (closeBtn) closeBtn.addEventListener('click', closeFnMCQ);
         }
     }
-  
+
     const showAnswers = () => {
         const inputs = document.querySelectorAll('textarea.hindiInput');
-        if( inputs.length ) {
-            inputs.forEach((input,ind) => {
-                const { index, flag, correct, user } = getAnswer(input,ind);
-                input.value = correct;                
+        if (inputs.length) {
+            inputs.forEach((input, ind) => {
+                const { index, flag, correct, user } = getAnswer(input, ind);
+                input.value = correct;
             });
             $('.submit-btn').addClass('disable');
         }
@@ -7916,24 +7909,24 @@ const TextArea = (() => {
 
     const getAnswer = (input, qInd) => {
         const correctAnswer = shuffledQuestions[qInd]?.answer;
-        const userAnswer    = input.value.trim();
-        let isCorrect       = false;
+        const userAnswer = input.value.trim();
+        let isCorrect = false;
 
-        if( userAnswer == correctAnswer ) isCorrect = true;
-        return { 
-            index   : qInd, 
-            flag    : isCorrect, 
-            correct : correctAnswer, 
-            user    : userAnswer 
+        if (userAnswer == correctAnswer) isCorrect = true;
+        return {
+            index: qInd,
+            flag: isCorrect,
+            correct: correctAnswer,
+            user: userAnswer
         };
     }
 
     const closeFnMCQ = () => {
         try {
             const popup = document.getElementById("popupDialogAns");
-            if (popup) popup.style.display = "none";            
-        } catch( e ) {
-            console.error( 'Mcq.closeFnMCQ', e );
+            if (popup) popup.style.display = "none";
+        } catch (e) {
+            console.error('Mcq.closeFnMCQ', e);
         }
     }
 
@@ -7964,6 +7957,7 @@ const CrossWord = (() => {
 
             const activity = Activity.getDefine(questionId) ?? {};
             const lang = activity.lang ?? 'en';
+            const que_side = activity.content?.side ?? 'left';
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -7971,8 +7965,8 @@ const CrossWord = (() => {
                             <div class="container" id="${containerId}">                                        
                                 <div class="cross-word-puzzle crossword-content" style="text-align:left;">
                                     <div class="${Define.get('head')}"></div>
-                                    <div class="cross-puzzle">
-                                        <div class="criss-cross"></div>
+                                    <div class="cross-puzzle ${que_side === 'top' || que_side === 'bottom' ? 'flex-column': ''} ${que_side === 'bottom' ? 'flex-column-reverse': que_side === 'right' ? 'flex-row-reverse': ''}" style="gap: 2vw;">
+                                        <div class="criss-cross ${que_side === 'top' || que_side === 'bottom' ? 'w-100 d-flex justify-content-evenly': ''}"></div>
                                         <div id="puzzle2" style="display:block;"></div>
                                     </div>
                                     <div id="answer" style="display:none;color:#000"></div>
@@ -8035,6 +8029,7 @@ const CrossWord = (() => {
         $('#answer').html(answers.join(''));
 
         const hints = [];
+        hints.push(`<div>`);
         if (ques?.across.length) hints.push(`<div class="criss-item across">ACROSS</div>`);
         ques?.across.map((item) => {
             const html = `
@@ -8044,7 +8039,9 @@ const CrossWord = (() => {
             `;
             hints.push(html);
         });
+        hints.push(`</div>`);
 
+        hints.push(`<div>`);
         if (ques?.down.length) hints.push(`<div class="criss-item across">DOWN</div>`);
         ques?.down.map((item) => {
             const html = `
@@ -8054,6 +8051,7 @@ const CrossWord = (() => {
             `;
             hints.push(html);
         });
+        hints.push(`</div>`);
         $('.criss-cross').html(hints.join(''));
 
         return ques;
@@ -8310,6 +8308,9 @@ const CrossWord = (() => {
 
         questions.forEach(q => {
 
+            const direction = q.direction;
+
+
             if (!q.image?.path || !q.image?.row || !q.image?.col) return;
 
             const { row, col, path } = q.image;
@@ -8319,6 +8320,8 @@ const CrossWord = (() => {
             );
 
             if (!cell) return;
+
+            const verticalMargin = cell.clientWidth / 3;
 
             const img = document.createElement("img");
             img.src = Activity.pathToCWD() + path;
@@ -8333,8 +8336,8 @@ const CrossWord = (() => {
             wrapper.appendChild(img);
 
             img.onload = () => {
-                img.style.top = cell.offsetTop + 10 + "px";
-                img.style.left = cell.offsetLeft + 10 + "px";
+                img.style.top = cell.offsetTop + verticalMargin + "px";
+                img.style.left = cell.offsetLeft - verticalMargin + "px";
             };
         });
     };
@@ -8364,7 +8367,7 @@ const ShravanKaushalWithImages = (() => {
     let questionRendered = false;
     let questionIndex = 0;
     const mainAudio = new Audio();
-    const queAudio  = new Audio();
+    const queAudio = new Audio();
 
     let pass = false;
 
@@ -8407,7 +8410,7 @@ const ShravanKaushalWithImages = (() => {
                                         </div>
                                     </div>
                                     ${activity.content?.main?.text != undefined ?
-                                        `<div class="poem-sec" style="display:none;">
+                    `<div class="poem-sec" style="display:none;">
                                             <div class="my-3 container" id="questionTitle">
                                                 <b class="${Define.get('head')}"></b>
                                                 <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn" viewBox="0 0 16 16">
@@ -8424,7 +8427,7 @@ const ShravanKaushalWithImages = (() => {
                                                 </div>
                                             </div>
                                         </div>`: ''
-                                    }
+                }
                                     <div class="question-sec" style="${activity.content?.main != undefined ? "display:none" : 'display:block'}">
                                         <div class="container contListen">
                                             <div class="my-3 container" id="questionTitle">
@@ -9343,7 +9346,7 @@ const RachnatmakParaWithImages = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity?.lang ?? 'en';
+            const lang = activity?.lang ?? 'en';
 
             const uiHtml = `<div class="question">
                                 <div class="container" id="${containerId}">
@@ -9471,8 +9474,8 @@ const RachnatmakWithKeyboard = (() => {
         ui(questionId);
 
         const activity = Activity.getDefine(questionId) ?? {};
-        const lang     = activity.lang ?? 'en';
-        const content  = activity.content ?? {};
+        const lang = activity.lang ?? 'en';
+        const content = activity.content ?? {};
         const hintText = activity.hintText ?? true;
 
         let textareaType = content.textArea?.type ?? "single";
@@ -9490,44 +9493,44 @@ const RachnatmakWithKeyboard = (() => {
                 `;
         }
 
-        const imgSrc   = content?.image?.path ? Activity.pathToCWD() + content?.image?.path : '';
+        const imgSrc = content?.image?.path ? Activity.pathToCWD() + content?.image?.path : '';
         const imgWidth = content?.image?.width ?? '10%';
-        const image    = imgSrc 
+        const image = imgSrc
             ? `<img
                 class="dynamicImgRachna shadow-sm ${content?.image?.side}"
                 src="${imgSrc}"
-                style="width:${imgWidth};" />` 
+                style="width:${imgWidth};" />`
             : '';
         // ..
 
-        const imageHTML = content?.image 
-                            ? ( content.image?.side === 'left' )
-                            : '';
+        const imageHTML = content?.image
+            ? (content.image?.side === 'left')
+            : '';
 
         const imageDirection = () => {
-            const html  = [];
-            if( content?.image?.side === 'top' ) html.push( `<div class="text-center">${image}</div>` );
+            const html = [];
+            if (content?.image?.side === 'top') html.push(`<div class="text-center">${image}</div>`);
 
             const frag1 = `<div class="inputeSectionsRachna img-${content?.image?.side}">`
-            html.push( frag1 );
+            html.push(frag1);
 
-            if( content?.image?.side === 'left' ) html.push( image );
+            if (content?.image?.side === 'left') html.push(image);
             const textArea = `<div class="textInputsBox">${textBox}</div>`;
-            html.push( textArea );
+            html.push(textArea);
 
-            if( content?.image?.side === 'right' ) html.push( image );
-            html.push( '</div>' );
+            if (content?.image?.side === 'right') html.push(image);
+            html.push('</div>');
 
             return html.join('');
         }
-        
+
         const html = `
-            ${ content?.heading ?
+            ${content?.heading ?
                 `<div class="instForFillText shadow-sm">
-                    ${ hintText ? `
+                    ${hintText ? `
                             <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
                         ` : ''
-                    }
+                }
                     <p class="saketText">${content?.heading ?? ''}</p>
                 </div>` : ''
             }
@@ -9560,8 +9563,8 @@ const RachnatmakWithKeyboard = (() => {
 
     const checkAnswer = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
-        const content  = activity.content ?? {};
-        const lang     = activity?.lang ?? 'en';
+        const content = activity.content ?? {};
+        const lang = activity?.lang ?? 'en';
 
         const textareas = document.querySelectorAll('textarea');
         const studentBox = document.querySelector('.studentOutPut');
@@ -9715,12 +9718,12 @@ const RachnatmakWithTabBtns = (() => {
 
     const handlingClick = () => {
         const tabs = document.querySelectorAll('.tabsForLetter');
-        tabs.forEach( (tab) => {
+        tabs.forEach((tab) => {
             const tabId = tab.dataset.id;
-            const contentBox = document.querySelector(`.showInboxes[data-id="${tabId}"]`);            
-            tab.addEventListener( 'click', (e) => {
+            const contentBox = document.querySelector(`.showInboxes[data-id="${tabId}"]`);
+            tab.addEventListener('click', (e) => {
                 $(contentBox).toggle();
-            });            
+            });
         });
     }
 
@@ -9836,35 +9839,35 @@ const RachnatmakWithInputs = (() => {
 
         const showInputsAnnds = document.getElementById("showInputsAnnds");
 
-        const colLeft  = content?.col?.left != undefined ? content?.col?.left : { md: 6, sm: 6, col: 6, show: true };
+        const colLeft = content?.col?.left != undefined ? content?.col?.left : { md: 6, sm: 6, col: 6, show: true };
         const colRight = content?.col?.right != undefined ? content?.col?.right : { md: 6, sm: 6, col: 6, show: true };
 
         content?.question.map((item, index) => {
-            
+
             const html = `<div class="row rowContainer">
                             <div class="col-md-${colLeft?.md} col-sm-${colLeft?.sm} col-${colLeft?.col}"
                                 style="display:${colLeft?.show ? "block" : "none"}">
                                 ${content?.inputLeft === false ?
-                                    item?.text ?
-                                        `<div class="headingText animate__animated animate__fadeInDown">
+                    item?.text ?
+                        `<div class="headingText animate__animated animate__fadeInDown">
                                             ${index + 1}. ${item.text}
-                                        </div>` : ''                                    
-                                    :
-                                    `<textarea 
+                                        </div>` : ''
+                    :
+                    `<textarea 
                                         data-type="left" id="leftValue_${index}"
                                         class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
                                         placeholder="${content?.placeholder?.left ?? ""}">
                                     </textarea>`
-                                }
+                }
                             </div>
-                            ${item?.answer ? 
-                                `<div class="col-md-${colRight?.md} col-sm-${colRight?.sm} col-${colRight?.col}"
+                            ${item?.answer ?
+                    `<div class="col-md-${colRight?.md} col-sm-${colRight?.sm} col-${colRight?.col}"
                                     style="display:${colRight?.show ? "block" : "none"}">
                                     <textarea data-type="right" id="inputAns_${index}"
                                     class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
                                     placeholder="${content?.placeholder?.right ?? ""}"></textarea>
                                 </div>` : ''
-                            }
+                }
                         </div>`;
             // ..
             showInputsAnnds.innerHTML += html;
@@ -9922,13 +9925,13 @@ const RachnatmakWithInputs = (() => {
             }
         } else {
             const qID = content?.showAnswerOfId;
-            if( Number(qID) ) {
-                if( qID < 0 || qID > content?.question.length ) return false;
+            if (Number(qID)) {
+                if (qID < 0 || qID > content?.question.length) return false;
 
                 const question = content?.question.filter(item => item.id == qID);
-                const index    = Number( qID - 1 );
-                if( content?.inputLeft === false ) {
-                    if( !fillAppli[index] ) return false;
+                const index = Number(qID - 1);
+                if (content?.inputLeft === false) {
+                    if (!fillAppli[index]) return false;
 
                     fillAppli[index].value = question[0]?.answer?.replaceAll("<br/>", "\n");
                     fillAppli[index].classList.add('pointer-none');
@@ -9970,14 +9973,14 @@ const RachnatmakWithInputs = (() => {
             $(".fillAppli").css("overflow", "hidden");
             $(".fillAppli").addClass("pointer-none");
         } else {
-            const fillAppLeft  = document.querySelectorAll('.fillAppli[data-type="left"]');
+            const fillAppLeft = document.querySelectorAll('.fillAppli[data-type="left"]');
             const fillAppRight = document.querySelectorAll('.fillAppli[data-type="right"]');
             content?.question.forEach((item, index) => {
-                if( fillAppLeft[index] ) {
+                if (fillAppLeft[index]) {
                     fillAppLeft[index].value = item.text.replaceAll("<br/>", "\n");
                 }
 
-                if( fillAppRight[index] ) {
+                if (fillAppRight[index]) {
                     fillAppRight[index].value = item.answer.replaceAll("<br/>", "\n");
                 }
                 autoResizeTextarea(fillAppRight[index]);
@@ -10017,8 +10020,8 @@ const RachnatmakWithInputs = (() => {
 
     const checkAnswers = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
-        const content  = activity?.content ?? {};
-        const lang     = activity?.lang ?? 'en';
+        const content = activity?.content ?? {};
+        const lang = activity?.lang ?? 'en';
 
         if (content?.inputLeft == false) {
 
@@ -10036,7 +10039,7 @@ const RachnatmakWithInputs = (() => {
             let score = (correct / fillAppli.length) * 100;
             let finalScore = score.toFixed(0);
 
-            const scoreText = ( lang == 'hi' ? `आपका स्कोर है:` : `Your score is:` ) + finalScore + '%';
+            const scoreText = (lang == 'hi' ? `आपका स्कोर है:` : `Your score is:`) + finalScore + '%';
 
             // SCORE BASED ALERT
             if (finalScore == 0) {
@@ -10061,14 +10064,14 @@ const RachnatmakWithInputs = (() => {
         } else {
             let score = 0;
 
-            const fillAppLeft  = document.querySelectorAll('.fillAppli[data-type="left"]');
+            const fillAppLeft = document.querySelectorAll('.fillAppli[data-type="left"]');
             const fillAppRight = document.querySelectorAll('.fillAppli[data-type="right"]');
-            const total        = fillAppLeft.length + fillAppRight.length;
+            const total = fillAppLeft.length + fillAppRight.length;
 
             content?.question.forEach((item, index) => {
-                if( fillAppLeft[index] ) {
+                if (fillAppLeft[index]) {
                     const correctAnswer = item.text.replaceAll("<br/>", "\n");
-                    if( fillAppLeft[index].value.trim() === correctAnswer.trim() ) {
+                    if (fillAppLeft[index].value.trim() === correctAnswer.trim()) {
                         score++;
                         fillAppLeft[index].classList.add('correctAnswer');
                         fillAppLeft[index].classList.remove('wrongAnswer');
@@ -10078,9 +10081,9 @@ const RachnatmakWithInputs = (() => {
                     }
                 }
 
-                if( fillAppRight[index] ) {
+                if (fillAppRight[index]) {
                     const correctAnswer = item.answer.replaceAll("<br/>", "\n");
-                    if( fillAppLeft[index].value.trim() === correctAnswer.trim() ) {
+                    if (fillAppLeft[index].value.trim() === correctAnswer.trim()) {
                         score++;
                         fillAppLeft[index].classList.add('correctAnswer');
                         fillAppLeft[index].classList.remove('wrongAnswer');
@@ -10095,7 +10098,7 @@ const RachnatmakWithInputs = (() => {
 
             let iconType = "info";
 
-            if( score === total ) {
+            if (score === total) {
                 iconType = "success";
             } else if (score === 0) {
                 iconType = "error";
@@ -10103,7 +10106,7 @@ const RachnatmakWithInputs = (() => {
                 iconType = "info";
             }
 
-            const totalScoreTxt = Number((score / total).toFixed(2)) + ' ' + (lang == 'hi' ? 'अंक प्राप्त हुए' : 'Points Scored' );
+            const totalScoreTxt = Number((score / total).toFixed(2)) + ' ' + (lang == 'hi' ? 'अंक प्राप्त हुए' : 'Points Scored');
             Swal.fire({
                 title: lang == 'hi' ? 'परिणाम' : 'Result',
                 text: totalScoreTxt,
@@ -10251,47 +10254,47 @@ const ClickOnImage = (() => {
         const selectedCards = document.querySelectorAll('.imgClick.selectedClickImgs');
 
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
-        const content  = activity?.content ?? {};
+        const content = activity?.content ?? {};
         const question = content?.question ?? [];
-        const lang     = activity.lang ?? 'en';
-        const txt      = popUpTxt[lang];
+        const lang = activity.lang ?? 'en';
+        const txt = popUpTxt[lang];
 
-        const totalCount = question.filter( (item) => item.answer === true );        
+        const totalCount = question.filter((item) => item.answer === true);
 
-        if( selectedCards.length === 0 ) {
+        if (selectedCards.length === 0) {
             document.querySelectorAll('.imgClick').forEach(card => {
                 card.classList.remove('correct-borderClickImgs', 'wrong-borderClickImgs');
             });
 
             Swal.fire({
-                icon  : 'warning',
-                title : txt.swalNoSelectTitle,
-                text  : txt.swalNoSelectText
+                icon: 'warning',
+                title: txt.swalNoSelectTitle,
+                text: txt.swalNoSelectText
             });
             return;
         }
 
-        let allCorrect   = false;
+        let allCorrect = false;
         let correctCount = 0;
 
         content?.question.forEach((item, index) => {
             const card = document.querySelector(`.imgClick[data-index="${index}"]`);
             card.classList.remove('correct-borderClickImgs', 'wrong-borderClickImgs');
 
-            const selectedCard =  document.querySelector(`.imgClick[data-index="${index}"].selectedClickImgs`);            
+            const selectedCard = document.querySelector(`.imgClick[data-index="${index}"].selectedClickImgs`);
 
             const isSelected = card.classList.contains('selectedClickImgs');
-            const isRight    = item?.answer === true;
+            const isRight = item?.answer === true;
 
-            if( isRight && isSelected ) {
+            if (isRight && isSelected) {
                 correctCount++;
-                selectedCard?.classList.add( 'correct-borderClickImgs' );
+                selectedCard?.classList.add('correct-borderClickImgs');
             } else {
-                selectedCard?.classList.add( 'wrong-borderClickImgs' );
+                selectedCard?.classList.add('wrong-borderClickImgs');
             }
         });
 
-        if( correctCount === totalCount.length ) {
+        if (correctCount === totalCount.length) {
             Swal.fire({ icon: 'success', title: txt.swalCorrectTitle, text: txt.swalCorrectText });
         } else {
             Swal.fire({ icon: 'error', title: txt.swalWrongTitle, text: txt.swalWrongText });
@@ -10423,9 +10426,9 @@ const FillOnClick = (() => {
                             <div class="optionsBoxClicked">${optionsHtml}</div>
                         </div>`;
             // ..
-            opts.push( html );
+            opts.push(html);
         });
-        rowOpts.innerHTML = opts.join( '' );
+        rowOpts.innerHTML = opts.join('');
 
         const option = parent.querySelectorAll('.clickedLetter');
 
@@ -10513,7 +10516,7 @@ const FillOnClick = (() => {
         $(".submit-btn").addClass("noclickMe");
         content?.question.map((item, index) => {
             const correct = item?.options[item?.answer];
-            if( !correct ) return;
+            if (!correct) return;
             const inp = document.querySelector(`input[data-q="${index}"]`);
             inp.value = correct;
             inp.style.width = (correct.length + 1) * 11 + "px";
@@ -10594,13 +10597,13 @@ const Dictionary = (() => {
         ui(questionId);
 
         const activity = Activity.getDefine(questionId) ?? {};
-        const lang     = activity.lang ?? 'en';
-        const content  = activity?.content ?? [];
+        const lang = activity.lang ?? 'en';
+        const content = activity?.content ?? [];
 
         const dictionaryHolders = document.getElementById("dictionaryHolders");
         let dropBoxes = "";
-        for( let i = 0; i <= 25; i++ ) {
-            const alpha  = Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: true });
+        for (let i = 0; i <= 25; i++) {
+            const alpha = Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: true });
             dropBoxes += `<div class="dropBoxDictP shadow-sm">
                             <div class="letterNums shadow-sm">${alpha}</div>
                             <div class="dropBoxDict" data-accept="${alpha}"></div>
@@ -10679,7 +10682,7 @@ const Dictionary = (() => {
         if (correct === totalWords) {
             Swal.fire({
                 title: "🎉" + (lang == "en" ? "Excellent!" : "hi"),
-                text: lang == "en"? "All answers are correct.": "सभी उत्तर सही है।",
+                text: lang == "en" ? "All answers are correct." : "सभी उत्तर सही है।",
                 icon: "success",
                 confirmButtonText: "OK"
             });
@@ -10700,7 +10703,7 @@ const Dictionary = (() => {
 
     const showAnswers = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
-        const content  = activity?.content ?? [];
+        const content = activity?.content ?? [];
 
         $(".submit-btn").addClass("disabled");
         $(".dropBoxDict").empty();
@@ -10711,7 +10714,7 @@ const Dictionary = (() => {
                 .attr("data-ans", letter);
             // ..
             $(`.dropBoxDict[data-accept='${letter}']`).append($clone);
-        });        
+        });
         $(".dropBoxDict").droppable("disable");
     }
 
@@ -10724,23 +10727,23 @@ const Dictionary = (() => {
 const MentalMath = (() => {
     Activity.css('math.css');
 
-    const containerId        = 'mental-container';
-    const questionTextId     = 'dynamicTypeArea';
+    const containerId = 'mental-container';
+    const questionTextId = 'dynamicTypeArea';
     const questionContentCls = 'boxForAttemptedMath';
     const dropOptionsMathCls = 'drpOptionsMath';
     const draggableOptionCls = 'disDragItemsMath';
-    const dropAreaCls        = 'dropArea';
+    const dropAreaCls = 'dropArea';
 
     let shuffledQuestions;
-    let currentQuesIndex  = 0;
-    let currentScore      = 0;
-    let correctDropCount  = 0;
+    let currentQuesIndex = 0;
+    let currentScore = 0;
+    let correctDropCount = 0;
 
     let __questionID;
 
     MathJax = {
-        tex : {
-            inlineMath : [
+        tex: {
+            inlineMath: [
                 ["\\(", "\\)"],
                 ["\\[", "\\]"]
             ]
@@ -10752,71 +10755,69 @@ const MentalMath = (() => {
             __questionID = questionId;
 
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error('ui container not found:', container);
                 return;
             }
 
-            await Define.get( 'loadScript' )('js/tex-chtml.js');
+            await Define.get('loadScript')('js/tex-chtml.js');
 
-            currentQuesIndex  = 0;
-            currentScore      = 0;
-            correctDropCount  = 0;
+            currentQuesIndex = 0;
+            currentScore = 0;
+            correctDropCount = 0;
 
-            const activity    = Activity.getDefine(questionId) ?? {};
-            const content     = activity?.content ?? [];
-            const questions   = content?.questions ?? [];
-            const lang        = activity.lang ?? 'en';
-            shuffledQuestions = content?.shuffle === true 
-                                    ? ( Activity.shuffleArray( questions ) ?? [] ) 
-                                    : questions;
+            const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity?.content ?? [];
+            const questions = content?.questions ?? [];
+            const lang = activity.lang ?? 'en';
+            shuffledQuestions = content?.shuffle === true
+                ? (Activity.shuffleArray(questions) ?? [])
+                : questions;
 
             parent.innerHTML = `<div class="question">
                                     <div class="container" id="${containerId}">
-                                        ${
-                                            activity?.head
-                                                ? 
-                                                    `<div class="menHeDicMath text-center">
+                                        ${activity?.head
+                    ?
+                    `<div class="menHeDicMath text-center">
                                                         <span class="menHeadingMath ${Define.get('head')}"></span>
-                                                        ${
-                                                            activity?.subhead
-                                                                ? ` (<span class="secondTextsRedMath ${Define.get('subHead')}"></span>)` 
-                                                                : ''
-                                                        }
+                                                        ${activity?.subhead
+                        ? ` (<span class="secondTextsRedMath ${Define.get('subHead')}"></span>)`
+                        : ''
+                    }
                                                     </div>`
-                                                : ''
-                                        }
+                    : ''
+                }
                                         <div class="${dropOptionsMathCls}" id="optLoop"></div>
                                         <div class="${questionContentCls} shadow-sm"></div>
                                     </div>
                                 </div>`;
             // ..
-            Activity.setHeader(questionId);            
-            
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            Activity.setHeader(questionId);
+
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
             renderQuestion();
 
-		} catch (err) {
-            console.error( 'MentalMath.ui :', err );
+        } catch (err) {
+            console.error('MentalMath.ui :', err);
         }
-    };    
+    };
 
     const renderQuestion = () => {
         try {
-            
-            const activity    = Activity.getDefine( Activity.getQid(containerId) ) ?? {};
-            const lang        = activity?.lang ?? 'en';
-            const question    = shuffledQuestions[currentQuesIndex];
+
+            const activity = Activity.getDefine(Activity.getQid(containerId)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const question = shuffledQuestions[currentQuesIndex];
 
             const options = [];
             question?.options.forEach((item, i) => {
                 const html = `<div class="${draggableOptionCls}" data-index="${i}">${item}</div>`;
-                options.push( html );
+                options.push(html);
             });
-            $(`.${dropOptionsMathCls}`).html( options.join( '' ) );
-            makeDraggable( `.${draggableOptionCls}` );
+            $(`.${dropOptionsMathCls}`).html(options.join(''));
+            makeDraggable(`.${draggableOptionCls}`);
 
             const html = `
                             <div class="numAndNumof">
@@ -10828,22 +10829,22 @@ const MentalMath = (() => {
                             <div id="${questionTextId}"></div>
                         `;
             // ..
-            $(`.${questionContentCls}`).html( html );
-            operatorUI( question );
+            $(`.${questionContentCls}`).html(html);
+            operatorUI(question);
 
         } catch (err) {
-            console.error( 'MentalMath.renderQuestion :', err );
+            console.error('MentalMath.renderQuestion :', err);
         }
     };
 
-    const makeDraggable = ( selector ) => {
+    const makeDraggable = (selector) => {
         try {
-            $( selector ).draggable({
-                helper : 'clone',
-                revert : 'invalid',
+            $(selector).draggable({
+                helper: 'clone',
+                revert: 'invalid',
             });
         } catch (err) {
-            console.error( 'MentalMath.makeDraggable :', err );
+            console.error('MentalMath.makeDraggable :', err);
         }
     }
 
@@ -10851,8 +10852,8 @@ const MentalMath = (() => {
         try {
             let html;
 
-            switch( question.type ) {
-                case '+' :
+            switch (question.type) {
+                case '+':
                     html = `
                                 <div class="rowT1">
                                 <div class="opraterMath">${question.type}</div>
@@ -10865,67 +10866,67 @@ const MentalMath = (() => {
                                 <div class="dropAnsBoxes ${dropAreaCls}"></div>
                             `;
                     // ..
-                break;
+                    break;
 
-                case 'x' :
+                case 'x':
                     const data = shuffledQuestions[currentQuesIndex];
 
-                    const imageWidth     = ( data?.image && data.image?.width ) ? data.image.width : '15%';
-                    const imgReplacement = ( data?.image && data.image?.replacement ) ? data.image?.replacement : '#img#';
-                    const image          = ( data?.image && data.image?.path )
-                                                ? `<img class="mx-2" src="${Activity.pathToCWD() + data.image.path}" style="width:${imageWidth};">`
-                                                : '';
+                    const imageWidth = (data?.image && data.image?.width) ? data.image.width : '15%';
+                    const imgReplacement = (data?.image && data.image?.replacement) ? data.image?.replacement : '#img#';
+                    const image = (data?.image && data.image?.path)
+                        ? `<img class="mx-2" src="${Activity.pathToCWD() + data.image.path}" style="width:${imageWidth};">`
+                        : '';
                     // ..
 
-                    const quesText    = ( data?.text && ( Array( data?.text[0] ) !== undefined ) ) 
-                                            ? data?.text[0] : '' ;
-                    
+                    const quesText = (data?.text && (Array(data?.text[0]) !== undefined))
+                        ? data?.text[0] : '';
+
                     const replacement = data?.replacement ?? '#_#';
-                    const content     = quesText.replace( imgReplacement, image )
-                                            .replaceAll(
-                                                replacement,
-                                                `<div class="dropAnsBoxes2 ${dropAreaCls}"></div>`
-                                            );
+                    const content = quesText.replace(imgReplacement, image)
+                        .replaceAll(
+                            replacement,
+                            `<div class="dropAnsBoxes2 ${dropAreaCls}"></div>`
+                        );
                     // ..
 
                     html = `<div class="multifillBox">${content}</div>`;
-                break;
+                    break;
 
                 default:
                     html = `<div class="dropAnsBoxes ${dropAreaCls}"></div>`;
             }
 
             const area = document.getElementById(questionTextId);
-            if( area ) area.innerHTML = html;
+            if (area) area.innerHTML = html;
 
-            makeDroppable( `.${dropAreaCls}` );            
+            makeDroppable(`.${dropAreaCls}`);
             MathJax.typesetPromise();
 
         } catch (err) {
-            console.error( 'MentalMath.operatorUI :', err );
+            console.error('MentalMath.operatorUI :', err);
         }
     }
 
-    const makeDroppable = ( selector ) => {
+    const makeDroppable = (selector) => {
         try {
             const correctAnswers = shuffledQuestions[currentQuesIndex].correct;
-            const totalDrops     = Array.isArray(correctAnswers) ? correctAnswers.length : 1;
+            const totalDrops = Array.isArray(correctAnswers) ? correctAnswers.length : 1;
 
-            $( selector ).droppable({
-                accept    : `.${draggableOptionCls}`,
-                tolerance : 'intersect',
-                drop      : function (event, ui) {
-                    const ansIndex = parseInt( ui.draggable.attr('data-index') );
-                    const pos      = $( selector ).index(this);
+            $(selector).droppable({
+                accept: `.${draggableOptionCls}`,
+                tolerance: 'intersect',
+                drop: function (event, ui) {
+                    const ansIndex = parseInt(ui.draggable.attr('data-index'));
+                    const pos = $(selector).index(this);
 
                     const isCorrect = correctAnswers[pos] === ansIndex;
 
-                    if( isCorrect ) {
+                    if (isCorrect) {
                         const dragWidth = ui.draggable.outerWidth();
                         $(this).css({
-                            'width'      : dragWidth + 'px',
-                            'background' : '#c8e6c9',
-                            'transition' : '0.3s'
+                            'width': dragWidth + 'px',
+                            'background': '#c8e6c9',
+                            'transition': '0.3s'
                         });
 
                         $(this).html(
@@ -10937,12 +10938,12 @@ const MentalMath = (() => {
 
                         correctDropCount++;
 
-                        if( correctDropCount === totalDrops ) {
+                        if (correctDropCount === totalDrops) {
                             setTimeout(() => {
                                 correctDropCount = 0;
                                 currentScore++;
                                 updateScore();
-                                if( ( currentQuesIndex + 1 ) === shuffledQuestions.length ) {
+                                if ((currentQuesIndex + 1) === shuffledQuestions.length) {
                                     showFunnySuccess();
                                 } else {
                                     currentQuesIndex++;
@@ -10959,12 +10960,12 @@ const MentalMath = (() => {
                 }
             });
         } catch (err) {
-            console.error( 'MentalMath.makeDroppable :', err );
+            console.error('MentalMath.makeDroppable :', err);
         }
     }
 
     const updateScore = () => {
-        $('.qnuMath').html( `Score : ${currentScore}` );
+        $('.qnuMath').html(`Score : ${currentScore}`);
     }
 
     const showFunnySuccess = () => {
@@ -11003,10 +11004,10 @@ const MentalMath = (() => {
 
         $(document).on("click", "#restartBtn", function () {
             Swal.close();
-            currentQuesIndex  = 0;
-            currentScore      = 0;
-            correctDropCount  = 0;
-            ui( __questionID );
+            currentQuesIndex = 0;
+            currentScore = 0;
+            correctDropCount = 0;
+            ui(__questionID);
         });
 
         $(document).on("click", "#closeBtn", function () {
@@ -11014,14 +11015,14 @@ const MentalMath = (() => {
         });
     }
 
-    return { render : ui }
+    return { render: ui }
 })();
 
 const AudioAndVideoFromYoutube = (() => {
     Activity.css('audioVideoYoutube.css');
 
-    const containerId  = 'youtube-container';
-    const playerCont   = 'plyItems';    
+    const containerId = 'youtube-container';
+    const playerCont = 'plyItems';
     const playerViewId = 'playerViewContainer';
     let __currentIndex;
     let __currentItem;
@@ -11032,9 +11033,9 @@ const AudioAndVideoFromYoutube = (() => {
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
@@ -11054,41 +11055,41 @@ const AudioAndVideoFromYoutube = (() => {
             // ..
             __playerHtml();
 
-            Activity.setHeader( questionId );
-		} catch (err) {
-            console.error( 'AudioAndVideoFromYoutube.ui :', err );
+            Activity.setHeader(questionId);
+        } catch (err) {
+            console.error('AudioAndVideoFromYoutube.ui :', err);
         }
     };
 
     const render = async (questionId) => {
         try {
             ui(questionId);
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
-            const activity = Activity.getDefine( questionId );
-            const content  = activity?.content ?? {};
-            const buttons  = content?.buttons ?? [];
+            const activity = Activity.getDefine(questionId);
+            const content = activity?.content ?? {};
+            const buttons = content?.buttons ?? [];
 
             const buttonUI = () => {
                 const buttonHtml = [];
                 buttons.map((btn) => {
                     const button = `<div class="circle3D activeCircle3D">${btn?.label ?? ''}</div>`;
-                    buttonHtml.push( button );
+                    buttonHtml.push(button);
                 });
-                $('#circleWrapper').html( buttonHtml.join( '' ) );
+                $('#circleWrapper').html(buttonHtml.join(''));
 
-                $('.circle3D.activeCircle3D').map( (ind, item) => {
-                    item.addEventListener( 'click', () => loadandplay(ind) );
+                $('.circle3D.activeCircle3D').map((ind, item) => {
+                    item.addEventListener('click', () => loadandplay(ind));
                 });
             }
 
-            await Define.get( 'loadScript' )('https://www.youtube.com/iframe_api');
+            await Define.get('loadScript')('https://www.youtube.com/iframe_api');
             await ytReady;
             buttonUI();
 
-            if( buttons.length ) loadandplay( 0 );
+            if (buttons.length) loadandplay(0);
         } catch (err) {
-            console.error( 'AudioAndVideoFromYoutube.render :', err );
+            console.error('AudioAndVideoFromYoutube.render :', err);
         }
     };
 
@@ -11099,7 +11100,7 @@ const AudioAndVideoFromYoutube = (() => {
     };
 
     const __playerHtml = () => {
-        $(`#${playerViewId}`).html( `<div id="${playerCont}" class="leftPanelBoxes ${playerCont}"></div>` );
+        $(`#${playerViewId}`).html(`<div id="${playerCont}" class="leftPanelBoxes ${playerCont}"></div>`);
     };
 
     const loadandplay = (index) => {
@@ -11107,26 +11108,26 @@ const AudioAndVideoFromYoutube = (() => {
         __playerHtml();
         setActiveCircle(index);
 
-        __currentIndex  = index;
-        __ytPlayer      = undefined;
-        __currentItem   = undefined;        
-        const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
-        const content   = activity?.content ?? {};
-        const buttons   = content?.buttons ?? [];
-        const button    = buttons[__currentIndex] ?? false;
+        __currentIndex = index;
+        __ytPlayer = undefined;
+        __currentItem = undefined;
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const content = activity?.content ?? {};
+        const buttons = content?.buttons ?? [];
+        const button = buttons[__currentIndex] ?? false;
         const youTubeID = button?.ytId ?? false;
 
-        if( button === false || youTubeID === false ) return false;
+        if (button === false || youTubeID === false) return false;
 
         __currentItem = button;
         const isVideo = button?.isVideo ?? false;
 
-        ( isVideo === true ) ? videoUI( youTubeID ) : audioUI( youTubeID );
+        (isVideo === true) ? videoUI(youTubeID) : audioUI(youTubeID);
     };
 
     const videoUI = (yiId) => {
         youtube(yiId);
-        $('iframe').addClass( `vdoFrmMulti` );
+        $('iframe').addClass(`vdoFrmMulti`);
     };
 
     const audioUI = (yiId) => {
@@ -11149,19 +11150,19 @@ const AudioAndVideoFromYoutube = (() => {
                         <div id="ytAudioPlayer" style="width:1px;height:1px;overflow:hidden"></div>
                     </div>`;
         // ..
-        $(`.${playerCont}`).html( ui );
+        $(`.${playerCont}`).html(ui);
         youtube(yiId, 'ytAudioPlayer');
 
-        const playBtn   = document.getElementById('playBtn');
+        const playBtn = document.getElementById('playBtn');
         const bigCircle = document.getElementById('bigCircle');
-        const seekBar   = document.getElementById('seekBar');
+        const seekBar = document.getElementById('seekBar');
         const btnReplay = document.getElementById('btnReplay');
-        const btnMute   = document.getElementById('btnMute');
+        const btnMute = document.getElementById('btnMute');
 
         playBtn.onclick = () => {
-            if( !__ytPlayer ) return;
+            if (!__ytPlayer) return;
             const state = __ytPlayer.getPlayerState();
-            if( state !== 1 ) {
+            if (state !== 1) {
                 __ytPlayer.playVideo();
                 playBtn.textContent = '❚❚';
                 bigCircle.classList.add('playing');
@@ -11173,15 +11174,15 @@ const AudioAndVideoFromYoutube = (() => {
         };
 
         btnReplay.onclick = () => {
-            if( __ytPlayer ) {
+            if (__ytPlayer) {
                 __ytPlayer.seekTo(0);
                 __ytPlayer.playVideo();
             }
         };
-        
+
         btnMute.onclick = () => {
-            if( !__ytPlayer ) return;
-            if( __ytPlayer.isMuted() ) {
+            if (!__ytPlayer) return;
+            if (__ytPlayer.isMuted()) {
                 __ytPlayer.unMute();
                 btnMute.textContent = '🔊';
             } else {
@@ -11191,31 +11192,31 @@ const AudioAndVideoFromYoutube = (() => {
         };
 
         seekBar.oninput = () => {
-            if( __ytPlayer ) __ytPlayer.seekTo(seekBar.value);
+            if (__ytPlayer) __ytPlayer.seekTo(seekBar.value);
         };
     };
 
-    const youtube = (yiId, selector=playerCont) => {
-        __ytPlayer = new YT.Player( selector, {
-            height     : '1',
-            width      : '1',
-            videoId    : yiId,
-            playerVars : {
-                'playsinline' : 1
+    const youtube = (yiId, selector = playerCont) => {
+        __ytPlayer = new YT.Player(selector, {
+            height: '1',
+            width: '1',
+            videoId: yiId,
+            playerVars: {
+                'playsinline': 1
             },
             events: {
-                'onReady' : onPlayerReady,
-                'onStateChange' : onPlayerStateChange
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
             }
         });
     };
 
     const onPlayerReady = (event) => {
-        if( __currentItem?.isVideo !== undefined && __currentItem.isVideo === false ) {
-            const playBtn   = document.getElementById('playBtn');
+        if (__currentItem?.isVideo !== undefined && __currentItem.isVideo === false) {
+            const playBtn = document.getElementById('playBtn');
             const bigCircle = document.getElementById('bigCircle');
-            const seekBar   = document.getElementById('seekBar');
-            const currTime  = document.getElementById('currTime');
+            const seekBar = document.getElementById('seekBar');
+            const currTime = document.getElementById('currTime');
             const totalTime = document.getElementById('totalTime');
 
             event.target.playVideo();
@@ -11223,25 +11224,25 @@ const AudioAndVideoFromYoutube = (() => {
             playBtn.textContent = '❚❚';
 
             setInterval(() => {
-                if( !event.target ) return;
-                if( event.target.getDuration() === 0 ) return;
-                const duration = Math.round( event.target.getDuration() );
-                const getCurrentTime = Math.round( event.target.getCurrentTime() );
+                if (!event.target) return;
+                if (event.target.getDuration() === 0) return;
+                const duration = Math.round(event.target.getDuration());
+                const getCurrentTime = Math.round(event.target.getCurrentTime());
 
-                seekBar.max   = Math.round( duration );
-                seekBar.value = Math.round( getCurrentTime );
-                currTime.textContent  = format( getCurrentTime );
-                totalTime.textContent = format( duration );
+                seekBar.max = Math.round(duration);
+                seekBar.value = Math.round(getCurrentTime);
+                currTime.textContent = format(getCurrentTime);
+                totalTime.textContent = format(duration);
             }, 500);
         }
     };
-    
+
     const onPlayerStateChange = (event) => {
-        if( __currentItem?.isVideo !== undefined && __currentItem.isVideo === false ) {
-            const playBtn   = document.getElementById('playBtn');
+        if (__currentItem?.isVideo !== undefined && __currentItem.isVideo === false) {
+            const playBtn = document.getElementById('playBtn');
             const bigCircle = document.getElementById('bigCircle');
 
-            if( event.data === YT.PlayerState.PLAYING ) {
+            if (event.data === YT.PlayerState.PLAYING) {
                 bigCircle.classList.add('playing');
                 playBtn.textContent = '❚❚';
             } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
@@ -11256,7 +11257,7 @@ const AudioAndVideoFromYoutube = (() => {
         const s = Math.floor(sec % 60).toString().padStart(2, '0');
         return `${m}:${s}`;
     }
-    
+
     const ytReady = new Promise(resolve => {
         __ytReadyResolve = resolve;
     });
@@ -11266,18 +11267,18 @@ const AudioAndVideoFromYoutube = (() => {
     };
 
 
-    return { render : render }
+    return { render: render }
 })();
 
 const MathMoney = (() => {
     Activity.css('math.css');
 
-    const containerId   = 'math-money-container';
-    const optionViewId  = 'option-view';
+    const containerId = 'math-money-container';
+    const optionViewId = 'option-view';
     const sectionViewId = 'section-view';
-    const tableViewId   = 'table-view';
+    const tableViewId = 'table-view';
     const dragItemClass = 'dragItm2';
-    const dropBoxClass  = 'dropBoxItem';
+    const dropBoxClass = 'dropBoxItem';
 
     let __answers;
     let __correctCount = 0;
@@ -11285,9 +11286,9 @@ const MathMoney = (() => {
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
@@ -11304,208 +11305,197 @@ const MathMoney = (() => {
                                 </div>`;
             // ..
 
-            Activity.setHeader( questionId );
-		} catch (err) {
-            console.error( 'MathMoney.ui :', err );
+            Activity.setHeader(questionId);
+        } catch (err) {
+            console.error('MathMoney.ui :', err);
         }
     };
 
     const render = (questionId) => {
         try {
             ui(questionId);
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
-            __correctCount  = 0;
-            const activity  = Activity.getDefine( questionId );
-            const content   = activity?.content ?? {};
-            const options   = Activity.shuffleArray( content?.options ?? [] ) ?? [];
-            const section   = content?.section ?? {};            
-            const table     = content?.table ?? {};
-            __answers       = table?.body.map((tr) => tr.map((td, index) => ({ ...td, index })).filter(td => td?.drop));
-            const isSection = ( Object.keys( section ).length && section.visible != undefined )
-                                ? section.visible
-                                : false;
+            __correctCount = 0;
+            const activity = Activity.getDefine(questionId);
+            const content = activity?.content ?? {};
+            const options = Activity.shuffleArray(content?.options ?? []) ?? [];
+            const section = content?.section ?? {};
+            const table = content?.table ?? {};
+            __answers = table?.body.map((tr) => tr.map((td, index) => ({ ...td, index })).filter(td => td?.drop));
+            const isSection = (Object.keys(section).length && section.visible != undefined)
+                ? section.visible
+                : false;
             // ..
 
             const optionsHtml = [];
-            options.map( (opt) => {
+            options.map((opt) => {
                 const html = `<div class="disDragItemsMath ${dragItemClass} ui-draggable ui-draggable-handle">${opt}</div>`
-                optionsHtml.push( html );
+                optionsHtml.push(html);
             });
 
             const sectionHtml = [];
-            if( isSection ) {
-                if( section?.heading ) {
-                    const sectionHeading = 
-                        ( section?.primary || section?.secondary ) 
+            if (isSection) {
+                if (section?.heading) {
+                    const sectionHeading =
+                        (section?.primary || section?.secondary)
                             ? `
                                 <div class="bill-header">
-                                    ${ 
-                                        section?.primary 
-                                            ? `<h2 class="bill-title">${section.primary}</h2>` 
-                                            : ''
-                                    }
-                                    ${
-                                        section?.secondary
-                                            ? `<p class="bill-phone"><strong>Phone:</strong> ${section.secondary}</p>`
-                                            : ''
-                                    }
+                                    ${section?.primary
+                                ? `<h2 class="bill-title">${section.primary}</h2>`
+                                : ''
+                            }
+                                    ${section?.secondary
+                                ? `<p class="bill-phone"><strong>Phone:</strong> ${section.secondary}</p>`
+                                : ''
+                            }
                                 </div>
-                            ` 
+                            `
                             : ''
                     // ..
-                    sectionHtml.push( sectionHeading );
+                    sectionHtml.push(sectionHeading);
                 }
 
-                if( section?.list ) {
+                if (section?.list) {
                     const sectionList = `
                         <div class="bill-details">
-                            ${
-                                section.list.map( (list) => {
-                                    return `
+                            ${section.list.map((list) => {
+                        return `
                                         <p>
                                             <strong>${list?.label ?? ''}</strong> ${list?.text ?? ''}
                                         </p>
                                     `;
-                                }).join( '' )
-                            }
+                    }).join('')
+                        }
                         </div>`
                     // ..
-                    sectionHtml.push( sectionList );
+                    sectionHtml.push(sectionList);
                 }
 
-                if( section?.block ) {
+                if (section?.block) {
                     const block = section.block;
-                    const blockHtml = ( block?.label || block?.text )
+                    const blockHtml = (block?.label || block?.text)
                         ?
-                            `<div class="bill-customer">
-                                ${
-                                    block?.label
-                                        ? `<label>${block.label}</label>`
-                                        : ''
-                                }
-                                ${
-                                    block?.text
-                                        ? `<div class="customer-address">${block.text}</div>`
-                                        : ''
-                                }
+                        `<div class="bill-customer">
+                                ${block?.label
+                            ? `<label>${block.label}</label>`
+                            : ''
+                        }
+                                ${block?.text
+                            ? `<div class="customer-address">${block.text}</div>`
+                            : ''
+                        }
                             </div>`
                         : '';
                     // ..
-                    sectionHtml.push( blockHtml );
+                    sectionHtml.push(blockHtml);
                 }
             }
 
             const tableHtml = [];
-            if( Object.keys( table ).length ) {
-                const tableView = ( table?.head || table?.body ) 
-                    ? 
-                        `
+            if (Object.keys(table).length) {
+                const tableView = (table?.head || table?.body)
+                    ?
+                    `
                             <table class="table table-bordered">
-                                ${
-                                    table?.head
-                                        ? 
-                                            `<thead><tr>
-                                                ${
-                                                    table?.head.map((th) => {
-                                                        return `<th>${th}</th>`
-                                                    }).join( '' )
-                                                }
+                                ${table?.head
+                        ?
+                        `<thead><tr>
+                                                ${table?.head.map((th) => {
+                            return `<th>${th}</th>`
+                        }).join('')
+                        }
                                             </tr></thead>`
-                                        : ''
-                                }
-                                ${
-                                    table?.body
-                                        ?
-                                            `<tbody>
-                                                ${
-                                                    table?.body.map((tr)=>{
-                                                        return `<tr>
-                                                        ${
-                                                            tr.map((td) => {
-                                                                const colspan = td?.colspan ?? '';
-                                                                const classes = td?.class ?? '';
-                                                                const tdView  = `
+                        : ''
+                    }
+                                ${table?.body
+                        ?
+                        `<tbody>
+                                                ${table?.body.map((tr) => {
+                            return `<tr>
+                                                        ${tr.map((td) => {
+                                const colspan = td?.colspan ?? '';
+                                const classes = td?.class ?? '';
+                                const tdView = `
                                                                     <td colspan="${colspan}" class="${classes}">
-                                                                    ${ 
-                                                                        ( td?.drop && td?.drop === true )
-                                                                            ? `<div class="${dropBoxClass} ui-droppable"></div>`
-                                                                            : td?.value ?? ''
-                                                                    }
+                                                                    ${(td?.drop && td?.drop === true)
+                                        ? `<div class="${dropBoxClass} ui-droppable"></div>`
+                                        : td?.value ?? ''
+                                    }
                                                                     </td>`
-                                                                // ..
-                                                                return tdView;
-                                                            }).join( '' )
-                                                        }
-                                                        </tr>`
-                                                    }).join( '' )
-                                                }
-                                            </tbody>`
-                                        : ''
+                                // ..
+                                return tdView;
+                            }).join('')
                                 }
+                                                        </tr>`
+                        }).join('')
+                        }
+                                            </tbody>`
+                        : ''
+                    }
                             </table>
                         `
                     : '';
                 // ..
-                tableHtml.push( tableView );
+                tableHtml.push(tableView);
             }
 
-            $(`#${optionViewId}`).html( optionsHtml.join( '' ) );
-            $(`#${sectionViewId}`).html( sectionHtml.join( '' ) );
-            $(`#${tableViewId}`).html( tableHtml );
+            $(`#${optionViewId}`).html(optionsHtml.join(''));
+            $(`#${sectionViewId}`).html(sectionHtml.join(''));
+            $(`#${tableViewId}`).html(tableHtml);
 
             initDrag();
             initDrop();
 
         } catch (err) {
-            console.error( 'MathMoney.render :', err );
+            console.error('MathMoney.render :', err);
         }
     };
 
     const initDrag = () => {
         $(`.${dragItemClass}`).draggable({
-            revert : true,
+            revert: true,
         });
     };
 
     const initDrop = () => {
         $(`.${dropBoxClass}`).droppable({
-            accept    : `.${dragItemClass}`,
-            tolerance : 'intersect',
-            drop      : dropHandler
+            accept: `.${dragItemClass}`,
+            tolerance: 'intersect',
+            drop: dropHandler
         });
     };
 
     const dropHandler = (event, ui) => {
-        const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
-        const lang      = activity?.lang ?? 'en';
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const lang = activity?.lang ?? 'en';
 
-        const text   = ui.draggable.text().trim();
+        const text = ui.draggable.text().trim();
         const target = event.target;
-        const index  = $(target).closest('td').index();
-        const trInd  = $(target).closest('tr').index();
-        const answer =  __answers[trInd]
-            ?.map((ans) => (ans?.index === index) ? ( ans?.value ?? '' ) : '' )
-            ?.filter((ans) => ans )
+        const index = $(target).closest('td').index();
+        const trInd = $(target).closest('tr').index();
+        const answer = __answers[trInd]
+            ?.map((ans) => (ans?.index === index) ? (ans?.value ?? '') : '')
+            ?.filter((ans) => ans)
             .toString();
         // ..
 
         const totalCount = __answers.flat();
 
-        if( answer === text ) {
+        if (answer === text) {
             __correctCount++;
-            const html = ui.draggable.clone().removeClass(dragItemClass).addClass( 'fixedDrop' ).css('position', 'static');
-            $(target).html( html ).removeClass('wrongAnsMoney').addClass( 'correctAnsMoney' ).droppable( 'disable' );
+            const html = ui.draggable.clone().removeClass(dragItemClass).addClass('fixedDrop').css('position', 'static');
+            $(target).html(html).removeClass('wrongAnsMoney').addClass('correctAnsMoney').droppable('disable');
 
-            if( __correctCount === totalCount.length ) {
+            if (__correctCount === totalCount.length) {
                 Swal.fire({
-                    icon   : 'success',
-                    title  : lang == 'hi' ? 'शानदार' : '🎉 Super!',
-                    text   : lang == 'hi' ? 'सभी विवरण सही हैं' : 'All values are correct!',
-                    button : 'OK'
-                }).then( (res) => {
-                    if( res.isConfirmed ) {
-                        $(`.${dragItemClass}`).draggable( 'disable' );
+                    icon: 'success',
+                    title: lang == 'hi' ? 'शानदार' : '🎉 Super!',
+                    text: lang == 'hi' ? 'सभी विवरण सही हैं' : 'All values are correct!',
+                    button: 'OK'
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        $(`.${dragItemClass}`).draggable('disable');
                     }
                 });
             }
@@ -11517,7 +11507,7 @@ const MathMoney = (() => {
     }
 
     return {
-        render : render
+        render: render
     }
 })();
 
@@ -11525,8 +11515,8 @@ const ShabdRachna = (() => {
 
     Activity.css('shabdRachna.css');
 
-    const containerId  = 'shabd-rachna-container';
-    const quesContId   = 'questBoxes';
+    const containerId = 'shabd-rachna-container';
+    const quesContId = 'questBoxes';
     const dropShabdCls = 'dropSabd';
     const dragShabdCls = 'itmd';
 
@@ -11535,16 +11525,16 @@ const ShabdRachna = (() => {
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
-            if( !parent ) {
+            if (!parent) {
                 console.error("ui container not found:", container);
                 return;
             }
 
-            const activity  = Activity.getDefine( questionId );
-            const lang      = activity?.lang ?? 'en';
-            const content   = activity?.content ?? {};
+            const activity = Activity.getDefine(questionId);
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
             const headWidth = content?.width?.heading ?? '250px';
 
             const buttonLabel = Activity.translateButtonLabels(lang);
@@ -11568,86 +11558,86 @@ const ShabdRachna = (() => {
             // ..
 
             const checkBtn = document.querySelector('.submit-btn');
-            const showBtn  = document.querySelector('.show-btn');
+            const showBtn = document.querySelector('.show-btn');
             const resetBtn = document.querySelector('.reset-btn');
 
-            if( checkBtn ) checkBtn.addEventListener( 'click', checkAnswers );
-            if( showBtn ) showBtn.addEventListener( 'click', showAnswers );
-            if( resetBtn ) resetBtn.addEventListener( 'click', resetAll );
+            if (checkBtn) checkBtn.addEventListener('click', checkAnswers);
+            if (showBtn) showBtn.addEventListener('click', showAnswers);
+            if (resetBtn) resetBtn.addEventListener('click', resetAll);
 
-            Activity.setHeader( questionId );
-		} catch (err) {
-            console.error( 'ShabdRachna.ui :', err );
+            Activity.setHeader(questionId);
+        } catch (err) {
+            console.error('ShabdRachna.ui :', err);
         }
     };
 
     const render = (questionId) => {
         try {
             ui(questionId);
-            if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
-            __score           = 0;
-            const activity    = Activity.getDefine( questionId );
-            const lang        = activity?.lang ?? 'en';
-            const content     = activity?.content ?? {};
-            const data        = content?.data ?? {};
+            __score = 0;
+            const activity = Activity.getDefine(questionId);
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
+            const data = content?.data ?? {};
             const replacement = data?.replacement ?? '#_#';
-            const bullets     = data?.bullets ?? false;
-            const questions   = data?.questions ?? [];
+            const bullets = data?.bullets ?? false;
+            const questions = data?.questions ?? [];
 
-            const html = questions.map( (question, index) => {
+            const html = questions.map((question, index) => {
                 const quesBullet = bullets
-                    ? 
-                        `
+                    ?
+                    `
                             <div class="headingQSabadRach">
-                                (${Activity.translateBulletLabels({lang:lang, ind:index})})
+                                (${Activity.translateBulletLabels({ lang: lang, ind: index })})
                             </div>
-                        ` 
+                        `
                     : '';
                 // ..
                 const view = question.map((ques, ind) => {
-                    const subBullets  = Activity.translateBulletLabels({lang:'mt', ind:ind});
-                    const dragOptions = Activity.shuffleArray( ques?.answer ?? [] ) ?? [];
+                    const subBullets = Activity.translateBulletLabels({ lang: 'mt', ind: ind });
+                    const dragOptions = Activity.shuffleArray(ques?.answer ?? []) ?? [];
 
-                    const dropArea = ques?.text.split( '+' )
-                                        .map( (item, i) => item.replace( replacement, `<div class="${dropShabdCls}" data-index="${i}"></div>` ) )
-                                        .join( '<div class="opraterPlus">+</div>' );
+                    const dropArea = ques?.text.split('+')
+                        .map((item, i) => item.replace(replacement, `<div class="${dropShabdCls}" data-index="${i}"></div>`))
+                        .join('<div class="opraterPlus">+</div>');
                     // ..
                     return `
                         <div class="qSabadRach" data-block-index="${index}" data-id="${ques?.id}">
                             <div class="flexRow">
                                 <div class="levels">${subBullets}.</div>
                                 <div class="drgitm">
-                                    ${ dragOptions.map((opt) => `<div class="${dragShabdCls}">${opt}</div>` ) }
+                                    ${dragOptions.map((opt) => `<div class="${dragShabdCls}">${opt}</div>`)}
                                 </div>
                                 <div class="isTO">=</div>
                                 <div class="rowInFlSaba">${dropArea}</div>
                             </div>
                         </div>
                     `
-                }).join( '' );
+                }).join('');
 
-                return [ quesBullet, view ].join( '' );
+                return [quesBullet, view].join('');
             });
-            
-            $(`#${quesContId}`).html( html );
+
+            $(`#${quesContId}`).html(html);
             initDragAndDrop();
 
         } catch (err) {
-            console.error( 'ShabdRachna.render :', err );
+            console.error('ShabdRachna.render :', err);
         }
     };
 
     const initDragAndDrop = () => {
         $(`.${dragShabdCls}`).draggable({
-            revert : 'invalid',
-            helper : 'clone',
-            cursor : 'move'
+            revert: 'invalid',
+            helper: 'clone',
+            cursor: 'move'
         });
 
         $(`.${dropShabdCls}`).droppable({
-            accept : `.${dragShabdCls}`,
-            drop   : function(event, ui) {
+            accept: `.${dragShabdCls}`,
+            drop: function (event, ui) {
                 const droppedText = ui.draggable.text();
                 $(this).text(droppedText).attr('data-fill', droppedText);
             }
@@ -11655,39 +11645,39 @@ const ShabdRachna = (() => {
     };
 
     const checkAnswers = () => {
-        __score         = 0;
-        const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
-        const lang      = activity?.lang ?? 'en';
-        const content   = activity?.content ?? {};
-        const data      = content?.data ?? {};
+        __score = 0;
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content ?? {};
+        const data = content?.data ?? {};
         const questions = data?.questions ?? [];
 
-        const set = questions.map((question) => question.map((ques) => ({ answer : ques?.answer.join( '' ) }) )).flat();
-        
-        [...$(`.rowInFlSaba`)].map((row, i) => {
-            const drops = $(row).find( `.${dropShabdCls}` );
-            let correctCount = 0;
-            let thisTotal    = 0;
-            [...drops].map((drop) => {
-                const parentData  = $(drop).closest('.qSabadRach')[0].dataset;
-                const mainQuesInd = parentData.blockIndex;
-                const subQuesId   = parentData.id;
-                const dropData    = drop.dataset;
-                const dropIndex   = dropData.index;
-                const dropFill    = dropData.fill ?? '';
-                const answers     = questions[mainQuesInd].filter( ques => ques.id == subQuesId )[0]?.answer;
-                const answer      = answers[dropIndex] ?? '';
-                thisTotal         = answers.length;
-                set[i].user       = (set[i].user || '') + dropFill;
+        const set = questions.map((question) => question.map((ques) => ({ answer: ques?.answer.join('') }))).flat();
 
-                if( answer == dropFill ) correctCount++;
+        [...$(`.rowInFlSaba`)].map((row, i) => {
+            const drops = $(row).find(`.${dropShabdCls}`);
+            let correctCount = 0;
+            let thisTotal = 0;
+            [...drops].map((drop) => {
+                const parentData = $(drop).closest('.qSabadRach')[0].dataset;
+                const mainQuesInd = parentData.blockIndex;
+                const subQuesId = parentData.id;
+                const dropData = drop.dataset;
+                const dropIndex = dropData.index;
+                const dropFill = dropData.fill ?? '';
+                const answers = questions[mainQuesInd].filter(ques => ques.id == subQuesId)[0]?.answer;
+                const answer = answers[dropIndex] ?? '';
+                thisTotal = answers.length;
+                set[i].user = (set[i].user || '') + dropFill;
+
+                if (answer == dropFill) correctCount++;
             });
-            if( correctCount === thisTotal ) __score++;
+            if (correctCount === thisTotal) __score++;
         });
 
         const tableRows = set.map((item) => {
             const correct = item.answer === item.user ?? false;
-            const text    = correct ? ( lang === 'hi' ? 'सही' : 'Correct' ) : (lang === 'hi' ? 'गलत' : 'Wrong');
+            const text = correct ? (lang === 'hi' ? 'सही' : 'Correct') : (lang === 'hi' ? 'गलत' : 'Wrong');
             const classes = correct ? "correctSabadStatus" : "wrongSabadStatus";
 
             const row = `
@@ -11699,7 +11689,7 @@ const ShabdRachna = (() => {
                         `;
             // ..
             return row;
-        }).join( '' );        
+        }).join('');
 
         const messages = {
             hi: [
@@ -11716,15 +11706,15 @@ const ShabdRachna = (() => {
             ]
         };
 
-        const total   = set.length;
+        const total = set.length;
         const percent = Math.round((__score / total) * 100);
-        const res     = messages[lang].find(m => percent >= m.min);
+        const res = messages[lang].find(m => percent >= m.min);
 
         const tableView = `
             <div class="box" style="animation: 0.5s pop;">
                 <div id="rpText">
                     <div class="resultTexts">
-                        ${ lang == 'hi' ? 'कुल अंक' : 'Total score' }: ${__score} / ${total}
+                        ${lang == 'hi' ? 'कुल अंक' : 'Total score'}: ${__score} / ${total}
                     </div>
                     <div class="emoji" style="font-size:36px; margin:6px 0;">${res.emoji}</div>
                     <div class="messageRes">${res.msg}</div>
@@ -11732,9 +11722,9 @@ const ShabdRachna = (() => {
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>${ lang == 'hi' ? 'सही उत्तर' : 'Correct Answer' }</th>
-                                    <th>${ lang == 'hi' ? 'आपका उत्तर' : 'Your Answer' }</th>
-                                    <th>${ lang == 'hi' ? 'स्थिति' : 'Status' }</th>
+                                    <th>${lang == 'hi' ? 'सही उत्तर' : 'Correct Answer'}</th>
+                                    <th>${lang == 'hi' ? 'आपका उत्तर' : 'Your Answer'}</th>
+                                    <th>${lang == 'hi' ? 'स्थिति' : 'Status'}</th>
                                 </tr>
                             </thead>
                             <tbody>${tableRows}</tbody>
@@ -11746,39 +11736,39 @@ const ShabdRachna = (() => {
         `;
         // ..
 
-        $('#funnyReport').html( tableView ).css({ 'display' : 'flex' });
-        $('#funnyBtn')[0].addEventListener( 'click', closeReport );
-        
+        $('#funnyReport').html(tableView).css({ 'display': 'flex' });
+        $('#funnyBtn')[0].addEventListener('click', closeReport);
+
     };
 
     const showAnswers = () => {
-        const activity  = Activity.getDefine( Activity.getQid(`#${containerId}`) );
-        const content   = activity?.content ?? {};
-        const data      = content?.data ?? {};
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+        const content = activity?.content ?? {};
+        const data = content?.data ?? {};
         const questions = data?.questions ?? [];
 
         $('.submitBtnSabd').addClass('noclicked');
-        
+
         [...$(`.rowInFlSaba`)].map((row, i) => {
-            const drops = $(row).find( `.${dropShabdCls}` );
+            const drops = $(row).find(`.${dropShabdCls}`);
             [...drops].map((drop) => {
-                const parentData  = $(drop).closest('.qSabadRach')[0].dataset;
+                const parentData = $(drop).closest('.qSabadRach')[0].dataset;
                 const mainQuesInd = parentData.blockIndex;
-                const subQuesId   = parentData.id;
-                const dropData    = drop.dataset;
-                const dropIndex   = dropData.index;
-                const answers     = questions[mainQuesInd].filter( ques => ques.id == subQuesId )[0]?.answer;
-                const answer      = answers[dropIndex] ?? '';
-                drop.innerHTML    = answer;
-                drop.classList.add( 'correctSabad' );
-                drop.classList.remove( 'wrongSabad' );
+                const subQuesId = parentData.id;
+                const dropData = drop.dataset;
+                const dropIndex = dropData.index;
+                const answers = questions[mainQuesInd].filter(ques => ques.id == subQuesId)[0]?.answer;
+                const answer = answers[dropIndex] ?? '';
+                drop.innerHTML = answer;
+                drop.classList.add('correctSabad');
+                drop.classList.remove('wrongSabad');
             });
         });
     };
 
     const resetAll = () => {
         $('.submitBtnSabd').removeClass('noclicked');
-        $(`.${dropShabdCls}`).each(function() {
+        $(`.${dropShabdCls}`).each(function () {
             $(this).text('').removeAttr('data-fill').removeClass('correctSabad wrongSabad');
         });
     };
@@ -11788,7 +11778,7 @@ const ShabdRachna = (() => {
     }
 
     return {
-        render : render
+        render: render
     }
 })();
 
@@ -11796,12 +11786,12 @@ const SpellCheck = (() => {
 
     Activity.css('clickTo.css');
 
-    const containerId  = 'spell-check-container';
+    const containerId = 'spell-check-container';
 
     const quesClass = 'questInCHeading';
     let activitiesClicked = {};
-    let userSelections    = {};
-    
+    let userSelections = {};
+
     const ui = (questionId) => {
         try {
             const containerSelector = Define.get('questionContainer');
@@ -11810,9 +11800,9 @@ const SpellCheck = (() => {
                 console.error("ui container not found:", containerSelector);
                 return;
             }
-            
+
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -11842,34 +11832,34 @@ const SpellCheck = (() => {
                                 </div>`;
             // ..
 
-            const submitBtn = parent.querySelector( '.submit-btn' );
-            const showBtn   = parent.querySelector( '.show-btn' );
-            const resetBtn  = parent.querySelector( '.reset-btn' );
-            const closepop  = parent.querySelector( '#pop-close' );
+            const submitBtn = parent.querySelector('.submit-btn');
+            const showBtn = parent.querySelector('.show-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
+            const closepop = parent.querySelector('#pop-close');
 
-            if( submitBtn ) submitBtn.addEventListener("click", () => checkAnswer(containerId) );
-            if( showBtn ) showBtn.addEventListener("click", (ev) => showAnswers(containerId, ev.currentTarget) );
-            if( resetBtn ) resetBtn.addEventListener("click", () => resetCircle(containerId) );
-            if( closepop ) closepop.addEventListener("click", closeReportClick );
+            if (submitBtn) submitBtn.addEventListener("click", () => checkAnswer(containerId));
+            if (showBtn) showBtn.addEventListener("click", (ev) => showAnswers(containerId, ev.currentTarget));
+            if (resetBtn) resetBtn.addEventListener("click", () => resetCircle(containerId));
+            if (closepop) closepop.addEventListener("click", closeReportClick);
 
             Activity.setHeader(questionId);
 
-            if( lang === 'hi' ) {
+            if (lang === 'hi') {
                 $(function () {
                     $.keyboard.layouts["hindiQuiz"] = Activity.hindiKeyboard();
-                    
+
                     $(".hindiInput")
-                    .keyboard({
-                        layout: "hindiQuiz",
-                        usePreview: false,
-                        autoAccept: true,
-                    })
-                    .addTyping({ showTyping: true, delay: 70 })
-                    .addCaret({
-                        caretClass: "ui-keyboard-caret",
-                        animate: true,
-                        blinkRate: 600,
-                    });
+                        .keyboard({
+                            layout: "hindiQuiz",
+                            usePreview: false,
+                            autoAccept: true,
+                        })
+                        .addTyping({ showTyping: true, delay: 70 })
+                        .addCaret({
+                            caretClass: "ui-keyboard-caret",
+                            animate: true,
+                            blinkRate: 600,
+                        });
                 });
             }
 
@@ -11877,10 +11867,10 @@ const SpellCheck = (() => {
             console.error('SpellCheck.ui :', e);
         }
     };
-    
+
     const renderQuestions = (questionId) => {
         ui(questionId);
-        if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+        if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
         const heading = document.querySelector(`.${quesClass}`);
         if (!heading) {
@@ -11897,8 +11887,8 @@ const SpellCheck = (() => {
         renderDiv.innerHTML = "";
 
         const activity = Activity.getDefine(questionId);
-        const content  = activity?.content;
-        const lang     = activity?.lang ?? 'en';
+        const content = activity?.content;
+        const lang = activity?.lang ?? 'en';
         const replacement = content?.replacement ?? '#';
 
         if (!Array.isArray(content?.questions)) {
@@ -11911,26 +11901,26 @@ const SpellCheck = (() => {
             questions: content,
             lang: activity?.content?.lang || activity.lang || 'en'
         };
-        
-        if( !userSelections[containerId] ) userSelections[containerId] = {};
-        
-        content?.questions.forEach((item, ind) => {
-            const regex = new RegExp(`${replacement[0]}[^${replacement[0]}]+${replacement[replacement.length - 1]}[.,?!-]?|[^\\s]+[.,?!-]?`,"g");
 
-            if(!item?.text) return false;
+        if (!userSelections[containerId]) userSelections[containerId] = {};
+
+        content?.questions.forEach((item, ind) => {
+            const regex = new RegExp(`${replacement[0]}[^${replacement[0]}]+${replacement[replacement.length - 1]}[.,?!-]?|[^\\s]+[.,?!-]?`, "g");
+
+            if (!item?.text) return false;
             const parts = item?.text.match(regex);
-            if(!item?.answer) return false;
+            if (!item?.answer) return false;
             const answers = item?.answer;
             let count = 0;
-            
+
             const html = parts?.map((part, i) => {
                 if (part.trim() === "" || part === ",") return part;
                 const match = hasHashPhrases(replacement[0], part);
-                let word = match? part.replaceAll(replacement[0],''): part;
-                let data_word = match? answers[count]: part;
+                let word = match ? part.replaceAll(replacement[0], '') : part;
+                let data_word = match ? answers[count] : part;
                 const isSymbol = /^[.,?!-]$/.test(part);
-                if(match)count++;
-                return `<span class="${isSymbol? 'px-0':'clickable'}" data-act="${containerId}" data-id="${item.id}" data-word="${data_word}">
+                if (match) count++;
+                return `<span class="${isSymbol ? 'px-0' : 'clickable'}" data-act="${containerId}" data-id="${item.id}" data-word="${data_word}">
                         ${word}
                     </span>`
             }).join("");
@@ -11938,27 +11928,27 @@ const SpellCheck = (() => {
             renderDiv.innerHTML += `
             <div class="questInC border-0" data-id="${item.id}">
                 ${content?.questions.length > 1 ?
-                    `<span class="label">(${Activity.translateBulletLabels({lang:lang, ind:ind})})</span>`:''
+                    `<span class="label">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</span>` : ''
                 }
                 ${html}
             </div>`;
 
             const input_container = document.createElement('div');
-            input_container.id = "inputFlipToCir"+ind;
+            input_container.id = "inputFlipToCir" + ind;
             input_container.classList.add('questInC', 'row');
             input_container.style.border = "none";
 
             renderDiv.append(input_container);
 
             answers.map((_, ind) => {
-                input_container.innerHTML+=`<div class="col-md-4 col-sm-6 col-12 my-3 d-flex align-items-end">
-                                               ${ind+1}. <input type='text' class='hindiInput inPutHindiNew w-100'/>
+                input_container.innerHTML += `<div class="col-md-4 col-sm-6 col-12 my-3 d-flex align-items-end">
+                                               ${ind + 1}. <input type='text' class='hindiInput inPutHindiNew w-100'/>
                                             </div>`;
             });
         });
-        
-        if( !document.__circle_click_attached ) {
-           document.addEventListener("click", function (e) {
+
+        if (!document.__circle_click_attached) {
+            document.addEventListener("click", function (e) {
                 if (!e.target || !e.target.classList) return;
                 if (e.target.classList.contains("clickable")) {
                     const span = e.target;
@@ -11981,18 +11971,18 @@ const SpellCheck = (() => {
 
                     console.log(activityMeta?.mode);
 
-                    if(activityMeta?.mode != 'single'){
+                    if (activityMeta?.mode != 'single') {
                         if (!span.classList.contains("circle") && circledCount >= activityMeta.questions.questions.find(q => q.id == qId).answer.length) {
                             Swal.fire({
                                 title: activityMeta.lang === "hi" ? "अधिकतम चयन" : "Maximum Selection",
-                                text: activityMeta.lang === "hi" 
-                                    ? `आप केवल ${answersLength} शब्द चुन सकते हैं।` 
+                                text: activityMeta.lang === "hi"
+                                    ? `आप केवल ${answersLength} शब्द चुन सकते हैं।`
                                     : `You can only select ${answersLength} words.`,
-                                    icon: "warning",
-                                    confirmButtonText: activityMeta.lang === "hi" ? "ठीक है" : "OK"
-                                });
-                                return;
-                            }
+                                icon: "warning",
+                                confirmButtonText: activityMeta.lang === "hi" ? "ठीक है" : "OK"
+                            });
+                            return;
+                        }
                     }
 
                     if (mode === "single") {
@@ -12004,7 +11994,7 @@ const SpellCheck = (() => {
                         span.classList.toggle("circle");
                         if (span.classList.contains("circle")) {
                             if (!userSelections[act][qId].includes(span.dataset.word)) {
-                                if(span.dataset.word.endsWith('.') || span.dataset.word.endsWith(',')){
+                                if (span.dataset.word.endsWith('.') || span.dataset.word.endsWith(',')) {
                                     span.dataset.word = span.dataset.word.slice(0, -1);
                                 }
                                 userSelections[act][qId].push(span.dataset.word);
@@ -12027,7 +12017,7 @@ const SpellCheck = (() => {
 
         return regex.test(str);
     }
-    
+
     const checkAnswer = (dataKeyParam) => {
         const key = dataKeyParam || containerId;
         const container = document.getElementById(key);
@@ -12119,7 +12109,7 @@ const SpellCheck = (() => {
         data.forEach((item, ind) => {
             const answers = item?.answer;
             const spans = container.querySelectorAll(`[data-id="${item.id}"] .clickable`);
-            const input_container = document.getElementById('inputFlipToCir'+ind);
+            const input_container = document.getElementById('inputFlipToCir' + ind);
             const inputs = input_container.querySelectorAll('input');
             spans.forEach((span) => {
                 span.classList.add('itemDisabled');
@@ -12143,7 +12133,7 @@ const SpellCheck = (() => {
         }
 
     };
-    
+
     const resetCircle = (dataKeyParam) => {
         const key = dataKeyParam || containerId;
         const container = document.getElementById(key);
@@ -12155,7 +12145,7 @@ const SpellCheck = (() => {
 
         const inputs = document.querySelectorAll("[type=text]");
         inputs.forEach((input) => {
-            input.value= "";
+            input.value = "";
             input.classList.remove('itemDisabled');
         })
 
@@ -12172,7 +12162,7 @@ const SpellCheck = (() => {
 
         userSelections[key] = {};
     };
-    
+
     const showClickReportClick = (clickData, selections = {}, typeLang = 'en') => {
         $("#clickAct").css("display", "block");
         let correctCount = 0;
@@ -12193,7 +12183,7 @@ const SpellCheck = (() => {
 
         (questions || []).forEach((q, i) => {
             const correctAnswers = Array.isArray(q.answer) ? q.answer.map(a => a.trim().toLowerCase()) : [q.answer.trim().toLowerCase()];
-            
+
             const circledWords = Array.from(
                 document.querySelectorAll(`[data-id="${q.id}"] .clickable.circle`)
             ).map(s => s.dataset.word?.trim().toLowerCase() || '');
@@ -12229,7 +12219,7 @@ const SpellCheck = (() => {
                 : typeLang === "hi" ? "प्रयास नहीं किया" : "Not Attempted";
 
             const correctAnswerText = correctAnswers.join(", ");
-            
+
             tableHTML += `
             <tr>
                 <th>${q.label || (i + 1)}</th>
@@ -12270,12 +12260,12 @@ const SpellItOut = (() => {
 
     Activity.css('clickTo.css');
 
-    const inputContainer   = 'input-container';
+    const inputContainer = 'input-container';
 
-    const containerId  = 'spell-It-out-container';
+    const containerId = 'spell-It-out-container';
 
     const quesClass = 'questInCHeading';
-    
+
     const ui = (questionId) => {
         try {
             const containerSelector = Define.get('questionContainer');
@@ -12284,9 +12274,9 @@ const SpellItOut = (() => {
                 console.error("ui container not found:", containerSelector);
                 return;
             }
-            
+
             const activity = Activity.getDefine(questionId) ?? {};
-            const lang     = activity.lang ?? 'en';
+            const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
@@ -12316,30 +12306,30 @@ const SpellItOut = (() => {
                                 </div>`;
             // ..
 
-            const submitBtn = parent.querySelector( '.submit-btn' );
-            const resetBtn  = parent.querySelector( '.reset-btn' );
+            const submitBtn = parent.querySelector('.submit-btn');
+            const resetBtn = parent.querySelector('.reset-btn');
 
-            if( submitBtn ) submitBtn.addEventListener("click", checkAnswer );
-            if( resetBtn ) resetBtn.addEventListener("click", resetActivity );
+            if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+            if (resetBtn) resetBtn.addEventListener("click", resetActivity);
 
             Activity.setHeader(questionId);
 
-            if( lang === 'hi' ) {
+            if (lang === 'hi') {
                 $(function () {
                     $.keyboard.layouts["hindiQuiz"] = Activity.hindiKeyboard();
-                    
+
                     $(".hindiInput")
-                    .keyboard({
-                        layout: "hindiQuiz",
-                        usePreview: false,
-                        autoAccept: true,
-                    })
-                    .addTyping({ showTyping: true, delay: 70 })
-                    .addCaret({
-                        caretClass: "ui-keyboard-caret",
-                        animate: true,
-                        blinkRate: 600,
-                    });
+                        .keyboard({
+                            layout: "hindiQuiz",
+                            usePreview: false,
+                            autoAccept: true,
+                        })
+                        .addTyping({ showTyping: true, delay: 70 })
+                        .addCaret({
+                            caretClass: "ui-keyboard-caret",
+                            animate: true,
+                            blinkRate: 600,
+                        });
                 });
             }
 
@@ -12372,7 +12362,7 @@ const SpellItOut = (() => {
         const content = activity?.content ?? {};
         const lang = activity?.lang ?? 'en';
 
-        const words = content?.words ?? [] ;
+        const words = content?.words ?? [];
 
         const allowedWords = words.map(w => w.toLowerCase());
         const usedValues = new Set();
@@ -12449,10 +12439,10 @@ const SpellItOut = (() => {
             input.value = "";
         })
     }
-    
+
     const render = (questionId) => {
         ui(questionId);
-        if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+        if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
         const heading = document.querySelector(`.${quesClass}`);
         if (!heading) {
@@ -12469,9 +12459,9 @@ const SpellItOut = (() => {
         renderDiv.innerHTML = "";
 
         const activity = Activity.getDefine(questionId);
-        const content  = activity?.content ?? {};
-        const lang  = activity?.lang ?? "en";
-        const words  = content?.words ?? [];
+        const content = activity?.content ?? {};
+        const lang = activity?.lang ?? "en";
+        const words = content?.words ?? [];
 
         if (words.length == 0) return;
 
@@ -12479,14 +12469,14 @@ const SpellItOut = (() => {
             console.error("renderWords: words should be an array", words);
             return;
         }
-        
+
         words?.map((item) => {
-           renderDiv.innerHTML += `<div class='d-flex-inline p-2'>${item}</div>`;
+            renderDiv.innerHTML += `<div class='d-flex-inline p-2'>${item}</div>`;
         });
 
-        const count  = content?.count ?? 1;
+        const count = content?.count ?? 1;
 
-        if(count > words.length){
+        if (count > words.length) {
             console.error(`count:- ${count} should be less than or equal to total words:- ${words.length}`);
             return;
         }
@@ -12537,7 +12527,7 @@ const VowelDragAndDrop = (() => {
 
     const containerId = 'vowel_dragAndDrop';
     let DragEnabled = false;
-    
+
     const ui = (questionId) => {
         try {
             const containerSelector = Define.get('questionContainer');
@@ -12780,7 +12770,7 @@ const VowelDragAndDrop = (() => {
                             currentSpan.classList.remove('vowel-incorrect');
                         }
                         allCorrect = false;
-                    } else {                        
+                    } else {
                         currentSpan.classList.remove('vowel-incorrect');
                         currentSpan.classList.remove('vowel-correct');
                     }
@@ -12805,7 +12795,7 @@ const VowelDragAndDrop = (() => {
 
     const render = (questionId) => {
         ui(questionId);
-        if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+        if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
         const activity = Activity.getDefine(questionId);
         const lang = activity?.lang ?? 'en';
@@ -12816,15 +12806,15 @@ const VowelDragAndDrop = (() => {
         const isCol = content?.col ?? false;
 
         const defaultCol = {
-            md : 4,
-            sm : 6,
-            col : 12
+            md: 4,
+            sm: 6,
+            col: 12
         };
 
         const col_size = {
-            md  : isCol != false ? content?.col?.md ?? defaultCol.md : 12,
-            sm  : isCol != false ? content?.col?.sm ?? defaultCol.sm : 12,
-            col : isCol != false ? content?.col?.col ?? defaultCol.col : 12
+            md: isCol != false ? content?.col?.md ?? defaultCol.md : 12,
+            sm: isCol != false ? content?.col?.sm ?? defaultCol.sm : 12,
+            col: isCol != false ? content?.col?.col ?? defaultCol.col : 12
         };
 
         const hasMainImage = content?.image ?? false;
@@ -12886,17 +12876,16 @@ const VowelDragAndDrop = (() => {
                     <div class="p-2 col d-flex flex-wrap ${hasImage ? 'flex-column align-items-center' : ''}">
                         ${image}
                         <div class="d-flex question-container_2" data-queindex="${wordIndex}" data-ans="${answerValue}">
-                            ${
-                                parts.map(part => {
-                                    const isEditable = part.editable;
-                                    const text = part.text.trim();
-                                    if (!text) return '';
+                            ${parts.map(part => {
+                const isEditable = part.editable;
+                const text = part.text.trim();
+                if (!text) return '';
 
-                                    return `<span class="part-container ${isEditable ? 'editable' : ''}" data-original="${text}">
+                return `<span class="part-container ${isEditable ? 'editable' : ''}" data-original="${text}">
                                         ${splitGraphemes(text).map(letter => `<span class="letter" data-original="${letter}">${letter}</span>`).join('')}
                                     </span>&nbsp;`;
-                                }).join('')
-                            }
+            }).join('')
+                }
                         </div>
                     </div>
                 </div>`;
@@ -12907,7 +12896,7 @@ const VowelDragAndDrop = (() => {
         $('.vowel-drop-box').html(questionHtml.join(''));
 
         userAns = Array(words.length).fill([]);
-        
+
         makeDraggable('.vowel');
         initDroppable('.letter');
         DragEnabled = true;
@@ -12938,7 +12927,7 @@ const VowelDragAndDrop = (() => {
         if (matra.endsWith('्')) {
             return matra + base;
         }
-    
+
         return base + matra;
     };
 
@@ -12985,30 +12974,30 @@ const VowelDragAndDrop = (() => {
 
 const VirtualTour = (() => {
 
-    const containerId       = 'virtualTour';
-    const titleWrapperId    = 'title-wrapper';
-    const audioWrapperId    = 'audio-wrapper';
-    const imageContainerCls = 'question-image-container';    
+    const containerId = 'virtualTour';
+    const titleWrapperId = 'title-wrapper';
+    const audioWrapperId = 'audio-wrapper';
+    const imageContainerCls = 'question-image-container';
 
     let __currentIndex = 0;
-    let __questions    = undefined;
-    let __prevBtn      = undefined;
-    let __nextBtn      = undefined;
+    let __questions = undefined;
+    let __prevBtn = undefined;
+    let __nextBtn = undefined;
 
     const style = () => {
         const purpleColor = "#771360";
-        const titleStyle  = `border:1px solid ${purpleColor};background-color:${purpleColor};`;
+        const titleStyle = `border:1px solid ${purpleColor};background-color:${purpleColor};`;
 
         const store = {
-            colors : {
-                purple : purpleColor
+            colors: {
+                purple: purpleColor
             },
-            css : {
-                title : titleStyle
+            css: {
+                title: titleStyle
             }
         };
 
-        return { get : store };
+        return { get: store };
     }
 
     const defaultCol = Helper?.defaultCol ?? {};
@@ -13022,9 +13011,9 @@ const VirtualTour = (() => {
                 return;
             }
 
-            const activity  = Activity.getDefine(questionId) ?? {};
-            const content   = activity?.content ?? {};
-            const lang      = activity?.lang ?? 'en';
+            const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity?.content ?? {};
+            const lang = activity?.lang ?? 'en';
             const questions = content?.questions ?? [];
             const questionsLength = questions.length;
 
@@ -13034,8 +13023,8 @@ const VirtualTour = (() => {
                                     <div class="container w-75 mx-auto">
                                         <div class="p-2 rounded-3 border bg-light text-center ${Define.get('head')}"></div>
                                         <div id="${containerId}" class="py-2 mt-2">
-                                            ${ questionsLength > 1 
-                                                ? `
+                                            ${questionsLength > 1
+                    ? `
                                                     <div class="text-end">
                                                         <button id="previousBtn" class="btn btn-outline-primary rounded m-1" disabled>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
@@ -13051,7 +13040,7 @@ const VirtualTour = (() => {
                                                         </button>
                                                     </div>
                                                 ` : ''
-                                            }
+                }
                                             <div class="question-content-container">
                                                 <div id="${titleWrapperId}"></div>
                                                 <div id="${audioWrapperId}"></div>
@@ -13062,45 +13051,45 @@ const VirtualTour = (() => {
                                 </div>`;
             // ..
 
-            __prevBtn = document.querySelector( '#previousBtn' );
-            __nextBtn = document.querySelector( '#nextBtn' );
+            __prevBtn = document.querySelector('#previousBtn');
+            __nextBtn = document.querySelector('#nextBtn');
 
-            if( __prevBtn ) __prevBtn.addEventListener( 'click', renderPrev );
-            if( __nextBtn ) __nextBtn.addEventListener( 'click', renderNext );
-            
+            if (__prevBtn) __prevBtn.addEventListener('click', renderPrev);
+            if (__nextBtn) __nextBtn.addEventListener('click', renderNext);
+
             Activity.setHeader(questionId);
 
-            if( content?.questions?.length > 1 ) __nextBtn.disabled = false;
+            if (content?.questions?.length > 1) __nextBtn.disabled = false;
 
         } catch (e) {
             console.error('VirtualTour.ui :', e);
         }
-    };    
+    };
 
     const render = (questionId) => {
         __currentIndex = 0;
-        __questions    = undefined;
-        __prevBtn      = undefined;
-        __nextBtn      = undefined;
+        __questions = undefined;
+        __prevBtn = undefined;
+        __nextBtn = undefined;
 
         ui(questionId);
-        if( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+        if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
-        renderQuestion();        
+        renderQuestion();
     };
 
-    const captionTextView = (text='') => {
+    const captionTextView = (text = '') => {
         const caption = `
             <div class="col-12 text-decoration-underline text-capitalize text-muted text-center">
                 <small>${text}</small>
             </div>`
         // ..
-        if( text != '' ) return caption;
+        if (text != '') return caption;
         else return '';
     }
 
-    const renderImage = ({path='', imageWidth='50%', border=false}={}) => {
-        const borderStyle = ( border == true ) ? `border:2px solid ${style().get.colors.purple}` : '';
+    const renderImage = ({ path = '', imageWidth = '50%', border = false } = {}) => {
+        const borderStyle = (border == true) ? `border:2px solid ${style().get.colors.purple}` : '';
         const img = `
             <img 
                 src="${Activity.pathToCWD()}${path}" 
@@ -13116,59 +13105,59 @@ const VirtualTour = (() => {
 
         Helper.stopAudio();
 
-        const questionId = Activity.getQid( `#${containerId}` );
-        const activity   = Activity.getDefine(questionId) ?? {};
-        const content    = activity?.content ?? {};
-        const questions  = content?.questions ?? [];
-        
-        if( !__questions ) __questions = questions;
+        const questionId = Activity.getQid(`#${containerId}`);
+        const activity = Activity.getDefine(questionId) ?? {};
+        const content = activity?.content ?? {};
+        const questions = content?.questions ?? [];
+
+        if (!__questions) __questions = questions;
 
         const currentQuestion = questions[__currentIndex];
 
         (() => {
-            const titleWrapper = document.querySelector( `#${titleWrapperId}` );
-            if( !titleWrapper ) return false;
+            const titleWrapper = document.querySelector(`#${titleWrapperId}`);
+            if (!titleWrapper) return false;
 
-            const title = currentQuestion?.title ?? {};            
-            const titleHtml = 
-                title && ( title.hasOwnProperty('main') || title.hasOwnProperty('sub') )
+            const title = currentQuestion?.title ?? {};
+            const titleHtml =
+                title && (title.hasOwnProperty('main') || title.hasOwnProperty('sub'))
                     ? `
                         <div class="question-text-container row g-0 gap-2 my-2 fs-5 align-items-start">
-                            ${ title?.main?.text && title.main.text != ''
-                                ? `
+                            ${title?.main?.text && title.main.text != ''
+                        ? `
                                     <div 
                                         class="col-auto p-3 fw-bold text-light text-uppercase rounded-3" 
                                         style="${style().get.css.title}"
                                     >${title.main.text}</div>
                                 ` : ''
-                            }
-                            ${ title?.sub?.text && title.sub.text != ''
-                                ? `
+                    }
+                            ${title?.sub?.text && title.sub.text != ''
+                        ? `
                                     <div 
-                                        class="col row g-0 align-items-center ${ title?.sub?.classes ? title?.sub?.classes : '' } ${ title?.main?.text ? '' : 'justify-content-center' } p-3"
+                                        class="col row g-0 align-items-center ${title?.sub?.classes ? title?.sub?.classes : ''} ${title?.main?.text ? '' : 'justify-content-center'} p-3"
                                     >${title.sub.text}</div>
                                 ` : ''
-                            }
+                    }
                         </div>
                     ` : '';
             // ..
 
             titleWrapper.innerHTML = titleHtml;
         })();
-        
-        const containerHtml = document.querySelector( `.${imageContainerCls}` );
-        if( !containerHtml ) return false;
+
+        const containerHtml = document.querySelector(`.${imageContainerCls}`);
+        if (!containerHtml) return false;
         containerHtml.innerHTML = '';
 
-        const wrapper = document.querySelector( '#'+audioWrapperId );
-        if( wrapper ) wrapper.innerHTML = '';
+        const wrapper = document.querySelector('#' + audioWrapperId);
+        if (wrapper) wrapper.innerHTML = '';
 
-        if( currentQuestion?.set?.virtualTour === true ) {
+        if (currentQuestion?.set?.virtualTour === true) {
             const definedCol = currentQuestion?.set?.col ?? {};
             const col = {
-                md  : definedCol?.md ?? defaultCol.md,
-                sm  : definedCol?.sm ?? defaultCol.sm,
-                col : definedCol?.col ?? defaultCol.col
+                md: definedCol?.md ?? defaultCol.md,
+                sm: definedCol?.sm ?? defaultCol.sm,
+                col: definedCol?.col ?? defaultCol.col
             };
 
             const audioPath = currentQuestion?.set?.audio && currentQuestion?.set?.audio?.path
@@ -13176,7 +13165,7 @@ const VirtualTour = (() => {
                 : undefined;
             // ..
 
-            if( audioPath ) {
+            if (audioPath) {
 
                 const audioView = `<div class="text-end">
                                     <svg class="common_playBtn" id="playAudio" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16" role="button">
@@ -13188,119 +13177,116 @@ const VirtualTour = (() => {
                                 </div>`;
                 // ..
 
-                if( wrapper ) wrapper.innerHTML = audioView;
+                if (wrapper) wrapper.innerHTML = audioView;
 
-                Helper.setAudio( Activity.pathToCWD() + audioPath );
+                Helper.setAudio(Activity.pathToCWD() + audioPath);
 
-                const playAudio  = document.querySelector( '#playAudio' );
-                const pauseAudio = document.querySelector( '#pauseAudio' );
+                const playAudio = document.querySelector('#playAudio');
+                const pauseAudio = document.querySelector('#pauseAudio');
 
-                if( playAudio ) playAudio.addEventListener( 'click', Helper.playAudio );
-                if( pauseAudio ) pauseAudio.addEventListener( 'click', Helper.pauseAudio );
+                if (playAudio) playAudio.addEventListener('click', Helper.playAudio);
+                if (pauseAudio) pauseAudio.addEventListener('click', Helper.pauseAudio);
             }
 
-            const imageWidth = ( currentQuestion?.set?.imageWidth && currentQuestion?.set?.imageWidth !== '')
-                                    ? currentQuestion.set.imageWidth
-                                    : '100%';
+            const imageWidth = (currentQuestion?.set?.imageWidth && currentQuestion?.set?.imageWidth !== '')
+                ? currentQuestion.set.imageWidth
+                : '100%';
             // ..
-            
-            containerHtml.classList.add( 'justify-content-center' );
 
-            containerHtml.innerHTML = currentQuestion.set?.images.map( obj => {
+            containerHtml.classList.add('justify-content-center');
+
+            containerHtml.innerHTML = currentQuestion.set?.images.map(obj => {
                 return `
                     <div class="col-${col.col} col-md-${col.md} col-sm-${col.sm} p-3 text-center animate__animated animate__fadeInDown">
-                        ${renderImage({path:obj?.path,imageWidth:imageWidth,border:true})}
-                        ${
-                            obj?.caption && obj?.caption != ''
-                                ? captionTextView(obj.caption) : ''
-                        }
+                        ${renderImage({ path: obj?.path, imageWidth: imageWidth, border: true })}
+                        ${obj?.caption && obj?.caption != ''
+                        ? captionTextView(obj.caption) : ''
+                    }
                     </div>
                 `;
-            }).join( '' ) ?? '';
+            }).join('') ?? '';
         }
 
-        if( currentQuestion?.set?.virtualTour === false ) {
-            containerHtml.innerHTML = currentQuestion?.set?.questions?.map( question => {
+        if (currentQuestion?.set?.virtualTour === false) {
+            containerHtml.innerHTML = currentQuestion?.set?.questions?.map(question => {
 
                 const imageLayout = question?.imageLayout ?? {};
 
                 const imageWidth = imageLayout?.width ?? '100px';
-                const imagePos   = imageLayout?.position ?? 'top';
-                const images     = imageLayout?.images ?? [];
+                const imagePos = imageLayout?.position ?? 'top';
+                const images = imageLayout?.images ?? [];
                 const definedCol = imageLayout?.col ?? {};
                 const col = {
-                    md  : definedCol?.md ?? defaultCol.md,
-                    sm  : definedCol?.sm ?? defaultCol.sm,
-                    col : definedCol?.col ?? defaultCol.col
+                    md: definedCol?.md ?? defaultCol.md,
+                    sm: definedCol?.sm ?? defaultCol.sm,
+                    col: definedCol?.col ?? defaultCol.col
                 };
 
                 const imageClass = `
-                    ${
-                        imagePos === 'top' || imagePos === 'bottom'
-                            ? images.length > 1
-                                ? `col-${col.col} col-sm-${col.sm} col-md-${col.md}`
-                                : 'col-12'
-                            : 'col-auto'
+                    ${imagePos === 'top' || imagePos === 'bottom'
+                        ? images.length > 1
+                            ? `col-${col.col} col-sm-${col.sm} col-md-${col.md}`
+                            : 'col-12'
+                        : 'col-auto'
                     } row g-0 align-items-center justify-content-center
                 `;
                 // ..
 
-                const textClass = ( imagePos == 'left' || imagePos == 'right' )
+                const textClass = (imagePos == 'left' || imagePos == 'right')
                     ? 'col'
                     : 'col-12';
                 // ..
 
                 let __renderAll = true;
-                const imageHtmlSet = images?.map( (image, index) => {
-                    if( imagePos == 'left' || imagePos == 'right' ) __renderAll = false;
+                const imageHtmlSet = images?.map((image, index) => {
+                    if (imagePos == 'left' || imagePos == 'right') __renderAll = false;
 
-                    if( !__renderAll && index > 0 ) return;
-                    
+                    if (!__renderAll && index > 0) return;
+
                     return image?.path && image?.path != ''
                         ? `<div class="${imageClass} my-1 px-1">
                                 <div class="col-12 text-center">
-                                    ${renderImage({path:image.path, imageWidth:imageWidth})}
+                                    ${renderImage({ path: image.path, imageWidth: imageWidth })}
                                 </div>
-                                ${
-                                    image?.caption && image?.caption != ''
-                                        ? captionTextView(image.caption) : ''
-                                }
+                                ${image?.caption && image?.caption != ''
+                            ? captionTextView(image.caption) : ''
+                        }
                             </div>
                         ` : ''
                     // ..
-                }).join( '' );
+                }).join('');
 
-                const imageHtmlContainer = imageHtmlSet != '' 
-                    ? images.length > 1 && ( imagePos == 'top' || imagePos == 'bottom' )
+                const imageHtmlContainer = imageHtmlSet != ''
+                    ? images.length > 1 && (imagePos == 'top' || imagePos == 'bottom')
                         ? `<div class="row g-0 justify-content-center">${imageHtmlSet}</div>`
                         : imageHtmlSet
                     : ''
                 // ..
 
                 return `
-                    ${ question?.head || question?.sentence || imageHtmlSet ? `
+                    ${question?.head || question?.sentence || imageHtmlSet ? `
                             <div class="row g-0 border-secondary-subtle border rounded py-2 bg-light-subtle px-1 my-2 animate__animated animate__fadeInDown">
                                 ${imagePos == 'top' || imagePos == 'left' ? imageHtmlContainer : ''}
-                                ${ question?.head || question?.sentence ? `
+                                ${question?.head || question?.sentence ? `
                                     <div class="${textClass} my-2">
-                                        ${ question?.head ? `
+                                        ${question?.head ? `
                                                 <div class="fs-5 text-danger-emphasis p-1">
                                                     ${question.head}
                                                 </div>
                                             ` : ''
-                                        }
-                                        ${ question?.sentence ? `
+                            }
+                                        ${question?.sentence ? `
                                                 <div class="p-1">${question.sentence}</div>
                                             ` : ''
-                                        }
+                            }
                                     </div>` : ''
-                                }
+                        }
                                 ${imagePos == 'bottom' || imagePos == 'right' ? imageHtmlContainer : ''}
                             </div>
                             ` : ''
                     }
                 `
-            }).join( '' ) ?? '';
+            }).join('') ?? '';
         }
     };
 
@@ -13309,7 +13295,7 @@ const VirtualTour = (() => {
         __prevBtn.disabled = false;
         renderQuestion();
 
-        if( !__questions[__currentIndex+1] ) {
+        if (!__questions[__currentIndex + 1]) {
             __nextBtn.disabled = true;
             return;
         }
@@ -13320,7 +13306,7 @@ const VirtualTour = (() => {
         __nextBtn.disabled = false;
         renderQuestion();
 
-        if( !__questions[__currentIndex-1] ) {
+        if (!__questions[__currentIndex - 1]) {
             __prevBtn.disabled = true;
             return;
         }
@@ -13335,12 +13321,12 @@ const VirtualTour = (() => {
 Templates.get('templates').map(({ template }) => {
     try {
         const mod = eval(template);
-        if( !mod || (typeof mod !== 'function' && typeof mod !== 'object') ) {
+        if (!mod || (typeof mod !== 'function' && typeof mod !== 'object')) {
             console.error(`FATAL :: Couldn't register ${template} :`, mod);
             return;
         }
         Activity.register(template, mod);
-    } catch( err ) {
-        console.error( `FATAL :: Couldn't register ${template} :`, err );
+    } catch (err) {
+        console.error(`FATAL :: Couldn't register ${template} :`, err);
     }
 });
