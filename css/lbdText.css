@@ -376,13 +376,13 @@ body {
 .machiNgs button {
   font-family: 'PoppinsLight';
   position: relative;
-  padding: 12px 8px;
+  padding: 12px 20px;
   border: none;
   border-radius: 50px;
   font-size: 19px;
   cursor: pointer;
   transition: all 0.35s ease;
-  width: 180px;
+  /* width: 180px; */
   text-align: center;
   overflow: hidden;
   color: #fff;
@@ -990,13 +990,13 @@ body {
   }
 
   .machiNgs button {
-    padding: 6px 9px;
+    padding: 8px 20px;
     border: none;
     border-radius: 32px;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: none;
-    width: 104px;
+    /* width: 104px; */
     text-align: center;
     font-size: 12px;
     margin-bottom: 10px;

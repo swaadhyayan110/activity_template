@@ -11,74 +11,74 @@ const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = [
-        { qid : 1, text : ['Q-1', 'Match-1'], module : 1, landscape : true },
-        { qid : 2, text : ['Q-2', 'Match-2'], module : 2 },
-        { qid : 3, text : ['Q-3', 'Match-3'], module : 3 },
-        { qid : 4, text : ['Q-4', 'Fill-1'], module : 4 },
-        { qid : 5, text : ['Q-5','Fill-2'], module : 5 },
-        { qid : 6, text : ['Q-6', 'Jumble-Letter'], module : 6 },
-        { qid : 7, text : ['Q-7', 'Jumble-Word'], module : 7 },
-        { qid : 8, text : ['Q-8', 'DND-1'], module : 8 },
-        { qid : 9, text : ['Q-9', 'MCQ-1'], module : 9 },
-        { qid : 10, text : ['Q-10', 'Adaptiv'], module : 10 },
-        { qid : 11, text : ['Q-11', 'Audio'], module : 11 },
-        { qid : 12, text : ['Q-12', 'Drop Down'], module : 12 },
-        { qid : 13, text : ['Q-13', 'Circle'], module : 13 },
-        { qid : 14, text : ['Q-14','श्रवण कौशल'], module : 14 },
-        { qid : 15, text : ['Q-15', 'T&F'], module : 15 },
-        { qid : 16, text : ['Q-16', 'DND-2'], module : 16 },
-        { qid : 17, text : ['Q-17', 'DND-3'], module : 16 },
-        { qid : 18, text : ['Q-18', 'Sorting'], module : 17 },
-        { qid : 19, text : ['Q-19', 'PDF'], module : 18 },
-        { qid : 20, text : ['Q-20', 'Shabdkosh'], module : 19 },
-        { qid : 21, text : ['Q-21', 'Shrutlekh'], module : 20 },
-        { qid : 22, text : ['Q-22', 'WordSearch'], module : 21 },
-        { qid : 23, text : ['Q-23', 'TextArea'], module : 22 },
-        { qid : 24, text : ['Q-24', 'CrossWord'], module : 23 },
-        { qid : 25, text : ['Q-25', 'ShravanKaushalWithPara'], module : 24 },
-        { qid : 26, text : ['Q-26', 'VideoPlayer'], module : 25 },
-        { qid : 27, text : ['Q-27', 'Rachnatmak_Para-1'], module : 26 },
-        { qid : 28, text : ['Q-28', 'Rachnatmak_Inputs&Images-2'], module : 27 },
-        { qid : 29, text : ['Q-29', 'Rachnatmak_Tab_Btns-3'], module : 28 },
-        { qid : 30, text : ['Q-30', 'Rachnatmak_multi_Inputs-4'], module : 29 },
-        { qid : 31, text : ['Q-31', 'ClickOnImage'], module : 30 },
-        { qid : 32, text : ['Q-32', 'FillOnClick'], module : 31 },
-        { qid : 33, text : ['Q-33', 'Dictionary'], module : 32 },
-        { qid : 34, text : ['Q-34', 'MentalMath'], module : 33 },
-        { qid : 35, text : ['Q-35', 'Youtube-Audio-Video'], module : 34 },
-        { qid : 36, text : ['Q-36', 'Math Money'], module : 35 },
-        { qid : 37, text : ['Q-37', 'Shabd Rachna'], module : 36 },
-        { qid : 38, text : ['Q-38', 'Spell Check'], module : 37 },
-        { qid : 39, text : ['Q-39', 'Spell It out'], module : 38 },
-        { qid : 40, text : ['Q-40', 'Vowel Drag and Drop'], module : 39 },
-        { qid : 41, text : ['Q-41', 'Shabdkosh type-2'], module : 19 },
-        { qid : 42, text : ['Q-42', 'Virtual Tour'], module : 40 },
+        { qid: 1, text: ['Q-1', 'Match-1'], module: 1, landscape: true },
+        { qid: 2, text: ['Q-2', 'Match-2'], module: 2 },
+        { qid: 3, text: ['Q-3', 'Match-3'], module: 3 },
+        { qid: 4, text: ['Q-4', 'Fill-1'], module: 4 },
+        { qid: 5, text: ['Q-5', 'Fill-2'], module: 5 },
+        { qid: 6, text: ['Q-6', 'Jumble-Letter'], module: 6 },
+        { qid: 7, text: ['Q-7', 'Jumble-Word'], module: 7 },
+        { qid: 8, text: ['Q-8', 'DND-1'], module: 8 },
+        { qid: 9, text: ['Q-9', 'MCQ-1'], module: 9 },
+        { qid: 10, text: ['Q-10', 'Adaptiv'], module: 10 },
+        { qid: 11, text: ['Q-11', 'Audio'], module: 11 },
+        { qid: 12, text: ['Q-12', 'Drop Down'], module: 12 },
+        { qid: 13, text: ['Q-13', 'Circle'], module: 13 },
+        { qid: 14, text: ['Q-14', 'श्रवण कौशल'], module: 14 },
+        { qid: 15, text: ['Q-15', 'T&F'], module: 15 },
+        { qid: 16, text: ['Q-16', 'DND-2'], module: 16 },
+        { qid: 17, text: ['Q-17', 'DND-3'], module: 16 },
+        { qid: 18, text: ['Q-18', 'Sorting'], module: 17 },
+        { qid: 19, text: ['Q-19', 'PDF'], module: 18 },
+        { qid: 20, text: ['Q-20', 'Shabdkosh'], module: 19 },
+        { qid: 21, text: ['Q-21', 'Shrutlekh'], module: 20 },
+        { qid: 22, text: ['Q-22', 'WordSearch'], module: 21 },
+        { qid: 23, text: ['Q-23', 'TextArea'], module: 22 },
+        { qid: 24, text: ['Q-24', 'CrossWord'], module: 23 },
+        { qid: 25, text: ['Q-25', 'ShravanKaushalWithPara'], module: 24 },
+        { qid: 26, text: ['Q-26', 'VideoPlayer'], module: 25 },
+        { qid: 27, text: ['Q-27', 'Rachnatmak_Para-1'], module: 26 },
+        { qid: 28, text: ['Q-28', 'Rachnatmak_Inputs&Images-2'], module: 27 },
+        { qid: 29, text: ['Q-29', 'Rachnatmak_Tab_Btns-3'], module: 28 },
+        { qid: 30, text: ['Q-30', 'Rachnatmak_multi_Inputs-4'], module: 29 },
+        { qid: 31, text: ['Q-31', 'ClickOnImage'], module: 30 },
+        { qid: 32, text: ['Q-32', 'FillOnClick'], module: 31 },
+        { qid: 33, text: ['Q-33', 'Dictionary'], module: 32 },
+        { qid: 34, text: ['Q-34', 'MentalMath'], module: 33 },
+        { qid: 35, text: ['Q-35', 'Youtube-Audio-Video'], module: 34 },
+        { qid: 36, text: ['Q-36', 'Math Money'], module: 35 },
+        { qid: 37, text: ['Q-37', 'Shabd Rachna'], module: 36 },
+        { qid: 38, text: ['Q-38', 'Spell Check'], module: 37 },
+        { qid: 39, text: ['Q-39', 'Spell It out'], module: 38 },
+        { qid: 40, text: ['Q-40', 'Vowel Drag and Drop'], module: 39 },
+        { qid: 41, text: ['Q-41', 'Shabdkosh type-2'], module: 19 },
+        { qid: 42, text: ['Q-42', 'Virtual Tour'], module: 40 },
     ];
 
     // DEFINE QUESTIONS
     const questions = [
         {
-            id      : 1,
-            lang    : 'en',
-            head    : 'Template : 1',
-            subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
-            content : [
+            id: 1,
+            lang: 'en',
+            head: 'Template : 1',
+            subhead: 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
+            content: [
                 { id: 1, left: 'Bird\'s&nbsp;<u>eye</u>&nbsp;view', right: 'Seen from above, as a bird does' },
                 { id: 2, left: 'Feast for the eyes', right: 'To look with great enjoyment' },
-                { id: 3, left: { path : 'img/1.png', width : '40px' }, right: 'To be very attentive' },
+                { id: 3, left: { path: 'img/1.png', width: '40px' }, right: 'To be very attentive' },
                 { id: 4, left: 'Apple of someone\'s eye', right: 'To be a favourite or loved one of someone' },
-                { id: 5, left: 'Catch someone\'s eye', right: { path : 'img/2.png', width : '10%' } },
+                { id: 5, left: 'Catch someone\'s eye', right: { path: 'img/2.png', width: '10%' } },
                 { id: 6, left: 'Be an eye-opener', right: 'To understand something' }
             ]
         },
         {
-            id      : 2,
-            lang    : 'hi',
-            head    : 'Template : 2',
-            subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
-            content : {
+            id: 2,
+            lang: 'hi',
+            head: 'Template : 2',
+            subhead: 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
+            content: {
                 col1: [
-                    { id: 1, img: 'img/1.png', width : '80%' },
+                    { id: 1, img: 'img/1.png', width: '80%' },
                     { id: 2, text: 'img/2.png' },
                     { id: 3, img: 'img/3.png' },
                 ],
@@ -100,11 +100,11 @@ const Define = (() => {
             },
         },
         {
-            id      : 3,
-            lang    : 'hi',
-            head    : 'Template : 3',
-            subhead : 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
-            content : [
+            id: 3,
+            lang: 'hi',
+            head: 'Template : 3',
+            subhead: 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
+            content: [
                 { id: 1, top: 'Bird\'s eye view', bottom: 'To understand something' },
                 { id: 2, top: 'Feast for the eyes', bottom: 'Be noticed by someone' },
                 { id: 3, top: 'All eyes and ears', bottom: 'To be very attentive' },
@@ -113,13 +113,13 @@ const Define = (() => {
             ]
         },
         {
-            id      : 4,
-            lang    : 'en',
-            head    : 'Template : 4',
-            subhead : 'text..',
-            content : {
-                hintimage : 'img/ch4_1.png',
-                hinttext  : [
+            id: 4,
+            lang: 'en',
+            head: 'Template : 4',
+            subhead: 'text..',
+            content: {
+                hintimage: 'img/ch4_1.png',
+                hinttext: [
                     'Broad Gauge RailwayLine',
                     'Pond',
                     'Police Station',
@@ -133,106 +133,118 @@ const Define = (() => {
                     'Settlement',
                     'Railway Crossing'
                 ],
-                blanks : [
-                    { img : 'img/ch4_2.png', ans : 'Settlement' },
-                    { img : 'img/ch4_3.png', ans : 'Forest' },
-                    { img : 'img/ch4_4.png', ans : 'Places of Worship' },	
-                    { img : 'img/ch4_5.png', ans : 'River' },
-                    { img : 'img/ch4_6.png', ans : 'Pond' },
-                    { img : 'img/ch4_7.png', ans : 'Metalled Road' },
-                    { img : 'img/ch4_8.png', ans : 'Unmetalled road' },
-                    { img : 'img/ch4_9.png', ans : 'Broad Gauge Railway Line' },
-                    { img : 'img/ch4_10.png', ans : 'Railway Crossing' },
-                    { img : 'img/ch4_12.png', ans : 'Restaurant' },
-                    { img : 'img/ch4_13.png', ans : 'Police Station' },
-                    { img : 'img/ch4_14.png', ans : 'Bridge' }
+                blanks: [
+                    { img: 'img/ch4_2.png', ans: 'Settlement' },
+                    { img: 'img/ch4_3.png', ans: 'Forest' },
+                    { img: 'img/ch4_4.png', ans: 'Places of Worship' },
+                    { img: 'img/ch4_5.png', ans: 'River' },
+                    { img: 'img/ch4_6.png', ans: 'Pond' },
+                    { img: 'img/ch4_7.png', ans: 'Metalled Road' },
+                    { img: 'img/ch4_8.png', ans: 'Unmetalled road' },
+                    { img: 'img/ch4_9.png', ans: 'Broad Gauge Railway Line' },
+                    { img: 'img/ch4_10.png', ans: 'Railway Crossing' },
+                    { img: 'img/ch4_12.png', ans: 'Restaurant' },
+                    { img: 'img/ch4_13.png', ans: 'Police Station' },
+                    { img: 'img/ch4_14.png', ans: 'Bridge' }
                 ]
             }
         },
         {
-            id      : 5,
-            lang    : 'en',
-            head    : 'Template : 5',
-            content : {
-                imageReplacement : '#img#',
-                replacement : '#_#',
-                image : {
-                    path  : 'img/1.png',
-                    width : '10%'
+            id: 5,
+            lang: 'en',
+            head: 'Template : 5',
+            content: {
+                imageReplacement: '#img#',
+                replacement: '#_#',
+                image: {
+                    path: 'img/1.png',
+                    width: '10%'
                 },
-                questionGridSize : { md : 12, sm : 12, col : 12 },      // [OPTIONAL]
-                hint : {        // ['string' || {}]
-                    text   : 'आदरणीया चाची जी, #img#; गर्मियों की छुट्टियाँ, #img# <br> बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
-                    images : [
-                        { path : 'img/2.png', width : '15%' },
-                        { path : 'img/3.png' },
+                questionGridSize: { md: 12, sm: 12, col: 12 },      // [OPTIONAL]
+                hint: {        // ['string' || {}]
+                    text: 'आदरणीया चाची जी, #img#; गर्मियों की छुट्टियाँ, #img# <br> बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
+                    images: [
+                        { path: 'img/2.png', width: '15%' },
+                        { path: 'img/3.png' },
                     ]
                 },
-                questions : [
-                    { 
-                        qid : 1,
-                        question : 'हमारे #_# देश का #img# नाम #_# है। #img#', 
-                        images : [
-                            { path : 'img/5.png', width : '200px' },
-                            { path : 'img/4.png', width : '200px' }
+                label: { question: true, subQuestion: true },
+                questions: [
+                    {
+                        qid: 1,
+                        question: 'हमारे #_# देश का #img# नाम #_# है। #img#',
+                        images: [
+                            { path: 'img/5.png', width: '200px' },
+                            { path: 'img/4.png', width: '200px' }
                         ],
-                        answers : ['हिंदी'] 
+                        answers: ['हिंदी']
                     },
-                    { 
-                        qid : 2, 
-                        question : 'भारत की राजधानी #_# है।' 
+                    {
+                        qid: 2,
+                        question: 'भारत की राजधानी #_# है।'
                     },
-                    { 
-                        question : 'भारत की #_# #img# राजभाषा #_# है।', 
-                        images : [
-                            { path : 'img/1.png', width : '200px' }
+                    {
+                        question: 'भारत की #_# #img# राजभाषा #_# है।',
+                        images: [
+                            { path: 'img/1.png', width: '200px' }
                         ],
-                        inputWidth : '50px', 
-                        answers : ['हिंदी', 'djf', 'sfdsf'], 
-                        inputBelow : true 
+                        inputWidth: '50px',
+                        answers: ['हिंदी', 'djf', 'sfdsf'],
+                        inputBelow: true
                     },
-                    { 
-                        qid : 4, 
-                        inputWidth : '80px', 
-                        question : 'बच्चों को पढ़ने के लिए #_# चाहिए।', 
-                        answers : ['किताब'] 
+                    {
+                        qid: 4,
+                        inputWidth: '80px',
+                        question: 'बच्चों को पढ़ने के लिए #_# चाहिए।',
+                        answers: ['किताब'],
+                        maxLength: 1,
                     },
-                    { 
-                        qid : 5, 
-                        question : '#img# जहाँ #img# पढ़ाई होती है उसे #_# कहते हैं।',
-                        images : [
-                            { path : 'img/5.png', width : '200px' },
-                            { path : 'img/2.png' },
+                    {
+                        qid: 5,
+                        question: '#img# जहाँ #img# पढ़ाई होती है उसे #_# कहते हैं।',
+                        images: [
+                            { path: 'img/5.png', width: '200px' },
+                            { path: 'img/2.png', width: '200px' },
                         ],
-                        answers : ['विद्यालय'] 
+                        answers: ['विद्यालय']
+                    },
+                    {
+                        qid: 6,
+                        question: '#img# T#_#O#_#I#_#T#_##_#Y',
+                        inputWidth: '30px',
+                        maxLength: 1,
+                        images: [
+                            { path: 'img/5.png', width: '200px' },
+                        ],
+                        answers: ['A', 'B', 'C', 'D', 'E']
                     }
                 ],
-                subquestions : [
-                    { sqid : 1, qid : 1, inputWidth : '80px', text : '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['~पंख'] },
-                    { sqid : 2, qid : 1, inputWidth : '180px', text : '! सितार बनाने #_# तारों को #_# से बाँधा गया।', answers : ['!पंख', '!पंख'] },
-                    { sqid : 3, qid : 2, text : '@ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['@पंख', '@नाचने'], inputBelow : true },
-                    { sqid : 4, qid : 2, inputWidth : '40px', text : '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['#पंख'] },
-                    { sqid : 5, qid : 2, text : '$ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers : ['$पंख'] }
+                subquestions: [
+                    { sqid: 1, qid: 1, inputWidth: '80px', text: '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers: ['~पंख'], maxLength: 1 },
+                    { sqid: 2, qid: 1, inputWidth: '180px', text: '#_#', answers: ['!पंख', '!पंख'] },
+                    { sqid: 3, qid: 2, text: 'भारत बनाने के लिए तारों को #_# से बाँधा गया।', answers: ['@पंख', '@नाचने'], inputBelow: true, maxLength: 1 },
+                    { sqid: 4, qid: 2, inputWidth: '40px', text: '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers: ['#पंख'] },
+                    { sqid: 5, qid: 2, text: '$ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers: ['$पंख'] }
                 ],
-                audios: 'audio/1.mp3'
+                audio: ''
             }
         },
         {
-            id      : 6,
-            lang    : 'hi',
-            head    : 'Template : 6',
-            subhead : 'text..',
-            content : [
-                'SCHOOL', 'TEACHER', 'STUDENT', 'BOOK', 
+            id: 6,
+            lang: 'hi',
+            head: 'Template : 6',
+            subhead: 'text..',
+            content: [
+                'SCHOOL', 'TEACHER', 'STUDENT', 'BOOK',
                 'CLASS', 'COLLEGE', 'EXAM', 'LEARN', 'STUDY'
             ]
         },
         {
-            id      : 7,
-            lang    : 'en',
-            head    : 'Template : 7',
-            subhead : 'text ...',
-            content : [
+            id: 7,
+            lang: 'en',
+            head: 'Template : 7',
+            subhead: 'text ...',
+            content: [
                 'A short, statement expressing an opinion.',
                 'A stance where both feet are placed in line, often used for balance.',
                 'Actions speak louder than words.',
@@ -244,24 +256,24 @@ const Define = (() => {
             ]
         },
         {
-            id      : 8,
-            lang    : 'hi',
-            head    : 'Template : 8',
-            subhead : '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो )',
-            content : {
-                shuffle : false,
-                audio   : './bg.mp3',
-                col     : {
-                    md : 4,
-                    sm : 4,
-                    om : 4
+            id: 8,
+            lang: 'hi',
+            head: 'Template : 8',
+            subhead: '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो )',
+            content: {
+                shuffle: false,
+                audio: './bg.mp3',
+                col: {
+                    md: 4,
+                    sm: 4,
+                    om: 4
                 },
-                heading : [
+                heading: [
                     { id: 1, accept: 'm', text: 'पुल्लिंग(Masculine)' },
                     { id: 2, accept: 'f', text: 'स्त्रीलिंग(Feminine)' },
                     { id: 3, accept: 'n', text: 'नपुंसकलिंग(Neuter)' }
                 ],
-                options : [
+                options: [
                     { id: 1, ans: 'm', text: 'हंसौ' },
                     { id: 2, ans: 'f', text: 'अध्यापिके' },
                     { id: 3, ans: 'n', text: 'क्रीडनकानि' },
@@ -271,59 +283,59 @@ const Define = (() => {
             }
         },
         {
-            id      : 9,
-            lang    : 'hi',
-            head    : 'Template : 9',
-            content : {
-                text : {
-                    text : 'वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
-                    side : 'left'
+            id: 9,
+            lang: 'hi',
+            head: 'Template : 9',
+            content: {
+                text: {
+                    text: 'वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
+                    side: 'left'
                 },
-                img  : {
-                    width : '35%',
-                    path  : 'img/1.png',
-                    imageclass : 'text-center'
+                img: {
+                    width: '35%',
+                    path: 'img/1.png',
+                    imageclass: 'text-center'
                 },
-                mcq  : [
+                mcq: [
                     {
-                        imageaboveoption : {
-                            image : 'img/2.png',
-                            width : '10%'
+                        imageaboveoption: {
+                            image: 'img/2.png',
+                            width: '10%'
                         },
-                        question : {
-                            image       : 'img/4.png',
-                            replacement : '#_#',
-                            text        : 'दूसरों के खिलौनों को खराब #_# कहना'
+                        question: {
+                            image: 'img/4.png',
+                            replacement: '#_#',
+                            text: 'दूसरों के खिलौनों को खराब #_# कहना'
                         },
-                        options  : [
-                            { image : 'img/5.png' },
-                            { image : 'img/6.png' },
-                            { image : 'img/1.png'},
-                            { text  : 'none of these' }
+                        options: [
+                            { image: 'img/4.png', width: '50%' },
+                            { image: 'img/6.png' },
+                            { image: 'img/1.png' },
+                            { text: 'none of these' }
                         ],
-                        answer   : 0
+                        answer: 0
                     },
                     {
                         question: {
-                            text : 'दूसरों के खिलौनों को खराब कहना-'
-                        },                        
-                        options  : [
-                            { text : 'अच्छा है।' },
-                            { text : 'अच्छी बात है' },
-                            { text : 'आम बात है।'},
-                            { text : 'खास बात है।' }
+                            text: 'दूसरों के खिलौनों को खराब कहना-'
+                        },
+                        options: [
+                            { text: 'अच्छा है।' },
+                            { text: 'अच्छी बात है' },
+                            { text: 'आम बात है।' },
+                            { image: 'img/ebytch34.png', width: '100%' },
                         ],
                         answer: 1
                     },
                     {
                         question: {
-                            text : 'साथी खिलाड़ी को धमकाना और डराना-'
+                            text: 'साथी खिलाड़ी को धमकाना और डराना-'
                         },
-                        options  : [
-                            { text : 'अच्छा है।' },
-                            { text : 'अच्छी बात है' },
-                            { text : 'आम बात है।'},
-                            { text : 'खास बात है।' }
+                        options: [
+                            { text: 'अच्छा है।' },
+                            { text: 'अच्छी बात है' },
+                            { text: 'आम बात है।' },
+                            { text: 'खास बात है।' }
                         ],
                         answer: 1
                     }
@@ -331,23 +343,23 @@ const Define = (() => {
             }
         },
         {
-            id      : 10,
-            lang    : 'en',
-            content : {
-                skiplevels : true,
-                skipanswerbutton : true,
-                skipnextlevel : false,
-                skipOptions : false,
-                skipQuestionSequence : false,
-                headings : {
-                    left : 'स्तर',
-                    mid  : {
-                        attempted : 'किए गए प्रश्न:',
-                        outof     : 'में से'
+            id: 10,
+            lang: 'en',
+            content: {
+                skiplevels: true,
+                skipanswerbutton: true,
+                skipnextlevel: false,
+                skipOptions: false,
+                skipQuestionSequence: false,
+                headings: {
+                    left: 'स्तर',
+                    mid: {
+                        attempted: 'किए गए प्रश्न:',
+                        outof: 'में से'
                     },
-                    right : {
-                        heading     : 'निर्देश',
-                        instruction : [
+                    right: {
+                        heading: 'निर्देश',
+                        instruction: [
                             'निम्नलिखित में से प्रत्येक प्रश्न में सही विकल्प चुनें।',
                             'कुल 3 स्तर (लेवल) हैं। प्रत्येक स्तर में 10 प्रश्न होंगे।',
                             'अगले स्तर पर जाने के लिए, आपको प्रत्येक प्रश्न का सही उत्तर देना होगा।',
@@ -355,49 +367,50 @@ const Define = (() => {
                         ]
                     }
                 },
-                levels : [
+                levels: [
                     {
-                        level : 1,
-                        heading : {
-                            text    : 'this is sample heading',
-                            classes : [ 
-                                'text-center', 'fs-4', 'text-capitalize', 
-                                'text-primary-emphasis', 'bg-primary-subtle', 
-                                'rounded-2', 'p-1' 
+                        level: 1,
+                        heading: {
+                            text: 'this is sample heading',
+                            classes: [
+                                'text-center', 'fs-4', 'text-capitalize',
+                                'text-primary-emphasis', 'bg-primary-subtle',
+                                'rounded-2', 'p-1'
                             ],
                         },
-                        questions : [
+                        questions: [
                             {
-                                imageReplacement : '#img#',
-                                imageAboveOption : {
-                                    image : 'img/2.png',
-                                    width : '10%'
+                                imageReplacement: '#img#',
+                                imageAboveOption: {
+                                    image: 'img/2.png',
+                                    width: '10%'
                                 },
-                                question : { 
-                                    text : 'कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
-                                    images : {
-                                        path : [ 'img/1.png', 'img/2.png' ]
+                                question: {
+                                    text: 'कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
+                                    images: {
+                                        path: ['img/1.png', 'img/2.png']
                                     }
                                 },
                                 options: [
-                                    { 
-                                        text : '#img# सैनिकों को #img#', 
-                                        images : {
-                                            path : [ 'img/1.png', 'img/5.png' ]
+                                    {
+                                        text: '#img# सैनिकों को #img#',
+                                        images: {
+                                            path: ['img/ch4_1.png', 'img/5.png'],
+                                            width: '40%'
                                         }
-                                    }, 
-                                    { 
-                                        text : 'किसान #img# सपूतों को', 
-                                        images : {
-                                            path : [ 'img/2.png' ]
+                                    },
+                                    {
+                                        text: 'किसान #img# सपूतों को',
+                                        images: {
+                                            path: ['img/2.png']
                                         }
-                                    }, 
-                                    { 
-                                        text : 'another sample text'
+                                    },
+                                    {
+                                        text: 'another sample text'
                                     },
                                     'this is sample text'
                                 ],
-                                answer: 1 
+                                answer: 1
                             },
                             { question: 'कविता में ‘नव निर्माण’ का अर्थ है -', options: ['नया खाना बनाना', 'नई इमारत बनाना', 'समाज का पुनर्निर्माण करना', 'नई सड़क बनाना'], answer: 3 },
                             { question: '‘उठो’ शब्द से कवि क्या करना चाहता है?', options: ['जगाना', 'सुलाना', 'डराना', 'चुप कराना'], answer: 3 },
@@ -411,8 +424,8 @@ const Define = (() => {
                         ]
                     },
                     {
-                        level     : 2,
-                        questions : [
+                        level: 2,
+                        questions: [
                             { question: '‘नव किरण है, ज्योति नई’ पंक्ति का क्या तात्पर्य है?', options: ['नया दीपक जलाना', 'प्रकाश और आशा का संदेश', 'बिजली का उपयोग', 'सूर्य का अस्त होना'], answer: 1 },
                             { question: '‘जन-जन के जीवन में -', options: ['जीवन को फिर से कठिन बनाना', 'पुनः ऊर्जा भरना', 'जीवन समाप्त करना', 'जीवन से ऊब जाना'], answer: 1 },
                             { question: '‘नई उमंग, नई तरंग’ का अर्थ है-', options: ['डर', 'क्रोध', 'उत्साह और ऊर्जा', 'आलस्य'], answer: 1 },
@@ -426,8 +439,8 @@ const Define = (() => {
                         ]
                     },
                     {
-                        level     : 3,
-                        questions : [
+                        level: 3,
+                        questions: [
                             { question: 'कविता में प्रयुक्त शैली कौन-सी है?', options: ['वर्णनात्मक', 'प्रश्नोत्तरी', 'आवाहनात्मक', 'व्यंग्यात्मक'], answer: 2 },
                             { question: '‘धरती के अमर सपूतों’ में ‘अमर’ विशेषण का प्रयोग क्यों हुआ है?', options: ['क्योंकि वे मृत्यु से अजेय हैं', 'क्योंकि वे प्रेरणास्रोत हैं', 'क्योंकि वे युद्ध करते हैं', 'क्योंकि वे भगवान हैं'], answer: 2 },
                             { question: '‘सपनों में मुस्कान’ डालने का क्या तात्पर्य है?', options: ['नींद में हँसना', 'भविष्य के सपनों को सुंदर बनाना', 'सोते समय सपना देखना', 'झूठे सपने दिखाना'], answer: 2 },
@@ -444,34 +457,34 @@ const Define = (() => {
             }
         },
         {
-            id      : 11,
-            lang    : 'hi',
-            content : {
-                desc : 'audio description',
-                src  : 'https://swaadhyayan.com/data/learningContent/3/Hindi/video/cca24b220e4c0b05f1b84310b587da95.mp4',
+            id: 11,
+            lang: 'hi',
+            content: {
+                desc: 'audio description',
+                src: 'https://swaadhyayan.com/data/learningContent/3/Hindi/video/cca24b220e4c0b05f1b84310b587da95.mp4',
             }
         },
         {
-            id      : 12,
-            lang    : 'hi',
-            head    : 'Template : 12, Drop Down',
-            content : {                
-                replacement : '#_#',
-                questions   : [
-                    { text: '(क) सितार के लिए #_# खोखला किया गया।', options: ['लकड़ी','कद्दू','धातु'], answer: 'कद्दू' },
-                    { text: '(ख) सितार की लकड़ी में ताँबा #_# जोड़ा गया।', options: ['तार','ताँबा','धातु'], answer: 'तार' },
-                    { text: '(ग) #_# ने अपने कौशल से सितार को सजाया।', options: ['कारीगर','कवि','विद्यार्थी'], answer: 'कारीगर' },
-                    { text: '(घ) सितार से #_# आवाज़ निकलने लगी।', options: ['मधुर','तेज़','भारी'], answer: 'मधुर' },
-                    { text: '(ङ) इस कविता के कवि का नाम #_# है।', options: ['निराला','सुभद्राकुमारी चौहान','प्रसाद'], answer: 'निराला' }
+            id: 12,
+            lang: 'hi',
+            head: 'Template : 12, Drop Down',
+            content: {
+                replacement: '#_#',
+                questions: [
+                    { text: '(क) सितार के लिए #_# खोखला किया गया।', options: ['लकड़ी', 'कद्दू', 'धातु'], answer: 'कद्दू' },
+                    { text: '(ख) सितार की लकड़ी में ताँबा #_# जोड़ा गया।', options: ['तार', 'ताँबा', 'धातु'], answer: 'तार' },
+                    { text: '(ग) #_# ने अपने कौशल से सितार को सजाया।', options: ['कारीगर', 'कवि', 'विद्यार्थी'], answer: 'कारीगर' },
+                    { text: '(घ) सितार से #_# आवाज़ निकलने लगी।', options: ['मधुर', 'तेज़', 'भारी'], answer: 'मधुर' },
+                    { text: '(ङ) इस कविता के कवि का नाम #_# है।', options: ['निराला', 'सुभद्राकुमारी चौहान', 'प्रसाद'], answer: 'निराला' }
                 ]
             }
         },
         {
-            id      : 13,
-            lang    : 'hi',
-            head    : 'Template : 13, Circle ',
-            mode    : 'single',
-            content : [
+            id: 13,
+            lang: 'hi',
+            head: 'Template : 13, Circle ',
+            mode: 'single',
+            content: [
                 { id: 1, text: 'दादा जी के लिए - तू, आप, तुम', answer: 'आप' },
                 { id: 2, text: 'अध्यापक जी के लिए - आप, वह, तुम', answer: 'आप' },
                 { id: 3, text: 'नानी जी के लिए - आप, तू, तुम', answer: 'आप' },
@@ -482,12 +495,12 @@ const Define = (() => {
             ]
         },
         {
-            id      : 14,
-            lang    : 'hi',
-            head    : 'Template : 14',
-            subhead : 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
-            content : {
-                questions : [
+            id: 14,
+            lang: 'hi',
+            head: 'Template : 14',
+            subhead: 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
+            content: {
+                questions: [
                     { id: 1, text: 'लेखक', ans: 4, popuptext: 'जो पुस्तकें लिखता है' },
                     { id: 2, text: 'चिकित्सक', ans: 3, popuptext: 'जो मरीज़ों का इलाज़ करता है' },
                     { id: 3, text: 'अध्यापक', ans: 1, popuptext: 'जो पढ़ाता है' },
@@ -495,25 +508,25 @@ const Define = (() => {
                     { id: 5, text: 'कुम्हार', ans: 2, popuptext: 'जो मिट्टी के बर्तन बनाता है' },
                     { id: 6, text: 'दरज़ी', ans: 5, popuptext: 'जो कपड़े सिलता है' }
                 ],
-                audio : {
-                    headsrc : './audio/heading.mp3',
-                    options : [
-                        { id : 1, src : './audio/1.mp3' },
-                        { id : 2, src : './audio/2.mp3' },
-                        { id : 3, src : './audio/3.mp3' },
-                        { id : 4, src : './audio/4.mp3' },
-                        { id : 5, src : './audio/5.mp3' },
-                        { id : 6, src : './audio/6.mp3' },
+                audio: {
+                    headsrc: './audio/heading.mp3',
+                    options: [
+                        { id: 1, src: './audio/1.mp3' },
+                        { id: 2, src: './audio/2.mp3' },
+                        { id: 3, src: './audio/3.mp3' },
+                        { id: 4, src: './audio/4.mp3' },
+                        { id: 5, src: './audio/5.mp3' },
+                        { id: 6, src: './audio/6.mp3' },
                     ]
                 }
             }
         },
         {
-            id      : 15,
-            lang    : 'en',
-            head    : 'Template : 15',
+            id: 15,
+            lang: 'en',
+            head: 'Template : 15',
             replacement: '#_#',
-            content : [
+            content: [
                 {
                     question: { text: 'तार लगाए गए #_#', image: 'img/1.png', width: '20%' },
                     answer: false,
@@ -535,219 +548,264 @@ const Define = (() => {
                     answer: true
                 }
             ],
-            add_content : {
-                image   : { path: "img/1.png", width: "30%" },
-                audio   : 'audio/1.mp3'
+            add_content: {
+                image: { path: "img/1.png", width: "30%" },
+                audio: 'audio/1.mp3'
             }
         },
         {
-            id      : 16,
-            lang    : 'hi',
-            head    : 'Template : 16',
-            content : {
-                shuffle     : false,
-                strictMatch : false,
-                replacement : '#_#',
-                option_side : 'top',
-                singleQuestionMode : true,
-                col         : { col : 6, md : 6, sm : 6 },
-                addOptions  : [ 'op1', 'op2', 'op3', 'op1' ],
-                questions   : [
+            id: 16,
+            lang: 'hi',
+            head: 'Template : 16',
+            content: {
+                shuffle: false,
+                strictMatch: false,
+                replacement: '#_#',
+                option_side: 'top',
+                singleQuestionMode: false,
+                col: { col: 12, md: 4, sm: 6 },
+                addOptions: ['op1', 'op2', 'op3', 'op1'],
+                questions: [
                     {
-                        qid : 1, 
-                        text : 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।', 
-                        inputWidth : '100px', 
-                        image : 'img/1.png',
-                        width : '120px',      // image-width
-                        options : ['पंख', 'नाचने'], 
-                        answer : 1 
+                        qid: 1,
+                        text: 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।',
+                        inputWidth: '100px',
+                        image: 'img/1.png',
+                        width: '120px',      // image-width
+                        options: ['पंख', 'नाचने'],
+                        answer: 1,
+                        imageSide: 'right'
                     },
-                    { qid : 2, text : 'सितार के सुर #_# में गूँजने लगे।', image : 'img/1.png', options : ['जंगल'], answer : 0 },
-                    { qid : 3, text : 'सितार पर खाली जगह पर #_# की गई।', image : 'img/1.png', options : ['नक्काषी'], answer : 0 },
-                    { qid : 4, text : 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image : 'img/1.png', options : ['खूँटी'], answer : 0 },
-                    { qid : 5, text : 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image : 'img/1.png', options : ['जतन'], answer : 0 }
+                    { qid: 2, text: '#_#', image: 'img/1.png', options: ['जंगल'], answer: 0 },
+                    { qid: 3, text: 'सितार पर खाली जगह पर #_# की गई।', image: 'img/1.png', options: ['नक्काषी'], answer: 0 },
+                    { qid: 4, text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image: 'img/1.png', options: ['खूँटी'], answer: 0 },
+                    { qid: 5, text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image: 'img/1.png', options: ['जतन'], answer: 0 }
                 ],
                 // audio     : 'audio/1.mp3'
             }
         },
         {
-            id      : 17,
-            lang    : 'hi',
-            head    : 'Template : 16',
-            content : {
-                set : {
-                    answers : [ 'पंख', 'जंगल', 'नक्काषी' ],
-                    options : [ 'पंख', 'जंगल', 'नक्काषी', 'नाचने', 'पंखूँटी', 'पंख' ],
+            id: 17,
+            lang: 'hi',
+            head: 'Template : 16',
+            content: {
+                set: {
+                    answers: ['पंख', 'जंगल', 'नक्काषी'],
+                    options: ['पंख', 'जंगल', 'नक्काषी', 'नाचने', 'पंखूँटी', 'पंख'],
                 },
             }
         },
         {
-            id      : 18,
-            lang    : 'en',
-            head    : 'Template : 17',
-            content : {
-                sequence : [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday' ],
+            id: 18,
+            lang: 'en',
+            head: 'Template : 17',
+            content: {
+                sequence: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
             }
         },
         {
-            id      : 19,
-            lang    : 'en',
-            content : {
-                pdf : 'pdf.pdf',
-                download : false
+            id: 19,
+            lang: 'en',
+            content: {
+                pdf: 'pdf.pdf',
+                download: false
             }
         },
         {
-            id      : 20,
-            lang    : 'en',
-            head    : 'Template : 19',
-            content : [
+            id: 20,
+            lang: 'en',
+            head: 'Template : 19',
+            content: [
                 {
-                    id       : 1,
-                    tabtitle : 'aPPle',
-                    meaning  : 'कूद-कूदकर',
-                    sentence : 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
-                    image    : {
-                        path  : 'img/1.png',
-                        width : '20%'
+                    id: 1,
+                    tabtitle: 'aPPle',
+                    meaning: 'कूद-कूदकर',
+                    sentence: 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
+                    image: {
+                        path: 'img/1.png',
+                        width: '20%'
                     }
                 },
                 {
-                    id       : 2,
-                    tabtitle : 'कूद-कूदकर',
-                    meaning  : 'कूद-कूदकर',
-                    sentence : 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।'
+                    id: 2,
+                    tabtitle: 'कूद-कूदकर',
+                    meaning: 'कूद-कूदकर',
+                    sentence: 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।'
                 }
             ]
         },
         {
-            id      : 21,
-            lang    : 'en',
-            content : {
-                questions : [
-                    { audio : './audio/1.mp3', answer: '1' },
-                    { audio : './audio/2.mp3', answer: '2' },
-                    { audio : './audio/3.mp3', answer: '3' },
-                    { audio : './audio/4.mp3', answer: '4' },
-                    { audio : './audio/5.mp3', answer: '5' },
-                    { audio : './audio/6.mp3', answer: '6' },
+            id: 21,
+            lang: 'en',
+            content: {
+                questions: [
+                    { audio: './audio/1.mp3', answer: '1' },
+                    { audio: './audio/2.mp3', answer: '2' },
+                    { audio: './audio/3.mp3', answer: '3' },
+                    { audio: './audio/4.mp3', answer: '4' },
+                    { audio: './audio/5.mp3', answer: '5' },
+                    { audio: './audio/6.mp3', answer: '6' },
                 ]
             }
         },
         {
-            id      : 22,
-            lang    : 'en',
-            head    : 'Template : 21',
-            content : [
-                { 
-                    text   : 'A drawing of Earth on a flat surface (3 letters)',
-                    answer : 'Map',
-                    row    : 0, 
-                    col    : 0,
-                    direction : 'h'
+            id: 22,
+            lang: 'en',
+            head: 'Template : 21',
+            config: {
+                replacement: '#_#',
+                side: 'top',
+                questionSection1: {
+                    heading: {
+                        main: {
+                            text: 'Hints'
+                        },
+                        vertical: {
+                            text: 'Across'
+                        },
+                        horizontal: {
+                            text: 'Down'
+                        }
+                    },
+                    col: { col: 12, md: 6, sm: 12 },
                 },
-                { 
-                    text   : 'Spherical model of Earth (5 letters)',
-                    answer : 'Globe',
-                    row    : 15,
-                    col    : 6,
-                    direction : 'h'
+                shuffle: false
+            },
+            content: [
+                {
+                    text: 'A drawing of Earth on a flat surface (3 letters)',
+                    answer: 'Map',
+                    row: 0,
+                    col: 0,
+                    direction: 'h',
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
-                { 
-                    text   : 'Ratio between map & ground distance (5 letters)',
-                    answer : 'Scale',
-                    row    : 4, 
-                    col    : 0,
-                    direction : 'h'
+                {
+                    text1: 'Spherical model of Earth (5 letters) #_#',
+                    answer: 'Globe',
+                    row: 15,
+                    col: 6,
+                    direction: 'h',
+                    image: { path: 'img/1.png', width: '15%' },
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
-                { 
-                    text   : 'Angular distance north or south of Equator (8 letters)',
-                    answer : 'Latitude',
-                    row    : 0, 
-                    col    : 8,
-                    direction : 'v'
+                {
+                    text: 'Ratio between map & ground distance (5 letters) #_#',
+                    answer: 'Scale',
+                    row: 4,
+                    col: 0,
+                    direction: 'h',
+                    image: { path: 'img/2.png', width: '15%' },
+                    colSize: { col: 12, md: 6, sm: 6 }
                 },
-                { 
-                    text   : 'Angular distance east or west of Prime Meridian (9 letters)',
-                    answer : 'Longitude',
-                    row    : 0, 
-                    col    : 12,
-                    direction : 'v'
+                {
+                    text: 'Angular distance north or south of Equator (8 letters) #_#',
+                    answer: 'Latitude',
+                    row: 0,
+                    col: 8,
+                    direction: 'v',
+                    image: { path: 'img/3.png', width: '15%' },
+                    colSize: { col: 12, md: 6, sm: 6 }
                 },
-                { 
-                    text   : 'Network of latitude & longitude (4 letters)',
-                    answer : 'Grid',
-                    row    : 8, 
-                    col    : 0,
-                    direction : 'h'
+                {
+                    text: 'Angular distance east or west of Prime Meridian (9 letters) #_#',
+                    answer: 'Longitude',
+                    row: 0,
+                    col: 12,
+                    direction: 'v',
+                    image: { path: 'img/4.png', width: '15%' },
+                    colSize: { col: 12, md: 6, sm: 6 }
                 },
-                { 
-                    text   : 'Magnetic needle tool (7 letters)',
-                    answer : 'Compass',
-                    row    : 10, 
-                    col    : 0,
-                    direction : 'h'
+                {
+                    text: 'Network of latitude & longitude (4 letters) #_#',
+                    answer: 'Grid',
+                    row: 8,
+                    col: 0,
+                    direction: 'h',
+                    image: { path: 'img/5.png', width: '15%' },
+                    colSize: { col: 12, md: 6, sm: 6 }
                 },
-                { 
-                    text   : 'A conventional sign (6 letters)',
-                    answer : 'Symbol',
-                    row    : 12, 
-                    col    : 0,
-                    direction : 'h'
+                {
+                    text: 'Magnetic needle tool (7 letters) #_#',
+                    answer: 'Compass',
+                    row: 10,
+                    col: 0,
+                    direction: 'h',
+                    image: { path: 'img/6.png', width: '15%' },
+                    colSize: { col: 12, md: 6, sm: 6 }
                 },
-                { 
-                    text   : '0° latitude dividing hemispheres (7 letters)',
-                    answer : 'Equator',
-                    row    : 6, 
-                    col    : 0,
-                    direction : 'h'
+                {
+                    text: 'A conventional sign (6 letters) #_#',
+                    answer: 'Symbol',
+                    row: 12,
+                    col: 0,
+                    direction: 'h',
+                    image: { path: 'img/414.png', width: '15%' },
+                    colSize: { col: 12, md: 6, sm: 6 }
                 },
-                { 
-                    text   : 'North-south line measuring longitude (8 letters)',
-                    answer : 'Meridian',
-                    row    : 2, 
-                    col    : 14,
-                    direction : 'v'
+                {
+                    text: '0° latitude dividing hemispheres (7 letters) #_#',
+                    answer: 'Equator',
+                    row: 6,
+                    col: 0,
+                    direction: 'h',
+                    image: { path: 'img/ch4_1.png', width: '15%' },
+                    colSize: { col: 12, md: 6, sm: 6 }
+                },
+                {
+                    text: 'North-south line measuring longitude (8 letters) #_#',
+                    answer: 'Meridian',
+                    row: 2,
+                    col: 14,
+                    direction: 'v',
+                    image: { path: 'img/ch4_2.png', width: '15%' },
+                    colSize: { col: 12, md: 6, sm: 6 }
                 },
             ]
         },
         {
-            id      : 23,
-            lang    : 'hi',
-            head    : 'Template : 22',
-            content : {
-                replacement : '#_#',
-                questions   : [
+            id: 23,
+            lang: 'hi',
+            head: 'Template : 22',
+            content: {
+                replacement: '#_#',
+                showInput: true,
+                questions: [
                     { text: 'किस महापुरुष के जन्मदिन को बाल-दिवस के रूप में मनाया जाता है? <br> #_#', answer: 'जछ' },
                     { text: 'नेहरू जी ने अपने जन्मदिन को बच्चों के जन्मदिन के रूप में मनाना क्यों स्वीकार कर लिया था? <br> #_#', answer: 'ज' }
                 ]
             }
-        },            
+        },
         {
-            id      : 24,
-            lang    : 'en',
-            head    : 'Template : 23',
-            content : {
-                side : 'left',
-                questions : [
-                    { sequence : 1, direction : 'v', row : [2, 16], col : [20], question: 'Fossil scientists', image: { path: 'img/1.png',  row: 2, col: 18 }, answer : 'paLEONTOLOGISTS' },
-                    { sequence : 2, direction : 'v', row : [4, 10], col : [6], question: 'Coins, tools, art', image: { path: 'img/2.png', row: 1, col: 6 }, answer : 'SOURCES' },
-                    { sequence : 3, direction : 'h', row : [5], col : [1, 14], question: 'Scientist who studies humans', image: { path: 'img/3.png', row: 2, col: 1 }, answer : 'ANTHROPOLOGIST' },
-                    { sequence : 4, direction : 'v', row : [5, 11], col : [13], question: 'Biographies, plays etc', image: { path: 'img/4.png', row: 2, col: 13 }, answer : 'SECULAR' },
-                    { sequence : 5, direction : 'v', row : [5, 13], col : [22], question: 'Study of Earth\'s history', image: { path: 'img/5.png', row: 2, col: 22 }, answer : 'GEOLOGIST' },
-                    { sequence : 6, direction : 'h', row : [7], col : [5, 15], question: 'Oral accounts from relatives', image: { path: 'img/6.png', row: 6, col: 3 }, answer : 'ORALSOURCES' },
-                    { sequence : 7, direction : 'v', row : [9, 15], col : [9], question: 'Facts in time order', image: { path: 'img/414.png', row: 12, col: 7 }, answer : 'HISTORY' },
-                    { sequence : 8, direction : 'v', row : [9, 17], col : [25], question: 'Legends & folk stories', image: { path: 'img/ch4_1.png', row: 6, col: 25 }, answer : 'FOLKLORES' },
-                    { sequence : 9, direction : 'h', row : [10], col : [2, 11], question: 'Old handwritten record', image: { path: 'img/ch4_2.png', row: 11, col: 3 }, answer : 'MANUSCRIPT' },
-                    { sequence : 10, direction : 'h', row : [11], col : [12, 25], question: 'Remains to study past life', image: { path: 'img/ch4_3.png', row: 12, col: 12 }, answer : 'ARCHAEOLOGICAL' },
+            id: 24,
+            lang: 'sk',
+            head: 'Template : 23',
+            content: {
+                replacement: '#_#',
+                side: 'left',
+                hint: true,
+                config: {
+                    showQuestion: true,
+                },
+                questions: [
+                    { sequence: 1, direction: 'v', row: [2, 16], col: [20], question: 'Fossil scientists', answer: "paLEONTOLOGISTS" },
+                    { sequence: 2, direction: 'v', row: [4, 10], col: [6], question: { text: 'Coins, tools, art #_#', image: { path: 'img/414.png', width: '20%' } }, answer: { text: 'SOURCES', image: { path: 'img/2.png', row: 1, col: 6 } } },
+                    { sequence: 3, direction: 'h', row: [5], col: [1, 14], question: 'Scientist who studies humans', answer: { text: 'ANTHROPOLOGIST', image: { path: 'img/3.png', row: 2, col: 1 } } },
+                    { sequence: 4, direction: 'v', row: [5, 11], col: [13], question: 'Biographies, plays etc', answer: { text: 'SECULAR', image: { path: 'img/4.png', row: 2, col: 13 } } },
+                    { sequence: 5, direction: 'v', row: [5, 13], col: [22], question: 'Study of Earth\'s history', answer: { text: 'GEOLOGIST', image: { path: 'img/5.png', row: 2, col: 22 } } },
+                    { sequence: 6, direction: 'h', row: [7], col: [5, 15], question: { text: 'Oral accounts from relatives #_#', image: { path: 'img/2.png', width: '20%' } }, answer: { text: 'ORALSOURCES', image: { path: 'img/6.png', row: 6, col: 3 } } },
+                    { sequence: 7, direction: 'v', row: [9, 15], col: [9], question: 'Facts in time order', answer: { text: 'HISTORY', image: { path: 'img/414.png', row: 12, col: 7 } } },
+                    { sequence: 8, direction: 'v', row: [9, 17], col: [25], question: 'Legends & folk stories', answer: { text: 'FOLKLORES', image: { path: 'img/ch4_1.png', row: 6, col: 25 } } },
+                    { sequence: 9, direction: 'h', row: [10], col: [2, 11], question: 'Old handwritten record', answer: { text: 'MANUSCRIPT', image: { path: 'img/ch4_2.png', row: 11, col: 3 } } },
+                    { sequence: 10, direction: 'h', row: [11], col: [12, 25], question: 'Remains to study past life', answer: { text: 'ARCHAEOLOGICAL', image: { path: 'img/ch4_3.png', row: 12, col: 12 } } },
                 ]
             }
         },
         {
-            id      : 25,
-            lang    : 'hi',
-            head    : 'Template : 24',
-            content : {
+            id: 25,
+            lang: 'hi',
+            head: 'Template : 24',
+            content: {
                 main: {
                     text: {
                         text: `करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।`,
@@ -757,11 +815,12 @@ const Define = (() => {
                         width: `20%`,
                         path: `img/ch4_1.png`,
                     },
-                    audio: 'audio/heading.mp3',
+                    audio: 'audio/correct.mp3',
                 },
+                col: { col: 12, md: 6, sm: 6 },
                 questions: [
                     {
-                        question: {
+                        question1: {
                             text: 'बच्चों की किन बातों से घर के लोग खुश होते हैं?',
                             image: 'img/ch4_1.png',
                             audio: 'audio/1.mp3'
@@ -777,6 +836,19 @@ const Define = (() => {
                     {
                         question: {
                             text: 'बच्चों की किन बातों से घर के लोग परेशान होते हैं?',
+                            audio: ''
+                        },
+                        options: [
+                            { text: 'खूब रोने से' },
+                            { text: 'खेलने में चोट लगने से' },
+                            { text: 'बार-बार खाने की इच्छा करने से' },
+                            { text: 'इनमें से कोई नहीं' }
+                        ],
+                        answer: 1
+                    },
+                    {
+                        question: {
+                            text: '3बच्चों की किन बातों से घर के लोग परेशान होते हैं?',
                             audio: 'audio/2.mp3'
                         },
                         options: [
@@ -789,24 +861,24 @@ const Define = (() => {
                     }
                 ]
             }
-        },        
+        },
         {
-            id      : 26,
-            lang    : 'en',
-            head    : 'Template : 25',
-            content : {
-                video : {
-                    path    : './video.mp4',
-                    youtube : true
+            id: 26,
+            lang: 'en',
+            head: 'Template : 25',
+            content: {
+                video: {
+                    path: './video.mp4',
+                    youtube: true
                 }
             }
         },
         {
-            id      : 27,
-            lang    : 'hi',
-            head    : 'Template : 26',
-            subhead : "पेड़ - प्रकृति का वरदान",
-            content : {
+            id: 27,
+            lang: 'hi',
+            head: 'Template : 26',
+            subhead: "पेड़ - प्रकृति का वरदान",
+            content: {
                 image: {
                     path: 'img/1.png',
                     align: 'right',
@@ -817,14 +889,14 @@ const Define = (() => {
             }
         },
         {
-            id       : 28,
-            lang     : 'hi',
-            head     : 'Template : 27',
-            hintText : false,
-            subhead  : "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
-            content  : {
-                heading : " • विज्ञान का उद्देश्य मानव जीवन को सरल व कष्टरहित बनाना • विभिन्न क्षेत्रों में चमत्कार • चिकित्सा क्षेत्र में• संचार व परिवहन क्षेत्र में • शिक्षा व कृषि क्षेत्र में • विभिन्न  ष्कारों ने मानव जीवन को सुविधासंपन्न बना दिया है।",
-                answer  : `<div class='headingInDtaAns'>विज्ञान के चमत्कार</div>
+            id: 28,
+            lang: 'hi',
+            head: 'Template : 27',
+            hintText: false,
+            subhead: "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
+            content: {
+                heading: " • विज्ञान का उद्देश्य मानव जीवन को सरल व कष्टरहित बनाना • विभिन्न क्षेत्रों में चमत्कार • चिकित्सा क्षेत्र में• संचार व परिवहन क्षेत्र में • शिक्षा व कृषि क्षेत्र में • विभिन्न  ष्कारों ने मानव जीवन को सुविधासंपन्न बना दिया है।",
+                answer: `<div class='headingInDtaAns'>विज्ञान के चमत्कार</div>
                         यदि विज्ञान के क्षेत्र में निरंतर नए-नए आविष्कार न होते तो कदाचित आज मानव प्रगति के सर्वोच्च शिखर पर
                         आसीन न होता। 
                         वैज्ञानिकों ने नित्य नए आविष्कार करके मनुष्य के जीवन को कष्टरहित एवं आनंददायी बना दिया है। आज
@@ -843,57 +915,58 @@ const Define = (() => {
                         चिरस्थायी और विश्वव्यापी बना दिया है। खेतों में उन्नत बीजों, कृषि-यंत्रों, रासायनिक खादों के प्रयोग ने
                         पैदावार चौगुनी कर दी है। बड़े-बड़े उद्योगों में बटन दबाते ही मशीनें लाखों, करोड़ों की संख्या में उत्पादन
                         करने लगती हैं।`,
-                textArea : {
-                    count  : 1,
-                    type   : 'multi',
-                    height : '100px',
+                textArea: {
+                    count: 1,
+                    type: 'multi',
+                    height: '100px',
                 },
-                image : {
-                    path  : 'img/1.png',
-                    side  : 'top',
-                    width : '150px',
-                }
+                image: {
+                    path: 'img/1.png',
+                    side: 'top',
+                    width: '150px',
+                },
+                showInput: false,
             }
         },
         {
-            id      : 29,
-            lang    : 'hi',
-            head    : 'Template : 28',
-            subhead : "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
-            content : {
-                heading   : "दादा जी को स्वास्थ्य का ध्यान रखने की सलाह देते हुए पत्र",
-                questions : [
-                    { label : "घर का पता एवं स्थान", answer : `<b>डी-32/3 लाजपत नगर <br/>नई दिल्ली </b>` },
-                    { label : "तिथि", answer : `दिनांक- ............................` },
-                    { label : "संबोधन", answer : `पूजनीय दादा जी,` },
-                    { label : "अभिवादन", answer : `सादर चरण स्पर्श।` },
-                    { label : "समाचार विस्तार से", answer : `आपका पत्र मिला। घर का समाचार पढ़कर खुशी हुई, किंतु आपके स्वास्थ्य को लेकर चिंता बढ़ गई है। आपने लिखा है कि आपके पैरों में दर्द बढ़ गया है, जिससे चलने-फि़रने में तकलीफ़ होती है। आप अपना ध्यान रखें और किसी अच्छे अस्पताल में इलाज- कराएँ, जिससे आप ठीक प्रकार से चल सकें। व्यायाम करते रहें, जिससे हाथ-पैर चलते रहें। दवाई भी समय पर लें। मेरी तरफ़ से आप निशि्ंचत रहें। इस वर्ष भी मैं प्रथम आने के लिए जी-तोड़ मेहनत कर रहा हूँ। आजकल परीक्षा की तैयारी में व्यस्त हूँ। मैं दीपावली की छुट्टियों में आपसे मिलने आ रहा हूँ। मेरी ओर से घर में दादी जी, माता जी को सादर प्रणाम तथा शोभा को प्यार कहिएगा।` },
-                    { label : "अपना रिश्ता बताते हुए", answer : `आपका प्यारा पोता` },
-                    { label : "नाम", answer : `<b>अमित</b>` }
+            id: 29,
+            lang: 'hi',
+            head: 'Template : 28',
+            subhead: "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
+            content: {
+                heading: "दादा जी को स्वास्थ्य का ध्यान रखने की सलाह देते हुए पत्र",
+                questions: [
+                    { label: "घर का पता एवं स्थान", answer: `<b>डी-32/3 लाजपत नगर <br/>नई दिल्ली </b>` },
+                    { label: "तिथि", answer: `दिनांक- ............................` },
+                    { label: "संबोधन", answer: `पूजनीय दादा जी,` },
+                    { label: "अभिवादन", answer: `सादर चरण स्पर्श।` },
+                    { label: "समाचार विस्तार से", answer: `आपका पत्र मिला। घर का समाचार पढ़कर खुशी हुई, किंतु आपके स्वास्थ्य को लेकर चिंता बढ़ गई है। आपने लिखा है कि आपके पैरों में दर्द बढ़ गया है, जिससे चलने-फि़रने में तकलीफ़ होती है। आप अपना ध्यान रखें और किसी अच्छे अस्पताल में इलाज- कराएँ, जिससे आप ठीक प्रकार से चल सकें। व्यायाम करते रहें, जिससे हाथ-पैर चलते रहें। दवाई भी समय पर लें। मेरी तरफ़ से आप निशि्ंचत रहें। इस वर्ष भी मैं प्रथम आने के लिए जी-तोड़ मेहनत कर रहा हूँ। आजकल परीक्षा की तैयारी में व्यस्त हूँ। मैं दीपावली की छुट्टियों में आपसे मिलने आ रहा हूँ। मेरी ओर से घर में दादी जी, माता जी को सादर प्रणाम तथा शोभा को प्यार कहिएगा।` },
+                    { label: "अपना रिश्ता बताते हुए", answer: `आपका प्यारा पोता` },
+                    { label: "नाम", answer: `<b>अमित</b>` }
                 ]
             }
         },
         {
-            id      : 30,
-            lang    : 'hi',
-            head    : 'Template : 29',
-            subhead : 'अपनी छोटी बहन को मोबाइल पर व्यर्थ समय बिताने की जगह पढ़ाई पर ध्यान देने का सुझाव देते हुए पत्र लिखिए।',
-            content : {
-                showButtons    : true,
-                showAnswerOfId : 1,
-                inputLeft      : true,
-                hint  : 'आदरणीया चाची जी, गर्मियों की छुट्टियाँ, बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ  दिन रहे सब मिलकर मजे करेंगे',
-                image : {
-                    path  : 'img/1.png',
-                    width : '15%'
+            id: 30,
+            lang: 'hi',
+            head: 'Template : 29',
+            subhead: 'अपनी छोटी बहन को मोबाइल पर व्यर्थ समय बिताने की जगह पढ़ाई पर ध्यान देने का सुझाव देते हुए पत्र लिखिए।',
+            content: {
+                showButtons: true,
+                showAnswerOfId: 1,
+                inputLeft: true,
+                hint: 'आदरणीया चाची जी, गर्मियों की छुट्टियाँ, बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ  दिन रहे सब मिलकर मजे करेंगे',
+                image: {
+                    path: 'img/1.png',
+                    width: '15%'
                 },
-                col : {
-                    left  : { md: 4, sm: 6, col: 6, show: true },
-                    right : { md: 6, sm: 6, col: 6, show: true }
+                col: {
+                    left: { md: 4, sm: 6, col: 6, show: true },
+                    right: { md: 6, sm: 6, col: 6, show: true }
                 },
                 placeholder: {
-                    left  : 'यहाँ सामग्री लिखें...',
-                    right : 'यहाँ विधि लिखें...'
+                    left: 'यहाँ सामग्री लिखें...',
+                    right: 'यहाँ विधि लिखें...'
                 },
                 question: [
                     { id: 1, text: "घर का पता एवं स्थान", answer: `ए-25/26,  पश्चिमी (वेस्ट) पटेल नगर,  नई दिल्ली - 110007` },
@@ -907,13 +980,13 @@ const Define = (() => {
             },
         },
         {
-            id      : 31,
-            lang    : 'en',
-            head    : "Template : 30",
-            content : {
-                width    : "200px",
-                height   : "200px",
-                question : [
+            id: 31,
+            lang: 'en',
+            head: "Template : 30",
+            content: {
+                width: "200px",
+                height: "200px",
+                question: [
                     { path: 'img/1.png', answer: true },
                     { path: 'img/2.png', answer: true },
                     { path: 'img/3.png', answer: true },
@@ -925,12 +998,12 @@ const Define = (() => {
             }
         },
         {
-            id      : 32,
-            lang    : 'en',            
-            head    : 'Click on the correct words in the blanks given below.',
-            content : {
-                replacement : '#_#',
-                question    : [
+            id: 32,
+            lang: 'en',
+            head: 'Click on the correct words in the blanks given below.',
+            content: {
+                replacement: '#_#',
+                question: [
                     { text: 'The maximum tally marks fell in a #_# range', options: ['general', 'particular'], answer: 0 },
                     { text: 'Raw data can be condensed using a #_#', options: ['class intervals', 'age intervals'], answer: 1 },
                     { text: 'No two students had identical #_#', options: ['heights and weights', 'health requirements'], answer: 1 },
@@ -940,170 +1013,170 @@ const Define = (() => {
             }
         },
         {
-            id      : 33,
-            lang    : 'en',
-            head    : 'Template : 32',
-            subhead : '(Drag and arrange each word in the order you will find them in a dictionary.)',
-            content : [
-                'Negligence', 'Untruthfulness', 'Omnibus', 'Flustered', 'Stupidity', 
-                'Scrimping', 'Patronage', 'Relinquished', 'Celestial', 'Xenophobia', 
+            id: 33,
+            lang: 'en',
+            head: 'Template : 32',
+            subhead: '(Drag and arrange each word in the order you will find them in a dictionary.)',
+            content: [
+                'Negligence', 'Untruthfulness', 'Omnibus', 'Flustered', 'Stupidity',
+                'Scrimping', 'Patronage', 'Relinquished', 'Celestial', 'Xenophobia',
                 'Grimly', 'Hankering', 'Quavered', 'Angel', 'Deterrence', 'Lavender', 'aeroplane',
             ]
         },
         {
-            id      : 34,
-            lang    : 'en',
-            head    : 'Numbers and Numeration',
-            subhead : 'Drag the correct answer',
-            content : {
-                shuffle   : false,
-                questions : [
+            id: 34,
+            lang: 'en',
+            head: 'Numbers and Numeration',
+            subhead: 'Drag the correct answer',
+            content: {
+                shuffle: false,
+                questions: [
                     {
-                        type        : 'x',
-                        replacement : '#_#',
-                        text        : [ '\\( \\sqrt{49} \\)  = #_# + 200 = 207 x #_# = #img#' ],
-                        image       : {
-                            width       : '200px',
-                            path        : 'img/414.png',
-                            replacement : '#img#',
+                        type: 'x',
+                        replacement: '#_#',
+                        text: ['\\( \\sqrt{49} \\)  = #_# + 200 = 207 x #_# = #img#'],
+                        image: {
+                            width: '200px',
+                            path: 'img/414.png',
+                            replacement: '#img#',
                         },
-                        options     : [ '7', '2', '20' ],
-                        correct     : [ 0, 1 ]
+                        options: ['7', '2', '20'],
+                        correct: [0, 1]
                     },
                     {
-                        type      : '+',
-                        text      : [ '393', '607' ],
-                        options   : [ '1000', '5987', '3895', '9538' ],
-                        correct   : [ 0 ]
+                        type: '+',
+                        text: ['393', '607'],
+                        options: ['1000', '5987', '3895', '9538'],
+                        correct: [0]
                     },
                     {
-                        type        : 'x',
-                        replacement : '#_#',
-                        text        : [ '200 + 200 = #_# + 200 = #_#' ],
-                        options     : [ '400', '700', '600' ],
-                        correct     : [ 0, 2 ]
+                        type: 'x',
+                        replacement: '#_#',
+                        text: ['200 + 200 = #_# + 200 = #_#'],
+                        options: ['400', '700', '600'],
+                        correct: [0, 2]
                     }
                 ]
             }
         },
         {
-            id      : 35,
-            content : {
-                buttons : [
-                    { ytId : 'xyxlR0DNyRI', isVideo : false, label : '1 पुल्लिङ्गम् प्रथम:' },
-                    { ytId : '1h5JA1fqXvo', isVideo : true, label : '2 स्त्रीलिङ्गम्' },
-                    { ytId : 'xyxlR0DNyRI', isVideo : true, label : '3 नपुंसकलिङ्गम्' },
-                    { ytId : 'xyxlR0DNyRI', isVideo : true, label : '4 पुल्लिङ्गम्' },
-                    { ytId : 'xyxlR0DNyRI', isVideo : true, label : '5 स्त्रीलिङ्गम् '},
-                    { ytId : 'xyxlR0DNyRI', isVideo : true, label : '6 नपुंसकलिङ्गम्' },
-                    { ytId : 'xyxlR0DNyRI', isVideo : true, label : '7 पुल्लिङ्गम्' },
-                    { ytId : 'xyxlR0DNyRI', isVideo : true, label : '8 स्त्रीलिङ्गम्' },
-                    { ytId : 'xyxlR0DNyRI', isVideo : true, label : '9 नपुंसकलिङ्गम्' },
-                    { ytId : 'xyxlR0DNyRI', isVideo : true, label : '10 नपुंसकलिङ्गम्' }
+            id: 35,
+            content: {
+                buttons: [
+                    { ytId: 'xyxlR0DNyRI', isVideo: false, label: '1 पुल्लिङ्गम् प्रथम:' },
+                    { ytId: '1h5JA1fqXvo', isVideo: true, label: '2 स्त्रीलिङ्गम्' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: true, label: '3 नपुंसकलिङ्गम्' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: true, label: '4 पुल्लिङ्गम्' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: true, label: '5 स्त्रीलिङ्गम् ' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: true, label: '6 नपुंसकलिङ्गम्' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: true, label: '7 पुल्लिङ्गम्' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: true, label: '8 स्त्रीलिङ्गम्' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: true, label: '9 नपुंसकलिङ्गम्' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: true, label: '10 नपुंसकलिङ्गम्' }
                 ]
             }
         },
         {
-            id      : 36,
-            lang    : 'en',
-            head    : 'Template : 35',
-            content : {
-                options : [ '120', '40', '160', '180', '480' ],
-                section : {
-                    visible : true,
-                    heading : {
-                        primary   : 'XYZ Sweets',
-                        secondary : '9876543210',
+            id: 36,
+            lang: 'en',
+            head: 'Template : 35',
+            content: {
+                options: ['120', '40', '160', '180', '480'],
+                section: {
+                    visible: true,
+                    heading: {
+                        primary: 'XYZ Sweets',
+                        secondary: '9876543210',
                     },
-                    list    : [
-                        { label : 'Location', text : 'New Delhi' },
-                        { label : 'Bill No', text : '125847' },
-                        { label : 'Date', text : '08/12/2025' }
+                    list: [
+                        { label: 'Location', text: 'New Delhi' },
+                        { label: 'Bill No', text: '125847' },
+                        { label: 'Date', text: '08/12/2025' }
                     ],
-                    block   : {
-                        label : 'Name & Address :',
-                        text  : 'Mr. Patel, Rajender Nagar, New Delhi'
+                    block: {
+                        label: 'Name & Address :',
+                        text: 'Mr. Patel, Rajender Nagar, New Delhi'
                     }
                 },
-                table : {
-                    head : [ 'S.N.', 'Name of the Items', 'Quantity (in kg)', 'Rate (₹/kg)', 'Amount (in ₹)' ],
-                    body : [
+                table: {
+                    head: ['S.N.', 'Name of the Items', 'Quantity (in kg)', 'Rate (₹/kg)', 'Amount (in ₹)'],
+                    body: [
                         [
-                            { value : '1.' },
-                            { value : 'Curd' },
-                            { value : '2 kg.' },
-                            { value : '₹ 60.00' },
-                            { value : '120', drop : true }
+                            { value: '1.' },
+                            { value: 'Curd' },
+                            { value: '2 kg.' },
+                            { value: '₹ 60.00' },
+                            { value: '120', drop: true }
                         ],
                         [
-                            { value : '2.' },
-                            { value : 'Cheese' },
-                            { value : '2 kg.' },
-                            { value : '₹ 20.00' },
-                            { value : '40', drop : true }
+                            { value: '2.' },
+                            { value: 'Cheese' },
+                            { value: '2 kg.' },
+                            { value: '₹ 20.00' },
+                            { value: '40', drop: true }
                         ],
                         [
-                            { value : '3.' },
-                            { value : 'Rasgulla' },
-                            { value : '2 kg.' },
-                            { value : '₹ 80.00' },
-                            { value : '160', drop : true }
+                            { value: '3.' },
+                            { value: 'Rasgulla' },
+                            { value: '2 kg.' },
+                            { value: '₹ 80.00' },
+                            { value: '160', drop: true }
                         ],
                         [
-                            { value : '4.' },
-                            { value : 'Burfee' },
-                            { value : '2 kg.' },
-                            { value : '₹ 80.00' },
-                            { value : '160', drop : true }
+                            { value: '4.' },
+                            { value: 'Burfee' },
+                            { value: '2 kg.' },
+                            { value: '₹ 80.00' },
+                            { value: '160', drop: true }
                         ],
                         [
-                            { value : 'Total', colspan: 4, class: 'totalAmtText' },
-                            { value : '480', drop : true }
+                            { value: 'Total', colspan: 4, class: 'totalAmtText' },
+                            { value: '480', drop: true }
                         ],
                         [
-                            { value : 'Signature of the Shopkeeper', colspan: 5, class: 'signatureOf' } 
+                            { value: 'Signature of the Shopkeeper', colspan: 5, class: 'signatureOf' }
                         ]
                     ]
                 }
             }
         },
         {
-            id      : 37,
-            lang    : 'en',
-            head    : 'Template : 36',
-            subhead : 'वर्णों को सही क्रम में लगाकर सार्थक शब्द बनाओ-',
-            content : {
-                width : {
-                    heading : '240px'
+            id: 37,
+            lang: 'en',
+            head: 'Template : 36',
+            subhead: 'वर्णों को सही क्रम में लगाकर सार्थक शब्द बनाओ-',
+            content: {
+                width: {
+                    heading: '240px'
                 },
-                data  : {
-                    replacement : '#_#',
-                    bullets     : true,
-                    questions   : [
+                data: {
+                    replacement: '#_#',
+                    bullets: true,
+                    questions: [
                         [
-                            { id: 1, text : '#_# + #_#', answer : ['न', 'ल'] },
-                            { id: 2, text : '#_# + #_#', answer : ['क', 'ल'] },
-                            { id: 3, text : '#_# + #_#', answer : ['च', 'ल'] },
-                            { id: 4, text : '#_# + #_#', answer : ['ध', 'न'] },
-                            { id: 5, text : '#_# + #_#', answer : ['र', 'थ'] }
+                            { id: 1, text: '#_# + #_#', answer: ['न', 'ल'] },
+                            { id: 2, text: '#_# + #_#', answer: ['क', 'ल'] },
+                            { id: 3, text: '#_# + #_#', answer: ['च', 'ल'] },
+                            { id: 4, text: '#_# + #_#', answer: ['ध', 'न'] },
+                            { id: 5, text: '#_# + #_#', answer: ['र', 'थ'] }
                         ],
                         [
-                            { id: 1, text : '#_# + #_# + #_#', answer : ['क', 'ल', 'न'] },
-                            { id: 2, text : '#_# + #_# + #_#', answer : ['ग', 'ल', 'न'] },
-                            { id: 3, text : '#_# + #_# + #_#', answer : ['प', 'व', 'न'] },
-                            { id: 4, text : '#_# + #_# + #_#', answer : ['ख़', 'ब', 'र'] },
-                            { id: 5, text : '#_# + #_# + #_#', answer : ['न', 'ह', 'र'] }
+                            { id: 1, text: '#_# + #_# + #_#', answer: ['क', 'ल', 'न'] },
+                            { id: 2, text: '#_# + #_# + #_#', answer: ['ग', 'ल', 'न'] },
+                            { id: 3, text: '#_# + #_# + #_#', answer: ['प', 'व', 'न'] },
+                            { id: 4, text: '#_# + #_# + #_#', answer: ['ख़', 'ब', 'र'] },
+                            { id: 5, text: '#_# + #_# + #_#', answer: ['न', 'ह', 'र'] }
                         ]
                     ]
                 }
-            }                
+            }
         },
         {
-            id      : 38,
-            lang    : 'en',
-            head    : 'Template : 37, Spell Check',
-            mode    : 'multiple',
-            content : {
+            id: 38,
+            lang: 'en',
+            head: 'Template : 37, Spell Check',
+            mode: 'multiple',
+            content: {
                 replacement: '#{word}#',
                 questions: [
                     { id: 1, text: 'I am six years old. I study in Class 1. I have #blac# #hare# and #broun# eyes. I have strong #leggs#. They help me #ren# fast. Today, I fell and hurt my #kne asdf#. I hope to get well soon and run again.', answer: ['black', 'hair', 'brown', 'legs', 'run', 'knee'] }
@@ -1111,24 +1184,24 @@ const Define = (() => {
             }
         },
         {
-            id      : 39,
-            lang    : 'en',
-            head    : 'Template : 38, Spell It Out',
-            content : {
+            id: 39,
+            lang: 'en',
+            head: 'Template : 38, Spell It Out',
+            content: {
                 count: 6,
                 words: ['Jeans', 'Sweater', 'cap', 'shorts', 'frock', 'skirt', 'hat', 'Vest', 'clothes', 'socks', 't-shirt', 'trousers', 'shirt', 'scarf', 'tie']
             }
         },
         {
-            id      : 40,
-            lang    : 'hi',
-            head    : 'Template : 39, Vowel Drag and Drop',
-            content : {
+            id: 40,
+            lang: 'hi',
+            head: 'Template : 39, Vowel Drag and Drop',
+            content: {
                 replacement: '#',
-                col   : { col : 12, md : 6, sm : 12 },
-                image : {
+                col: { col: 12, md: 6, sm: 12 },
+                image: {
                     path: 'img/1.png',
-                    width : '20%',
+                    width: '20%',
                 },
                 words: [
                     { text: "#बल्टी# #घड़या# नद #सरस्वत#", answer: ['बाल्टी', 'घड़िया', 'सरस्वती'] },
@@ -1137,40 +1210,40 @@ const Define = (() => {
                     { text: "सरस्वत #बल्टी# #नद#", image: { path: 'img/4.png', width: '15%' }, answer: ['बाल्टी', 'नदी'] },
                     { text: "#बल्टी#", image: { path: 'img/5.png', width: '15%' }, answer: ["बाल्टी"] }
                 ],
-                vowels: ["ा","ि","ी","ु","ू","े","ै","ो","ौ","ं","ः","ँ"]
+                vowels: ["ा", "ि", "ी", "ु", "ू", "े", "ै", "ो", "ौ", "ं", "ः", "ँ"]
             }
         },
         {
-            id      : 41,
-            lang    : 'en',
-            head    : 'Template : 19, Shabdkosh',
-            shuffle : false,
-            content : [
+            id: 41,
+            lang: 'en',
+            head: 'Template : 19, Shabdkosh',
+            shuffle: false,
+            content: [
                 {
-                    id       : 1,
-                    tabtitle : 'aPPle',
-                    meaning  : 'कूद-कूदकर',
-                    sentence : 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
-                    image    : {
-                        path  : 'img/1.png',
-                        width : '20%'
+                    id: 1,
+                    tabtitle: 'aPPle',
+                    meaning: 'कूद-कूदकर',
+                    sentence: 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
+                    image: {
+                        path: 'img/1.png',
+                        width: '20%'
                     },
-                    titles    : [
+                    titles: [
                         { title: "1कूद-कूदकर", text: "1छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing" },
                         { title: "SentenCe", text: "छोटी apple" },
                         { title: "1Antonyms", text: "चिड़ियाँ" },
                     ]
                 },
                 {
-                    id       : 2,
-                    tabtitle : 'कूद-कूदकर',
-                    meaning  : 'कूद-कूदकर',
-                    sentence : 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।',
-                    image    : {
-                        path  : 'img/2.png',
-                        width : '20%'
+                    id: 2,
+                    tabtitle: 'कूद-कूदकर',
+                    meaning: 'कूद-कूदकर',
+                    sentence: 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।',
+                    image: {
+                        path: 'img/2.png',
+                        width: '20%'
                     },
-                    titles   : [
+                    titles: [
                         { title: "2कूद-कूदकर", text: "2छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing" },
                         { title: "2Synonyms", text: "2छोटी" },
                         { title: "sentence", text: "2चिड़ियाँ कूद-कूदकर" },
@@ -1179,37 +1252,37 @@ const Define = (() => {
             ]
         },
         {
-            id      : 42,
-            head    : 'Template : 40, VirtualTour',
-            lang    : 'en',
-            content : {
-                questions : [
-                     {
-                        id : 1,
-                        title : {
-                            main : {
-                                text : 'Fascinating Facts'
+            id: 42,
+            head: 'Template : 40, VirtualTour',
+            lang: 'en',
+            content: {
+                questions: [
+                    {
+                        id: 1,
+                        title: {
+                            main: {
+                                text: 'Fascinating Facts'
                             },
-                            sub  : {
-                                text : 'here some sub title text',
-                                classes : 'text-success bg-success-subtle border-success border rounded-3 w-50 text-uppercase p-2'
+                            sub: {
+                                text: 'here some sub title text',
+                                classes: 'text-success bg-success-subtle border-success border rounded-3 w-50 text-uppercase p-2'
                             }
                         },
-                        set : {
-                            virtualTour : false,
-                            questions   : [
+                        set: {
+                            virtualTour: false,
+                            questions: [
                                 {
-                                    head     : 'image - position - top',
-                                    sentence : 'question set sentencehere and item size lorem.',
-                                    imageLayout : {
-                                        col      : { md : 4, sm : 6, col : 12 },
-                                        position : 'top',
-                                        width    : '50%',
-                                        images   : [
-                                            { path  : 'img/1.png', caption : 'police-man-1' },
-                                            { path  : 'img/2.png', caption : 'police-man-2' },
-                                            { path  : 'img/3.png', caption : 'police-man-3' },
-                                            { path  : 'img/3.png', caption : 'police-man-3' }
+                                    head: 'image - position - top',
+                                    sentence: 'question set sentencehere and item size lorem.',
+                                    imageLayout: {
+                                        col: { md: 4, sm: 6, col: 12 },
+                                        position: 'top',
+                                        width: '50%',
+                                        images: [
+                                            { path: 'img/1.png', caption: 'police-man-1' },
+                                            { path: 'img/2.png', caption: 'police-man-2' },
+                                            { path: 'img/3.png', caption: 'police-man-3' },
+                                            { path: 'img/3.png', caption: 'police-man-3' }
                                         ]
                                     }
                                 }
@@ -1217,71 +1290,71 @@ const Define = (() => {
                         }
                     },
                     {
-                        id : 2,
-                        title : {
-                            main : {
-                                text : 'Virtual Tour'
+                        id: 2,
+                        title: {
+                            main: {
+                                text: 'Virtual Tour'
                             },
-                            sub  : {
-                                text : 'here some sub title text',
-                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                            sub: {
+                                text: 'here some sub title text',
+                                classes: 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
                             }
                         },
-                        set : {
-                            virtualTour : true,
-                            imageWidth  : '100%',
-                            col : {
-                                md  : 4,
-                                sm  : 6,
-                                col : 3,
+                        set: {
+                            virtualTour: true,
+                            imageWidth: '100%',
+                            col: {
+                                md: 4,
+                                sm: 6,
+                                col: 3,
                             },
-                            images : [ 
-                                { path : 'img/1.png', caption : 'text-1' },
-                                { path : 'img/2.png', caption : 'text-2' },
-                                { path : 'img/3.png', caption : 'text-3' },
-                                { path : 'img/4.png', caption : 'text-4' },
-                                { path : 'img/5.png', caption : 'text-5' }
+                            images: [
+                                { path: 'img/1.png', caption: 'text-1' },
+                                { path: 'img/2.png', caption: 'text-2' },
+                                { path: 'img/3.png', caption: 'text-3' },
+                                { path: 'img/4.png', caption: 'text-4' },
+                                { path: 'img/5.png', caption: 'text-5' }
                             ],
-                            audio : { path : 'bg.mp3' }
+                            audio: { path: 'audio/ohGalat.mp3' }
                         }
-                    },                   
+                    },
                     {
-                        id : 2,
-                        title : {
-                            main : {
-                                text : 'Fascinating Facts-2'
+                        id: 2,
+                        title: {
+                            main: {
+                                text: 'Fascinating Facts-2'
                             },
-                            sub  : {
-                                text : 'here some sub title text',
-                                classes : 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
+                            sub: {
+                                text: 'here some sub title text',
+                                classes: 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
                             }
                         },
-                        set : {
-                            virtualTour : false,
-                            questions   : [
+                        set: {
+                            virtualTour: false,
+                            questions: [
                                 {
-                                    head     : 'image - position - left',
-                                    sentence : 'question set sentencehere and item size lorem.',
-                                    imageLayout : {
-                                        position : 'left',
-                                        width    : '150px',
-                                        images   : [
-                                            { path  : 'img/1.png', caption : 'police-man-1' },
-                                            { path  : 'img/2.png', caption : 'police-man-2' },
-                                            { path  : 'img/3.png', caption : 'police-man-3' }
+                                    head: 'image - position - left',
+                                    sentence: 'question set sentencehere and item size lorem.',
+                                    imageLayout: {
+                                        position: 'left',
+                                        width: '150px',
+                                        images: [
+                                            { path: 'img/1.png', caption: 'police-man-1' },
+                                            { path: 'img/2.png', caption: 'police-man-2' },
+                                            { path: 'img/3.png', caption: 'police-man-3' }
                                         ]
                                     }
                                 }
                             ]
                         }
-                    }                    
+                    }
                 ]
             }
         },
     ];
 
     const questionContainer = '.question-container';
-    const head    = 'qNum';
+    const head = 'qNum';
     const subHead = 'questionText';
 
     const loadScript = (src) => {
@@ -1290,18 +1363,18 @@ const Define = (() => {
                 reject(new Error('No script src provided'));
                 return;
             }
-            const exists = [...document.querySelectorAll('script')].some(script => script.src.includes( src ) );
-            if( exists ) {                
+            const exists = [...document.querySelectorAll('script')].some(script => script.src.includes(src));
+            if (exists) {
                 resolve('already-loaded');
                 return;
             }
-            
-            const s   = document.createElement('script');
-            s.src     = src;
-            s.onload  = () => resolve(s);
+
+            const s = document.createElement('script');
+            s.src = src;
+            s.onload = () => resolve(s);
             s.onerror = (err) => {
                 s.remove();
-                reject( new Error( `Failed to load script: ${src}` ) );
+                reject(new Error(`Failed to load script: ${src}`));
             };
             document.body.appendChild(s);
         });

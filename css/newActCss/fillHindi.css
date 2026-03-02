@@ -26,7 +26,7 @@
   border: none !important;
   border-bottom: 2px dashed #333 !important;
   text-align: center !important;
-  color: #4CAF50 !important;
+  color: #343434 !important;
   font-family: 'IBM Plex Sans Devanagari';
 }
 
@@ -39,11 +39,11 @@
 }
 
 .questionFILL {
-    font-size: 23px;
-    margin: 23px 0;
-    color: #1041ff;
-    border-bottom: 1px solid #dfdfdf;
-    padding: 10px 0;
+  font-size: 23px;
+  margin: 23px 0;
+  /* color: #1041ff; */
+  border-bottom: 1px solid #dfdfdf;
+  padding: 10px 0;
 }
 
 .keyboard-input {
@@ -99,25 +99,27 @@
 }
 
 /* rachnatamk_25_11_20225 */
-.menHeading{
+.menHeading {
   font-size: 22px;
   margin: 20px 0;
   /* text-align: center; */
   color: #0d6efd !important;
 }
-.nameOfTopic{
-    font-size: 22px;
-    font-weight: bold;
-    color: #0087ff !important;
-    text-align: center;
-  }
-  .textNormalRun {
+
+.nameOfTopic {
+  font-size: 22px;
+  font-weight: bold;
+  color: #0087ff !important;
+  text-align: center;
+}
+
+.textNormalRun {
   font-size: 20px;
   color: #000;
   text-align: justify;
   line-height: 1.7;
-   font-family: 'PoppinsLight';
-   
+  font-family: 'PoppinsLight';
+
 }
 
 /* Default image responsive */
@@ -162,62 +164,71 @@
 .wordRachnata.show {
   opacity: 1;
 }
-.headNirdesh{
-    color: #fa6807;
-    font-size: 33px;
-    text-align: center;
-    animation: pulseRed 1.2s infinite;
+
+.headNirdesh {
+  color: #fa6807;
+  font-size: 33px;
+  text-align: center;
+  animation: pulseRed 1.2s infinite;
 }
-.instForFillText{
-    margin: 20px 0px;
-    border: 3px double #7aa7ff;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 22px;
-    text-align: center;
+
+.instForFillText {
+  margin: 20px 0px;
+  border: 3px double #7aa7ff;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 22px;
+  text-align: center;
 }
-.forHindiDev{
-   font-family: 'IBM Plex Sans Devanagari';
-   font-size: 20px;
-   color: #000;
+
+.forHindiDev {
+  font-family: 'IBM Plex Sans Devanagari';
+  font-size: 20px;
+  color: #000;
 }
+
 .multiTextArea {
-    margin: 10px 0;
-    border: none;
-    border-bottom: 1px solid green;
+  margin: 10px 0;
+  border: none;
+  border-bottom: 1px solid green;
 }
+
 .inputeSectionsRachna {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    width: 100%;
-    align-items: center;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  align-items: center;
 }
-.dynamicImgRachna{
+
+.dynamicImgRachna {
   border: 3px solid #fff;
 }
 
 
 .img-left .dynamicImgRachna {
-    order: 0;
+  order: 0;
 }
 
 .img-right .dynamicImgRachna {
-    order: 2;
+  order: 2;
 }
 
 .textInputsBox {
-    flex: 1;
+  flex: 1;
 }
-.clear{
+
+.clear {
   clear: both;
 }
-.saketText{
+
+.saketText {
   color: #000;
   font-size: 20px;
-   font-family: 'PoppinsLight';
+  font-family: 'PoppinsLight';
 }
-.studentAnsBox{
+
+.studentAnsBox {
   position: fixed;
   top: 0;
   left: 0;
@@ -230,8 +241,9 @@
   justify-content: center;
   /* align-items: center; */
 }
-.sampleBox{
-    position: fixed;
+
+.sampleBox {
+  position: fixed;
   top: 0;
   left: 0;
   background: #000000ba;
@@ -242,7 +254,8 @@
   display: flex;
   justify-content: center;
 }
-.inForContRach{
+
+.inForContRach {
   background: #fff;
   padding: 38px;
   border-radius: 15px;
@@ -251,60 +264,67 @@
   height: max-content;
   margin: 5vw 0 !important;
 }
-.headingYourAns{
-    font-size: 22px;
-    text-align: left;
-    color: #008da9;
+
+.headingYourAns {
+  font-size: 22px;
+  text-align: left;
+  color: #008da9;
 }
-.closeBtnsRachna{
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    background: red;
-    color: #fff;
-    width: 37px;
-    height: 37px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 23px;
-    border-radius: 50%;
-    cursor: pointer;
-    animation: pulseRed 1.2s infinite;
-        z-index: 99;
+
+.closeBtnsRachna {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: red;
+  color: #fff;
+  width: 37px;
+  height: 37px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 23px;
+  border-radius: 50%;
+  cursor: pointer;
+  animation: pulseRed 1.2s infinite;
+  z-index: 99;
 }
-.closeBtnsRachna:hover{
+
+.closeBtnsRachna:hover {
   background: #f55a46;
 }
-.studentTextApp{
-    font-size: 20px;
-    color: #000;
-    text-align: center;
-    display: inline-block;
-    width: 100%;
-    border: 1px solid #f5f5f5;
-    padding: 18px;
-    min-height: 30vh;
-    overflow: auto;
-     font-family: 'PoppinsLight';
+
+.studentTextApp {
+  font-size: 20px;
+  color: #000;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  border: 1px solid #f5f5f5;
+  padding: 18px;
+  min-height: 30vh;
+  overflow: auto;
+  font-family: 'PoppinsLight';
 }
-.scoreInRachNamat{
-    text-align: center;
-    font-size: 17px;
-    color: #000;
+
+.scoreInRachNamat {
+  text-align: center;
+  font-size: 17px;
+  color: #000;
 }
-.headingInDtaAns{
-   color: #fa6807;
-    font-size: 25px;
-    text-align: center;
-    animation: pulseRed 1.2s infinite;
+
+.headingInDtaAns {
+  color: #fa6807;
+  font-size: 25px;
+  text-align: center;
+  animation: pulseRed 1.2s infinite;
 }
+
 .sampleAnsBox {
   font-size: 18px;
   color: #000;
   margin: 10px 20px;
   text-align: justify;
-   font-family: 'PoppinsLight';
+  font-family: 'PoppinsLight';
 }
 
 /* letter */
@@ -332,31 +352,33 @@
 }
 
 
-.holderLeterBox{
+.holderLeterBox {
   padding: 2px;
   margin: 19px 0 0 0;
   position: relative;
 }
-.num_guides{
-    background: #014b8d;
-    width: 31px;
-    height: 30px;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    border: 3px solid #89c4ff;
-    margin: 7px auto 0 auto;
-    font-size: 13px;
+
+.num_guides {
+  background: #014b8d;
+  width: 31px;
+  height: 30px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 3px solid #89c4ff;
+  margin: 7px auto 0 auto;
+  font-size: 13px;
 }
 
 
 
-.tbClicked{
+.tbClicked {
   margin: 0 4px;
 }
-.showInboxes{
+
+.showInboxes {
   padding: 7px 16px;
   font-family: 'PoppinsLight';
   margin: 0px 0;
@@ -366,17 +388,20 @@
   line-height: 1.7;
   font-size: 20px;
 }
+
 .activeTabRach {
- background: #0c53b7;
+  background: #0c53b7;
 }
-.wrapers{
-    background: #fafeff;
-    /* border: 1px solid #6bfff7; */
-    margin: 15px 0;
-    border-radius: 20px;
-    padding: 0 15px;
+
+.wrapers {
+  background: #fafeff;
+  /* border: 1px solid #6bfff7; */
+  margin: 15px 0;
+  border-radius: 20px;
+  padding: 0 15px;
 }
-.readyLetterBox{
+
+.readyLetterBox {
   position: fixed;
   top: 0;
   left: 0;
@@ -389,39 +414,44 @@
   justify-content: center;
   display: none;
 }
-.baseModelsReady{
-    background: #fff;
-    padding: 18px;
-    border-radius: 15px;
-    width: 930px;
-    position: relative;
-    height: max-content;
-    margin: 5vw 0 !important;
+
+.baseModelsReady {
+  background: #fff;
+  padding: 18px;
+  border-radius: 15px;
+  width: 930px;
+  position: relative;
+  height: max-content;
+  margin: 5vw 0 !important;
 }
-.headingReadyPatr{
+
+.headingReadyPatr {
   color: #1e1e1e;
   font-size: 20px;
   color: #000000;
   font-family: 'PoppinsSemiBold';
 }
-#dataForReadyPatar{
+
+#dataForReadyPatar {
   line-height: 2;
   font-family: 'PoppinsLight';
   color: #0d0757;
   text-align: justify;
   font-size: 20px;
 }
-.headingText{
-   font-family: 'PoppinsSemiBold';
-   font-size: 18px;
-   border-left: 2px solid #b0deff;
-   padding: 16px 10px;
-   margin: 8px 0;
-   color: #115f97;
-   background: #f5f5f5;
-   border-radius: 50px;
+
+.headingText {
+  font-family: 'PoppinsSemiBold';
+  font-size: 18px;
+  border-left: 2px solid #b0deff;
+  padding: 16px 10px;
+  margin: 8px 0;
+  color: #115f97;
+  background: #f5f5f5;
+  border-radius: 50px;
 }
-.fillAppli{
+
+.fillAppli {
   border: none;
   border-bottom: 1px solid #87acc7;
   border-radius: 0 !important;
@@ -432,10 +462,12 @@
   font-family: 'PoppinsLight';
   overflow: hidden;
 }
-.fillAppli:hover{
-   border-bottom: 1px solid #297909;
+
+.fillAppli:hover {
+  border-bottom: 1px solid #297909;
 }
-.alignItems{
+
+.alignItems {
   align-items: center;
 }
 
@@ -443,44 +475,49 @@
   pointer-events: none;
   opacity: 0.8;
 }
+
 .noClicked {
   pointer-events: none;
   opacity: 0.6;
 }
-.imgDisplay{
-    margin: 0 auto;
-    /* border: 2px solid #f4f3ff; */
-    padding: 10px;
-    border-radius: 20px;
+
+.imgDisplay {
+  margin: 0 auto;
+  /* border: 2px solid #f4f3ff; */
+  padding: 10px;
+  border-radius: 20px;
 }
-.imgDisplay img{
+
+.imgDisplay img {
   width: 100%;
 }
-#showInputsAnnds{
+
+#showInputsAnnds {
   margin-bottom: 25px;
 }
 
 /* click on imagea */
-.clikImhCRow{
+.clikImhCRow {
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
 }
+
 .imgClick {
-    border: 2px solid #9999991c;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
-    cursor: pointer;
-    overflow: hidden;
-    margin: 15px;
-    transition: transform 0.5s ease, box-shadow 0.5s ease, border 0.5s ease;
-    transform-style: preserve-3d;
+  border: 2px solid #9999991c;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  margin: 15px;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border 0.5s ease;
+  transform-style: preserve-3d;
 }
 
 .imgClick img {
@@ -495,23 +532,31 @@
   border: 2px solid #00ffff;
   transform: translateY(-8px) scale(1.05) rotateX(8deg);
   box-shadow: rgb(0 255 255) 0px 1px 15px 0px,
-              rgba(0, 0, 0, 0.3) 0px 17px 10px -12px !important;
+    rgba(0, 0, 0, 0.3) 0px 17px 10px -12px !important;
 }
 
 .imgClick:hover img {
   transform: scale(1.2);
 }
-.imgClick:hover{
+
+.imgClick:hover {
   border: 2px solid #00ffff;
   box-shadow: rgb(0 255 255) 0px 1px 15px 0px, rgba(0, 0, 0, 0.3) 0px 17px 10px -12px !important;
 }
 
 
-.selectedClickImgs {border: 0.3px solid #094aff;
+.selectedClickImgs {
+  border: 0.3px solid #094aff;
   box-shadow: rgb(8, 53, 252) 0px 1px 15px 0px, rgba(0, 0, 0, 0.3) 0px 17px 10px -12px !important;
 }
-.correct-borderClickImgs { border: 3px solid green !important; }
-.wrong-borderClickImgs { border: 3px solid red !important; }
+
+.correct-borderClickImgs {
+  border: 3px solid green !important;
+}
+
+.wrong-borderClickImgs {
+  border: 3px solid red !important;
+}
 
 
 
@@ -522,64 +567,78 @@
 
 
 @media (min-width:300px) and (max-width:880px) {
-.questionFILL {
-  font-size: 15px;
-  margin: 0;
-}
-.inPutHindiNew {
-  width: 90px;
-}
-.hindiHeadings {
-  padding: 8px 14px;
-  margin: 14px 0;
-  font-size: 15px;
-}
-.menHeading {
-  font-size: 15px;
-  margin: 10px 0 0 0;
-}
-.nameOfTopic {
-  font-size: 15px;
-}
-.textNormalRun {
-  font-size: 14px;
-}
-.saketText {
-  color: #000;
-  font-size: 13px;
-}
-.instForFillText {
-  margin: 9px 0px;
-  border: 3px double #ffc59e;
-  padding: -1px 12px;
-  font-size: 13px;
-}
-.headNirdesh {
-  color: #fa6807;
-  font-size: 23px;
-}
-.inputeSectionsRachna {
-  display: block;
-  text-align: center;
-}
-.ui-keyboard {
-  display: none !important;
-}
-.tabsForLetter {
-  border: 2px solid #fff;
-  padding: 7px 9px;
-  border-radius: 19px;
-  font-size: 13px;
-  margin: 5px 0;
-}
-.showInboxes {
-  font-size: 15px;
-}
-.headingReadyPatr {
-  font-size: 15px;
-  margin: 0 33px 0 0;
-}
-#dataForReadyPatar{
-  font-size: 14px;
-}
+  .questionFILL {
+    font-size: 15px;
+    margin: 0;
+  }
+
+  .inPutHindiNew {
+    width: 90px;
+  }
+
+  .hindiHeadings {
+    padding: 8px 14px;
+    margin: 14px 0;
+    font-size: 15px;
+  }
+
+  .menHeading {
+    font-size: 15px;
+    margin: 10px 0 0 0;
+  }
+
+  .nameOfTopic {
+    font-size: 15px;
+  }
+
+  .textNormalRun {
+    font-size: 14px;
+  }
+
+  .saketText {
+    color: #000;
+    font-size: 13px;
+  }
+
+  .instForFillText {
+    margin: 9px 0px;
+    border: 3px double #ffc59e;
+    padding: -1px 12px;
+    font-size: 13px;
+  }
+
+  .headNirdesh {
+    color: #fa6807;
+    font-size: 23px;
+  }
+
+  .inputeSectionsRachna {
+    display: block;
+    text-align: center;
+  }
+
+  .ui-keyboard {
+    display: none !important;
+  }
+
+  .tabsForLetter {
+    border: 2px solid #fff;
+    padding: 7px 9px;
+    border-radius: 19px;
+    font-size: 13px;
+    margin: 5px 0;
+  }
+
+  .showInboxes {
+    font-size: 15px;
+  }
+
+  .headingReadyPatr {
+    font-size: 15px;
+    margin: 0 33px 0 0;
+  }
+
+  #dataForReadyPatar {
+    font-size: 14px;
+  }
 }
