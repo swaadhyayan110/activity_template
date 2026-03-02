@@ -279,6 +279,151 @@ const Activity = (() => {
         }
     };
 
+    const translatePopupLabels = (lang = 'hi') => {
+        if (lang == 'hi') {
+            return {
+                excellent: 'उत्कृष्ट!',
+                great: 'बहुत अच्छा!',
+                good: 'अच्छा!',
+                perfect: 'बढ़िया!',
+                correct: 'सही!',
+                allCorrect: 'सभी उत्तर सही हैं 🎉',
+                noCorrect: 'कोई भी उत्तर सही नहीं है ❌',
+                almost: 'लगभग सही!',
+                notBad: 'बुरा नहीं है',
+                oops: 'अरे नहीं...',
+                checkAnswers: 'अपने उत्तरों की जाँच करें',
+                scored: (correct, total) => `आपने ${total} में से ${correct} अंक प्राप्त किए हैं ✅`,
+                selectLeftFirst: 'कृपया पहले बाईं ओर की वस्तु चुनें!',
+                selectTopFirst: 'कृपया पहले ऊपर की वस्तु चुनें!',
+                selectImageFirst: 'कृपया पहले बाएँ या दाएँ कॉलम से एक छवि चुनें।',
+                writeAtLeastOne: 'कृपया कम से कम एक उत्तर लिखें फिर उत्तर जाँचें।',
+                noAnswerWritten: 'कोई उत्तर नहीं लिखा गया',
+                answerReview: 'उत्तर समीक्षा',
+                correctLabel: 'सही',
+                wrongLabel: 'गलत',
+                emptyLabel: 'खाली',
+                ok: 'ठीक है',
+                tryAgain: 'कृपया पुनः प्रयास करें।',
+                pointsScored: (score, total) => `आपको ${total} में से ${score} अंक मिले हैं`,
+                allLevelsCompleted: 'सभी स्तर पूरे हो गए हैं।',
+                maxSelectionReached: (max) => `आप केवल ${max} शब्द चुन सकते हैं।`,
+                holdOn: 'अरे रुकिए!',
+                fillAllBlanks: 'कृपया सभी स्थानों को भरें!',
+                notAttempted: 'प्रयास नहीं किया',
+                incompleteAnswers: 'कुछ उत्तर अधूरे हैं, कृपया पुनः प्रयास करें।!',
+                selectOptionBeforeNext: 'अगले पर जाने से पहले कृपया एक विकल्प चुनें।',
+                info: 'जानकारी',
+                chooseWord: 'एक शब्द चुनें!',
+                chooseWordFromBox: 'उत्तर जाँचने से पहले कृपया बॉक्स से एक शब्द चुनें।',
+                fillCrosswordBeforeChecking: 'जाँचने से पहले कृपया क्रॉसवर्ड भरें!',
+                selectOptionForQuestion: (num) => `सबमिट करने से पहले कृपया प्रश्न ${num} के लिए एक विकल्प चुनें।`,
+                unstoppable: 'आपने कमाल कर दिया!',
+                superbJob: 'बहुत शानदार काम किया दोस्त!',
+                selectAllWrongWords: 'कृपया सभी गलत शब्द चयनित करें।',
+                fillAllAnswersCorrectlly: 'कृपया सभी उत्तर सही ढंग से भरें।',
+                noSelectTitle: "⚠️ चयन करें",
+                noSelectText: "कृपया कम से कम एक चित्र चुनें",
+                correctTitle: "शाबाश! 👍",
+                correctText: "सभी उत्तर सही हैं",
+                wrongTitle: "गलत उत्तर ❌",
+                wrongText: "कृपया दोबारा प्रयास करें",
+                result: "परिणाम",
+                yourAnswer: "आपका उत्तर",
+                correctAnswer: "सही उत्तर",
+                score: "अंक",
+                notAttempted: "प्रयास नहीं किया",
+                questionNotFound: "प्रश्न उपलब्ध नहीं है",
+                questionLabel: "प्र",
+                levelLabel: "स्तर",
+                levelComplete: "पूरा हुआ",
+                totalQuestions: "कुल प्रश्न",
+                correctAnswers: "सही उत्तर",
+                attemptNo: "प्रयास संख्या",
+                goToLevel: (level) => `स्तर ${level} पर जाएँ`,
+                finished: "समाप्त",
+                choose: "चुनें",
+                status: "स्थिति",
+                correctStatus: "✔ सही",
+                incorrectStatus: "❌ गलत",
+                unattemptedStatus: "उत्तर नहीं दिया",
+                allWordsCorrect: "आपने सभी शब्द सही लिखे!",
+                excellentPerformance: "शानदार प्रदर्शन!",
+                playAgain: "फिर से खेलें"
+            };
+        } else {
+            return {
+                excellent: 'Excellent!',
+                great: 'Great!',
+                good: 'Good!',
+                perfect: 'Perfect!',
+                correct: 'Correct!',
+                allCorrect: 'All answers are correct 🎉',
+                noCorrect: 'No answers are correct ❌',
+                almost: 'Almost!',
+                notBad: 'Not bad',
+                oops: 'Oops!',
+                checkAnswers: 'Check your answers',
+                scored: (correct, total) => `You got ${correct} out of ${total} correct ✅`,
+                selectLeftFirst: 'Please select left item first!',
+                selectTopFirst: 'Please select top item first!',
+                selectImageFirst: 'Please select an image from left or right column first.',
+                writeAtLeastOne: 'Please write at least one answer and then check the answer.',
+                noAnswerWritten: 'No answer was written',
+                answerReview: 'Answer review',
+                correctLabel: 'Correct',
+                wrongLabel: 'Wrong',
+                emptyLabel: 'Empty',
+                ok: 'OK',
+                tryAgain: 'Please try again.',
+                pointsScored: (score, total) => `You scored ${score} out of ${total}`,
+                allLevelsCompleted: 'All levels have been completed.',
+                maxSelectionReached: (max) => `You can only select ${max} words.`,
+                holdOn: 'Hold on a second!',
+                fillAllBlanks: 'Please fill in all the blanks!',
+                notAttempted: 'Not Attempted',
+                incompleteAnswers: 'Some answers are incomplete, please try again.!',
+                selectOptionBeforeNext: 'Please select an option before next.',
+                info: 'Info',
+                chooseWord: 'Choose a word!',
+                chooseWordFromBox: 'Please choose a word from the box before checking your answer.',
+                fillCrosswordBeforeChecking: 'Please fill the crossword before checking!',
+                selectOptionForQuestion: (num) => `Please select an option for Question ${num} before submitting.`,
+                unstoppable: 'You are unstoppable 😎🔥',
+                superbJob: 'Superb Job Buddy!',
+                selectAllWrongWords: 'Please select all wrong words first.',
+                fillAllAnswersCorrectlly: 'Please fill all answers correctly',
+                noSelectTitle: "⚠️ Select Images",
+                noSelectText: "Please select at least one image",
+                correctTitle: "Great! 👍",
+                correctText: "All answers are correct",
+                wrongTitle: "Wrong ❌",
+                wrongText: "Please try again",
+                result: "Result",
+                yourAnswer: "Your Answer",
+                correctAnswer: "Correct Answer",
+                score: "Score",
+                questionNotFound: "Question not found.",
+                questionLabel: "Q",
+                levelLabel: "Level",
+                levelComplete: "completed.",
+                totalQuestions: "Total Questions",
+                correctAnswers: "Correct Answers",
+                attemptNo: "Attempt No",
+                goToLevel: (level) => `Go to Level ${level}`,
+                finished: "Finished",
+                choose: "choose",
+                status: "Status",
+                correctStatus: "✔ Correct",
+                incorrectStatus: "❌ Incorrect",
+                unattemptedStatus: "Unattempted",
+                allWordsCorrect: "You wrote all the words correctly!",
+                excellentPerformance: "Excellent performance!",
+                playAgain: "Play again"
+            };
+        }
+    };
+
     const translateTableHeads = (lang = 'hi') => {
         if (lang == 'hi') {
             return {
@@ -414,6 +559,7 @@ const Activity = (() => {
         translateMeaningLabel,
         translateButtonLabels,
         translateBulletLabels,
+        translatePopupLabels,
         translateWriteAnsLabel,
         translateSentenceLabel,
         translateBooleanLabels,
@@ -501,12 +647,15 @@ const MatchLeftToRight = (() => {
             }
 
             const total = Object.keys(correctMatches).length;
+            const lang = activity.lang || 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
+
             if (correctCount === total) {
-                Swal.fire({ icon: "success", title: "Excellent!", text: `All ${total} answers are correct 🎉` });
+                Swal.fire({ icon: "success", title: popupLabels.excellent, text: popupLabels.allCorrect });
             } else if (correctCount === 0) {
-                Swal.fire({ icon: "error", title: "Oops!", text: "No answers are correct ❌" });
+                Swal.fire({ icon: "error", title: popupLabels.oops, text: popupLabels.noCorrect });
             } else {
-                Swal.fire({ icon: "info", title: "Almost!", text: `You got ${correctCount} out of ${total} correct ✅` });
+                Swal.fire({ icon: "info", title: popupLabels.almost, text: popupLabels.scored(correctCount, total) });
             }
         } catch (err) {
             console.error('MatchLeftToRight.checkAnswers :', err);
@@ -733,8 +882,10 @@ const MatchLeftToRight = (() => {
                 div.addEventListener('click', (ev) => {
                     const activity = activities[activityId];
                     if (!activity || !activity.selectedLeftItem) {
-                        Swal.fire({ icon: "error", text: "Please select left item first!" });
-                        return;
+                        const lang = Activity.getDefine(Activity.getQid(`#${containerId}`))?.lang || 'en';
+                const popupLabels = Activity.translatePopupLabels(lang);
+                Swal.fire({ icon: "error", text: popupLabels.selectLeftFirst });
+                return;
                     }
 
                     const leftId = activity.selectedLeftItem.dataset.id;
@@ -950,6 +1101,8 @@ const MatchLeftRightToCenter = (() => {
             const totalLeft = Object.keys(activity.correctLeft || {}).length;
             const totalRight = Object.keys(activity.correctRight || {}).length;
             const total = totalLeft + totalRight;
+            const lang = activity.lang || 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
 
             Object.entries(activity.correctLeft || {}).forEach(([leftId, centerCorrectId]) => {
                 const userCenterId = activity.userLeftMatches[leftId];
@@ -990,11 +1143,11 @@ const MatchLeftRightToCenter = (() => {
             });
 
             if (correctCount === total && total > 0) {
-                Swal.fire({ icon: "success", title: "Great!", text: `All ${total} matches are correct 🎉` });
+                Swal.fire({ icon: "success", title: popupLabels.great, text: popupLabels.allCorrect });
             } else if (correctCount === 0) {
-                Swal.fire({ icon: "error", title: "Oops!", text: "No answers are correct ❌" });
+                Swal.fire({ icon: "error", title: popupLabels.oops, text: popupLabels.noCorrect });
             } else {
-                Swal.fire({ icon: "info", title: "Almost!", text: `You got ${correctCount} out of ${total} correct ✅` });
+                Swal.fire({ icon: "info", title: popupLabels.almost, text: popupLabels.scored(correctCount, total) });
             }
         } catch (err) {
             console.error('MatchLeftRightToCenter.checkAnswers :', err);
@@ -1247,7 +1400,9 @@ const MatchLeftRightToCenter = (() => {
                         act.selectedRight.classList.remove('selected');
                         act.selectedRight = null;
                     } else {
-                        Swal.fire({ icon: "info", text: "Please select an image from left or right column first." });
+                        const lang = Activity.getDefine(Activity.getQid(`#${containerId}`))?.lang || 'en';
+                        const popupLabels = Activity.translatePopupLabels(lang);
+                        Swal.fire({ icon: "info", text: popupLabels.selectImageFirst });
                     }
                 });
             });
@@ -1443,12 +1598,15 @@ const MatchTopToBottom = (() => {
             }
 
             const total = Object.keys(correctMatches).length;
+            const lang = activity.lang || 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
+
             if (correctCount === total) {
-                Swal.fire({ icon: "success", title: "Good!", text: `You got ${correctCount} out of ${total} correct.` });
+                Swal.fire({ icon: "success", title: popupLabels.good, text: popupLabels.scored(correctCount, total) });
             } else if (correctCount === 0) {
-                Swal.fire({ icon: "error", title: "Oops...", text: `No correct answers. ${correctCount}/${total}` });
+                Swal.fire({ icon: "error", title: popupLabels.oops, text: popupLabels.noCorrect });
             } else {
-                Swal.fire({ icon: "info", title: "Not bad", text: `You got ${correctCount} out of ${total} correct.` });
+                Swal.fire({ icon: "info", title: popupLabels.notBad, text: popupLabels.scored(correctCount, total) });
             }
         } catch (err) {
             console.error('MatchTopToBottom.checkAnswers : ', err);
@@ -1597,8 +1755,10 @@ const MatchTopToBottom = (() => {
                 div.addEventListener("click", () => {
                     const act = activities[activityId];
                     if (!act || !act.selectedTop) {
-                        Swal.fire({ icon: "error", text: "Select top item first" });
-                        return;
+                        const lang = Activity.getDefine(Activity.getQid(`#${containerId}`))?.lang || 'en';
+                const popupLabels = Activity.translatePopupLabels(lang);
+                Swal.fire({ icon: "error", text: popupLabels.selectTopFirst });
+                return;
                     }
                     const topId = act.selectedTop.dataset.id;
                     const bottomId = div.dataset.id;
@@ -1782,13 +1942,15 @@ const FillInTheBlanksWithImage = (() => {
                 }
             });
 
-            const questionId = document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid;
-            const dataFills = Activity.getDefine(questionId)?.content?.blanks;
+            const activityData = Activity.getDefine(questionId);
+            const lang = activityData?.lang || 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
+            const dataFills = activityData?.content?.blanks;
 
             Swal.fire({
                 icon: correct === (dataFills || []).length ? "success" : "info",
-                title: correct === (dataFills || []).length ? "Perfect!" : "Checked",
-                text: `You got ${correct} / ${(dataFills || []).length} correct.`
+                title: correct === (dataFills || []).length ? popupLabels.perfect : popupLabels.checkAnswers,
+                text: popupLabels.scored(correct, (dataFills || []).length)
             });
         } catch (err) {
             console.error('FillInTheBlanksWithImage.checkAnswerFill : ', err);
@@ -2091,6 +2253,7 @@ const FillInTheBlanksHindiKb = (() => {
                 }
 
                 if (subQuestion.length) {
+                    console.log('if')
                     if (html.length > 2) return false;
 
                     const frame = `<div class="my-2">`;
@@ -2189,11 +2352,11 @@ const FillInTheBlanksHindiKb = (() => {
                             })
                         );
 
-                        const wrappedTextInput = length !== '' ? `
+                        const wrappedTextInput = `
                             <div class="text-input-wrapper">
                                 ${inputView}
-                            </div>`: inputView
-                        ;
+                            </div>
+                        `;
 
                         html.push(imageHtml);
 
@@ -2281,15 +2444,18 @@ const FillInTheBlanksHindiKb = (() => {
         });
 
         const totalBlanks = $('.inPutHindiNew').length;
+        const lang = activity?.lang || 'hi';
+        const popupLabels = Activity.translatePopupLabels(lang);
 
         const swalIcon = (__score === totalBlanks) ? "success" : "info";
-        const swalTitle = (__score === totalBlanks) ? "🎉 सभी सही!" : "अरे नहीं...";
+        const swalTitle = (__score === totalBlanks) ? popupLabels.allCorrect : popupLabels.oops;
 
         Swal.fire({
             icon: swalIcon,
             title: swalTitle,
-            text: `✅ आपका स्कोर: ${__score}/${totalBlanks}`,
-            confirmButtonColor: "#00bfff"
+            text: popupLabels.scored(__score, totalBlanks),
+            confirmButtonColor: "#00bfff",
+            confirmButtonText: popupLabels.ok
         });
     }
 
@@ -2554,7 +2720,10 @@ const JumbleLetters = (() => {
             let score = 0;
 
             const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
-            const jumbleData = Activity.getDefine(questionId)?.content;
+            const activity = Activity.getDefine(questionId);
+            const lang = activity?.lang || 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
+            const jumbleData = activity?.content;
 
             jumbleData.forEach((word, index) => {
                 let isCorrect = true;
@@ -2572,9 +2741,9 @@ const JumbleLetters = (() => {
             });
 
             if (score === jumbleData.length) {
-                Swal.fire({ title: "Good!", text: "Congratulations! All are correct!", icon: "success" });
+                Swal.fire({ title: popupLabels.good, text: popupLabels.allCorrect, icon: "success" });
             } else {
-                Swal.fire({ icon: "error", title: "Oops...", text: `You got ${score} out of ${jumbleData.length} correct. Please try again.` });
+                Swal.fire({ icon: "error", title: popupLabels.oops, text: popupLabels.scored(score, jumbleData.length) + " " + popupLabels.tryAgain });
             }
         } catch (err) {
             console.log('JumbleLetters.submit : ', err);
@@ -2786,6 +2955,11 @@ const JumbleWords = (() => {
     const checkAnswersWORD = () => {
         try {
             let allRowsCorrect = true;
+            const questionId = $(idiomContainer)[0].dataset.qid;
+            const activity = Activity.getDefine(questionId);
+            const lang = activity?.lang || 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
+
             const idioms = JSON.parse($(idiomContainer)[0].dataset.shuffledIdioms);
 
             $(".rowWordLet").each(function () {
@@ -2804,11 +2978,13 @@ const JumbleWords = (() => {
                         $(this).addClass("correctWord");
                     } else {
                         $(this).addClass("wrongwrongRORD");
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Some Answer are uncompleted please try again.!",
-                        });
+                        if (allGood) {
+                            Swal.fire({
+                                icon: "error",
+                                title: popupLabels.oops,
+                                text: popupLabels.incompleteAnswers,
+                            });
+                        }
                         allGood = false;
                         allRowsCorrect = false;
                     }
@@ -2823,8 +2999,8 @@ const JumbleWords = (() => {
 
             if (allRowsCorrect) {
                 Swal.fire({
-                    title: "Correct!",
-                    text: "All answers are correct!",
+                    title: popupLabels.correct,
+                    text: popupLabels.allCorrect,
                     icon: "success"
                 });
             }
@@ -2993,8 +3169,8 @@ const Mcq_PathKaSaar = (() => {
                 const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'left';
                 const side = String(preferredSide).toLowerCase();
 
-                const commonClassText = 'col-md-12 col-lg-7 col-12 col-sm-12';
-                const commonClassImg = 'col-md-12 col-lg-5 col-sm-12 col-12 text-center';
+                const commonClassText = 'col-7';
+                const commonClassImg = 'col-5 text-center';
 
                 if (hasText) {
                     mcqContextContainer.append(textDiv);
@@ -3023,14 +3199,11 @@ const Mcq_PathKaSaar = (() => {
                     if (side === 'left') {
                         textDiv.css('order', 1);
                         imgDiv.css('order', 2);
-
                         textDiv.removeClass('text-end').addClass('text-start');
-
                     } else {
                         textDiv.css('order', 2);
                         imgDiv.css('order', 1);
-
-                        textDiv.removeClass('text-start').addClass('text-end');
+                        textDiv.removeClass('text-end').addClass('text-start');
                     }
                 } else if (side === 'top' || side === 'bottom') {
                     mcqContextContainer.css('flex-direction', 'column');
@@ -3041,9 +3214,8 @@ const Mcq_PathKaSaar = (() => {
                         textDiv.css('order', 2);
                         imgDiv.css('order', 1);
                     }
-
-                    textDiv.removeClass(commonClassText).addClass('col my-1');
-                    imgDiv.removeClass(commonClassImg).addClass('col my-1 text-center');
+                    textDiv.removeClass('col-7').addClass('col-12 my-1');
+                    imgDiv.removeClass('col-5').addClass('col-12 my-1 text-center');
                 } else {
                     mcqContextContainer.css('flex-direction', 'row');
                     textDiv.css('order', 1);
@@ -3188,9 +3360,10 @@ const Mcq_PathKaSaar = (() => {
             const questionId = document.getElementById(heading)?.dataset.qid;
             const activity = Activity.getDefine(questionId);
             const data = activity?.content;
-            const lang = activity?.lang;
+            const lang = activity?.lang || 'en';
             const mcq = data?.mcq || [];
             const headLabels = Activity.translateTableHeads(lang);
+            const popupLabels = Activity.translatePopupLabels(lang);
 
             let totalQues = mcq.length;
 
@@ -3211,7 +3384,7 @@ const Mcq_PathKaSaar = (() => {
                 const userIndex = userAnswers[i];
                 const userAnswerText = userIndex !== null && userIndex !== undefined
                     ? `${option_text(q?.options[userIndex])}`
-                    : (lang === "hi" ? "प्रयास नहीं किया" : "Not Attempted");
+                    : popupLabels.notAttempted;
 
                 const correctAnswerText = `${option_text(q?.options[q.answer])}`;
                 const isCorrect = userIndex === q.answer;
@@ -3222,7 +3395,7 @@ const Mcq_PathKaSaar = (() => {
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswerText}</td>
                     <td class="text-success">${correctAnswerText}</td>
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">
-                    ${isCorrect ? (lang === "hi" ? "✔ " : "✔ ") : (lang === "hi" ? "✘ " : "✘")}
+                    ${isCorrect ? "✔" : "✘"}
                     </td>
                 </tr>`;
             });
@@ -3236,10 +3409,7 @@ const Mcq_PathKaSaar = (() => {
 
             const scoreText = document.getElementById("scoreTextQ1");
             if (scoreText) {
-                scoreText.innerText =
-                    lang === "hi"
-                        ? `आपको ${totalQues} में से ${correctCount} अंक मिले हैं`
-                        : `You scored ${correctCount} out of ${totalQues}`;
+                scoreText.innerText = popupLabels.scored(correctCount, totalQues);
             }
         } catch (e) {
             console.error('Mcq.showAnswerPopupMCQ', e);
@@ -3462,7 +3632,8 @@ const Adaptiv = (() => {
         void container.offsetWidth;
 
         if (!q) {
-            container.innerHTML = `<div class="row m-0"><div class="col">${lang == 'hi' ? 'प्रश्न उपलब्ध नहीं है' : 'Question not found.'}</div></div>`;
+            const popupLabels = Activity.translatePopupLabels(lang);
+            container.innerHTML = `<div class="row m-0"><div class="col">${popupLabels.questionNotFound}</div></div>`;
             updateNavButtons();
             return;
         }
@@ -3510,12 +3681,14 @@ const Adaptiv = (() => {
                     ` : '';
         // ..
 
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         container.innerHTML = `${questionText != ''
             ? `
                     <div class="row m-0 g-0 align-items-center" style="font-size:18px">
                         ${!skipQuestionSequence ? `
                             <div style="min-width:30px;" class="col-auto questionHeadingMCQ me-2">
-                                <strong>${lang == 'hi' ? 'प्र' : 'Q'}${realIndex + 1}.</strong>
+                                <strong>${popupLabels.questionLabel}${realIndex + 1}.</strong>
                             </div>
                             ` : ''
             }
@@ -3613,9 +3786,10 @@ const Adaptiv = (() => {
         if (userAnswersAdaptiv[currentQuestion] === null) {
             const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
             const lang = activity?.lang ?? 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
             Swal.fire({
-                title: lang == 'en' ? 'Info' : 'जानकारी',
-                text: lang == 'en' ? 'Please select an option before next.' : 'अगले पर जाने से पहले कृपया एक विकल्प चुनें।',
+                title: popupLabels.info,
+                text: popupLabels.selectOptionBeforeNext,
                 icon: 'info'
             });
             return;
@@ -3687,12 +3861,14 @@ const Adaptiv = (() => {
                 }
             });
 
+            const popupLabels = Activity.translatePopupLabels(lang);
+
             const correct = (userAnswersAdaptiv || []).filter((a, i) => a === (currentQuizData?.[i]?.answer)).length;
             const showAnswerBtn = attemptCount >= 5;
             const showRetryBtn = correct < (currentQuizData?.length || 0);
             const showNextLevel = correct === skipnextbtn || skipOptions || ((currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0);
             const finished = currentLevel === levels.length;
-            const whenCompleteLevel = showNextLevel ? (lang == 'en' ? 'completed.' : 'पूरा हुआ') : "";
+            const whenCompleteLevel = showNextLevel ? popupLabels.levelComplete : "";
             const navButtonsEl = document.getElementById("nav-buttons");
             if (navButtonsEl) navButtonsEl.style.display = "none";
             const submitWrapper = document.getElementById("submit-btn-wrapper");
@@ -3702,29 +3878,24 @@ const Adaptiv = (() => {
             const btnLabel = Activity.translateButtonLabels(lang);
             container.innerHTML = `
                 <div class="result-box">
-                    ${!skipnextbtn ? `<h4><strong class="fs-1">${lang == 'en' ? 'Level' : 'स्तर'} ${currentLevel} ${whenCompleteLevel}</strong></h4>` : ''}
+                    ${!skipnextbtn ? `<h4><strong class="fs-1">${popupLabels.levelLabel} ${currentLevel} ${whenCompleteLevel}</strong></h4>` : ''}
                     ${!skipOptions ? `
                         <p class="text-danger my-3">
-                            ${lang == 'en' ? 'Total Questions' : 'कुल प्रश्न'} : 
+                            ${popupLabels.totalQuestions} : 
                             ${currentQuizData?.length || 0}
                         </p>
                         <p class="text-success my-3">
-                            ${lang == 'en' ? 'Correct Answers' : 'सही उत्तर'}: ${correct}
+                            ${popupLabels.correctAnswers}: ${correct}
                         </p>
                         <p class="text-success my-3">
-                            ${lang == 'en' ? 'Attempt No' : 'प्रयास संख्या'}: ${attemptCount}
+                            ${popupLabels.attemptNo}: ${attemptCount}
                         </p>
                         ` : ''
                 }
                     <div class="rowBtns">
                         ${((showNextLevel || skiplevels) && !skipnextbtn) ? `
                             <button class='btn btn-success mt-3 mx-3' id='btn-next-level'>
-                                ${lang == 'en'
-                        ? `
-                                            Go To Level ${currentLevel + 1}
-                                        `
-                        : `स्तर ${currentLevel + 1} पर जाएँ`
-                    }
+                                ${popupLabels.goToLevel(currentLevel + 1)}
                             </button>` : ''
                 }
                         ${(showRetryBtn || showNextLevel) ? `
@@ -3744,7 +3915,7 @@ const Adaptiv = (() => {
                 }
                         ${(finished && showNextLevel && !skipnextbtn) ? `
                                 <button class='btn btn-success mt-3 mx-3' id='btn-finish'>
-                                    ${lang == 'en' ? 'Finished' : 'समाप्त'}
+                                    ${popupLabels.finished}
                                 </button>
                             ` : ''
                 }
@@ -3907,13 +4078,11 @@ const Adaptiv = (() => {
             </tr>`;
         });
 
+        const popupLabels = Activity.translatePopupLabels(lang);
         const headLabel = Activity.translateTableHeads(lang);
         topData = `<div class="d-flex justify-content-between align-items-center">
                     <h4 id="scoreTextQ1" class="text-center mb-3">
-                        ${lang == 'hi'
-                ? `आपको ${totalQuestion} में से ${totalCorrect} अंक मिले हैं`
-                : `You scored ${totalCorrect} out of ${totalQuestion}`
-            }
+                        ${popupLabels.scored(totalCorrect, totalQuestion)}
                     </h4>
                     <button class="btn btn-secondary" id="btn-close-answers">X</button>
                 </div>`;
@@ -3949,8 +4118,12 @@ const Adaptiv = (() => {
     }
 
     const finishMessage = () => {
+        const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
+        const lang = activity?.lang ?? 'en';
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         Swal.fire({
-            title: "All level has been completed.",
+            title: popupLabels.allCorrect,
             text: "",
             icon: "success",
             timer: 3000,
@@ -4087,14 +4260,14 @@ const DropDown = (() => {
         if (blankIndex !== null) select.setAttribute("data-blank", blankIndex);
 
         const lang = Activity.getDefine(Activity.getQid(`.${quesClass}`))?.lang;
-        const optionSelect = lang == 'hi' ? 'चुनें' : 'choose';
+        const popupLabels = Activity.translatePopupLabels(lang);
 
         const def = document.createElement("option");
         def.value = "";
         def.disabled = true;
         def.selected = true;
         def.hidden = true;
-        def.textContent = optionSelect;
+        def.textContent = popupLabels.choose;
         select.appendChild(def);
 
         optionsArr.forEach(optValue => {
@@ -4116,16 +4289,23 @@ const DropDown = (() => {
         document.getElementById("commonReport").style.display = "block";
         const selects = document.querySelectorAll(`select`);
 
-        const content = Activity.getDefine(Activity.getQid(`.${quesClass}`))?.content;
-        const lang = content?.lang;
+        const activity = Activity.getDefine(Activity.getQid(`.${quesClass}`));
+        const lang = activity?.lang || 'en';
+        const content = activity?.content;
         const data = content?.questions;
-        const isHindi = lang == 'hi' ? true : false;
+        const popupLabels = Activity.translatePopupLabels(lang);
 
-        const headings = isHindi
-            ? { yourAns: "आपका उत्तर", correctAns: "सही उत्तर", status: "स्थिति", correct: "✔ सही", incorrect: "❌ गलत", unattempted: "उत्तर नहीं दिया", statusText: "सही उत्तर" }
-            : { yourAns: "Your Answer", correctAns: "Correct Answer", status: "Status", correct: "✔ Correct", incorrect: "❌ Incorrect", unattempted: "Unattempted", statusText: "Correct" };
+        const headings = {
+            yourAns: popupLabels.yourAnswer,
+            correctAns: popupLabels.correctAnswer,
+            status: popupLabels.status,
+            correct: popupLabels.correctStatus,
+            incorrect: popupLabels.incorrectStatus,
+            unattempted: popupLabels.unattemptedStatus,
+            statusText: popupLabels.correct
+        };
 
-        const numbering = isHindi
+        const numbering = lang == 'hi'
             ? ["क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "ट", "ठ", "ड", "ढ", "ण", "त", "थ", "द", "ध", "न", "प", "फ", "ब", "भ", "म", "य", "र", "ल", "व", "श"]
             : ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
@@ -4497,18 +4677,21 @@ const Circle = (() => {
         $("#clickAct").css("display", "block");
         let correctCount = 0;
         let totalQues = Array.isArray(clickData) ? clickData.length : 0;
+        const headLabels = Activity.translateTableHeads(typeLang);
+        const popupLabels = Activity.translatePopupLabels(typeLang);
 
         let tableHTML = `<div class="table-responsive p-2">
             <table class="table table-bordered" style="font-size:18px">
             <thead class="text-light" style="white-space: nowrap;">
             <tr>
-                <th>${typeLang === "hi" ? "प्रश्न संख्या" : "Q. No."}</th>
-                <th>${typeLang === "hi" ? "आपका उत्तर" : "Your Answer"}</th>
-                <th>${typeLang === "hi" ? "सही उत्तर" : "Correct Answer"}</th>
-                <th>${typeLang === "hi" ? "परिणाम" : "Result"}</th>
+                <th>${headLabels.sequence}</th>
+                <th>${headLabels.attempted}</th>
+                <th>${headLabels.correct}</th>
+                <th>${headLabels.result}</th>
             </tr>
             </thead>
             <tbody>`;
+        // ..
 
         (clickData || []).forEach((q, i) => {
             const correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
@@ -4542,9 +4725,7 @@ const Circle = (() => {
 
         const scoreEl = document.getElementById("scoreTextQ1Click");
         if (scoreEl) {
-            scoreEl.innerText = typeLang === "hi"
-                ? `आपको ${totalQues} में से ${correctCount} अंक मिले हैं`
-                : `You scored ${correctCount} out of ${totalQues}`;
+            scoreEl.innerText = popupLabels.scored(correctCount, totalQues);
         }
     };
 
@@ -4783,7 +4964,9 @@ const ShravanKaushal = (() => {
     const checkAns = () => {
         const data = Activity.getDefine(Activity.getQid(`#${inputDataId}`));
         const dataSet = data?.content?.questions || [];
-        const isHindi = (data?.lang === 'hi');
+        const lang = data?.lang || 'en';
+        const headLabels = Activity.translateTableHeads(lang);
+        const popupLabels = Activity.translatePopupLabels(lang);
 
         let correctCount = 0;
         const totalQues = dataSet.length;
@@ -4792,13 +4975,14 @@ const ShravanKaushal = (() => {
             <table class="table table-bordered" style="font-size:18px">
             <thead class="text-light" style="white-space: nowrap;">
                 <tr>
-                <th>${isHindi ? "प्रश्न संख्या" : "Q. No."}</th>
-                <th>${isHindi ? "आपका उत्तर" : "Your Answer"}</th>
-                <th>${isHindi ? "सही उत्तर" : "Correct Answer"}</th>
-                <th>${isHindi ? "परिणाम" : "Result"}</th>
+                <th>${headLabels.sequence}</th>
+                <th>${headLabels.attempted}</th>
+                <th>${headLabels.correct}</th>
+                <th>${headLabels.result}</th>
                 </tr>
             </thead>
             <tbody>`;
+        // ..
 
         dataSet.forEach((q, i) => {
             const inputEl = document.getElementById(`f${inputDataId}_${q.id}`);
@@ -4809,7 +4993,7 @@ const ShravanKaushal = (() => {
             if (isCorrect) correctCount++;
 
             const userAnswerText =
-                userAns.length > 0 ? userAns : (isHindi ? "प्रयास नहीं किया" : "Not Attempted");
+                userAns.length > 0 ? userAns : popupLabels.notAttempted;
             const correctAnswerText = correctAnswers.join(", ");
 
             tableHTML += `
@@ -4830,9 +5014,7 @@ const ShravanKaushal = (() => {
 
         const scoreTextEl = document.getElementById("scoreTextQ8Click");
         if (scoreTextEl) {
-            scoreTextEl.innerText = isHindi
-                ? `आपको ${correctCount} अंक मिले हैं (कुल ${totalQues})`
-                : `You scored ${correctCount} out of ${totalQues}`;
+            scoreTextEl.innerText = popupLabels.scored(correctCount, totalQues);
         }
 
         const clickAct = document.getElementById("clickActShravan");
@@ -5158,7 +5340,8 @@ const TrueAndFalse = (() => {
                 correctCount++;
             }
 
-            const userAnswerText = (userAnswer !== undefined && userAnswer !== null) ? `${userAnswer}` : lang == 'hi' ? "उत्तर नहीं दिया" : "Not Attempted";
+            const popupLabels = Activity.translatePopupLabels(lang);
+            const userAnswerText = (userAnswer !== undefined && userAnswer !== null) ? `${userAnswer}` : popupLabels.unattemptedStatus;
 
             const textLabels = Activity.translateBooleanLabels(lang);
 
@@ -5179,15 +5362,12 @@ const TrueAndFalse = (() => {
         const tableBodyL = `</tbody></table></div>`;
         table.push(tableBodyL);
 
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         document.getElementById("answer-review").innerHTML = table.join('');
         document.getElementById("popupDialogAns").style.display = "block";
 
-        const finalText = lang == 'en' ?
-            `You answered ${correctCount} out of ${totalQues} questions correctly!` :
-            `आपको ${totalQues} में से ${correctCount} मिले है`;
-        // ..
-
-        document.getElementById("scoreTextQ1").innerText = finalText;
+        document.getElementById("scoreTextQ1").innerText = popupLabels.scored(correctCount, totalQues);
     }
 
     const closePopUp = () => {
@@ -5405,6 +5585,12 @@ const DragAndDrop = (() => {
     const checkAnswersDnd = () => {
         try {
             let correct = 0;
+            const dragItems = document.getElementById(containerId);
+            const questionId = dragItems.dataset.qid;
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity.lang ?? 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
+
             const total = $(`${containerSelector} .wordDrag`).length;
 
             $(`${containerSelector} .dropSect`).each(function () {
@@ -5421,10 +5607,10 @@ const DragAndDrop = (() => {
             });
 
             Swal.fire({
-                title: correct === total ? "All Correct!" : "Check your answers",
-                text: `You got ${correct} out of ${total} correct!`,
+                title: correct === total ? popupLabels.allCorrect : popupLabels.checkAnswers,
+                text: popupLabels.scored(correct, total),
                 icon: correct === total ? "success" : "info",
-                confirmButtonText: "OK"
+                confirmButtonText: popupLabels.ok
             });
         } catch (e) {
             console.error('DragAndDrop.checkAnswersDnd :', e);
@@ -5558,6 +5744,7 @@ const DragAndDropMulti = (() => {
                                             </div>
                                         </div>
                                         <div id='question-container-box' ${audioSrc ? `style="display: none"` : ''}>
+                                            <div class="mcq-context p-1"></div>
                                             <div class="question-block position-relative">
                                                 <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
                                                 <div class="drag-question-box2 mt-3"></div>
@@ -5746,12 +5933,8 @@ const DragAndDropMulti = (() => {
 
         document.getElementById("popupDialogAns").style.display = "block";
 
-        const finalText = lang == 'en' ?
-            `You answered ${correctCount} out of ${totalQues} questions correctly!` :
-            `आपको ${totalQues} में से ${correctCount} मिले है`;
-        // ..
-
-        document.getElementById("scoreTextQ1").innerText = finalText;
+        const popupLabels = Activity.translatePopupLabels(lang);
+        document.getElementById("scoreTextQ1").innerText = popupLabels.scored(correctCount, totalQues);
     }
 
     const closePopUp = () => {
@@ -5948,6 +6131,79 @@ const DragAndDropMulti = (() => {
             dragItems.dataset.qid = questionId;
 
             const content = data?.content ?? {};
+            const text = content?.text ?? {};
+            const img = content?.img ?? {};
+
+            const mcqContextContainer = $('.mcq-context');
+            mcqContextContainer.empty();
+
+            const hasText = text && Object.keys(text).length > 0;
+            const hasImg = img && Object.keys(img).length > 0;
+
+            if (!hasText && !hasImg) mcqContextContainer.remove();
+
+            if (hasText || hasImg) {
+                const textDiv = $('<div class="mcq-text"></div>');
+                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
+
+                mcqContextContainer.addClass('row g-0');
+
+                const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'top';
+                const side = String(preferredSide).toLowerCase();
+
+                const commonClassText = 'col-7';
+                const commonClassImg = 'col-5 text-center';
+
+                if (hasText) {
+                    mcqContextContainer.append(textDiv);
+                    const mcq_txt_class = hasImg ? `${commonClassText}` : 'col';
+                    textDiv.addClass(mcq_txt_class).html(text.text || '');
+                }
+
+                if (hasImg) {
+                    const imageclass = img?.imageclass ?? '';
+                    mcqContextContainer.append(imgDiv);
+                    const mcq_img_cont_class = hasText
+                        ? commonClassImg
+                        : `col ${imageclass}`;
+                    // ..
+
+                    const image_width = img.width ?? '40%';
+
+                    imgDiv.addClass(mcq_img_cont_class)
+                        .find('img')
+                        .attr('src', Activity.pathToCWD() + img.path)
+                        .css({ 'border-radius': '20px', 'width': image_width });
+                }
+
+                if (side === 'left' || side === 'right') {
+                    mcqContextContainer.css('flex-direction', 'row');
+                    if (side === 'left') {
+                        textDiv.css('order', 1);
+                        imgDiv.css('order', 2);
+                        textDiv.removeClass('text-end').addClass('text-start');
+                    } else {
+                        textDiv.css('order', 2);
+                        imgDiv.css('order', 1);
+                        textDiv.removeClass('text-end').addClass('text-start');
+                    }
+                } else if (side === 'top' || side === 'bottom') {
+                    mcqContextContainer.css('flex-direction', 'column');
+                    if (side === 'top') {
+                        textDiv.css('order', 1);
+                        imgDiv.css('order', 2);
+                    } else {
+                        textDiv.css('order', 2);
+                        imgDiv.css('order', 1);
+                    }
+                    textDiv.removeClass('col-7').addClass('col-12 my-1');
+                    imgDiv.removeClass('col-5').addClass('col-12 my-1 text-center');
+                } else {
+                    mcqContextContainer.css('flex-direction', 'row');
+                    textDiv.css('order', 1);
+                    imgDiv.css('order', 2);
+                }
+            }
             const option_side = content?.option_side ?? 'top';
             const type_set = content?.set ?? {};
             const hasTypeSet = Object.keys(type_set).length > 0;
@@ -6281,15 +6537,12 @@ const DragAndDropMulti = (() => {
         const tablePartEnd = `</tbody></table></div>`;
         table.push(tablePartEnd);
 
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         document.getElementById("answer-review").innerHTML = table.join('');
         document.getElementById("popupDialogAns").style.display = "block";
 
-        const finalText = lang == 'en' ?
-            `You answered ${correctCount} out of ${totalQues} questions correctly!` :
-            `आपको ${totalQues} में से ${correctCount} मिले है`;
-        // ..
-
-        document.getElementById("scoreTextQ1").innerText = finalText;
+        document.getElementById("scoreTextQ1").innerText = popupLabels.scored(correctCount, totalQues);
     }
 
     const drag_option_html = (item, ind) => `<div class="drag_${ind} wordDrag font17" data-text="${item}" data-ans="${item}">${item}</div>`;
@@ -6549,7 +6802,9 @@ const Sorting = (() => {
     const checkAnswer = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) || {};
         const content = activity?.content ?? {};
+        const lang = activity?.lang || 'en';
         const sequence = content?.sequence ?? [];
+        const popupLabels = Activity.translatePopupLabels(lang);
 
         const attempt = [];
         [...$(`.${sequenceClass} li`)]?.map((item, ind) => {
@@ -6558,7 +6813,7 @@ const Sorting = (() => {
 
         if (sequence.toString() === attempt.toString()) {
             Swal.fire({
-                title: "Well Done",
+                title: popupLabels.excellent,
                 icon: "success"
             });
 
@@ -6573,7 +6828,7 @@ const Sorting = (() => {
             });
 
             Swal.fire({
-                title: "Try again",
+                title: popupLabels.oops,
                 icon: "error"
             });
         }
@@ -7253,9 +7508,11 @@ const Shrutlekh = (() => {
                 const correctAudio = await playAudio('correct', lang);
                 const timeout = Math.round(correctAudio.duration * 1000);
 
+                const popupLabels = Activity.translatePopupLabels(lang);
+
                 Swal.fire({
                     icon: 'success',
-                    title: lang == 'hi' ? 'बहुत बढ़िया! सही उत्तर 👏' : 'Very good! Correct answer 👏',
+                    title: popupLabels.great,
                     color: '#2e7d32',
                     timer: timeout,
                     showConfirmButton: false,
@@ -7273,9 +7530,11 @@ const Shrutlekh = (() => {
                 const boxAudio = await playAudio(boxID, lang);
                 const duration = boxAudio instanceof HTMLAudioElement ? boxAudio.duration : 2;
                 const timeout = Math.round(duration * 1000);
+                const popupLabels = Activity.translatePopupLabels(lang);
+
                 Swal.fire({
                     icon: 'error',
-                    title: lang == 'hi' ? 'फिर से कोशिश करें!' : 'Try Again!',
+                    title: popupLabels.oops,
                     color: '#c62828',
                     timer: timeout,
                     showConfirmButton: false,
@@ -7315,10 +7574,11 @@ const Shrutlekh = (() => {
         if (!skipAlert) {
             const correctAudio = await playAudio('correct', lang);
             const timeout = Math.round(correctAudio.duration) * 1000;
+            const popupLabels = Activity.translatePopupLabels(lang);
 
             Swal.fire({
                 icon: 'success',
-                title: lang == 'hi' ? 'शाबाश! सही उत्तर 👏' : 'Well done! Correct answer.👏',
+                title: popupLabels.excellent,
                 color: '#2e7d32',
                 timer: timeout,
                 showConfirmButton: false,
@@ -7338,14 +7598,15 @@ const Shrutlekh = (() => {
     const wrongPopUp = async () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
         const lang = activity?.lang ?? 'en';
+        const popupLabels = Activity.translatePopupLabels(lang);
 
         const incorrectAudio = await playAudio('incorrect', lang);
 
         const timeout = Math.round(incorrectAudio.duration) * 1000;
         Swal.fire({
             icon: "error",
-            title: lang == 'hi' ? 'गलत उत्तर!' : 'Wrong Answer',
-            html: lang == 'hi' ? '<small>फिर से कोशिश करें।</small>' : '<small>Try Again</small>',
+            title: popupLabels.oops,
+            html: `<small>${popupLabels.tryAgain}</small>`,
             timer: timeout,
             showConfirmButton: false,
             allowOutsideClick: false,
@@ -7361,15 +7622,13 @@ const Shrutlekh = (() => {
     const showFinalCongrats = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
         const lang = activity?.lang ?? 'en';
-
-        const hiHtml = '<b>आपने सभी शब्द सही लिखे!</b><br><small>शानदार प्रदर्शन!</small>';
-        const enHtml = '<b>You wrote all the words correctly!</b><br><small>Excellent performance!</small>';
+        const popupLabels = Activity.translatePopupLabels(lang);
 
         Swal.fire({
             icon: 'success',
-            title: lang == 'hi' ? 'बहुत बढ़िया! 🏆' : 'Excellent 🏆',
-            html: lang == 'hi' ? hiHtml : enHtml,
-            confirmButtonText: lang == 'hi' ? 'फिर से खेलें' : 'Play again',
+            title: popupLabels.excellent,
+            html: `<b>${popupLabels.allWordsCorrect}</b><br><small>${popupLabels.excellentPerformance}</small>`,
+            confirmButtonText: popupLabels.playAgain,
             color: '#333',
             confirmButtonColor: '#3085d6',
             showConfirmButton: true,
@@ -7712,13 +7971,14 @@ const WordSearch = (() => {
 
             const checkBtn = document.getElementById("c-check");
 
+            const popupLabels = Activity.translatePopupLabels(lang);
             const selected = [...document.querySelectorAll('input[data-selected="1"]')];
             if (selected.length === 0) {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Choose a word!',
-                    text: 'Please choose a word from the box before checking your answer.',
-                    confirmButtonText: 'OK',
+                    title: popupLabels.chooseWord,
+                    text: popupLabels.chooseWordFromBox,
+                    confirmButtonText: popupLabels.ok,
                     confirmButtonColor: '#3085d6',
                     showConfirmButton: true,
                     allowOutsideClick: false,
@@ -7791,11 +8051,13 @@ const WordSearch = (() => {
     };
 
     const popup = ({ complete = false, correct = 0, total = 0, lang = 'en' } = {}) => {
+        const popupLabels = Activity.translatePopupLabels(lang);
+        const buttonLabels = Activity.translateButtonLabels(lang);
+
         if (complete) {
-            const buttonLabels = Activity.translateButtonLabels(lang);
             Swal.fire({
-                title: lang == 'en' ? '🎉 Well Done!' : '🎉बहुत बढ़िया!',
-                text: lang == 'en' ? 'You found all the words!' : 'आपने सारे शब्द ढूँढ लिए!',
+                title: popupLabels.excellent,
+                text: popupLabels.allCorrect,
                 icon: 'success',
                 confirmButtonText: buttonLabels.replay,
                 confirmButtonColor: '#28a745',
@@ -7808,13 +8070,11 @@ const WordSearch = (() => {
                 }
             });
         } else {
-            const en = `You found <strong>${correct}</strong> words out of <strong>${total}</strong>.`;
-            const hi = `आपने <strong>${total}</strong> में से <strong>${correct}</strong> शब्द ढूँढ लिए हैं.`;
             Swal.fire({
-                title: lang == 'en' ? 'Result' : 'परिणाम',
-                html: lang == 'en' ? en : hi,
+                title: popupLabels.checkAnswers,
+                html: popupLabels.scored(correct, total),
                 icon: 'info',
-                confirmButtonText: 'OK',
+                confirmButtonText: popupLabels.ok,
                 confirmButtonColor: '#3085d6',
                 allowOutsideClick: false,
                 allowEscapeKey: false,
@@ -7887,13 +8147,18 @@ const TextArea = (() => {
             const activity = Activity.getDefine(questionId) ?? {};
             const content = activity?.content ?? {};
             const lang = activity.lang ?? 'en';
-            const showInput = content?.showInput ?? true;
+            let showInput = content?.showInput ?? true;
+
+            if (lang === 'en') {
+                showInput = true;
+            }
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `<div class="question">
                                     <div class="container" id="${containerId}">
                                         <h5 class="questionHeading mt-3 border-bottom pb-2 ${Define.get('head')}"></h5>
+                                        <div class="mcq-context p-1"></div>
                                         <div id="short-answer-container" class="ps-1 pe-3">
                                             <div id="${quesContId}" class="mb-2" style="font-size: 20px;"></div>
                                         </div>
@@ -7932,18 +8197,96 @@ const TextArea = (() => {
     const render = (questionId) => {
         try {
             ui(questionId);
-            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
             const activity = Activity.getDefine(questionId);
-            const lang = activity?.lang ?? 'en';
             const content = activity?.content ?? {};
+            const text = content?.text ?? {};
+            const img = content?.img ?? {};
+
+            const mcqContextContainer = $('.mcq-context');
+            mcqContextContainer.empty();
+
+            const hasText = text && Object.keys(text).length > 0;
+            const hasImg = img && Object.keys(img).length > 0;
+
+            if (!hasText && !hasImg) mcqContextContainer.remove();
+
+            if (hasText || hasImg) {
+                const textDiv = $('<div class="mcq-text"></div>');
+                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
+
+                mcqContextContainer.addClass('row g-0');
+
+                const preferredSide = (hasText && text?.side) ? text.side : (hasImg && img?.side) ? img.side : 'top';
+                const side = String(preferredSide).toLowerCase();
+
+                const commonClassText = 'col-7';
+                const commonClassImg = 'col-5 text-center';
+
+                if (hasText) {
+                    mcqContextContainer.append(textDiv);
+                    const mcq_txt_class = hasImg ? `${commonClassText}` : 'col';
+                    textDiv.addClass(mcq_txt_class).html(text.text || '');
+                }
+
+                if (hasImg) {
+                    const imageclass = img?.imageclass ?? '';
+                    mcqContextContainer.append(imgDiv);
+                    const mcq_img_cont_class = hasText
+                        ? commonClassImg
+                        : `col ${imageclass}`;
+
+                    const image_width = img.width ?? '40%';
+
+                    imgDiv.addClass(mcq_img_cont_class)
+                        .find('img')
+                        .attr('src', Activity.pathToCWD() + img.path)
+                        .css({ 'border-radius': '20px', 'width': image_width });
+                }
+
+                if (side === 'left' || side === 'right') {
+                    mcqContextContainer.css('flex-direction', 'row');
+                    if (side === 'left') {
+                        textDiv.css('order', 1);
+                        imgDiv.css('order', 2);
+                        textDiv.removeClass('text-end').addClass('text-start');
+                    } else {
+                        textDiv.css('order', 2);
+                        imgDiv.css('order', 1);
+                        textDiv.removeClass('text-end').addClass('text-start');
+                    }
+                } else if (side === 'top' || side === 'bottom') {
+                    mcqContextContainer.css('flex-direction', 'column');
+                    if (side === 'top') {
+                        textDiv.css('order', 1);
+                        imgDiv.css('order', 2);
+                    } else {
+                        textDiv.css('order', 2);
+                        imgDiv.css('order', 1);
+                    }
+                    textDiv.removeClass('col-7').addClass('col-12 my-1');
+                    imgDiv.removeClass('col-5').addClass('col-12 my-1 text-center');
+                } else {
+                    mcqContextContainer.css('flex-direction', 'row');
+                    textDiv.css('order', 1);
+                    imgDiv.css('order', 2);
+                }
+            }
+
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
+
+            const lang = activity?.lang ?? 'en';
             const replacement = content?.replacement ?? '#_#';
-            const showInput = content?.showInput ?? true;
+            let showInput = content?.showInput ?? true;
+
+            if (lang === 'en') {
+                showInput = true;
+            }
 
             shuffledQuestions = Activity.shuffleArray(content?.questions ?? []) ?? [];
 
             const placeholder = Activity.translateWriteAnsLabel(lang);
-            let textArea = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" readOnly rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px; ${!showInput ? `display: none;` : ''}" role="textbox"></textarea>`;
+            const textArea = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px; ${!showInput ? `display: none; pointer-events: none;` : ''}" role="textbox"></textarea>`;
             const questions = [];
             shuffledQuestions.forEach((ques, index) => {
                 const questionText = ques?.text?.replace(replacement, textArea);
@@ -7956,7 +8299,7 @@ const TextArea = (() => {
             });
             $('#' + quesContId).html(questions.join(''));
 
-            if (lang == 'hi' && showInput) {
+            if (lang == 'hi') {
                 const inputs = $('#' + quesContId)[0].querySelectorAll('.hindiInput');
 
                 $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
@@ -7995,12 +8338,14 @@ const TextArea = (() => {
                 }
             });
 
+            const popupLabels = Activity.translatePopupLabels(lang);
+
             if (!filled) {
                 Swal.fire({
                     icon: 'warning',
-                    title: lang == 'hi' ? 'कोई उत्तर नहीं लिखा गया' : 'No answer was written',
-                    text: lang == 'hi' ? 'कृपया कम से कम एक उत्तर लिखें फिर उत्तर जाँचें।' : 'Please write at least one answer and then check the answer.',
-                    confirmButtonText: 'OK'
+                    title: popupLabels.noAnswerWritten,
+                    text: popupLabels.writeAtLeastOne,
+                    confirmButtonText: popupLabels.ok
                 });
                 return;
             }
@@ -8014,7 +8359,7 @@ const TextArea = (() => {
                 let userClass = '';
 
                 if (user === '') {
-                    resultIcon = '⚠ खाली';
+                    resultIcon = '⚠ ' + popupLabels.emptyLabel;
                     userClass = 'wrong';
                     emptyCount++;
                 } else if (user === correct) {
@@ -8026,7 +8371,7 @@ const TextArea = (() => {
                     userClass = 'wrong';
                     wrongCount++;
                 }
-
+                // ..
                 const data = `
                     <tr>
                         <td style="text-align: center;">${parseInt(index) + 1}.</td>
@@ -8042,7 +8387,7 @@ const TextArea = (() => {
 
             const popHtml = `
                     <div class="popup-header d-flex justify-content-between align-items-center py-2">
-                        <h2> ${lang == 'hi' ? 'उत्तर समीक्षा' : 'Answer review'}</h2>    
+                        <h2> ${popupLabels.answerReview}</h2>    
                         <button id="close-popup" class="btn btn-secondary">X</button>                    
                     </div>
                     <table class="answerdiv table table-bordered w-100" style="font-size:20px">
@@ -8059,9 +8404,9 @@ const TextArea = (() => {
                     </tbody>
                     </table>
                     <div class="d-flex" style="padding:10px; text-align:left;">
-                        <p>${lang == 'hi' ? 'सही' : 'Correct'} :</p> &nbsp;${correctCount} &nbsp;| &nbsp;
-                        <p>${lang == 'hi' ? 'गलत' : 'Wrong'} :</p> &nbsp;${wrongCount} &nbsp;| &nbsp;
-                        <p>${lang == 'hi' ? 'खाली' : 'Empty'} :</p>&nbsp; ${emptyCount}
+                        <p>${popupLabels.correctLabel} :</p> &nbsp;${correctCount} &nbsp;| &nbsp;
+                        <p>${popupLabels.wrongLabel} :</p> &nbsp;${wrongCount} &nbsp;| &nbsp;
+                        <p>${popupLabels.emptyLabel} :</p>&nbsp; ${emptyCount}
                     </div>
                     `;
             // ..            
@@ -8349,9 +8694,13 @@ const CrossWord = (() => {
     };
 
     const showCorrectPopup = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         Swal.fire({
             iconHtml: "😄",
-            title: "बहुत बढ़िया! सारे उत्तर सही 👏",
+            title: popupLabels.allCorrect,
             color: "#2e7d32",
             timer: 1500,
             showConfirmButton: false,
@@ -8434,11 +8783,13 @@ const CrossWord = (() => {
             document.querySelectorAll(".box").forEach(b => {
                 if (b.value.trim() !== "") allEmpty = false;
             });
+            const popupLabels = Activity.translatePopupLabels(lang);
             if (allEmpty) {
                 Swal.fire({
                     icon: "info",
-                    title: "Result",
-                    text: "Please fill the crossword before checking!",
+                    title: popupLabels.info,
+                    text: popupLabels.fillCrosswordBeforeChecking,
+                    confirmButtonText: popupLabels.ok,
                     confirmButtonColor: "#6c63ff"
                 });
                 return;
@@ -8502,11 +8853,15 @@ const CrossWord = (() => {
             if (correctCount === total && total > 0) {
                 showCorrectPopup();
             } else {
+                const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+                const lang = activity?.lang ?? 'en';
+                const popupLabels = Activity.translatePopupLabels(lang);
+
                 Swal.fire({
                     icon: "info",
-                    title: "Result",
-                    html: `You got <b>${correctCount}</b> out of <b>${total}</b> words correct.`,
-                    confirmButtonText: "OK",
+                    title: popupLabels.checkAnswers,
+                    html: popupLabels.scored(correctCount, total),
+                    confirmButtonText: popupLabels.ok,
                     confirmButtonColor: "#6c63ff"
                 });
             }
@@ -8971,12 +9326,16 @@ const ShravanKaushalWithImages = (() => {
                 `input[name="question-${questionIndex}"]:checked`
             );
 
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
+
             if (!selected) {
                 Swal.fire({
                     icon: "info",
-                    title: "Info",
-                    text: "Please select an option before next.",
-                    confirmButtonText: "OK"
+                    title: popupLabels.info,
+                    text: popupLabels.selectOptionBeforeNext,
+                    confirmButtonText: popupLabels.ok
                 });
                 return;
             } else {
@@ -8997,7 +9356,7 @@ const ShravanKaushalWithImages = (() => {
 
         const headHtml = `
             <div class='question-block animate__animated animate__fadeInRight'>
-            ${questions.length > 1 ? `<div class="Ques"><b>${questionIndex + 1}. ${q?.question?.text ?? ''}</b></div>` : ''}
+            ${questions.length > 1 ?`<div class="Ques"><b>${questionIndex + 1}. ${q?.question?.text ?? ''}</b></div>`:''}
             ${q?.question?.image
                 ? `<img src="${Activity.pathToCWD() + q.question?.image}" class="question-img mb-2 image-Center">`
                 : ''
@@ -9116,12 +9475,14 @@ const ShravanKaushalWithImages = (() => {
 
         const notAnsweredIndex = userAnswers.findIndex(a => a === null);
 
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         if (notAnsweredIndex !== -1) {
             Swal.fire({
                 icon: 'info',
-                title: 'Info',
-                text: `Please select an option for Question ${notAnsweredIndex + 1} before submitting.`,
-                confirmButtonText: "OK"
+                title: popupLabels.info,
+                text: popupLabels.selectOptionForQuestion(notAnsweredIndex + 1),
+                confirmButtonText: popupLabels.ok
             });
             return;
         }
@@ -9142,8 +9503,9 @@ const ShravanKaushalWithImages = (() => {
     }
 
     const showResultPopup = (score, total, userAns, correctAns, lang = 'en') => {
+        const popupLabels = Activity.translatePopupLabels(lang);
 
-        document.getElementById("scoreTextQ1").innerText = `You got : ${score} out of ${total}`;
+        document.getElementById("scoreTextQ1").innerText = popupLabels.scored(score, total);
 
         const tableHeadLabels = Activity.translateTableHeads(lang);
 
@@ -9822,9 +10184,8 @@ const RachnatmakWithKeyboard = (() => {
                         class="form-control hindiInput ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted forHindiDev 
                         ${textareaClass}" 
                         data-ans="${i}"
-                        readOnly
                         placeholder="${Activity.translateWriteAnsLabel(lang)}"
-                        style="height:${content?.textArea?.height}; ${!showInput ? `display: none;` : ''}"
+                        style="height:${content?.textArea?.height}; ${!showInput ? `display: none; pointer-events: none;` : ''}"
                     ></textarea>
                 `;
         }
@@ -9875,7 +10236,7 @@ const RachnatmakWithKeyboard = (() => {
 
         document.getElementById("activitiesRachnatmal").innerHTML = html;
 
-        if (lang == 'hi' && showInput) {
+        if (lang == 'hi') {
             const inputs = $('#' + containerId)[0].querySelectorAll('.hindiInput');
             $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
             $(inputs)
@@ -9921,10 +10282,12 @@ const RachnatmakWithKeyboard = (() => {
             }
         });
         if (isEmptyFound) {
+            const popupLabels = Activity.translatePopupLabels(lang);
             Swal.fire({
                 icon: "error",
-                title: lang == 'hi' ? 'अरे रुकिए!' : 'Hold on a second!',
-                text: lang == 'hi' ? 'कृपया सभी स्थानों को भरें!' : 'Please fill in all the blanks!',
+                title: popupLabels.oops,
+                text: popupLabels.writeAtLeastOne,
+                confirmButtonText: popupLabels.ok
             });
             return;
         }
@@ -9942,9 +10305,11 @@ const RachnatmakWithKeyboard = (() => {
         let score = Math.round((matchedKeywords / uniqueKeywords.length) * 100);
         score = Math.max(0, Math.min(100, score));
 
-        studentBox.innerHTML = `<div class='headingYourAns'>आपके उत्तर :</div><br>
+        const popupLabels = Activity.translatePopupLabels(lang);
+
+        studentBox.innerHTML = `<div class='headingYourAns'>${popupLabels.attempted} :</div><br>
                                 <span class='studentTextApp'>${studentText}</span><br><br>
-                                <div class='scoreInRachNamat'>आपको 100 में से ${score} अंक मिले हैं</div>`;
+                                <div class='scoreInRachNamat'>${popupLabels.pointsScored(score, 100)}</div>`;
 
         $(".studentAnsBox").show();
 
@@ -10115,7 +10480,6 @@ const RachnatmakWithInputs = (() => {
             const activity = Activity.getDefine(questionId) ?? {};
             const content = activity?.content ?? {};
             const lang = activity.lang ?? 'en';
-            const showInput = content?.showInput ?? true;
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
@@ -10376,25 +10740,26 @@ const RachnatmakWithInputs = (() => {
             let score = (correct / fillAppli.length) * 100;
             let finalScore = score.toFixed(0);
 
-            const scoreText = (lang == 'hi' ? `आपका स्कोर है:` : `Your score is:`) + finalScore + '%';
+            const popupLabels = Activity.translatePopupLabels(lang);
+            const scoreText = popupLabels.scored(correct, fillAppli.length);
 
             // SCORE BASED ALERT
             if (finalScore == 0) {
                 Swal.fire({
                     icon: "error",
-                    title: lang == 'hi' ? "ओह!" : 'Ohh!',
+                    title: popupLabels.oops,
                     text: scoreText
                 });
             } else if (finalScore <= 50) {
                 Swal.fire({
                     icon: "warning",
-                    title: lang == 'hi' ? 'और मेहनत कीजिए!' : 'Work harder!',
+                    title: popupLabels.notBad,
                     text: scoreText
                 });
             } else {
                 Swal.fire({
                     icon: "success",
-                    title: lang == 'hi' ? 'शानदार!' : 'Fabulous',
+                    title: popupLabels.excellent,
                     text: scoreText
                 });
             }
@@ -10443,12 +10808,13 @@ const RachnatmakWithInputs = (() => {
                 iconType = "info";
             }
 
-            const totalScoreTxt = Number((score / total).toFixed(2)) + ' ' + (lang == 'hi' ? 'अंक प्राप्त हुए' : 'Points Scored');
+            const popupLabels = Activity.translatePopupLabels(lang);
+            const totalScoreTxt = popupLabels.pointsScored(score, total);
             Swal.fire({
-                title: lang == 'hi' ? 'परिणाम' : 'Result',
+                title: popupLabels.info,
                 text: totalScoreTxt,
                 icon: iconType,
-                confirmButtonText: lang == 'hi' ? 'ठीक है' : 'OK'
+                confirmButtonText: popupLabels.ok
             });
         }
     }
@@ -10469,25 +10835,6 @@ const ClickOnImage = (() => {
 
     const default_largeScreen_width = '200px';
     const default_largeScreen_height = '200px';
-
-    const popUpTxt = {
-        hi: {
-            swalNoSelectTitle: "⚠️ चयन करें",
-            swalNoSelectText: "कृपया कम से कम एक चित्र चुनें",
-            swalCorrectTitle: "शाबाश! 👍",
-            swalCorrectText: "सभी उत्तर सही हैं",
-            swalWrongTitle: "गलत उत्तर ❌",
-            swalWrongText: "कृपया दोबारा प्रयास करें"
-        },
-        en: {
-            swalNoSelectTitle: "⚠️ Select Images",
-            swalNoSelectText: "Please select at least one image",
-            swalCorrectTitle: "Great! 👍",
-            swalCorrectText: "All answers are correct",
-            swalWrongTitle: "Wrong ❌",
-            swalWrongText: "Please try again"
-        }
-    };
 
     const ui = (questionId) => {
         try {
@@ -10594,9 +10941,7 @@ const ClickOnImage = (() => {
         const content = activity?.content ?? {};
         const question = content?.question ?? [];
         const lang = activity.lang ?? 'en';
-        const txt = popUpTxt[lang];
-
-        const totalCount = question.filter((item) => item.answer === true);
+        const popupLabels = Activity.translatePopupLabels(lang);
 
         if (selectedCards.length === 0) {
             document.querySelectorAll('.imgClick').forEach(card => {
@@ -10605,8 +10950,8 @@ const ClickOnImage = (() => {
 
             Swal.fire({
                 icon: 'warning',
-                title: txt.swalNoSelectTitle,
-                text: txt.swalNoSelectText
+                title: popupLabels.oops,
+                text: popupLabels.selectImageFirst
             });
             return;
         }
@@ -10632,9 +10977,9 @@ const ClickOnImage = (() => {
         });
 
         if (correctCount === totalCount.length) {
-            Swal.fire({ icon: 'success', title: txt.swalCorrectTitle, text: txt.swalCorrectText });
+            Swal.fire({ icon: 'success', title: popupLabels.excellent, text: popupLabels.allCorrect });
         } else {
-            Swal.fire({ icon: 'error', title: txt.swalWrongTitle, text: txt.swalWrongText });
+            Swal.fire({ icon: 'error', title: popupLabels.oops, text: popupLabels.scored(correctCount, totalCount.length) });
         }
     }
 
@@ -10667,23 +11012,6 @@ const FillOnClick = (() => {
     const containerId = 'fillOnclick-container';
 
     Activity.css('reading.css');
-
-    const popUpTxt = {
-        hi: {
-            head: "परिणाम",
-            title1: "आपका उत्तर",
-            title2: "सही उत्तर",
-            score: "अंक",
-            attempt: "प्रयास नहीं किया"
-        },
-        en: {
-            head: "Result",
-            title1: "Your Answer",
-            title2: "Correct Answer",
-            score: "Score",
-            attempt: "Not Attempted"
-        }
-    };
 
     const ui = (questionId) => {
         try {
@@ -10798,11 +11126,11 @@ const FillOnClick = (() => {
         $("#reportBoxReading").show();
         let score = 0;
 
-        const t = popUpTxt[lang];
+        const t = Activity.translatePopupLabels(lang);
 
         let reportHTML = `<div class="ReadingActCard effectFadeScale">
                             <button id="closeReport" class="ReadingActCloseBtn">✖</button>
-                            <h2 class="ReadingActTitle">🎉 ${t.head} 🤪</h2>
+                            <h2 class="ReadingActTitle">🎉 ${t.result} 🤪</h2>
                             <div class="ReadingActItemsBox">`;
 
         content?.question.map((item, index) => {
@@ -10814,8 +11142,8 @@ const FillOnClick = (() => {
             reportHTML += `<div class="ReadingActItem ${isCorrect ? "ReadingActCorrect" : "ReadingActWrong"}">
                             <div class="ReadingActQno">${index + 1}.</div>
                             <div class="ReadingActAnswerBox">
-                                <p><strong>${t.title1}:</strong> <span>${userVal || `😶 ${t.attempt}?`}</span></p>
-                                <p><strong>${t.title2}:</strong> <span>${correctAns}</span></p>
+                                <p><strong>${t.yourAnswer}:</strong> <span>${userVal || `😶 ${t.notAttempted}?`}</span></p>
+                                <p><strong>${t.correctAnswer}:</strong> <span>${correctAns}</span></p>
                             </div>
                             <div class="ReadingActEmoji">${isCorrect ? "😎✔" : "😭❌"}</div>
                         </div>`;
@@ -11016,19 +11344,21 @@ const Dictionary = (() => {
                 }
             });
         });
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         if (correct === totalWords) {
             Swal.fire({
-                title: "🎉" + (lang == "en" ? "Excellent!" : "hi"),
-                text: lang == "en" ? "All answers are correct." : "सभी उत्तर सही है।",
+                title: "🎉" + popupLabels.excellent,
+                text: popupLabels.allCorrect,
                 icon: "success",
-                confirmButtonText: "OK"
+                confirmButtonText: popupLabels.ok
             });
         } else {
             Swal.fire({
-                title: (lang == "en" ? "Try Again" : "दुबारा प्रयास करें।") + "💪",
-                text: lang == "en" ? "Some answers are incorrect." : "कुछ उत्तर गलत हैं।",
+                title: popupLabels.oops + "💪",
+                text: popupLabels.scored(correct, totalWords),
                 icon: "info",
-                confirmButtonText: "OK"
+                confirmButtonText: popupLabels.ok
             });
         }
     }
@@ -11306,10 +11636,15 @@ const MentalMath = (() => {
     }
 
     const showFunnySuccess = () => {
+        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const lang = activity?.lang ?? 'en';
+        const popupLabels = Activity.translatePopupLabels(lang);
+        const buttonLabels = Activity.translateButtonLabels(lang);
+
         Swal.fire({
-            title: "🎉 Wohoo! All Completed! 🎉",
+            title: "🎉" + popupLabels.excellent + "🎉",
             html: `
-                <b>You are unstoppable 😎🔥</b><br>Superb Job Buddy!<br><br>
+                <b>${popupLabels.unstoppable}</b><br>${popupLabels.superbJob}<br><br>
                 <div style="display:flex; gap:15px; justify-content:center;">
                     <button id="restartBtn" style="
                     padding: 10px 20px;
@@ -11320,7 +11655,7 @@ const MentalMath = (() => {
                     border-radius: 8px;
                     cursor: pointer;
                     font-size: 18px;
-                    ">🔁 Do It Again</button>
+                    ">🔁 ${buttonLabels.replay}</button>
 
                     <button id="closeBtn" style="
                     padding: 10px 20px;
@@ -11331,7 +11666,7 @@ const MentalMath = (() => {
                     border-radius: 8px;
                     cursor: pointer;
                     font-size: 18px;
-                    ">❌ Close</button>
+                    ">❌ ${popupLabels.ok}</button>
                 </div>
             `,
             icon: "success",
@@ -11825,11 +12160,12 @@ const MathMoney = (() => {
             $(target).html(html).removeClass('wrongAnsMoney').addClass('correctAnsMoney').droppable('disable');
 
             if (__correctCount === totalCount.length) {
+                const popupLabels = Activity.translatePopupLabels(lang);
                 Swal.fire({
                     icon: 'success',
-                    title: lang == 'hi' ? 'शानदार' : '🎉 Super!',
-                    text: lang == 'hi' ? 'सभी विवरण सही हैं' : 'All values are correct!',
-                    button: 'OK'
+                    title: popupLabels.excellent,
+                    text: popupLabels.allCorrect,
+                    confirmButtonText: popupLabels.ok
                 }).then((res) => {
                     if (res.isConfirmed) {
                         $(`.${dragItemClass}`).draggable('disable');
@@ -12012,9 +12348,11 @@ const ShabdRachna = (() => {
             if (correctCount === thisTotal) __score++;
         });
 
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         const tableRows = set.map((item) => {
             const correct = item.answer === item.user ?? false;
-            const text = correct ? (lang === 'hi' ? 'सही' : 'Correct') : (lang === 'hi' ? 'गलत' : 'Wrong');
+            const text = correct ? popupLabels.correctLabel : popupLabels.wrongLabel;
             const classes = correct ? "correctSabadStatus" : "wrongSabadStatus";
 
             const row = `
@@ -12045,13 +12383,13 @@ const ShabdRachna = (() => {
 
         const total = set.length;
         const percent = Math.round((__score / total) * 100);
-        const res = messages[lang].find(m => percent >= m.min);
+        const res = messages[lang] ? messages[lang].find(m => percent >= m.min) : messages['en'].find(m => percent >= m.min);
 
         const tableView = `
             <div class="box" style="animation: 0.5s pop;">
                 <div id="rpText">
                     <div class="resultTexts">
-                        ${lang == 'hi' ? 'कुल अंक' : 'Total score'}: ${__score} / ${total}
+                        ${popupLabels.score}: ${__score} / ${total}
                     </div>
                     <div class="emoji" style="font-size:36px; margin:6px 0;">${res.emoji}</div>
                     <div class="messageRes">${res.msg}</div>
@@ -12059,16 +12397,16 @@ const ShabdRachna = (() => {
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>${lang == 'hi' ? 'सही उत्तर' : 'Correct Answer'}</th>
-                                    <th>${lang == 'hi' ? 'आपका उत्तर' : 'Your Answer'}</th>
-                                    <th>${lang == 'hi' ? 'स्थिति' : 'Status'}</th>
+                                    <th>${popupLabels.correctAnswer}</th>
+                                    <th>${popupLabels.yourAnswer}</th>
+                                    <th>${popupLabels.status}</th>
                                 </tr>
                             </thead>
                             <tbody>${tableRows}</tbody>
                         </table>
                     </div>
                 </div>
-                <button id="funnyBtn">OK</button>
+                <button id="funnyBtn">${popupLabels.ok}</button>
             </div>
         `;
         // ..
@@ -12310,13 +12648,12 @@ const SpellCheck = (() => {
 
                     if (activityMeta?.mode != 'single') {
                         if (!span.classList.contains("circle") && circledCount >= activityMeta.questions.questions.find(q => q.id == qId).answer.length) {
+                            const popupLabels = Activity.translatePopupLabels(activityMeta.lang || 'en');
                             Swal.fire({
-                                title: activityMeta.lang === "hi" ? "अधिकतम चयन" : "Maximum Selection",
-                                text: activityMeta.lang === "hi"
-                                    ? `आप केवल ${answersLength} शब्द चुन सकते हैं।`
-                                    : `You can only select ${answersLength} words.`,
+                                title: popupLabels.oops,
+                                text: popupLabels.maxSelectionReached(answersLength),
                                 icon: "warning",
-                                confirmButtonText: activityMeta.lang === "hi" ? "ठीक है" : "OK"
+                                confirmButtonText: popupLabels.ok
                             });
                             return;
                         }
@@ -12379,13 +12716,12 @@ const SpellCheck = (() => {
         });
 
         if (!allCirclesSelected) {
+            const popupLabels = Activity.translatePopupLabels(lang);
             Swal.fire({
-                title: lang === 'hi' ? "दुबारा प्रयास करें।" : "Try Again",
-                text: lang === 'hi'
-                    ? 'कृपया सभी गलत शब्द चयनित करें।'
-                    : 'Please select all wrong words first.',
+                title: popupLabels.oops,
+                text: popupLabels.selectAllWrongWords,
                 icon: 'error',
-                confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+                confirmButtonText: popupLabels.ok
             });
             return;
         }
@@ -12414,13 +12750,12 @@ const SpellCheck = (() => {
         });
 
         if (!allInputsFilled) {
+            const popupLabels = Activity.translatePopupLabels(lang);
             Swal.fire({
-                title: lang === 'hi' ? "दुबारा प्रयास करें।" : "Try Again",
-                text: lang === 'hi'
-                    ? 'कृपया सभी उत्तर सही ढंग से भरें।'
-                    : 'Please fill all answers correctly',
+                title: popupLabels.oops,
+                text: popupLabels.fillAllAnswersCorrectlly,
                 icon: 'error',
-                confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+                confirmButtonText: popupLabels.ok
             });
             return;
         }
@@ -12748,22 +13083,22 @@ const SpellItOut = (() => {
         });
 
         if (errorMessage) {
+            const popupLabels = Activity.translatePopupLabels(lang);
             Swal.fire({
-                title: lang === 'hi' ? "दुबारा प्रयास करें।" : "Try Again",
+                title: popupLabels.oops,
                 text: errorMessage,
                 icon: 'error',
-                confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+                confirmButtonText: popupLabels.ok
             });
             return false;
         }
 
+        const popupLabels = Activity.translatePopupLabels(lang);
         Swal.fire({
-            title: lang === 'hi' ? "बहुत बढ़िया!" : "Well done!",
-            text: lang === 'hi'
-                ? "सभी उत्तर सही हैं।"
-                : "All answers are correct!",
+            title: popupLabels.excellent,
+            text: popupLabels.allCorrect,
             icon: 'success',
-            confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+            confirmButtonText: popupLabels.ok
         });
 
         return true;
@@ -13120,13 +13455,13 @@ const VowelDragAndDrop = (() => {
 
         DragEnabled = false;
 
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         Swal.fire({
-            title: lang === 'hi' ? "परिणाम!" : "Result!",
-            text: lang === 'hi'
-                ? `${totalScore} में से ${totalQuestions} सही है।`
-                : `You got ${totalScore} out of ${totalQuestions} correct!`,
+            title: popupLabels.checkAnswers,
+            text: popupLabels.scored(totalScore, totalQuestions),
             icon: totalScore === totalQuestions ? 'success' : 'error',
-            confirmButtonText: lang === 'hi' ? 'ठीक है' : 'OK'
+            confirmButtonText: popupLabels.ok
         });
     };
 
