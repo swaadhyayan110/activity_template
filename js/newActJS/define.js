@@ -654,8 +654,8 @@ const Define = (() => {
             head: 'Template : 21',
             config: {
                 replacement: '#_#',
-                side: 'top',
-                questionSection1: {
+                side: 'left',
+                questionSection: {
                     heading: {
                         main: {
                             text: 'Hints'
@@ -769,10 +769,10 @@ const Define = (() => {
             head: 'Template : 22',
             content: {
                 replacement: '#_#',
-                showInput: true,
+                showInput: false,
                 questions: [
-                    { text: 'किस महापुरुष के जन्मदिन को बाल-दिवस के रूप में मनाया जाता है? <br> #_#', answer: 'जछ' },
-                    { text: 'नेहरू जी ने अपने जन्मदिन को बच्चों के जन्मदिन के रूप में मनाना क्यों स्वीकार कर लिया था? <br> #_#', answer: 'ज' }
+                    { text: 'किस महापुरुष के जन्मदिन को बाल-दिवस के रूप में मनाया जाता है? <br> #_#', answer: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae, suscipit ipsa numquam quos porro eligendi pariatur odit aut odio quas in corrupti id cupiditate a ab dolore nobis voluptatibus saepe blanditiis maxime dolores dolorem repellendus ad? Dolor modi quia quam sit non ducimus delectus praesentium, sequi aut quaerat laborum assumenda ipsa? Aperiam sed necessitatibus dicta reprehenderit ipsam eligendi distinctio facere eius debitis architecto rerum, ut commodi eos rem nulla provident beatae harum facilis nostrum laborum! Magni voluptatum a, quisquam harum porro error necessitatibus reiciendis eum tempore quo, illum optio. Voluptatum, voluptatibus beatae doloremque qui rerum eum, odio, nesciunt cumque commodi at unde? Ducimus harum reiciendis facere consequuntur voluptas, veniam quis velit incidunt maxime mollitia molestiae omnis deserunt, ab ipsum? Unde consectetur consequatur voluptatum, ullam vero blanditiis minus pariatur esse perspiciatis sapiente nam eius beatae sed magni cumque a ea. Repellat tempore voluptatum reiciendis possimus id. Debitis, itaque. Possimus, nam laboriosam!' },
+                    // { text: 'नेहरू जी ने अपने जन्मदिन को बच्चों के जन्मदिन के रूप में मनाना क्यों स्वीकार कर लिया था? <br> #_#', answer: 'ज' }
                 ]
             }
         },
