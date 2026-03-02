@@ -2091,7 +2091,6 @@ const FillInTheBlanksHindiKb = (() => {
                 }
 
                 if (subQuestion.length) {
-                    console.log('if')
                     if (html.length > 2) return false;
 
                     const frame = `<div class="my-2">`;
@@ -2190,11 +2189,11 @@ const FillInTheBlanksHindiKb = (() => {
                             })
                         );
 
-                        const wrappedTextInput = `
+                        const wrappedTextInput = length !== '' ? `
                             <div class="text-input-wrapper">
                                 ${inputView}
-                            </div>
-                        `;
+                            </div>`: inputView
+                        ;
 
                         html.push(imageHtml);
 
@@ -7944,7 +7943,7 @@ const TextArea = (() => {
             shuffledQuestions = Activity.shuffleArray(content?.questions ?? []) ?? [];
 
             const placeholder = Activity.translateWriteAnsLabel(lang);
-            const textArea = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px; ${!showInput ? `display: none; pointer-events: none;` : ''}" role="textbox"></textarea>`;
+            let textArea = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" readOnly rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px; ${!showInput ? `display: none;` : ''}" role="textbox"></textarea>`;
             const questions = [];
             shuffledQuestions.forEach((ques, index) => {
                 const questionText = ques?.text?.replace(replacement, textArea);
@@ -7957,7 +7956,7 @@ const TextArea = (() => {
             });
             $('#' + quesContId).html(questions.join(''));
 
-            if (lang == 'hi') {
+            if (lang == 'hi' && showInput) {
                 const inputs = $('#' + quesContId)[0].querySelectorAll('.hindiInput');
 
                 $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
@@ -8998,7 +8997,7 @@ const ShravanKaushalWithImages = (() => {
 
         const headHtml = `
             <div class='question-block animate__animated animate__fadeInRight'>
-            ${questions.length > 1 ?`<div class="Ques"><b>${questionIndex + 1}. ${q?.question?.text ?? ''}</b></div>`:''}
+            ${questions.length > 1 ? `<div class="Ques"><b>${questionIndex + 1}. ${q?.question?.text ?? ''}</b></div>` : ''}
             ${q?.question?.image
                 ? `<img src="${Activity.pathToCWD() + q.question?.image}" class="question-img mb-2 image-Center">`
                 : ''
@@ -9823,8 +9822,9 @@ const RachnatmakWithKeyboard = (() => {
                         class="form-control hindiInput ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted forHindiDev 
                         ${textareaClass}" 
                         data-ans="${i}"
+                        readOnly
                         placeholder="${Activity.translateWriteAnsLabel(lang)}"
-                        style="height:${content?.textArea?.height}; ${!showInput ? `display: none; pointer-events: none;` : ''}"
+                        style="height:${content?.textArea?.height}; ${!showInput ? `display: none;` : ''}"
                     ></textarea>
                 `;
         }
@@ -9875,7 +9875,7 @@ const RachnatmakWithKeyboard = (() => {
 
         document.getElementById("activitiesRachnatmal").innerHTML = html;
 
-        if (lang == 'hi') {
+        if (lang == 'hi' && showInput) {
             const inputs = $('#' + containerId)[0].querySelectorAll('.hindiInput');
             $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
             $(inputs)
@@ -10115,6 +10115,7 @@ const RachnatmakWithInputs = (() => {
             const activity = Activity.getDefine(questionId) ?? {};
             const content = activity?.content ?? {};
             const lang = activity.lang ?? 'en';
+            const showInput = content?.showInput ?? true;
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
