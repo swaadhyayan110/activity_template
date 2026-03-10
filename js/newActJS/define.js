@@ -274,11 +274,11 @@ const Define = (() => {
                     { id: 3, accept: 'n', text: 'नपुंसकलिंग(Neuter)' }
                 ],
                 options: [
-                    { id: 1, ans: 'm', text: 'हंसौ' },
+                    { id: 1, ans: 'm', text: '', images: [{ path: 'img/1.png', width: '50px' }]},
                     { id: 2, ans: 'f', text: 'अध्यापिके' },
-                    { id: 3, ans: 'n', text: 'क्रीडनकानि' },
-                    { id: 4, ans: 'm', text: 'हंसौक्री' },
-                    { id: 4, ans: 'm', text: 'अध्याकानि' },
+                    { id: 3, ans: 'n', text: 'क्रीडनकानि', images: [{ path: 'img/3.png', width: '50px' }]},
+                    { id: 4, ans: 'm', text: 'हंसौक्री', images: [{ path: 'img/4.png', width: '50px' }]},
+                    { id: 5, ans: 'm', text: 'अध्याकानि', images: [{ path: 'img/5.png', width: '50px' }]},
                 ]
             }
         },
@@ -556,7 +556,7 @@ const Define = (() => {
         {
             id: 16,
             lang: 'hi',
-            head: 'Template : 16',
+            head: '',
             content: {
                 shuffle: false,
                 strictMatch: false,

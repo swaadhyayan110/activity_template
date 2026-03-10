@@ -2052,7 +2052,7 @@ const FillInTheBlanksHindiKb = (() => {
                                                 </div>
                                             </div>`: ''
                 }
-                                        <div id="question_header_container" ${audioSrc ? `style="display: none"` : ''}>
+                                        <div id="question_header_container" ${(audioSrc || !activity.head) ? `style="display: none"` : ''}>
                                             <div class="qSections row g-0 mt-3 rowWithAudios">
                                                 <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
                                                 ${audioSrc ?
@@ -2249,7 +2249,7 @@ const FillInTheBlanksHindiKb = (() => {
                         text: question?.question ?? '',
                         imageReplacement: imageReplacement
                     });
-                    html.push(`<div class='flex-grow-1'>${imageView}`);
+                    html.push(`${imageView}`);
                 }
 
                 if (subQuestion.length) {
@@ -2311,7 +2311,6 @@ const FillInTheBlanksHindiKb = (() => {
                         // ..
                         html.push(final);
                     });
-                    html.push('</div>');
                 } else {
                     const length = question?.maxLength ?? '';
                     if (inputBelowCondition) {
@@ -2352,15 +2351,9 @@ const FillInTheBlanksHindiKb = (() => {
                             })
                         );
 
-                        const wrappedTextInput = `
-                            <div class="text-input-wrapper">
-                                ${inputView}
-                            </div>
-                        `;
-
                         html.push(imageHtml);
 
-                        html.push(wrappedTextInput);
+                        html.push(inputView);
                     }
                 }
 
@@ -5087,7 +5080,7 @@ const TrueAndFalse = (() => {
                                                 </div>
                                             </div>`: ''
                 }
-                                        <div id="question_header_container" ${audioSrc ? `style="display: none"` : ''}>
+                                        <div id="question_header_container" ${(audioSrc || !activity.head) ? `style="display: none"` : ''}>
                                             <div class="qSections row g-0 mt-3">
                                                 <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
                                                 ${audioSrc ?
@@ -5515,7 +5508,14 @@ const DragAndDrop = (() => {
             const opt = [];
             const options = (isShuffle == true) ? Activity.shuffleArray(data?.content?.options) : data?.content?.options;
             options.forEach((item) => {
-                const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${item.text}</div>`;
+                let imgHtml = '';
+                if (item.images && Array.isArray(item.images)) {
+                    item.images.forEach(img => {
+                        const width = img.width || '50px';
+                        imgHtml += `<img src="${Activity.pathToCWD()}${img.path}" style="width:${width};" ondragstart="return false;">`;
+                    });
+                }
+                const html = `<div class="wordDrag" data-ans="${item.ans}" data-id="${item.id}">${imgHtml}${item.text}</div>`;
                 opt.push(html);
             });
             dragItems.innerHTML = opt.join('');
@@ -5630,7 +5630,14 @@ const DragAndDrop = (() => {
             const data = Activity.getDefine(questionId)?.content?.options;
 
             data.forEach((item) => {
-                const $clone = $(`<div class="wordDrag">${item.text}</div>`)
+                let imgHtml = '';
+                if (item.images && Array.isArray(item.images)) {
+                    item.images.forEach(img => {
+                        const width = img.width || '50px';
+                        imgHtml += `<img src="${Activity.pathToCWD()}${img.path}" style="width:${width};" ondragstart="return false;">`;
+                    });
+                }
+                const $clone = $(`<div class="wordDrag">${imgHtml}${item.text}</div>`)
                     .css({ background: "#c8e6c9", position: "relative" })
                     .attr("data-ans", item.ans);
                 $(`${containerSelector} .dropSect[data-accept='${item.ans}']`).append($clone);
@@ -5728,7 +5735,7 @@ const DragAndDropMulti = (() => {
                                                 </div>
                                             </div>`: ''
                 }
-                                        <div id="question_header_container" ${audioSrc ? `style="display: none"` : ''}>
+                                        <div id="question_header_container" ${(audioSrc || !activity.head) ? `style="display: none"` : ''}>
                                             <div class="qSections row g-0 mt-3 rowWithAudios">
                                                 <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
                                                 ${audioSrc ?
@@ -6122,7 +6129,14 @@ const DragAndDropMulti = (() => {
     const renderDataDND = (questionId) => {
         try {
             ui(questionId);
-            Activity.setHeader(questionId);
+            const headElem = Activity.setHeader(questionId);
+
+            if (!headElem.head) {
+                const headerContainer = document.getElementById('question_header_container');
+                if (headerContainer && !headerContainer.querySelector('.common_playBtn')) {
+                    headerContainer.style.display = 'none';
+                }
+            }
 
             const data = Activity.getDefine(questionId);
             const lang = data?.lang ?? 'en';
