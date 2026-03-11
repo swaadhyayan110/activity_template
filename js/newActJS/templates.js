@@ -10080,24 +10080,43 @@ const RachnatmakParaWithImages = (() => {
     const renderActivity = (questionId) => {
         ui(questionId);
 
-        const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+        const activity = Activity.getDefine(questionId) ?? {};
         const content = activity?.content ?? {};
 
         const container = document.querySelector(".textNormalRun");
 
         const image = content?.image ?? false;
-
+        let text = content?.text ?? '';
         if (image != false) {
-            const align = (image?.align == 'left' || image?.align == 'right') ? image?.align : 'right';
             const width = image?.width ?? '40%';
             const replacement = image?.replacement ?? '#_#';
-            const path = image?.path ? Activity.pathToCWD() + image.path : false;
-            if (path != false) {
-                const image = `<img src="${path}" style="width:${width};" class="img-${align}">`
-                const text = content?.text?.replace(replacement, image);
-                container.innerHTML = text;
+
+            if (Array.isArray(image.path)) {
+                let count = 0;
+                const escapedReplacement = replacement.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(escapedReplacement, 'g');
+
+                text = text.replace(regex, (match) => {
+                    const path = image.path[count];
+                    if (path) {
+                        const align = Array.isArray(image.align) ? (image.align[count] || 'right') : (image.align || 'right');
+                        const fullPath = path ? Activity.pathToCWD() + path : '';
+                        const imageTag = `<img src="${fullPath}" style="width:${width};" class="img-${align}" >`;
+                        count++;
+                        return imageTag;
+                    }
+                    return match;
+                });
+            } else {
+                const align = (image?.align == 'left' || image?.align == 'right') ? image?.align : 'right';
+                const path = image?.path ? Activity.pathToCWD() + image.path : false;
+                if (path != false && text.includes(replacement)) {
+                    const imageTag = `<img src="${path}" style="width:${width};" class="img-${align}" >`;
+                    text = text.replace(replacement, imageTag);
+                }
             }
         }
+        container.innerHTML = text;
     }
 
     return {
