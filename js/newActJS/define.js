@@ -630,17 +630,45 @@ const Define = (() => {
                     tabtitle: 'aPPle',
                     meaning: 'कूद-कूदकर',
                     sentence: 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
-                    image: {
-                        path: 'img/1.png',
-                        width: '20%'
-                    }
+                    image: [
+                        {
+                            path    : 'img/1.png',
+                            width   : '40%',
+                            caption : 'image-text'
+                        },
+                        {
+                            path    : 'img/2.png',
+                            width   : '40%',
+                            caption : 'image-text'
+                        },
+                        {
+                            path    : 'img/3.png',
+                            width   : '40%',
+                            caption : 'image-text'
+                        },
+                        {
+                            path    : 'img/4.png',
+                            width   : '40%'
+                        }
+                    ]
                 },
                 {
                     id: 2,
                     tabtitle: 'कूद-कूदकर',
                     meaning: 'कूद-कूदकर',
                     sentence: 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।'
-                }
+                },
+                {
+                    id: 3,
+                    tabtitle: 'amrood',
+                    meaning: 'कूद-कूद-कूदकर',
+                    sentence: 'छोटी चिड़ियाँ amrood चलना सीखती हैं। amrood',
+                    image: {
+                        path    : 'img/3.png',
+                        width   : '20%',
+                        caption : 'image-text'
+                    }
+                },
             ]
         },
         {
@@ -1170,6 +1198,7 @@ const Define = (() => {
                 data: {
                     replacement: '#_#',
                     bullets: true,
+                    shuffle: false,
                     questions: [
                         [
                             { id: 1, text: '#_# + #_#', answer: ['न', 'ल'] },

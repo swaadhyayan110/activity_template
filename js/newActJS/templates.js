@@ -7114,12 +7114,12 @@ const Shabdkosh = (() => {
             const isShuffle = activity?.shuffle ?? true;
             const questions = isShuffle ? Activity.shuffleArray(content) : content;
 
-            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
+            if ( !Activity.setQid(`#${containerId}`, questionId) ) return false;
 
             const tabs = [];
             questions.forEach((item, ind) => {
 
-                if (!item.tabtitle || !item.id) return;
+                if ( !item.tabtitle || !item.id ) return;
 
                 const titleLower = item.tabtitle.toLowerCase();
                 const tabTitle = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
@@ -7131,7 +7131,7 @@ const Shabdkosh = (() => {
                 tabs.push(tab);
             });
             const tabBtn = document.getElementById("tabButtons");
-            if (tabBtn && tabs.length) tabBtn.innerHTML = tabs.join('');
+            if ( tabBtn && tabs.length ) tabBtn.innerHTML = tabs.join('');
 
             const tabBtns = document.querySelectorAll('#tabButtons button');
             tabBtns.forEach((item, ind) => {
@@ -7150,7 +7150,7 @@ const Shabdkosh = (() => {
     };
 
     const renderTabContent = (thisObj) => {
-        if (typeof thisObj != 'object' && typeof thisObj.target != 'object') {
+        if ( typeof thisObj != 'object' && typeof thisObj.target != 'object' ) {
             console.warn('[WARNING]', 'Invalid selector');
         }
 
@@ -7162,7 +7162,7 @@ const Shabdkosh = (() => {
         const tabitem = content.filter(x => x.id == id);
 
         const isTitles = tabitem[0]?.titles ? tabitem[0]?.titles.length > 0 : false;
-        const titles = isTitles ? tabitem[0]?.titles : tabitem[0];
+        const titles   = isTitles ? tabitem[0]?.titles : tabitem[0];
 
         if (!tabitem.length) {
             console.warn('[WARNING]', 'Invalid tab-id');
@@ -7179,24 +7179,76 @@ const Shabdkosh = (() => {
 
         titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : ''}`);
 
+        const __imageContainer = ({width='40%', path, classes='', inBox=true, caption=' '}={}) => {
+
+            if( !path ) return '';
+
+            const html = `
+                <div class="${inBox ? `img-box` : classes }">
+                    <div>
+                        <img 
+                            style="width:${width};" 
+                            src="${Activity.pathToCWD() + path}" 
+                            class="photo animate__animated animate__bounceInRight" 
+                            ondragstart="return false;"
+                        >
+                        <div class="text-muted align-content-center" style="height:35px;">${caption}</div>
+                    </div>
+                </div>
+            `;
+            return html;
+        }
+
         if (!isTitles) {
             tabpanecontent = `
                     ${titles?.meaning ? `<div class="meaning me-1"><b class="me-1 arth">${Activity.translateMeaningLabel(lang)} :</b>${titles.meaning}</div>` : ''}
                     ${titles?.sentence ?
                     `<div class="sentence-use">
                             <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
-                            ${titles?.sentence ?
-                        titles?.sentence.replaceAll(titleLower, `<span class="blinking-underline sometextcolor">${titleLower}</span>`)
+                            ${titles?.sentence 
+                                ? titles?.sentence
+                                    .replaceAll(
+                                        titleLower, 
+                                        `
+                                            <span 
+                                                class="blinking-underline sometextcolor"
+                                            >
+                                                ${titleLower}
+                                            </span>
+                                        `
+                                    )
                         : ''
                     }
                         </div>` : ''
                 }
-                    ${titles?.image && titles?.image?.path ?
-                    `<div class="img-box">
-                            <img style="width:${titles?.image?.width ?? '40%'};" src="${Activity.pathToCWD() + titles?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
-                        </div>`
-                    : ''
-                }
+                    ${ titles?.image?.path 
+                        ? __imageContainer({
+                                width:titles?.image?.width,
+                                path:titles?.image?.path,
+                                caption:titles?.image?.caption
+                            })
+                        : `
+                            ${ titles?.image instanceof Array 
+                                ? 
+                                    `
+                                        <div class="row align-items-center justify-content-center w-75 mx-auto">
+                                            ${
+                                                titles?.image.map((item) => {
+                                                    return __imageContainer({
+                                                        width:item?.width, 
+                                                        path:item?.path,
+                                                        classes:'col-lg-3 col-md-4 col-sm-6 col-12 p-1',
+                                                        inBox:false,
+                                                        caption:item?.caption
+                                                    })
+                                                }).join( '' )
+                                            }
+                                        </div>
+                                    `
+                                : ''
+                            }
+                        `
+                    }
                 </div>
             `;
             titlesHtml.push(tabpanecontent);
@@ -7222,9 +7274,12 @@ const Shabdkosh = (() => {
             });
 
             if (tabitem[0]?.image && tabitem[0]?.image?.path) {
-                const image = `<div class="img-box">
-                                    <img style="width:${tabitem[0]?.image?.width ?? '40%'};" src="${Activity.pathToCWD() + tabitem[0]?.image?.path}" class="photo animate__animated animate__bounceInRight" ondragstart="return false;">
-                                </div>`
+                const image = __imageContainer({
+                    width:tabitem[0]?.image?.width,
+                    path:tabitem[0]?.image?.path,
+                    caption:tabitem[0]?.image?.caption
+                });
+
                 titlesHtml.push(image);
             }
         }
@@ -12283,13 +12338,14 @@ const ShabdRachna = (() => {
             if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
             __score = 0;
-            const activity = Activity.getDefine(questionId);
-            const lang = activity?.lang ?? 'en';
-            const content = activity?.content ?? {};
-            const data = content?.data ?? {};
+            const activity    = Activity.getDefine(questionId);
+            const lang        = activity?.lang ?? 'en';
+            const content     = activity?.content ?? {};
+            const data        = content?.data ?? {};
             const replacement = data?.replacement ?? '#_#';
-            const bullets = data?.bullets ?? false;
-            const questions = data?.questions ?? [];
+            const bullets     = data?.bullets ?? false;
+            const questions   = data?.questions ?? [];
+            const shuffle     = data?.shuffle ?? true;
 
             const html = questions.map((question, index) => {
                 const quesBullet = bullets
@@ -12302,8 +12358,11 @@ const ShabdRachna = (() => {
                     : '';
                 // ..
                 const view = question.map((ques, ind) => {
-                    const subBullets = Activity.translateBulletLabels({ lang: 'mt', ind: ind });
-                    const dragOptions = Activity.shuffleArray(ques?.answer ?? []) ?? [];
+                    const subBullets  = Activity.translateBulletLabels({ lang: 'mt', ind: ind });
+                    const dragOptions = shuffle === true 
+                        ? Activity.shuffleArray(ques?.answer ?? []) ?? []
+                        : ques?.answer ?? [];
+                    // ..
 
                     const dropArea = ques?.text.split('+')
                         .map((item, i) => item.replace(replacement, `<div class="${dropShabdCls}" data-index="${i}"></div>`))
@@ -14026,7 +14085,7 @@ const VirtualTour = (() => {
 Templates.get('templates').map(({ template }) => {
     try {
         const mod = eval(template);
-        if (!mod || (typeof mod !== 'function' && typeof mod !== 'object')) {
+        if ( !mod || ( typeof mod !== 'function' && typeof mod !== 'object' ) ) {
             console.error(`FATAL :: Couldn't register ${template} :`, mod);
             return;
         }
