@@ -7149,6 +7149,26 @@ const Shabdkosh = (() => {
         }
     };
 
+    const __imageContainer = ({width='40%', path, classes='', inBox=true, caption=' '}={}) => {
+
+        if( !path ) return '';
+
+        const html = `
+            <div class="${inBox ? `img-box` : classes }">
+                <div>
+                    <img 
+                        style="width:${width};" 
+                        src="${Activity.pathToCWD() + path}" 
+                        class="photo animate__animated animate__bounceInRight" 
+                        ondragstart="return false;"
+                    >
+                    <div class="text-muted align-content-center" style="height:35px;">${caption}</div>
+                </div>
+            </div>
+        `;
+        return html;
+    }
+
     const renderTabContent = (thisObj) => {
         if ( typeof thisObj != 'object' && typeof thisObj.target != 'object' ) {
             console.warn('[WARNING]', 'Invalid selector');
@@ -7177,27 +7197,7 @@ const Shabdkosh = (() => {
         const titlesHtml = [];
         let tabpanecontent = "";
 
-        titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : ''}`);
-
-        const __imageContainer = ({width='40%', path, classes='', inBox=true, caption=' '}={}) => {
-
-            if( !path ) return '';
-
-            const html = `
-                <div class="${inBox ? `img-box` : classes }">
-                    <div>
-                        <img 
-                            style="width:${width};" 
-                            src="${Activity.pathToCWD() + path}" 
-                            class="photo animate__animated animate__bounceInRight" 
-                            ondragstart="return false;"
-                        >
-                        <div class="text-muted align-content-center" style="height:35px;">${caption}</div>
-                    </div>
-                </div>
-            `;
-            return html;
-        }
+        titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : ''}`);           
 
         if (!isTitles) {
             tabpanecontent = `
@@ -8605,8 +8605,6 @@ const CrossWord = (() => {
             __renderGrid(questions, __renderQuestions(questions));
             questionSet = questions;
 
-            if (content.hint) showHints();
-
         } catch (err) {
             console.error('CrossWord.render :', err);
         }
@@ -8698,7 +8696,16 @@ const CrossWord = (() => {
 
                     table.push('<td>');
                     if (__isBox(r, c, renderedQuestion)) {
-                        table.push(`<span class="num" style="top: 8px; left: -2px;">${num || ''}</span><input type="text" class="box" maxlength="1" />`);
+                        let answer = undefined;
+                        if (num != "") {
+                            if (typeof questions[num - 1]?.answer === 'string') {
+                                answer = questions[num - 1]?.answer;
+                            }
+                            else if (typeof questions[num - 1]?.answer === 'object') {
+                                answer = questions[num - 1]?.answer?.text;
+                            }
+                        }
+                        table.push(`<span class="num" style="top: 8px; left: -2px;">${num || ''}</span><input type="text" class="box" maxlength="1" ${answer != undefined ? `value='${answer[0]}'` : ''}  ${answer != undefined ? "disabled" : ''} />`);
                     } else {
                         table.push('&nbsp;');
                     }
@@ -8759,6 +8766,7 @@ const CrossWord = (() => {
             checkBtn.style.cursor = 'pointer';
             checkBtn.classList.remove('disable');
         }
+
         if (showHint) showHints();
     };
 
@@ -8846,6 +8854,7 @@ const CrossWord = (() => {
         try {
             const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
             const content = activity?.content ?? {};
+            const lang = activity?.lang ?? 'en';
             const questions = content?.questions ?? [];
 
             let allEmpty = true;
@@ -8982,29 +8991,13 @@ const CrossWord = (() => {
     };
 
     const showHints = () => {
-        let inputs = [];
-
         $('.num').each(function () {
             let numValue = $(this).html();
-
             if (numValue && numValue.trim() != '') {
                 $(this).siblings('input').each(function () {
-                    inputs.push(this);
+                    this.value = this.getAttribute('value');
                 });
             }
-        });
-
-        questionSet.map((q, i) => {
-            let answer = undefined;
-            if (typeof q?.answer === 'string') {
-                answer = q?.answer;
-            }
-            else if (typeof q?.answer === 'object') {
-                answer = q?.answer?.text;
-            }
-
-            inputs[i].value = answer[0];
-            inputs[i].style.pointerEvents = "none";
         });
     }
 
