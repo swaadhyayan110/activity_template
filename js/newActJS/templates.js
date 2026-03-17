@@ -3143,19 +3143,19 @@ const Mcq_PathKaSaar = (() => {
             }
 
             const text = content?.text ?? {};
-            const img = content?.img ?? {};
+            const img  = content?.img ?? {};
 
             const mcqContextContainer = $('.mcq-context');
             mcqContextContainer.empty();
 
             const hasText = text && Object.keys(text).length > 0;
-            const hasImg = img && Object.keys(img).length > 0;
+            const hasImg  = img && Object.keys(img).length > 0;
 
-            if (!hasText && !hasImg) mcqContextContainer.remove();
+            if ( !hasText && !hasImg ) mcqContextContainer.remove();
 
             if (hasText || hasImg) {
                 const textDiv = $('<div class="mcq-text"></div>');
-                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
+                const imgDiv  = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
 
                 mcqContextContainer.addClass('row g-0');
 
@@ -3238,11 +3238,19 @@ const Mcq_PathKaSaar = (() => {
                     const isSelected = userAnswers[ind] === oi ? "selected" : "";
                     const html = `
                         <div class="col-md-6 col-sm-12 mb-2">
-                        <label class="option-btn ${isSelected} mcq-type" data-oi="${oi}" data-qi="${ind}" >
-                            <input type="radio" name="question-${ind}" ${userAnswers[ind] === oi ? "checked" : ""}>
-                            <strong>(${Activity.translateBulletLabels({ lang: lang, ind: oi })})</strong> 
-                            ${optionText}
-                        </label>
+                            <label 
+                                class="option-btn ${isSelected} mcq-type h-100" 
+                                data-oi="${oi}" 
+                                data-qi="${ind}"
+                            >
+                                <input 
+                                    type="radio" 
+                                    name="question-${ind}" 
+                                    ${userAnswers[ind] === oi ? "checked" : ""}
+                                >
+                                <strong>(${Activity.translateBulletLabels({ lang: lang, ind: oi })})</strong> 
+                                ${optionText}
+                            </label>
                         </div>
                     `;
                     return html;
@@ -3250,7 +3258,11 @@ const Mcq_PathKaSaar = (() => {
 
                 const imageAboveOption = mcq?.imageaboveoption ?
                     `<div class="text-center my-1">
-                        <img src="${Activity.pathToCWD()}${mcq?.imageaboveoption.image}" style="width :${mcq?.imageaboveoption.width ?? '30%'};">
+                        <img 
+                            src="${Activity.pathToCWD()}${mcq?.imageaboveoption.image}"
+                            style="width :${mcq?.imageaboveoption.width ?? '30%'};"
+                            ondragstart="return false;"
+                        >
                     </div>` : '';
                 // ..
 
@@ -3285,13 +3297,29 @@ const Mcq_PathKaSaar = (() => {
     const render_image = (src, width = false) => `<img src="${src}" style="height:150px; width:${!width ? '150px' : `${width}`}; object-fit:contain;" ondragstart="return false;">`;
 
     const option_text = (option) => {
-        const path = option?.image ?? undefined;
+        const path  = option?.image ?? undefined;
         const width = option?.width ?? false;
-        const image = path != undefined ?
-            render_image(Activity.pathToCWD() + path, width) :
-            undefined;
+        const image = path != undefined 
+            ? render_image( Activity.pathToCWD() + path, width ) 
+            : '';
         // ..
-        const optionText = path != undefined ? image : option?.text ?? '';
+        const text = option?.text ?? undefined;
+        if ( path != undefined && text != undefined ) {
+            return `
+                <div 
+                    class="row g-0 w-100"
+                >
+                    <div class="col-auto">${image}</div>
+                    <div class="col d-flex align-items-center px-2">${option?.text ?? ''}</div>
+                </div>
+            `;
+        } 
+
+        const optionText = path != undefined 
+            ? image 
+            : option?.text ?? '';
+        // ..
+
         return optionText;
     }
 

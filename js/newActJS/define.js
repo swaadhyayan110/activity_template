@@ -53,6 +53,7 @@ const Define = (() => {
         { qid: 40, text: ['Q-40', 'Vowel Drag and Drop'], module: 39 },
         { qid: 41, text: ['Q-41', 'Shabdkosh type-2'], module: 19 },
         { qid: 42, text: ['Q-42', 'Virtual Tour'], module: 40 },
+        { qid: 43, text: ['Q-43', 'Circle and underline'], module: 41 },
     ];
 
     // DEFINE QUESTIONS
@@ -308,7 +309,7 @@ const Define = (() => {
                             text: 'दूसरों के खिलौनों को खराब #_# कहना'
                         },
                         options: [
-                            { image: 'img/4.png', width: '50%' },
+                            { text : 'text test', image: 'img/4.png' },
                             { image: 'img/6.png' },
                             { image: 'img/1.png' },
                             { text: 'none of these' }
@@ -323,7 +324,7 @@ const Define = (() => {
                             { text: 'अच्छा है।' },
                             { text: 'अच्छी बात है' },
                             { text: 'आम बात है।' },
-                            { image: 'img/ebytch34.png', width: '100%' },
+                            { text : 'text test', image: 'img/3.png', width: '100%' },
                         ],
                         answer: 1
                     },
@@ -1401,7 +1402,7 @@ const Define = (() => {
     ];
 
     const questionContainer = '.question-container';
-    const head = 'qNum';
+    const head    = 'qNum';
     const subHead = 'questionText';
 
     const loadScript = (src) => {
