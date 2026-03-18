@@ -14103,6 +14103,392 @@ const VirtualTour = (() => {
 
 })();
 
+const CircleAndUnderline = (() => {
+
+    Activity.css('circleAndUnderline.css');
+
+    const containerId = 'circle-and-underline';
+
+    let __state = {};
+
+    let __submitBtn;
+    let __showBtn;
+    let __resetBtn;
+
+    const ui = (questionId) => {
+        try {
+            __state = {};
+
+            const container = Define.get('questionContainer');
+            const parent = document.querySelector(container);
+
+            if (!parent) return;
+
+            const activity    = Activity.getDefine(questionId) ?? {};
+            const lang        = activity.lang ?? 'en';
+            const buttonLabel = Activity.translateButtonLabels(lang);
+
+            parent.innerHTML = `
+                <div class="question">
+                    <div class="container cu position-relative contAdapt shadow-lg p-3" id="${containerId}">
+                        <div class="questionHeadingMCQ ${Define.get('head')}"></div>
+                        <div class="${Define.get('subHead')}"></div>
+
+                        <div class="sentence my-3" id="sentence"></div>
+
+                        <div class="buttons machiNgs">
+                            <button class="submit-btn">${buttonLabel.check}</button>
+                            <button class="show-btn">${buttonLabel.show}</button>
+                            <button class="reset-btn">${buttonLabel.try}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            Activity.setHeader(questionId);
+            Activity.setQid(`#${containerId}`, questionId);
+
+            __submitBtn = parent.querySelector('.submit-btn');
+            __showBtn   = parent.querySelector('.show-btn');
+            __resetBtn  = parent.querySelector('.reset-btn');
+
+            if ( __resetBtn ) __resetBtn.addEventListener("click", tryAgain);
+            if( __showBtn ) __showBtn.addEventListener("click", showAnswers);
+            if( __submitBtn ) __submitBtn.addEventListener("click", checkAnswers);
+
+        } catch (e) {
+            console.error('ui error:', e);
+        }
+    };
+
+    const renderAllQuestions = (questionId) => {
+
+        ui(questionId);
+
+        const activity  = Activity.getDefine(questionId) ?? {};
+        const questions = activity?.content?.questions ?? [];
+
+        const container = document.querySelector('#sentence');
+        if (!container) return;
+
+        container.innerHTML = questions.map((q, qIndex) => {
+            const disabledWords = q?.highlight?.disabled ?? [];
+
+            const wordsHtml = q.words.map((word, wIndex) => {
+                const disabledClass = disabledWords.includes( wIndex ) 
+                    ? ''
+                    : 'cu-word';
+                // ..
+                return `
+                    <span 
+                        class="${disabledClass}" 
+                        data-q="${qIndex}" 
+                        data-index="${wIndex}"
+                        ${disabledClass != '' ? role="button" : '' }
+                    >
+                        ${word}
+                    </span>`;
+            }).join(' ');
+
+            return `
+                <div class="question-block mb-3 p-2 border-bottom row g-0 align-items-center">
+                    <div class="col-auto w50 me-1">Q.${qIndex + 1}</div>
+                    <div class="col ps-0 p-3">${wordsHtml}</div>
+                </div>
+            `;
+        }).join('');
+
+        attachWordEvents(questionId);
+    };
+
+    const attachWordEvents = () => {
+        const wrapper = document.querySelector(`#${containerId}`);
+        if ( !wrapper ) return;
+
+        wrapper.querySelectorAll('.cu-word').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const qIndex = Number( e.target.dataset.q );
+                const index  = Number( e.target.dataset.index );
+
+                showMenu(e.target, qIndex, index);
+            });
+        });
+    };
+
+    const showMenu = (target, qIndex, index) => {
+
+        removeMenu();
+
+        const wrapper = document.querySelector(`#${containerId}`);
+        if (!wrapper) return;
+
+        const menu = document.createElement('div');
+        menu.className = 'cu-word-menu border rounded p-1 bg-white user-select-none';
+        menu.innerHTML = `
+            <button data-type="cu-circle">Circle</button>
+            <button data-type="cu-underline">Underline</button>
+        `;
+
+        wrapper.appendChild(menu);
+
+        const rect = target.getBoundingClientRect();
+        const parentRect = wrapper.getBoundingClientRect();
+
+        menu.style.position = 'absolute';
+        menu.style.top  = `${rect.bottom - parentRect.top + wrapper.scrollTop}px`;
+        menu.style.left = `${rect.left - parentRect.left + wrapper.scrollLeft}px`;
+
+        menu.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            const type = e.target.dataset.type;
+            if (!type) return;
+
+            applyStyle(target, type, qIndex, index);
+
+            removeMenu();
+        });
+
+        const handleOutsideClick = (e) => {
+            if (!e.target.closest('.cu-word-menu')) {
+                removeMenu();
+                document.removeEventListener('click', handleOutsideClick);
+            }
+        };
+
+        setTimeout(() => {
+            document.addEventListener('click', handleOutsideClick);
+        }, 0);
+    };
+
+    const removeMenu = () => {
+        const wrapper = document.querySelector(`#${containerId}`);
+        if (!wrapper) return;
+
+        const existing = wrapper.querySelector('.cu-word-menu');
+        if (existing) existing.remove();
+    };
+
+    const applyStyle = (el, type, qIndex, index) => {
+
+        if (!__state[qIndex]) __state[qIndex] = {};
+
+        if (el.classList.contains(type)) {
+            el.classList.remove(type);
+            delete __state[qIndex][index];
+            return;
+        }
+
+        el.classList.remove('cu-circle', 'cu-underline');
+        el.classList.add(type);
+
+        __state[qIndex][index] = type;
+    };
+
+    const tryAgain = () => {
+        const wrapper = document.querySelector(`#${containerId}`);
+        if (!wrapper) return;
+
+        wrapper.querySelectorAll('.cu-word').forEach(el => {
+            el.classList.remove('cu-circle', 'cu-underline');
+        });
+
+        __state = {};
+
+        if( __submitBtn ) {
+            __submitBtn.classList.remove( 'disabled' );
+            __submitBtn.disabled = false;
+        }
+    };
+
+    const showAnswers = () => {
+
+        const questionID = Activity.getQid('#'+containerId) ?? {};
+        const define     = Activity.getDefine(questionID) ?? {};
+        const questions  = define?.content?.questions ?? [];
+
+        const wrapper = document.querySelector(`#${containerId}`);
+        if (!wrapper) return;
+
+        tryAgain();
+
+        questions.forEach((q, qIndex) => {
+
+            const circleIndexes    = q?.highlight?.circle ?? [];
+            const underlineIndexes = q?.highlight?.underLine ?? [];
+
+            if (!__state[qIndex]) __state[qIndex] = {};
+
+            circleIndexes.forEach(index => {
+                const el = wrapper.querySelector(`.cu-word[data-q="${qIndex}"][data-index="${index}"]`);
+                if (el) {
+                    el.classList.add('cu-circle');
+                    __state[qIndex][index] = 'cu-circle';
+                }
+            });
+
+            underlineIndexes.forEach(index => {
+                const el = wrapper.querySelector(`.cu-word[data-q="${qIndex}"][data-index="${index}"]`);
+                if (el) {
+                    el.classList.remove('cu-circle');
+                    el.classList.add('cu-underline');
+                    __state[qIndex][index] = 'cu-underline';
+                }
+            });
+
+        });
+
+        if( __submitBtn ) {
+            __submitBtn.classList.add( 'disabled' );
+            __submitBtn.disabled = true;
+        }
+    };
+
+    const checkAnswers = () => {
+
+        const questionId = Activity.getQid('#'+containerId);
+        const activity   = Activity.getDefine(questionId) ?? {};
+        const questions  = activity?.content?.questions ?? [];
+
+        const wrapper = document.querySelector(`#${containerId}`);
+        if (!wrapper) return;
+
+        let total = 0;
+        let correct = 0;
+
+        const results = [];
+
+        questions.forEach((q, qIndex) => {
+
+            const correctCircle    = q?.highlight?.circle ?? [];
+            const correctUnderline = q?.highlight?.underLine ?? [];
+
+            const userAnswers = __state[qIndex] ?? {};
+
+            q.words.forEach((word, index) => {
+
+                const el = wrapper.querySelector(`.cu-word[data-q="${qIndex}"][data-index="${index}"]`);
+                if (!el) return;
+
+                const userType = userAnswers[index];
+
+                let expected = null;
+
+                if (correctCircle.includes(index)) {
+                    expected = 'cu-circle';
+                    total++;
+                }
+
+                if (correctUnderline.includes(index)) {
+                    expected = 'cu-underline';
+                    total++;
+                }
+
+                const isCorrect =
+                    (userType === 'cu-circle' && correctCircle.includes(index)) ||
+                    (userType === 'cu-underline' && correctUnderline.includes(index));
+
+                if (isCorrect) correct++;
+
+                if (expected) {
+                    results.push({
+                        qIndex,
+                        word,
+                        expected,
+                        chosen: userType || 'none',
+                        isCorrect
+                    });
+                }
+
+            });
+
+        });
+
+        showResultPopup(correct, total, results);
+    };
+
+    const showResultPopup = (correct, total, results) => {
+
+        const questionId = Activity.getQid('#'+containerId);
+        const activity   = Activity.getDefine(questionId) ?? {};
+        const lang       = activity?.lang ?? 'en';
+
+        const oldPopup = document.querySelector('.cu-popup');
+        if (oldPopup) oldPopup.remove();
+
+        const percentage = Math.round((correct / total) * 100);
+
+        let message = lang == 'en' ? 'Keep trying' : 'प्रयास जारी रखें';
+        if (percentage === 100) message = lang == 'en' ? 'Perfect!' : 'उत्तम';
+        else if (percentage >= 70) message = lang == 'en' ? 'Good job' : 'शाबाश';
+
+        const popup = document.createElement('div');
+        popup.className = 'cu-popup';
+
+        const formatType = (type, lang='en') => {
+            if (type === 'cu-circle') return 'Circle';
+            if (type === 'cu-underline') return 'Underline';
+            return lang == 'en' ? 'None' : 'अपूर्ण';
+        };
+
+        const rows = `
+            <table class="cu-table">
+                <thead>
+                    <tr>
+                        <th>${lang == 'en' ? 'Q' : 'प्रश्न'}</th>
+                        <th>${lang == 'en' ? 'Word' : 'शब्द'}</th>
+                        <th>${lang == 'en' ? 'Correct' : 'ठीक'}</th>
+                        <th>${lang == 'en' ? 'Your Answer' : 'आपका उत्तर'}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${results.map(r => `
+                        <tr>
+                            <td>${r.qIndex + 1}</td>
+                            <td>${r.word}</td>
+                            <td><span class="cu-tag ${r.expected}">${formatType(r.expected)}</span></td>
+                            <td>
+                                <span 
+                                    class="cu-tag ${r.chosen} ${
+                                    r.chosen !== 'none'
+                                        ? (r.isCorrect ? 'correct' : 'wrong') 
+                                        : ''
+                                }">
+                                    ${formatType(r.chosen, lang)}
+                                </span>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+
+        popup.innerHTML = `
+            <div class="cu-popup-content w-50 user-select-none">
+                <h3>${lang == 'en' ? 'Your Score' : 'प्राप्त अंक'}</h3>
+                <div class="cu-score">${correct} / ${total}</div>
+                <div class="cu-message">${message}</div>
+
+                <div class="cu-breakdown">
+                    ${rows}
+                </div>
+
+                <button class="cu-close-btn">Close</button>
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+
+        popup.querySelector('.cu-close-btn').addEventListener('click', () => {
+            popup.remove();
+        });
+    };
+
+    return { render : renderAllQuestions };
+
+})();
+
 Templates.get('templates').map(({ template }) => {
     try {
         const mod = eval(template);

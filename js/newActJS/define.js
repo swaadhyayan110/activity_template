@@ -4,8 +4,10 @@ const Define = (() => {
         ==============
         Language Codes
         --------------
-        en : "English"
+        sk : "संस्कृत"
         hi : "हिन्दी"
+        en : "English"
+        fr : "French"
         ==============
     */
 
@@ -1394,6 +1396,32 @@ const Define = (() => {
                                     }
                                 }
                             ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            id      : 43,
+            head    : 'Template : 43, CircleAndUnderline',
+            lang    : 'en',
+            content : {
+                questions: [
+                    {
+                        id    : 1,
+                        words : [ 'lorem', 'ipsum', 'red dipsum', 'bipsum', 'chipsum', 'lipsum', '.' ],
+                        highlight : { // Index of words
+                            circle    : [ 0, 2 ],
+                            underLine : [ 4, 5 ],
+                            disabled  : [ 3, 6 ]
+                        }
+                    },
+                    {
+                        id    : 2,
+                        words : [ 'lorem', 'ipsum', 'red dipsum', 'bipsum', 'chipsum', 'lipsum' ],
+                        highlight : {
+                            circle    : [ 0, 2 ],
+                            underLine : [ 1, 5 ]
                         }
                     }
                 ]
