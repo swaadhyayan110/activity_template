@@ -75,9 +75,7 @@ const UI = (() => {
                 try {
                     await lockOrientation('portrait');
                     console.log('Locked portrait');
-                } catch (err) {
-                    console.log('Portrait lock failed:', err?.message || err);
-                }
+                } catch (err) {}
             }
         } catch (err) {
             console.log('Exiting fullscreen failed:', err?.message || err);

@@ -2,6 +2,7 @@ const Templates = (() => {
 
     // TEMPLATE MAP [ DO NOT CHANGE ]
     const templates = [
+        { id : 0, template  : 'CustomTemplate' },
         { id : 1, template  : 'MatchLeftToRight', landscape : true },
         { id : 2, template  : 'MatchLeftRightToCenter' },
         { id : 3, template  : 'MatchTopToBottom' },

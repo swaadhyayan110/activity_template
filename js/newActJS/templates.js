@@ -94,19 +94,22 @@ const Activity = (() => {
 
     const store = { templates: {} };
 
-    const css = (href) => {
+    const css = (href, path='') => {
         try {
             if (!href) return;
 
-            const completePath = 'css/newActCss/' + href;
+            const completePath = path === '' ? 'css/newActCss/' + href : path + href;
             const exists = [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes(completePath));
 
             if (exists) return;
 
             const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = completePath;
+            link.rel   = 'stylesheet';
+            link.type  = 'text/css';
+            link.href  = completePath;
+
+            link.onerror = () => link.remove();
+            
             document.head.appendChild(link);
         } catch (err) {
             console.error('Activity.css : ', err);
@@ -7928,8 +7931,10 @@ const WordSearch = (() => {
 
     const renderGrid = () => {
         try {
-            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
-            const content = activity?.content ?? [];
+            const activity  = Activity.getDefine(Activity.getQid(`#${containerId}`));
+            const content   = activity?.content ?? [];
+            const config    = activity?.config ?? {};
+            const isNumeric = config?.numeric ?? false;
 
             const words = content.filter(puz => puz?.answer).map(puz => puz.answer.toUpperCase());
             const longest = Math.max(...words.map(w => w.length));
@@ -7943,6 +7948,7 @@ const WordSearch = (() => {
             const grid = Array.from({ length: size }, () => Array.from({ length: gridCols }, () => ''));
 
             const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numerals  = '1234567890';
 
             content.forEach(item => {
                 const { row, col, answer, direction } = item;
@@ -7959,7 +7965,7 @@ const WordSearch = (() => {
             });
 
 
-            const pool = alphabets.toUpperCase();
+            const pool = isNumeric ? numerals : alphabets.toUpperCase();
             for (let r = 0; r < size; r++) {
                 for (let c = 0; c < gridCols; c++) {
                     if (grid[r][c] === '') {
@@ -14487,6 +14493,109 @@ const CircleAndUnderline = (() => {
 
     return { render : renderAllQuestions };
 
+})();
+
+const CustomTemplate = (() => {
+
+    const __baseContainerID = 'dynamic-template-';
+    let __containerID;
+    let __container;
+
+    const __prefixImagePath = (html) => {
+        const base = Activity.pathToCWD();
+
+        return html.replace(
+            /<img([^>]*?)src=["'](.*?)["']([^>]*?)>/g,
+            (match, before, path, after) => {
+                return `<img${before}src="${base}${path}"${after}>`;
+            }
+        );
+    };
+
+    const __ui = ({html, id} = {}) => {
+        const container = Define.get('questionContainer');
+        const parent    = document.querySelector(container);
+
+        if ( !parent ) return { flag : false };
+
+        html = __prefixImagePath(html);
+
+        parent.innerHTML = `<div class="question p-3 h-100" id="${id}">${html}</div>`;
+
+        return { flag : true, parent : parent };
+    };
+
+    const __loadCSS = (activity) => {
+        if( !activity ) return;
+
+        activity?.path?.css?.forEach(file => {
+            if( !file || file == '' || file == ' ' ) return;
+            
+            const path = Activity.pathToCWD();
+            Activity.css(file, path);
+        });
+    };
+
+    const __bindEvents = (activity) => {
+        if( !activity ) return;
+
+        activity.events.forEach(item => {
+            const selector = item?.selector ?? undefined;
+            if( !selector ) return;
+
+            const elements = __container.querySelectorAll(selector);            
+            if( !elements ) return;
+
+            const event = item?.event ?? undefined;
+            if( !event ) return;
+
+            const handler = item?.handle ?? undefined;
+            if( !handler ) return;
+
+            elements.forEach(ele => {
+                ele.addEventListener(event, (e) => {
+                    const handlers = Array.isArray(handler) ? handler : [handler];
+                    handlers.forEach(h => {
+                        const fn = typeof h === 'string'
+                            ? activity.logic?.[h]
+                            : undefined;
+
+                        if ( !fn ) {
+                            console.warn(`Handler "${h}" not found`);
+                            return;
+                        }
+
+                        fn({ event: e, el: ele, root: __container });
+                    });
+                });
+            });
+        });
+    };
+
+    const __init = (questionId) => {
+        __containerID  = __baseContainerID + questionId;
+        const activity = Activity.getDefine(questionId) ?? undefined;
+
+        if ( activity === undefined ) return;
+        
+        const isUI = __ui({
+            html : activity?.ui() ?? '',
+            id   : __containerID 
+        });
+
+        if ( !isUI.flag ) return;
+
+        const containerRef = isUI.parent.querySelector( '#'+__containerID );
+        if ( containerRef ) __container = containerRef;
+
+        __loadCSS( activity );
+
+        __bindEvents( activity );
+    }
+
+    return {
+        render : __init
+    }
 })();
 
 Templates.get('templates').map(({ template }) => {

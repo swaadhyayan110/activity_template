@@ -13,6 +13,7 @@ const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = [
+        { qid: 0, text: ['Q-0', 'Custom'], module: 0 },
         { qid: 1, text: ['Q-1', 'Match-1'], module: 1, landscape: true },
         { qid: 2, text: ['Q-2', 'Match-2'], module: 2 },
         { qid: 3, text: ['Q-3', 'Match-3'], module: 3 },
@@ -60,6 +61,101 @@ const Define = (() => {
 
     // DEFINE QUESTIONS
     const questions = [
+        {
+            id     : 0,
+            path   : {
+                css : [ 'style1.css' ],
+            },
+            ui     : () => {
+                const html = `
+                    <div class="container py-4">
+                        <div class="border border-success-subtle my-3 rounded p-2 bg-success-subtle text-success-emphasis text-captitalize text-center mx-auto w-50">
+                            <div class="border-bottom border-success-subtle mb-2 fs-5 p-1">Template : 0</div>
+                            <div class="p-1">Customizable template</div>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card shadow-sm h-100">
+                                    <div class="card-header text-center fw-semibold">
+                                        Drag Images
+                                    </div>
+                                    <div class="card-body d-flex flex-wrap justify-content-center gap-3">
+                                        ${['1','2','3','4','5','6'].map(i => `
+                                            <img 
+                                                src="img/${i}.png"
+                                                class="drag-item border rounded p-1 bg-light"
+                                                draggable="true"
+                                                data-value="${i}"
+                                                style="width:80px; height:80px; object-fit:cover;"
+                                            />
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card shadow-sm h-100">
+                                    <div class="card-header text-center fw-semibold">
+                                        Drop Zones
+                                    </div>
+                                    <div class="card-body d-grid gap-3">
+                                        ${['1','2','3','4','5','6'].map(i => `
+                                            <div 
+                                                class="drop-zone border border-2 border-secondary-subtle rounded text-center p-3 bg-light"
+                                                data-accept="${i}"
+                                            >
+                                                Drop ${i}
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return html;
+            },
+            logic  : {
+                // Every `method` gets : { event, el, root }
+                // Format => `function-name` : () => { code.. }
+                dragstart : ({ event, el }) => {
+                    event.dataTransfer.setData('text/plain', el.dataset.value);
+                    el._originalParent = el.parentElement;
+                    el.classList.add('opacity-50');
+                },
+                drop      : ({ event, el, root }) => {
+                    event.preventDefault();
+
+                    const value = event.dataTransfer.getData('text/plain');
+                    const draggedEl = root.querySelector(`[data-value="${value}"]`);
+
+                    if (!draggedEl) return;
+                    
+                    if (el.children.length > 0) {
+                        const existing = el.children[0];
+                        existing._originalParent?.appendChild(existing);
+                    }
+
+                    el.classList.remove(
+                        'bg-success', 'bg-danger-subtle', 'text-white', 'text-danger', 'border-primary'
+                    );
+
+                    el.innerHTML = '';
+                    el.appendChild(draggedEl);
+                },
+                dragend   : ({ el })    => el.classList.remove('opacity-50'),
+                dragover  : ({ event }) => event.preventDefault(),
+                dragenter : ({ el })    => el.classList.add('border-primary'),
+                dragleave : ({ el })    => el.classList.remove('border-primary')                
+            },
+            events : [
+                { event: 'dragstart', selector: '.drag-item', handle: ['dragstart'] },
+                { event: 'dragend',   selector: '.drag-item', handle: ['dragend'] },
+                { event: 'dragover',  selector: '.drop-zone', handle: ['dragover'] },
+                { event: 'dragenter', selector: '.drop-zone', handle: ['dragenter'] },
+                { event: 'dragleave', selector: '.drop-zone', handle: ['dragleave'] },
+                { event: 'drop',      selector: '.drop-zone', handle: ['drop'] },
+            ]
+        },
         {
             id: 1,
             lang: 'en',
@@ -709,7 +805,8 @@ const Define = (() => {
                     },
                     col: { col: 12, md: 6, sm: 12 },
                 },
-                shuffle: false
+                shuffle: false,
+                numeric: false
             },
             content: [
                 {
