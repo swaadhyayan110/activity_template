@@ -62,100 +62,230 @@ const Define = (() => {
     // DEFINE QUESTIONS
     const questions = [
         {
-            id     : 0,
-            path   : {
-                css : [ 'style1.css' ],
-            },
-            ui     : () => {
+            id: 0,
+            ui: () => {
+                const options = [
+                    { name: "Salad", correct: true },
+                    { name: "Sweets", correct: true },
+                    { name: "Fruits", correct: false },
+                    { name: "Bread", correct: true },
+                    { name: "Parantha", correct: true },
+                    { name: "Bun", correct: false },
+                    { name: "Fruit cream", correct: false }
+                ];
+
                 const html = `
-                    <div class="container py-4">
-                        <div class="border border-success-subtle my-3 rounded p-2 bg-success-subtle text-success-emphasis text-captitalize text-center mx-auto w-50">
-                            <div class="border-bottom border-success-subtle mb-2 fs-5 p-1">Template : 0</div>
-                            <div class="p-1">Customizable template</div>
+                <div class="container py-4">
+                    <h5 class="text-center mb-3">
+                        Tick the things you can see in the plate
+                    </h5>
+
+                    <div class="row">
+                        <!-- Options -->
+                        <div class="col-md-6">
+                            <div class="card p-3 shadow-sm">
+                                ${options.map((opt, i) => `
+                                    <div class="form-check my-2">
+                                        <input 
+                                            class="form-check-input option-check" 
+                                            type="checkbox" 
+                                            id="opt${i}"
+                                            data-correct="${opt.correct}"
+                                        >
+                                        <label class="form-check-label" for="opt${i}">
+                                            ${opt.name}
+                                        </label>
+                                    </div>
+                                `).join('')}
+                            </div>
                         </div>
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="card shadow-sm h-100">
-                                    <div class="card-header text-center fw-semibold">
-                                        Drag Images
-                                    </div>
-                                    <div class="card-body d-flex flex-wrap justify-content-center gap-3">
-                                        ${['1','2','3','4','5','6'].map(i => `
-                                            <img 
-                                                src="img/${i}.png"
-                                                class="drag-item border rounded p-1 bg-light"
-                                                draggable="true"
-                                                data-value="${i}"
-                                                style="width:80px; height:80px; object-fit:cover;"
-                                            />
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card shadow-sm h-100">
-                                    <div class="card-header text-center fw-semibold">
-                                        Drop Zones
-                                    </div>
-                                    <div class="card-body d-grid gap-3">
-                                        ${['1','2','3','4','5','6'].map(i => `
-                                            <div 
-                                                class="drop-zone border border-2 border-secondary-subtle rounded text-center p-3 bg-light"
-                                                data-accept="${i}"
-                                            >
-                                                Drop ${i}
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            </div>
+
+                        <!-- Plate Image -->
+                        <div class="col-md-6 text-center">
+                            <img 
+                                src="img/plate.png" 
+                                class="img-fluid rounded shadow-sm"
+                                style="max-height:300px;"
+                            />
                         </div>
                     </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary check-btn">
+                            Check Answer
+                        </button>
+                        <div id="resultBox" class="mt-3 fw-bold text-center"></div>
+                    </div>
+                </div>
                 `;
                 return html;
             },
-            logic  : {
-                // Every `method` gets : { event, el, root }
-                // Format => `function-name` : () => { code.. }
-                dragstart : ({ event, el }) => {
-                    event.dataTransfer.setData('text/plain', el.dataset.value);
-                    el._originalParent = el.parentElement;
-                    el.classList.add('opacity-50');
-                },
-                drop      : ({ event, el, root }) => {
-                    event.preventDefault();
+            logic: {
+                checkAnswer: ({ root }) => {
+                    const checks = root.querySelectorAll('.option-check');
+                    const result = root.querySelector('#resultBox');
 
-                    const value = event.dataTransfer.getData('text/plain');
-                    const draggedEl = root.querySelector(`[data-value="${value}"]`);
+                    let selected = [];
+                    let correctAnswers = [];
+                    let hasChecked = false;
+                    let allCorrect = true;
 
-                    if (!draggedEl) return;
-                    
-                    if (el.children.length > 0) {
-                        const existing = el.children[0];
-                        existing._originalParent?.appendChild(existing);
+                    checks.forEach(chk => {
+                        const label = chk.nextElementSibling.innerText;
+                        const isCorrect = chk.dataset.correct === "true";
+
+                        if (isCorrect) correctAnswers.push(label);
+
+                        if (chk.checked) {
+                            hasChecked = true;
+                            selected.push(label);
+
+                            if (!isCorrect) {
+                                allCorrect = false;
+                            }
+                        } else {
+                            if (isCorrect) {
+                                allCorrect = false;
+                            }
+                        }
+                    });
+
+                    // 🚫 No selection
+                    if (!hasChecked) {
+                        alert("Please select at least one option!");
+                        return;
                     }
 
-                    el.classList.remove(
-                        'bg-success', 'bg-danger-subtle', 'text-white', 'text-danger', 'border-primary'
-                    );
+                    // 🧾 Build answer display
+                    const userHTML = `
+                        <div class="mb-2">
+                            <div class="fw-bold">Your Answer</div>
+                            ${selected.map((item, i) => `<div>${i + 1}. ${item}</div>`).join('')}
+                        </div>
+                    `;
 
-                    el.innerHTML = '';
-                    el.appendChild(draggedEl);
-                },
-                dragend   : ({ el })    => el.classList.remove('opacity-50'),
-                dragover  : ({ event }) => event.preventDefault(),
-                dragenter : ({ el })    => el.classList.add('border-primary'),
-                dragleave : ({ el })    => el.classList.remove('border-primary')                
+                    const correctHTML = `
+                        <div class="mt-3">
+                            <div class="fw-bold">Correct Answer</div>
+                            ${correctAnswers.map((item, i) => `<div>${i + 1}. ${item}</div>`).join('')}
+                        </div>
+                    `;
+
+                    // ✅ / ❌ Result
+                    if (allCorrect) {
+                        result.innerHTML = `
+                            <div class="text-success fw-bold">✅ Correct!</div>
+                            ${userHTML}
+                            ${correctHTML}
+                        `;
+                    } else {
+                        result.innerHTML = `
+                            <div class="text-danger fw-bold">❌ Incorrect</div>
+                            ${userHTML}
+                            ${correctHTML}
+                        `;
+                    }
+                }
             },
-            events : [
-                { event: 'dragstart', selector: '.drag-item', handle: ['dragstart'] },
-                { event: 'dragend',   selector: '.drag-item', handle: ['dragend'] },
-                { event: 'dragover',  selector: '.drop-zone', handle: ['dragover'] },
-                { event: 'dragenter', selector: '.drop-zone', handle: ['dragenter'] },
-                { event: 'dragleave', selector: '.drop-zone', handle: ['dragleave'] },
-                { event: 'drop',      selector: '.drop-zone', handle: ['drop'] },
+            events: [
+                { event: 'click', selector: '.check-btn', handle: ['checkAnswer'] }
             ]
         },
+        // {
+        //     id     : 0,
+        //     path   : {
+        //         css : [ 'style1.css' ],
+        //     },
+        //     ui     : () => {
+        //         const html = `
+        //             <div class="container py-4">
+        //                 <div class="border border-success-subtle my-3 rounded p-2 bg-success-subtle text-success-emphasis text-captitalize text-center mx-auto w-100">
+        //                     <div class="border-bottom border-success-subtle mb-2 fs-5 p-1">Template : 0</div>
+        //                     <div class="p-1">Customizable template</div>
+        //                 </div>
+        //                 <div class="row g-4">
+        //                     <div class="col-md-6">
+        //                         <div class="card shadow-sm h-100">
+        //                             <div class="card-header text-center fw-semibold">
+        //                                 Drag Images
+        //                             </div>
+        //                             <div class="card-body d-flex flex-wrap justify-content-center gap-3">
+        //                                 ${['1','2','3','4','5','6'].map(i => `
+        //                                     <img 
+        //                                         src="img/${i}.png"
+        //                                         class="drag-item border rounded p-1 bg-light"
+        //                                         draggable="true"
+        //                                         data-value="${i}"
+        //                                         style="width:80px; height:80px; object-fit:cover;"
+        //                                     />
+        //                                 `).join('')}
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                     <div class="col-md-6">
+        //                         <div class="card shadow-sm h-100">
+        //                             <div class="card-header text-center fw-semibold">
+        //                                 Drop Zones
+        //                             </div>
+        //                             <div class="card-body d-grid gap-3">
+        //                                 ${['1','2','3','4','5','6'].map(i => `
+        //                                     <div 
+        //                                         class="drop-zone border border-2 border-secondary-subtle rounded text-center p-3 bg-light"
+        //                                         data-accept="${i}"
+        //                                     >
+        //                                         Drop ${i}
+        //                                     </div>
+        //                                 `).join('')}
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         `;
+        //         return html;
+        //     },
+        //     logic  : {
+        //         // Every `method` gets : { event, el, root }
+        //         // Format => `function-name` : () => { code.. }
+        //         dragstart : ({ event, el }) => {
+        //             event.dataTransfer.setData('text/plain', el.dataset.value);
+        //             el._originalParent = el.parentElement;
+        //             el.classList.add('opacity-50');
+        //         },
+        //         drop      : ({ event, el, root }) => {
+        //             event.preventDefault();
+
+        //             const value = event.dataTransfer.getData('text/plain');
+        //             const draggedEl = root.querySelector(`[data-value="${value}"]`);
+
+        //             if (!draggedEl) return;
+                    
+        //             if (el.children.length > 0) {
+        //                 const existing = el.children[0];
+        //                 existing._originalParent?.appendChild(existing);
+        //             }
+
+        //             el.classList.remove(
+        //                 'bg-success', 'bg-danger-subtle', 'text-white', 'text-danger', 'border-primary'
+        //             );
+
+        //             el.innerHTML = '';
+        //             el.appendChild(draggedEl);
+        //         },
+        //         dragend   : ({ el })    => el.classList.remove('opacity-50'),
+        //         dragover  : ({ event }) => event.preventDefault(),
+        //         dragenter : ({ el })    => el.classList.add('border-primary'),
+        //         dragleave : ({ el })    => el.classList.remove('border-primary')                
+        //     },
+        //     events : [
+        //         { event: 'dragstart', selector: '.drag-item', handle: ['dragstart'] },
+        //         { event: 'dragend',   selector: '.drag-item', handle: ['dragend'] },
+        //         { event: 'dragover',  selector: '.drop-zone', handle: ['dragover'] },
+        //         { event: 'dragenter', selector: '.drop-zone', handle: ['dragenter'] },
+        //         { event: 'dragleave', selector: '.drop-zone', handle: ['dragleave'] },
+        //         { event: 'drop',      selector: '.drop-zone', handle: ['drop'] },
+        //     ]
+        // },
         {
             id: 1,
             lang: 'en',
