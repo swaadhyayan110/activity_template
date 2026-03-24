@@ -94,7 +94,7 @@ const Activity = (() => {
 
     const store = { templates: {} };
 
-    const css = (href, path='') => {
+    const css = (href, path = '') => {
         try {
             if (!href) return;
 
@@ -104,12 +104,12 @@ const Activity = (() => {
             if (exists) return;
 
             const link = document.createElement('link');
-            link.rel   = 'stylesheet';
-            link.type  = 'text/css';
-            link.href  = completePath;
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = completePath;
 
             link.onerror = () => link.remove();
-            
+
             document.head.appendChild(link);
         } catch (err) {
             console.error('Activity.css : ', err);
@@ -253,7 +253,7 @@ const Activity = (() => {
                 try: 'पुनः प्रयास करें'
             };
         }
-        else if (lang == 'en') {
+        else if (lang == 'en' || lang == 'mt') {
             return {
                 check: 'Check Answers',
                 show: 'Show Answers',
@@ -352,7 +352,8 @@ const Activity = (() => {
                 unattemptedStatus: "उत्तर नहीं दिया",
                 allWordsCorrect: "आपने सभी शब्द सही लिखे!",
                 excellentPerformance: "शानदार प्रदर्शन!",
-                playAgain: "फिर से खेलें"
+                playAgain: "फिर से खेलें",
+                attemptAll: "कृपया सभी प्रश्नों का प्रयास करें"
             };
         } else {
             return {
@@ -422,7 +423,8 @@ const Activity = (() => {
                 unattemptedStatus: "Unattempted",
                 allWordsCorrect: "You wrote all the words correctly!",
                 excellentPerformance: "Excellent performance!",
-                playAgain: "Play again"
+                playAgain: "Play again",
+                attemptAll: "Please attempt all questions"
             };
         }
     };
@@ -451,10 +453,23 @@ const Activity = (() => {
                 next: 'अगला',
                 prev: 'पिछला'
             };
-        } else {
+        }
+        else if (lang == 'en' || lang == 'mt') {
             return {
                 next: 'Next',
                 prev: 'Prev'
+            };
+        }
+        else if (lang == 'fr') {
+            return {
+                next: 'suivante',
+                prev: 'précédente'
+            };
+        }
+        else if (lang == 'sk') {
+            return {
+                next: 'अग्रिम',
+                prev: 'पूर्वतनम्‌'
             };
         }
     };
@@ -886,9 +901,9 @@ const MatchLeftToRight = (() => {
                     const activity = activities[activityId];
                     if (!activity || !activity.selectedLeftItem) {
                         const lang = Activity.getDefine(Activity.getQid(`#${containerId}`))?.lang || 'en';
-                const popupLabels = Activity.translatePopupLabels(lang);
-                Swal.fire({ icon: "error", text: popupLabels.selectLeftFirst });
-                return;
+                        const popupLabels = Activity.translatePopupLabels(lang);
+                        Swal.fire({ icon: "error", text: popupLabels.selectLeftFirst });
+                        return;
                     }
 
                     const leftId = activity.selectedLeftItem.dataset.id;
@@ -1759,9 +1774,9 @@ const MatchTopToBottom = (() => {
                     const act = activities[activityId];
                     if (!act || !act.selectedTop) {
                         const lang = Activity.getDefine(Activity.getQid(`#${containerId}`))?.lang || 'en';
-                const popupLabels = Activity.translatePopupLabels(lang);
-                Swal.fire({ icon: "error", text: popupLabels.selectTopFirst });
-                return;
+                        const popupLabels = Activity.translatePopupLabels(lang);
+                        Swal.fire({ icon: "error", text: popupLabels.selectTopFirst });
+                        return;
                     }
                     const topId = act.selectedTop.dataset.id;
                     const bottomId = div.dataset.id;
@@ -3146,19 +3161,19 @@ const Mcq_PathKaSaar = (() => {
             }
 
             const text = content?.text ?? {};
-            const img  = content?.img ?? {};
+            const img = content?.img ?? {};
 
             const mcqContextContainer = $('.mcq-context');
             mcqContextContainer.empty();
 
             const hasText = text && Object.keys(text).length > 0;
-            const hasImg  = img && Object.keys(img).length > 0;
+            const hasImg = img && Object.keys(img).length > 0;
 
-            if ( !hasText && !hasImg ) mcqContextContainer.remove();
+            if (!hasText && !hasImg) mcqContextContainer.remove();
 
             if (hasText || hasImg) {
                 const textDiv = $('<div class="mcq-text"></div>');
-                const imgDiv  = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
+                const imgDiv = $('<div class="mcq-image"><img ondragstart="return false;"/></div>');
 
                 mcqContextContainer.addClass('row g-0');
 
@@ -3300,14 +3315,14 @@ const Mcq_PathKaSaar = (() => {
     const render_image = (src, width = false) => `<img src="${src}" style="height:150px; width:${!width ? '150px' : `${width}`}; object-fit:contain;" ondragstart="return false;">`;
 
     const option_text = (option) => {
-        const path  = option?.image ?? undefined;
+        const path = option?.image ?? undefined;
         const width = option?.width ?? false;
-        const image = path != undefined 
-            ? render_image( Activity.pathToCWD() + path, width ) 
+        const image = path != undefined
+            ? render_image(Activity.pathToCWD() + path, width)
             : '';
         // ..
         const text = option?.text ?? undefined;
-        if ( path != undefined && text != undefined ) {
+        if (path != undefined && text != undefined) {
             return `
                 <div 
                     class="row g-0 w-100"
@@ -3316,10 +3331,10 @@ const Mcq_PathKaSaar = (() => {
                     <div class="col d-flex align-items-center px-2">${option?.text ?? ''}</div>
                 </div>
             `;
-        } 
+        }
 
-        const optionText = path != undefined 
-            ? image 
+        const optionText = path != undefined
+            ? image
             : option?.text ?? '';
         // ..
 
@@ -5834,6 +5849,8 @@ const DragAndDropMulti = (() => {
         const questions = activity?.content?.questions ?? [];
         const headLabels = Activity.translateTableHeads(lang);
 
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         const strictMatch = activity?.content?.strictMatch;
         const option_side = activity?.content?.option_side ?? 'top';
 
@@ -5909,6 +5926,7 @@ const DragAndDropMulti = (() => {
 
                 if (strictMatch) {
                     isCorrect = userAnswer.toString() === correctAnswerText.toString();
+
                     if (isCorrect) {
                         count++;
                         correctCount++;
@@ -5946,7 +5964,7 @@ const DragAndDropMulti = (() => {
                 const body = `
                     <tr clsss='trData'>
                         <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
-                        <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
+                        <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString() || popupLabels.notAttempted}</td>
                         <td class="text-success">${correctAnswerText.toString()}</td>
                         <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
                     </tr>
@@ -5971,7 +5989,6 @@ const DragAndDropMulti = (() => {
 
         document.getElementById("popupDialogAns").style.display = "block";
 
-        const popupLabels = Activity.translatePopupLabels(lang);
         document.getElementById("scoreTextQ1").innerText = popupLabels.scored(correctCount, totalQues);
     }
 
@@ -6105,7 +6122,7 @@ const DragAndDropMulti = (() => {
                                 <div class='col-auto'>
                                     ${image.join('')}
                                 </div>
-                                <div class='col d-flex'>
+                                <div class='col d-flex' data-queindex="${ind}">
                                     ${replacedText}
                                 </div>
                             </div>
@@ -6117,8 +6134,6 @@ const DragAndDropMulti = (() => {
                 ind == 0 ? questionHtml.push('<div class="row g-0 my-3">') : false;
 
                 replacedText = replacedText.replaceAll(',', '');
-
-                console.log(col_size.md);
 
                 const html = `
                     ${col_size && !singleQuestionMode ? `
@@ -6283,7 +6298,7 @@ const DragAndDropMulti = (() => {
 
             const questionHtml = [];
             if (hasTypeSet) {
-                type_set?.answers.map((item, ind) => {
+                type_set?.answers.map((_, ind) => {
                     const html = `
                         <div class="row g-0 my-3">
                             <div class="col-auto me-2">
@@ -6490,13 +6505,19 @@ const DragAndDropMulti = (() => {
 
     const __showAnswerPopupSingleType = () => {
 
+        const data = __getQuestionData();
+        const lang = data?.lang ?? 'en';
+
+        const popupLabels = Activity.translatePopupLabels(lang);
+
         if (!userAns.every(arr => arr.length > 0 && arr.every(v => v != null && v !== ""))) {
-            console.log('Please attempt all questions');
+            Swal.fire({
+                title: popupLabels.attemptAll,
+                icon: "error"
+            });
             return;
         }
 
-        const data = __getQuestionData();
-        const lang = data?.lang ?? 'en';
         const questions = data?.questions ?? [];
         const strictMatch = data?.content?.strictMatch ?? false;
         const option_side = data?.content?.option_side ?? 'top';
@@ -6582,8 +6603,6 @@ const DragAndDropMulti = (() => {
         const tablePartEnd = `</tbody></table></div>`;
         table.push(tablePartEnd);
 
-        const popupLabels = Activity.translatePopupLabels(lang);
-
         document.getElementById("answer-review").innerHTML = table.join('');
         document.getElementById("popupDialogAns").style.display = "block";
 
@@ -6624,7 +6643,7 @@ const DragAndDropMulti = (() => {
                     if (Array.isArray(userAns[index])) {
                         const totalDropBox = (hasCol === true)
                             ? $(this).parent().children()
-                            : $(`.question-container_2`).eq(index).children(selector);
+                            : $(`.question-container_2`).eq(index).children().find(selector);
                         // ..
 
                         const tempArr = [];
@@ -6633,10 +6652,13 @@ const DragAndDropMulti = (() => {
                                 tempArr.push($(totalDropBox).eq(i).attr('data-val'));
                             }
                         }
-                        userAns[index] = tempArr;
+
+                        userAns[index] = tempArr.filter(Boolean);
                     } else {
                         userAns[index] = dragVal;
                     }
+
+                    console.log(userAns);
 
                     if (enableDragCheckSubmitBtn() == $(selector).length) {
                         $(`#submit2`).removeClass('disable');
@@ -7145,12 +7167,12 @@ const Shabdkosh = (() => {
             const isShuffle = activity?.shuffle ?? true;
             const questions = isShuffle ? Activity.shuffleArray(content) : content;
 
-            if ( !Activity.setQid(`#${containerId}`, questionId) ) return false;
+            if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
             const tabs = [];
             questions.forEach((item, ind) => {
 
-                if ( !item.tabtitle || !item.id ) return;
+                if (!item.tabtitle || !item.id) return;
 
                 const titleLower = item.tabtitle.toLowerCase();
                 const tabTitle = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
@@ -7162,7 +7184,7 @@ const Shabdkosh = (() => {
                 tabs.push(tab);
             });
             const tabBtn = document.getElementById("tabButtons");
-            if ( tabBtn && tabs.length ) tabBtn.innerHTML = tabs.join('');
+            if (tabBtn && tabs.length) tabBtn.innerHTML = tabs.join('');
 
             const tabBtns = document.querySelectorAll('#tabButtons button');
             tabBtns.forEach((item, ind) => {
@@ -7180,12 +7202,12 @@ const Shabdkosh = (() => {
         }
     };
 
-    const __imageContainer = ({width='40%', path, classes='', inBox=true, caption=' '}={}) => {
+    const __imageContainer = ({ width = '40%', path, classes = '', inBox = true, caption = ' ' } = {}) => {
 
-        if( !path ) return '';
+        if (!path) return '';
 
         const html = `
-            <div class="${inBox ? `img-box` : classes }">
+            <div class="${inBox ? `img-box` : classes}">
                 <div>
                     <img 
                         style="width:${width};" 
@@ -7201,7 +7223,7 @@ const Shabdkosh = (() => {
     }
 
     const renderTabContent = (thisObj) => {
-        if ( typeof thisObj != 'object' && typeof thisObj.target != 'object' ) {
+        if (typeof thisObj != 'object' && typeof thisObj.target != 'object') {
             console.warn('[WARNING]', 'Invalid selector');
         }
 
@@ -7213,7 +7235,7 @@ const Shabdkosh = (() => {
         const tabitem = content.filter(x => x.id == id);
 
         const isTitles = tabitem[0]?.titles ? tabitem[0]?.titles.length > 0 : false;
-        const titles   = isTitles ? tabitem[0]?.titles : tabitem[0];
+        const titles = isTitles ? tabitem[0]?.titles : tabitem[0];
 
         if (!tabitem.length) {
             console.warn('[WARNING]', 'Invalid tab-id');
@@ -7228,7 +7250,7 @@ const Shabdkosh = (() => {
         const titlesHtml = [];
         let tabpanecontent = "";
 
-        titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : ''}`);           
+        titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : ''}`);
 
         if (!isTitles) {
             tabpanecontent = `
@@ -7236,50 +7258,49 @@ const Shabdkosh = (() => {
                     ${titles?.sentence ?
                     `<div class="sentence-use">
                             <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
-                            ${titles?.sentence 
-                                ? titles?.sentence
-                                    .replaceAll(
-                                        titleLower, 
-                                        `
+                            ${titles?.sentence
+                        ? titles?.sentence
+                            .replaceAll(
+                                titleLower,
+                                `
                                             <span 
                                                 class="blinking-underline sometextcolor"
                                             >
                                                 ${titleLower}
                                             </span>
                                         `
-                                    )
+                            )
                         : ''
                     }
                         </div>` : ''
                 }
-                    ${ titles?.image?.path 
-                        ? __imageContainer({
-                                width:titles?.image?.width,
-                                path:titles?.image?.path,
-                                caption:titles?.image?.caption
-                            })
-                        : `
-                            ${ titles?.image instanceof Array 
-                                ? 
-                                    `
+                    ${titles?.image?.path
+                    ? __imageContainer({
+                        width: titles?.image?.width,
+                        path: titles?.image?.path,
+                        caption: titles?.image?.caption
+                    })
+                    : `
+                            ${titles?.image instanceof Array
+                        ?
+                        `
                                         <div class="row align-items-center justify-content-center w-75 mx-auto">
-                                            ${
-                                                titles?.image.map((item) => {
-                                                    return __imageContainer({
-                                                        width:item?.width, 
-                                                        path:item?.path,
-                                                        classes:'col-lg-3 col-md-4 col-sm-6 col-12 p-1',
-                                                        inBox:false,
-                                                        caption:item?.caption
-                                                    })
-                                                }).join( '' )
-                                            }
+                                            ${titles?.image.map((item) => {
+                            return __imageContainer({
+                                width: item?.width,
+                                path: item?.path,
+                                classes: 'col-lg-3 col-md-4 col-sm-6 col-12 p-1',
+                                inBox: false,
+                                caption: item?.caption
+                            })
+                        }).join('')
+                        }
                                         </div>
                                     `
-                                : ''
-                            }
-                        `
+                        : ''
                     }
+                        `
+                }
                 </div>
             `;
             titlesHtml.push(tabpanecontent);
@@ -7306,9 +7327,9 @@ const Shabdkosh = (() => {
 
             if (tabitem[0]?.image && tabitem[0]?.image?.path) {
                 const image = __imageContainer({
-                    width:tabitem[0]?.image?.width,
-                    path:tabitem[0]?.image?.path,
-                    caption:tabitem[0]?.image?.caption
+                    width: tabitem[0]?.image?.width,
+                    path: tabitem[0]?.image?.path,
+                    caption: tabitem[0]?.image?.caption
                 });
 
                 titlesHtml.push(image);
@@ -7931,9 +7952,9 @@ const WordSearch = (() => {
 
     const renderGrid = () => {
         try {
-            const activity  = Activity.getDefine(Activity.getQid(`#${containerId}`));
-            const content   = activity?.content ?? [];
-            const config    = activity?.config ?? {};
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
+            const content = activity?.content ?? [];
+            const config = activity?.config ?? {};
             const isNumeric = config?.numeric ?? false;
 
             const words = content.filter(puz => puz?.answer).map(puz => puz.answer.toUpperCase());
@@ -7948,7 +7969,7 @@ const WordSearch = (() => {
             const grid = Array.from({ length: size }, () => Array.from({ length: gridCols }, () => ''));
 
             const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const numerals  = '1234567890';
+            const numerals = '1234567890';
 
             content.forEach(item => {
                 const { row, col, answer, direction } = item;
@@ -8697,6 +8718,11 @@ const CrossWord = (() => {
     const __renderGrid = (questions = [], renderedQuestion = {}) => {
         try {
 
+            const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
+            const content = activity?.content ?? {};
+
+            const showHint = content?.hint;
+
             const allRows = questions.flatMap(q => Array.isArray(q.row) ? q.row : (q.row ? [q.row] : []));
             const allCols = questions.flatMap(q => Array.isArray(q.col) ? q.col : (q.col ? [q.col] : []));
             const maxRow = allRows.length ? Math.max(...allRows) : 0;
@@ -8739,7 +8765,8 @@ const CrossWord = (() => {
                                 answer = questions[num - 1]?.answer?.text;
                             }
                         }
-                        table.push(`<span class="num" style="top: 8px; left: -2px;">${num || ''}</span><input type="text" class="box" maxlength="1" ${answer != undefined ? `value='${answer[0]}'` : ''}  ${answer != undefined ? "disabled" : ''} />`);
+                        const showFirstLetter = (showHint && answer != undefined) ? `value='${answer[0]}'` : ''
+                        table.push(`<span class="num" style="top: 8px; left: -2px;">${num || ''}</span><input type="text" class="box" maxlength="1" ${showFirstLetter}  ${(showHint && answer != undefined) ? "disabled" : ''} />`);
                     } else {
                         table.push('&nbsp;');
                     }
@@ -9452,7 +9479,7 @@ const ShravanKaushalWithImages = (() => {
 
         const headHtml = `
             <div class='question-block animate__animated animate__fadeInRight'>
-            ${questions.length > 1 ?`<div class="Ques"><b>${questionIndex + 1}. ${q?.question?.text ?? ''}</b></div>`:''}
+            ${questions.length > 1 ? `<div class="Ques"><b>${questionIndex + 1}. ${q?.question?.text ?? ''}</b></div>` : ''}
             ${q?.question?.image
                 ? `<img src="${Activity.pathToCWD() + q.question?.image}" class="question-img mb-2 image-Center">`
                 : ''
@@ -10598,7 +10625,6 @@ const RachnatmakWithInputs = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-
             const uiHtml = `<div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
@@ -10616,12 +10642,12 @@ const RachnatmakWithInputs = (() => {
                                                     <img src="${Activity.pathToCWD() + content.image?.path}"/>
                                                 </div>`: ''
                 }
-                                            <div id="showInputsAnnds"></div>
+                                            <div id="showInputsAnnds" style="${lang == 'hi' ? 'display: none;' : ''}"></div>
                                             ${content?.showButtons ?
                     `<div class="buttons machiNgs">
-                                                    <button class="submit-btn">${buttonLabel.check}</button>
-                                                    <button class="show-btn">${buttonLabel.show}</button>
-                                                    <button class="reset-btn">${buttonLabel.try}</button>
+                                                    <button class="submit-btn ${lang == 'hi' ? 'd-none' : ''}">${buttonLabel.check}</button>
+                                                    <button class="show-btn">${lang == 'hi' ? 'उत्तर नमुना' : `${buttonLabel.show}`} </button>
+                                                    <button class="reset-btn ${lang == 'hi' ? 'd-none' : ''}">${buttonLabel.try}</button>
                                                 </div>`: ''
                 }
                                         </div>
@@ -10672,7 +10698,7 @@ const RachnatmakWithInputs = (() => {
                     `<textarea 
                                         data-type="left" id="leftValue_${index}"
                                         class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
-                                        placeholder="${content?.placeholder?.left ?? ""}">
+                                        placeholder="${content?.placeholder?.left ?? ""}" style="${lang == 'hi'? 'pointer-events: none;': ''}">
                                     </textarea>`
                 }
                             </div>
@@ -10681,7 +10707,7 @@ const RachnatmakWithInputs = (() => {
                                     style="display:${colRight?.show ? "block" : "none"}">
                                     <textarea data-type="right" id="inputAns_${index}"
                                     class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
-                                    placeholder="${content?.placeholder?.right ?? ""}"></textarea>
+                                    placeholder="${content?.placeholder?.right ?? ""}" style="${lang == 'hi'? 'pointer-events: none;': ''}"></textarea>
                                 </div>` : ''
                 }
                         </div>`;
@@ -10776,6 +10802,8 @@ const RachnatmakWithInputs = (() => {
     const showAnswer = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
         const content = activity?.content ?? {};
+
+        $('#showInputsAnnds').slideDown();
 
         $(".submit-btn").addClass("noClicked");
         if (content.inputLeft == false) {
@@ -12365,14 +12393,14 @@ const ShabdRachna = (() => {
             if (!Activity.setQid(`#${containerId}`, questionId)) return false;
 
             __score = 0;
-            const activity    = Activity.getDefine(questionId);
-            const lang        = activity?.lang ?? 'en';
-            const content     = activity?.content ?? {};
-            const data        = content?.data ?? {};
+            const activity = Activity.getDefine(questionId);
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
+            const data = content?.data ?? {};
             const replacement = data?.replacement ?? '#_#';
-            const bullets     = data?.bullets ?? false;
-            const questions   = data?.questions ?? [];
-            const shuffle     = data?.shuffle ?? true;
+            const bullets = data?.bullets ?? false;
+            const questions = data?.questions ?? [];
+            const shuffle = data?.shuffle ?? true;
 
             const html = questions.map((question, index) => {
                 const quesBullet = bullets
@@ -12385,8 +12413,8 @@ const ShabdRachna = (() => {
                     : '';
                 // ..
                 const view = question.map((ques, ind) => {
-                    const subBullets  = Activity.translateBulletLabels({ lang: 'mt', ind: ind });
-                    const dragOptions = shuffle === true 
+                    const subBullets = Activity.translateBulletLabels({ lang: 'mt', ind: ind });
+                    const dragOptions = shuffle === true
                         ? Activity.shuffleArray(ques?.answer ?? []) ?? []
                         : ques?.answer ?? [];
                     // ..
@@ -14130,8 +14158,8 @@ const CircleAndUnderline = (() => {
 
             if (!parent) return;
 
-            const activity    = Activity.getDefine(questionId) ?? {};
-            const lang        = activity.lang ?? 'en';
+            const activity = Activity.getDefine(questionId) ?? {};
+            const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `
@@ -14155,12 +14183,12 @@ const CircleAndUnderline = (() => {
             Activity.setQid(`#${containerId}`, questionId);
 
             __submitBtn = parent.querySelector('.submit-btn');
-            __showBtn   = parent.querySelector('.show-btn');
-            __resetBtn  = parent.querySelector('.reset-btn');
+            __showBtn = parent.querySelector('.show-btn');
+            __resetBtn = parent.querySelector('.reset-btn');
 
-            if ( __resetBtn ) __resetBtn.addEventListener("click", tryAgain);
-            if( __showBtn ) __showBtn.addEventListener("click", showAnswers);
-            if( __submitBtn ) __submitBtn.addEventListener("click", checkAnswers);
+            if (__resetBtn) __resetBtn.addEventListener("click", tryAgain);
+            if (__showBtn) __showBtn.addEventListener("click", showAnswers);
+            if (__submitBtn) __submitBtn.addEventListener("click", checkAnswers);
 
         } catch (e) {
             console.error('ui error:', e);
@@ -14171,7 +14199,7 @@ const CircleAndUnderline = (() => {
 
         ui(questionId);
 
-        const activity  = Activity.getDefine(questionId) ?? {};
+        const activity = Activity.getDefine(questionId) ?? {};
         const questions = activity?.content?.questions ?? [];
 
         const container = document.querySelector('#sentence');
@@ -14181,7 +14209,7 @@ const CircleAndUnderline = (() => {
             const disabledWords = q?.highlight?.disabled ?? [];
 
             const wordsHtml = q.words.map((word, wIndex) => {
-                const disabledClass = disabledWords.includes( wIndex ) 
+                const disabledClass = disabledWords.includes(wIndex)
                     ? ''
                     : 'cu-word';
                 // ..
@@ -14190,7 +14218,7 @@ const CircleAndUnderline = (() => {
                         class="${disabledClass}" 
                         data-q="${qIndex}" 
                         data-index="${wIndex}"
-                        ${disabledClass != '' ? role="button" : '' }
+                        ${disabledClass != '' ? role = "button" : ''}
                     >
                         ${word}
                     </span>`;
@@ -14209,13 +14237,13 @@ const CircleAndUnderline = (() => {
 
     const attachWordEvents = () => {
         const wrapper = document.querySelector(`#${containerId}`);
-        if ( !wrapper ) return;
+        if (!wrapper) return;
 
         wrapper.querySelectorAll('.cu-word').forEach(el => {
             el.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const qIndex = Number( e.target.dataset.q );
-                const index  = Number( e.target.dataset.index );
+                const qIndex = Number(e.target.dataset.q);
+                const index = Number(e.target.dataset.index);
 
                 showMenu(e.target, qIndex, index);
             });
@@ -14242,7 +14270,7 @@ const CircleAndUnderline = (() => {
         const parentRect = wrapper.getBoundingClientRect();
 
         menu.style.position = 'absolute';
-        menu.style.top  = `${rect.bottom - parentRect.top + wrapper.scrollTop}px`;
+        menu.style.top = `${rect.bottom - parentRect.top + wrapper.scrollTop}px`;
         menu.style.left = `${rect.left - parentRect.left + wrapper.scrollLeft}px`;
 
         menu.addEventListener('click', (e) => {
@@ -14302,17 +14330,17 @@ const CircleAndUnderline = (() => {
 
         __state = {};
 
-        if( __submitBtn ) {
-            __submitBtn.classList.remove( 'disabled' );
+        if (__submitBtn) {
+            __submitBtn.classList.remove('disabled');
             __submitBtn.disabled = false;
         }
     };
 
     const showAnswers = () => {
 
-        const questionID = Activity.getQid('#'+containerId) ?? {};
-        const define     = Activity.getDefine(questionID) ?? {};
-        const questions  = define?.content?.questions ?? [];
+        const questionID = Activity.getQid('#' + containerId) ?? {};
+        const define = Activity.getDefine(questionID) ?? {};
+        const questions = define?.content?.questions ?? [];
 
         const wrapper = document.querySelector(`#${containerId}`);
         if (!wrapper) return;
@@ -14321,7 +14349,7 @@ const CircleAndUnderline = (() => {
 
         questions.forEach((q, qIndex) => {
 
-            const circleIndexes    = q?.highlight?.circle ?? [];
+            const circleIndexes = q?.highlight?.circle ?? [];
             const underlineIndexes = q?.highlight?.underLine ?? [];
 
             if (!__state[qIndex]) __state[qIndex] = {};
@@ -14345,17 +14373,17 @@ const CircleAndUnderline = (() => {
 
         });
 
-        if( __submitBtn ) {
-            __submitBtn.classList.add( 'disabled' );
+        if (__submitBtn) {
+            __submitBtn.classList.add('disabled');
             __submitBtn.disabled = true;
         }
     };
 
     const checkAnswers = () => {
 
-        const questionId = Activity.getQid('#'+containerId);
-        const activity   = Activity.getDefine(questionId) ?? {};
-        const questions  = activity?.content?.questions ?? [];
+        const questionId = Activity.getQid('#' + containerId);
+        const activity = Activity.getDefine(questionId) ?? {};
+        const questions = activity?.content?.questions ?? [];
 
         const wrapper = document.querySelector(`#${containerId}`);
         if (!wrapper) return;
@@ -14367,7 +14395,7 @@ const CircleAndUnderline = (() => {
 
         questions.forEach((q, qIndex) => {
 
-            const correctCircle    = q?.highlight?.circle ?? [];
+            const correctCircle = q?.highlight?.circle ?? [];
             const correctUnderline = q?.highlight?.underLine ?? [];
 
             const userAnswers = __state[qIndex] ?? {};
@@ -14416,9 +14444,9 @@ const CircleAndUnderline = (() => {
 
     const showResultPopup = (correct, total, results) => {
 
-        const questionId = Activity.getQid('#'+containerId);
-        const activity   = Activity.getDefine(questionId) ?? {};
-        const lang       = activity?.lang ?? 'en';
+        const questionId = Activity.getQid('#' + containerId);
+        const activity = Activity.getDefine(questionId) ?? {};
+        const lang = activity?.lang ?? 'en';
 
         const oldPopup = document.querySelector('.cu-popup');
         if (oldPopup) oldPopup.remove();
@@ -14432,7 +14460,7 @@ const CircleAndUnderline = (() => {
         const popup = document.createElement('div');
         popup.className = 'cu-popup';
 
-        const formatType = (type, lang='en') => {
+        const formatType = (type, lang = 'en') => {
             if (type === 'cu-circle') return 'Circle';
             if (type === 'cu-underline') return 'Underline';
             return lang == 'en' ? 'None' : 'अपूर्ण';
@@ -14456,11 +14484,10 @@ const CircleAndUnderline = (() => {
                             <td><span class="cu-tag ${r.expected}">${formatType(r.expected)}</span></td>
                             <td>
                                 <span 
-                                    class="cu-tag ${r.chosen} ${
-                                    r.chosen !== 'none'
-                                        ? (r.isCorrect ? 'correct' : 'wrong') 
-                                        : ''
-                                }">
+                                    class="cu-tag ${r.chosen} ${r.chosen !== 'none'
+                ? (r.isCorrect ? 'correct' : 'wrong')
+                : ''
+            }">
                                     ${formatType(r.chosen, lang)}
                                 </span>
                             </td>
@@ -14491,7 +14518,7 @@ const CircleAndUnderline = (() => {
         });
     };
 
-    return { render : renderAllQuestions };
+    return { render: renderAllQuestions };
 
 })();
 
@@ -14512,45 +14539,45 @@ const CustomTemplate = (() => {
         );
     };
 
-    const __ui = ({html, id} = {}) => {
+    const __ui = ({ html, id } = {}) => {
         const container = Define.get('questionContainer');
-        const parent    = document.querySelector(container);
+        const parent = document.querySelector(container);
 
-        if ( !parent ) return { flag : false };
+        if (!parent) return { flag: false };
 
         html = __prefixImagePath(html);
 
         parent.innerHTML = `<div class="question p-3 h-100" id="${id}">${html}</div>`;
 
-        return { flag : true, parent : parent };
+        return { flag: true, parent: parent };
     };
 
     const __loadCSS = (activity) => {
-        if( !activity ) return;
+        if (!activity) return;
 
         activity?.path?.css?.forEach(file => {
-            if( !file || file == '' || file == ' ' ) return;
-            
+            if (!file || file == '' || file == ' ') return;
+
             const path = Activity.pathToCWD();
             Activity.css(file, path);
         });
     };
 
     const __bindEvents = (activity) => {
-        if( !activity ) return;
+        if (!activity) return;
 
         activity.events.forEach(item => {
             const selector = item?.selector ?? undefined;
-            if( !selector ) return;
+            if (!selector) return;
 
-            const elements = __container.querySelectorAll(selector);            
-            if( !elements ) return;
+            const elements = __container.querySelectorAll(selector);
+            if (!elements) return;
 
             const event = item?.event ?? undefined;
-            if( !event ) return;
+            if (!event) return;
 
             const handler = item?.handle ?? undefined;
-            if( !handler ) return;
+            if (!handler) return;
 
             elements.forEach(ele => {
                 ele.addEventListener(event, (e) => {
@@ -14560,7 +14587,7 @@ const CustomTemplate = (() => {
                             ? activity.logic?.[h]
                             : undefined;
 
-                        if ( !fn ) {
+                        if (!fn) {
                             console.warn(`Handler "${h}" not found`);
                             return;
                         }
@@ -14573,35 +14600,35 @@ const CustomTemplate = (() => {
     };
 
     const __init = (questionId) => {
-        __containerID  = __baseContainerID + questionId;
+        __containerID = __baseContainerID + questionId;
         const activity = Activity.getDefine(questionId) ?? undefined;
 
-        if ( activity === undefined ) return;
-        
+        if (activity === undefined) return;
+
         const isUI = __ui({
-            html : activity?.ui() ?? '',
-            id   : __containerID 
+            html: activity?.ui() ?? '',
+            id: __containerID
         });
 
-        if ( !isUI.flag ) return;
+        if (!isUI.flag) return;
 
-        const containerRef = isUI.parent.querySelector( '#'+__containerID );
-        if ( containerRef ) __container = containerRef;
+        const containerRef = isUI.parent.querySelector('#' + __containerID);
+        if (containerRef) __container = containerRef;
 
-        __loadCSS( activity );
+        __loadCSS(activity);
 
-        __bindEvents( activity );
+        __bindEvents(activity);
     }
 
     return {
-        render : __init
+        render: __init
     }
 })();
 
 Templates.get('templates').map(({ template }) => {
     try {
         const mod = eval(template);
-        if ( !mod || ( typeof mod !== 'function' && typeof mod !== 'object' ) ) {
+        if (!mod || (typeof mod !== 'function' && typeof mod !== 'object')) {
             console.error(`FATAL :: Couldn't register ${template} :`, mod);
             return;
         }
