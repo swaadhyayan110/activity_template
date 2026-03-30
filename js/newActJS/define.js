@@ -1313,7 +1313,7 @@ const Define = (() => {
                     {
                         type: 'x',
                         replacement: '#_#',
-                        text: ['`theta` \\( \\sqrt{49} \\)  = #_# + 200 = 207 x #_# = #img#'],
+                        text: ['`theta` `sqrt(49)`  = #_# + 200 = 207 x #_# = #img#'],
                         image: {
                             width: '200px',
                             path: 'img/414.png',

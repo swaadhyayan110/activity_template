@@ -11646,15 +11646,6 @@ const MentalMath = (() => {
 
     let __questionID;
 
-    // MathJax = {
-    //     tex: {
-    //         inlineMath: [
-    //             ["\\(", "\\)"],
-    //             ["\\[", "\\]"]
-    //         ]
-    //     }
-    // };
-
     const ui = async (questionId) => {
         try {
             __questionID = questionId;
@@ -11666,8 +11657,6 @@ const MentalMath = (() => {
                 console.error('ui container not found:', container);
                 return;
             }
-
-            await Define.get('loadScript')('js/tex-chtml.js');
 
             currentQuesIndex = 0;
             currentScore = 0;
@@ -11805,7 +11794,7 @@ const MentalMath = (() => {
             if (area) area.innerHTML = html;
 
             makeDroppable(`.${dropAreaCls}`);
-            // MathJax.typesetPromise();
+            Activity.initMathJax();
 
         } catch (err) {
             console.error('MentalMath.operatorUI :', err);
