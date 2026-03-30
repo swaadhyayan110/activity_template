@@ -7977,21 +7977,30 @@ const WordSearch = (() => {
                 col = que_side === 'left' || que_side === 'right' ? Helper.defaultCol : activity?.config?.questionSection?.col;
                 puzzle.push(`<div class='col-md-${col?.md} col-sm-${col?.sm} col-${col?.col}  ${queSection == undefined ? 'd-flex flex-wrap' : ''}'>`);
                 if (ques?.across.length) puzzle.push(`<div class="hints">${queHeading?.vertical?.text ?? 'Across'}</div>`);
+
+                let __acrossIndex = 1;
                 ques?.across.map((item, index) => {
+                    if( !item?.text && !item?.image ) return;
                     const html = `<div class="criss-item clues-text mb-1">
-                                    ${index + 1}. ${renderQuestion(item)}
+                                    ${__acrossIndex}. ${renderQuestion(item)}
                                 </div>`;
                     puzzle.push(html);
+                    __acrossIndex++;
                 });
                 puzzle.push(`</div><div class='col-md-${col?.md} col-sm-${col?.sm} col-${col.col}'>`);
 
                 if (ques?.down.length) puzzle.push(`<div class="hints">${queHeading?.horizontal?.text ?? 'Down'}</div>`);
+
+                let __downIndex = 1;
                 ques?.down.map((item, index) => {
+                    if( !item?.text && !item?.image ) return;
                     const html = `<div class="criss-item clues-text mb-1">
-                                    ${index + 1}. ${renderQuestion(item)}
+                                    ${__downIndex}. ${renderQuestion(item)}
                                 </div>`;
                     puzzle.push(html);
+                    __downIndex++;
                 });
+                
             } else {
                 col = Helper.defaultCol;
                 puzzle.push(`<div class='col-md-${col?.md} col-sm-${col?.sm} col-${col?.col}  ${queSection == undefined ? 'd-flex flex-wrap' : ''}'>`);
@@ -8310,7 +8319,7 @@ const WordSearch = (() => {
             }
         }
 
-        return queTxt;
+        return queTxt ?? '';
     }
 
     return {

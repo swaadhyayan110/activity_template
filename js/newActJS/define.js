@@ -943,7 +943,7 @@ const Define = (() => {
             },
             content: [
                 {
-                    text: 'A drawing of Earth on `theta` a flat surface (3 letters)',
+                    // text: 'A drawing of Earth on `theta` a flat surface (3 letters)',
                     answer: 'Map',
                     row: 0,
                     col: 0,
