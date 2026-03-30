@@ -94,6 +94,18 @@ const Activity = (() => {
 
     const store = { templates: {} };
 
+    const initMathJax = () => {
+        const container = document.querySelector('.question-container');
+        if (!container) return;
+
+        const interval = setInterval(() => {
+            if ( window.MathJax && MathJax.Hub ) {
+                clearInterval(interval);
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, container]);
+            }
+        }, 50);
+    };
+
     const css = (href, path = '') => {
         try {
             if (!href) return;
@@ -521,7 +533,7 @@ const Activity = (() => {
         }
     };
 
-    const render = (templateId, questionId, activityId = null) => {
+    const render = async (templateId, questionId, activityId = null) => {
         try {
 
             Helper.stopAudio();
@@ -549,6 +561,8 @@ const Activity = (() => {
             }
 
             temp.render(questionId, activityId);
+            
+            await Define.get('loadScript')('js/newActJS/MathJax-2.7.9/MathJax.js?config=TeX-MML-AM_CHTML');
         } catch (err) {
             console.error('Activity.render : ', err);
         }
@@ -565,6 +579,7 @@ const Activity = (() => {
         setHeader,
         getDefine,
         pathToCWD,
+        initMathJax,
         shuffleArray,
         shuffleWords,
         hindiKeyboard,
@@ -926,6 +941,8 @@ const MatchLeftToRight = (() => {
 
             leftContainer.appendChild(leftFrag);
             rightContainer.appendChild(rightFrag);
+
+            Activity.initMathJax();
 
             const submitBtn = document.querySelector(`.buttons.machiNgs .submit-btn[data-activity="${activityId}"]`);
             const showBtn = document.querySelector(`.buttons.machiNgs .show-btn`);
@@ -1430,6 +1447,8 @@ const MatchLeftRightToCenter = (() => {
                 document.querySelector('hr').remove();
             }
 
+            Activity.initMathJax();
+
             const btnContainer = cont.querySelector('.buttons.machiNgs');
             if (btnContainer) {
                 const submitBtn = btnContainer.querySelector('.submit-btn');
@@ -1792,6 +1811,8 @@ const MatchTopToBottom = (() => {
                 bottomContainer.appendChild(div);
             });
 
+            Activity.initMathJax();
+
             const containerEl = document.querySelector(Define.get('questionContainer'));
             const checkBtn = containerEl.querySelector(".buttons.machiNgs [data-check]");
             const showBtn = containerEl.querySelector(".buttons.machiNgs [data-show]");
@@ -1926,6 +1947,8 @@ const FillInTheBlanksWithImage = (() => {
                 }
             });
             container2.innerHTML = blanksBlock;
+
+            Activity.initMathJax();
         } catch (err) {
             console.error('FillInTheBlanksWithImage.fillInTheBlanks : ', err);
         }
@@ -2399,6 +2422,8 @@ const FillInTheBlanksHindiKb = (() => {
                 });
             }
 
+            Activity.initMathJax();
+
         } catch (err) {
             console.error('FillInTheBlanksHindiKb.fillIntheBlanks :', err);
         }
@@ -2674,6 +2699,8 @@ const JumbleLetters = (() => {
 
                 enableTapSwapFallback($row[0]);
             });
+
+            Activity.initMathJax();
         } catch (err) {
             console.log('JumbleLetters.loadAllQuestions : ', err);
         }
@@ -2914,6 +2941,8 @@ const JumbleWords = (() => {
 
                 enableTapSwapFallback($wordStance[0], index);
             });
+
+            Activity.initMathJax();
         } catch (err) {
             console.error('JumbleWords.renderIdioms :', err);
         }
@@ -3050,6 +3079,8 @@ const JumbleWords = (() => {
                 });
                 $stance.sortable("disable");
             });
+
+            Activity.initMathJax();
         } catch (err) {
             console.error('JumbleWords.showAnswersWORD :', err);
         }
@@ -3307,6 +3338,8 @@ const Mcq_PathKaSaar = (() => {
                     selectOptionMCQ(qi, oi);
                 });
             });
+
+            Activity.initMathJax();
         } catch (e) {
             console.error('Mcq.renderAllQuestionsMCQ', e);
         }
@@ -3788,6 +3821,8 @@ const Adaptiv = (() => {
         }
 
         updateNavButtons();
+
+        Activity.initMathJax();
     }
 
     const selectOption = (realIndex, optIndex) => {
@@ -4291,6 +4326,8 @@ const DropDown = (() => {
 
             container.appendChild(wrapper);
         });
+
+        Activity.initMathJax();
     }
 
     const makeSelect = (qIndex, blankIndex, optionsArr) => {
@@ -4415,6 +4452,8 @@ const DropDown = (() => {
             </span>
             `;
         }
+
+        Activity.initMathJax();
     }
 
     const showAnswersDD = () => {
@@ -4447,7 +4486,6 @@ const DropDown = (() => {
             sel.classList.remove("incorrect");
             sel.classList.add("correct");
         });
-
     }
 
     const resetActivityDD = () => {
@@ -4625,6 +4663,8 @@ const Circle = (() => {
             });
             document.__circle_click_attached = true;
         }
+
+        Activity.initMathJax();
     };
 
     const checkCircle = (dataKeyParam) => {
@@ -4653,6 +4693,8 @@ const Circle = (() => {
         });
 
         showClickReportClick(data, userSelections[key], activity.lang || 'en');
+
+        Activity.initMathJax();
     };
 
     const showCircle = (dataKeyParam, btn) => {
@@ -4907,6 +4949,7 @@ const ShravanKaushal = (() => {
         });
         popupcontainer.innerHTML = popupContent.join('');
 
+        Activity.initMathJax();
     }
 
     const startShravan = () => {
@@ -5294,6 +5337,8 @@ const TrueAndFalse = (() => {
                 btn.addEventListener('click', (e) => selectAnswer(e.currentTarget));
             });
         }
+
+        Activity.initMathJax();
     }
 
     const selectAnswer = (thisObj) => {
@@ -5568,6 +5613,8 @@ const DragAndDrop = (() => {
 
             makeDraggable(`#${containerId} .wordDrag`);
             initDroppable(containerSelector);
+
+            Activity.initMathJax();
         } catch (e) {
             console.error('DragAndDrop.renderDataDND :', e);
         }
@@ -5990,6 +6037,8 @@ const DragAndDropMulti = (() => {
         document.getElementById("popupDialogAns").style.display = "block";
 
         document.getElementById("scoreTextQ1").innerText = popupLabels.scored(correctCount, totalQues);
+
+        Activity.initMathJax();
     }
 
     const closePopUp = () => {
@@ -6018,6 +6067,8 @@ const DragAndDropMulti = (() => {
                 $(`.dropBox_2`).eq(i).html($(`.dropBox_2`).eq(i).attr('data-ans'));
             }
         }
+
+        Activity.initMathJax();
     }
 
     const resetDropBox = () => {
@@ -6393,6 +6444,8 @@ const DragAndDropMulti = (() => {
             makeDraggable(`.wordDrag`);
             initDroppable('.dropBox_2');
             DragEnabled = true;
+
+            Activity.initMathJax();
         } catch (e) {
             console.error('DragAndDropMulti.renderDataDND :', e);
         }
@@ -6434,6 +6487,8 @@ const DragAndDropMulti = (() => {
         DragEnabled = true;
 
         __setGetUserAttemptedAns();
+
+        Activity.initMathJax();
     }
 
     const __previousQuestion = () => {
@@ -6607,6 +6662,8 @@ const DragAndDropMulti = (() => {
         document.getElementById("popupDialogAns").style.display = "block";
 
         document.getElementById("scoreTextQ1").innerText = popupLabels.scored(correctCount, totalQues);
+
+        Activity.initMathJax();
     }
 
     const drag_option_html = (item, ind) => `<div class="drag_${ind} wordDrag font17" data-text="${item}" data-ans="${item}">${item}</div>`;
@@ -6658,7 +6715,7 @@ const DragAndDropMulti = (() => {
                         userAns[index] = dragVal;
                     }
 
-                    console.log(userAns);
+                    Activity.initMathJax();
 
                     if (enableDragCheckSubmitBtn() == $(selector).length) {
                         $(`#submit2`).removeClass('disable');
@@ -6781,6 +6838,8 @@ const Sorting = (() => {
             const ul = dragContainer.querySelector('.' + sequenceClass);
             if (ul) ul.addEventListener("dragover", handleDragOver);
 
+            Activity.initMathJax();
+
         } catch (e) {
             console.error('Sorting.renderQuestion :', e);
         }
@@ -6839,6 +6898,8 @@ const Sorting = (() => {
         });
 
         $('.submit-btn').addClass('disable');
+
+        Activity.initMathJax();
     }
 
     const tryAgain = () => {
@@ -6864,6 +6925,8 @@ const Sorting = (() => {
         });
 
         $('.submit-btn').removeClass('disable');
+
+        Activity.initMathJax();
     }
 
     const checkAnswer = () => {
@@ -6875,7 +6938,7 @@ const Sorting = (() => {
 
         const attempt = [];
         [...$(`.${sequenceClass} li`)]?.map((item, ind) => {
-            attempt.push(item.innerHTML);
+            attempt.push(item.dataset.text);
         });
 
         if (sequence.toString() === attempt.toString()) {
@@ -6899,6 +6962,8 @@ const Sorting = (() => {
                 icon: "error"
             });
         }
+
+        Activity.initMathJax();
     }
 
     return {
@@ -7196,7 +7261,7 @@ const Shabdkosh = (() => {
                     item.click();
                 }
             });
-
+            Activity.initMathJax();
         } catch (e) {
             console.error('Shabdkosh.renderQuestion :', e);
         }
@@ -7338,6 +7403,8 @@ const Shabdkosh = (() => {
 
         const tabPanes = document.getElementById("tabPanes");
         if (tabPanes) tabPanes.innerHTML = titlesHtml.join('');
+
+        Activity.initMathJax();
     };
 
     const toggleTabActive = (thisObj) => {
@@ -7945,6 +8012,8 @@ const WordSearch = (() => {
 
             renderGrid(content, lang);
 
+            Activity.initMathJax();
+
         } catch (e) {
             console.error('WordSearch.render :', e);
         }
@@ -8088,7 +8157,6 @@ const WordSearch = (() => {
 
     const checkAnswer = () => {
         try {
-
             const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
             const lang = activity?.lang ?? 'en';
             const content = activity?.content ?? [];
@@ -8436,6 +8504,8 @@ const TextArea = (() => {
                     .addTyping({ showTyping: true, delay: 70 })
                     .on('keydown', e => e.preventDefault());
             }
+
+            Activity.initMathJax();
         } catch (err) {
             console.error('TextArea.render :', err);
         }
@@ -8542,7 +8612,7 @@ const TextArea = (() => {
             const closeBtn = document.querySelector('#close-popup');
             if (closeBtn) closeBtn.addEventListener('click', closeFnMCQ);
         }
-    }
+    };
 
     const showAnswers = () => {
         const inputs = document.querySelectorAll('textarea.hindiInput');
@@ -8554,7 +8624,7 @@ const TextArea = (() => {
             });
             $('.submit-btn').addClass('disable');
         }
-    }
+    };
 
     const getAnswer = (input, qInd) => {
         const correctAnswer = shuffledQuestions[qInd]?.answer;
@@ -8568,7 +8638,7 @@ const TextArea = (() => {
             correct: correctAnswer,
             user: userAnswer
         };
-    }
+    };
 
     const closeFnMCQ = () => {
         try {
@@ -8577,7 +8647,7 @@ const TextArea = (() => {
         } catch (e) {
             console.error('Mcq.closeFnMCQ', e);
         }
-    }
+    };
 
     return {
         render
@@ -8659,6 +8729,8 @@ const CrossWord = (() => {
 
             __renderGrid(questions, __renderQuestions(questions));
             questionSet = questions;
+
+            Activity.initMathJax();
 
         } catch (err) {
             console.error('CrossWord.render :', err);
@@ -9421,6 +9493,8 @@ const ShravanKaushalWithImages = (() => {
 
         }
 
+        Activity.initMathJax();
+
     }
 
     const playMainAudio = () => {
@@ -9542,14 +9616,10 @@ const ShravanKaushalWithImages = (() => {
 
         const audioPath = q?.question?.audio;
 
-        // ✅ play audio ONLY when allowed
-        if (audioPath && !waitForMainAudioToFinish) {
+        Activity.initMathJax();
 
-            playQuestionAudio(
-                Activity.pathToCWD() + audioPath
-            );
-
-        }
+        // play audio ONLY when allowed
+        if (audioPath && !waitForMainAudioToFinish) playQuestionAudio(Activity.pathToCWD() + audioPath);
 
     }
 
@@ -9669,6 +9739,8 @@ const ShravanKaushalWithImages = (() => {
 
         document.getElementById("answer-review").innerHTML = table.join('');
         document.getElementById("popupDialogAns").style.display = "block";
+
+        Activity.initMathJax();
     }
 
     const closePopUp = () => {
@@ -9939,6 +10011,8 @@ const OnlyAudio = (() => {
             state.replayBtn = parent.querySelector("#replayBtn");
             state.loaderEl = parent.querySelector("#loader");
             state.iframeWrap = parent.querySelector("#oas-iframe-wrap");
+
+            Activity.initMathJax();
         } catch (e) {
             console.error('OnlyAudio.renderUI error:', e);
         }
@@ -10226,6 +10300,8 @@ const RachnatmakParaWithImages = (() => {
             }
         }
         container.innerHTML = text;
+
+        Activity.initMathJax();
     }
 
     return {
@@ -10390,6 +10466,8 @@ const RachnatmakWithKeyboard = (() => {
                 .addTyping({ showTyping: true, delay: 70 })
                 .on('keydown', e => e.preventDefault());
         }
+
+        Activity.initMathJax();
     }
 
     const showAnswer = () => {
@@ -10557,6 +10635,8 @@ const RachnatmakWithTabBtns = (() => {
 
         showAns(questionId);
         handlingClick();
+
+        Activity.initMathJax();
     }
 
     const handlingClick = () => {
@@ -10595,6 +10675,8 @@ const RachnatmakWithTabBtns = (() => {
             $("#readyLetterBox").show();
             $("#readyLetterBox").css("display", "flex");
         });
+
+        Activity.initMathJax();
     }
 
     return {
@@ -10736,6 +10818,8 @@ const RachnatmakWithInputs = (() => {
                 .addTyping({ showTyping: true, delay: 70 })
                 .on('keydown', e => e.preventDefault());
         }
+
+        Activity.initMathJax();
     }
 
     const showDefaultAnswer = () => {
@@ -11066,6 +11150,8 @@ const ClickOnImage = (() => {
         window.addEventListener("resize", () => {
             resizeFn(width, height)
         });
+
+        Activity.initMathJax();
     }
 
     const resizeFn = (width, height) => {
@@ -11245,6 +11331,8 @@ const FillOnClick = (() => {
                 opt.addEventListener('click', selectOption);
             });
         }
+
+        Activity.initMathJax();
     }
 
     const selectOption = (e) => {
@@ -11273,7 +11361,7 @@ const FillOnClick = (() => {
 
         let reportHTML = `<div class="ReadingActCard effectFadeScale">
                             <button id="closeReport" class="ReadingActCloseBtn">✖</button>
-                            <h2 class="ReadingActTitle">🎉 ${t.result} 🤪</h2>
+                            <h2 class="ReadingActTitle">🎉 ${t.result}</h2>
                             <div class="ReadingActItemsBox">`;
 
         content?.question.map((item, index) => {
@@ -11285,15 +11373,15 @@ const FillOnClick = (() => {
             reportHTML += `<div class="ReadingActItem ${isCorrect ? "ReadingActCorrect" : "ReadingActWrong"}">
                             <div class="ReadingActQno">${index + 1}.</div>
                             <div class="ReadingActAnswerBox">
-                                <p><strong>${t.yourAnswer}:</strong> <span>${userVal || `😶 ${t.notAttempted}?`}</span></p>
+                                <p><strong>${t.yourAnswer}:</strong> <span>${userVal || `${t.notAttempted}?`}</span></p>
                                 <p><strong>${t.correctAnswer}:</strong> <span>${correctAns}</span></p>
                             </div>
-                            <div class="ReadingActEmoji">${isCorrect ? "😎✔" : "😭❌"}</div>
+                            <div class="ReadingActEmoji">${isCorrect ? "✔" : "❌"}</div>
                         </div>`;
         });
 
         reportHTML += `</div>
-                        <h2 class="ReadingActScore">🏆 ${t.score}: ${score}/${content?.question.length}</h2>
+                        <h2 class="ReadingActScore">${t.score}: ${score}/${content?.question.length}</h2>
                         </div>`;
 
         document.getElementById("reportBoxReading").innerHTML = reportHTML;
@@ -11302,6 +11390,7 @@ const FillOnClick = (() => {
             $("#reportBoxReading").hide();
             document.getElementById("reportBoxReading").innerHTML = "";
         });
+        Activity.initMathJax();
     }
 
     const resetActivity = () => {
@@ -11337,6 +11426,7 @@ const FillOnClick = (() => {
                 }
             });
         });
+        Activity.initMathJax();
     }
 
     return {
@@ -11440,6 +11530,8 @@ const Dictionary = (() => {
 
         makeDraggable(".wordDragDic");
         initDroppable(".container");
+
+        Activity.initMathJax();
     }
 
     const makeDraggable = (selector) => {
@@ -11466,6 +11558,7 @@ const Dictionary = (() => {
                 $(this).append($dragged);
             }
         });
+        Activity.initMathJax();
     }
 
     const checkAnswers = () => {
@@ -11491,19 +11584,20 @@ const Dictionary = (() => {
 
         if (correct === totalWords) {
             Swal.fire({
-                title: "🎉" + popupLabels.excellent,
+                title: popupLabels.excellent,
                 text: popupLabels.allCorrect,
                 icon: "success",
                 confirmButtonText: popupLabels.ok
             });
         } else {
             Swal.fire({
-                title: popupLabels.oops + "💪",
+                title: popupLabels.oops,
                 text: popupLabels.scored(correct, totalWords),
                 icon: "info",
                 confirmButtonText: popupLabels.ok
             });
         }
+        Activity.initMathJax();
     }
 
     const resetActivity = () => {
@@ -11526,6 +11620,7 @@ const Dictionary = (() => {
             $(`.dropBoxDict[data-accept='${letter}']`).append($clone);
         });
         $(".dropBoxDict").droppable("disable");
+        Activity.initMathJax();
     }
 
     return {
@@ -11551,14 +11646,14 @@ const MentalMath = (() => {
 
     let __questionID;
 
-    MathJax = {
-        tex: {
-            inlineMath: [
-                ["\\(", "\\)"],
-                ["\\[", "\\]"]
-            ]
-        }
-    };
+    // MathJax = {
+    //     tex: {
+    //         inlineMath: [
+    //             ["\\(", "\\)"],
+    //             ["\\[", "\\]"]
+    //         ]
+    //     }
+    // };
 
     const ui = async (questionId) => {
         try {
@@ -11710,7 +11805,7 @@ const MentalMath = (() => {
             if (area) area.innerHTML = html;
 
             makeDroppable(`.${dropAreaCls}`);
-            MathJax.typesetPromise();
+            // MathJax.typesetPromise();
 
         } catch (err) {
             console.error('MentalMath.operatorUI :', err);
@@ -12262,6 +12357,8 @@ const MathMoney = (() => {
             initDrag();
             initDrop();
 
+            Activity.initMathJax();
+
         } catch (err) {
             console.error('MathMoney.render :', err);
         }
@@ -12279,6 +12376,7 @@ const MathMoney = (() => {
             tolerance: 'intersect',
             drop: dropHandler
         });
+        Activity.initMathJax();
     };
 
     const dropHandler = (event, ui) => {
@@ -12320,6 +12418,7 @@ const MathMoney = (() => {
             setTimeout(() => $(this).removeClass('wrongAnsMoney'), 600);
             ui.draggable.draggable('option', 'revert', true);
         }
+        Activity.initMathJax();
     }
 
     return {
@@ -12443,6 +12542,8 @@ const ShabdRachna = (() => {
             $(`#${quesContId}`).html(html);
             initDragAndDrop();
 
+            Activity.initMathJax();
+
         } catch (err) {
             console.error('ShabdRachna.render :', err);
         }
@@ -12515,16 +12616,16 @@ const ShabdRachna = (() => {
 
         const messages = {
             hi: [
-                { min: 100, msg: "आप तो कमाल हो! 🤩 पूरी तरह सही!", emoji: "🧡🎉😁" },
-                { min: 70, msg: "बहुत बढ़िया! थोड़ी और practice कर लो!", emoji: "👍😃" },
-                { min: 40, msg: "अच्छा है, कोशिश जारी रखें!", emoji: "🙂🤏" },
-                { min: 0, msg: "😂 अरे! ये क्या कर दिया? फिर से कोशिश करो!", emoji: "😅😭" }
+                { min: 100, msg: "आप तो कमाल हो! पूरी तरह सही!", emoji: "" },
+                { min: 70, msg: "बहुत बढ़िया! थोड़ी और practice कर लो!", emoji: "" },
+                { min: 40, msg: "अच्छा है, कोशिश जारी रखें!", emoji: "" },
+                { min: 0, msg: "अरे! ये क्या कर दिया? फिर से कोशिश करो!", emoji: "" }
             ],
             en: [
-                { min: 100, msg: "Amazing! All correct! 🤩", emoji: "🧡🎉😁" },
-                { min: 70, msg: "Great! A little more practice!", emoji: "👍😃" },
-                { min: 40, msg: "Good! Keep trying!", emoji: "🙂🤏" },
-                { min: 0, msg: "Oops! Try again! 😂", emoji: "😅😭" }
+                { min: 100, msg: "Amazing! All correct!", emoji: "" },
+                { min: 70, msg: "Great! A little more practice!", emoji: "" },
+                { min: 40, msg: "Good! Keep trying!", emoji: "" },
+                { min: 0, msg: "Oops! Try again!", emoji: "" }
             ]
         };
 
@@ -12561,6 +12662,8 @@ const ShabdRachna = (() => {
         $('#funnyReport').html(tableView).css({ 'display': 'flex' });
         $('#funnyBtn')[0].addEventListener('click', closeReport);
 
+        Activity.initMathJax();
+
     };
 
     const showAnswers = () => {
@@ -12586,6 +12689,7 @@ const ShabdRachna = (() => {
                 drop.classList.remove('wrongSabad');
             });
         });
+        Activity.initMathJax();
     };
 
     const resetAll = () => {
@@ -12829,6 +12933,7 @@ const SpellCheck = (() => {
 
             document.__circle_click_attached = true;
         }
+        Activity.initMathJax();
     };
 
     function hasHashPhrases(replacement, str) {
@@ -12907,8 +13012,10 @@ const SpellCheck = (() => {
             return;
         }
 
-        // ✅ Everything correct, show report
+        // Everything correct, show report
         showClickReportClick(activity.questions, userSelections[key], activity.lang || 'en');
+
+        Activity.initMathJax();
     };
 
     const showAnswers = (dataKeyParam, btn) => {
@@ -12951,6 +13058,8 @@ const SpellCheck = (() => {
             btn.classList.add("clicked-show");
         }
 
+        Activity.initMathJax();
+
     };
 
     const resetCircle = (dataKeyParam) => {
@@ -12980,6 +13089,8 @@ const SpellCheck = (() => {
         }
 
         userSelections[key] = {};
+
+        Activity.initMathJax();
     };
 
     const showClickReportClick = (clickData, selections = {}, typeLang = 'en') => {
@@ -13061,6 +13172,8 @@ const SpellCheck = (() => {
                 ? `आपको ${totalQues} में से ${correctCount} अंक मिले हैं`
                 : `You scored ${correctCount} out of ${totalQues}`;
         }
+
+        Activity.initMathJax();
     };
 
     const closeReportClick = () => {
@@ -13153,7 +13266,7 @@ const SpellItOut = (() => {
             }
 
         } catch (e) {
-            console.error('Circle.ui :', e);
+            console.error('SpellItOut', e);
         }
     };
 
@@ -14107,6 +14220,8 @@ const VirtualTour = (() => {
                 `
             }).join('') ?? '';
         }
+
+        Activity.initMathJax();
     };
 
     const renderNext = () => {
@@ -14566,7 +14681,7 @@ const CustomTemplate = (() => {
     const __bindEvents = (activity) => {
         if (!activity) return;
 
-        activity.events.forEach(item => {
+        activity?.events?.forEach(item => {
             const selector = item?.selector ?? undefined;
             if (!selector) return;
 
@@ -14584,7 +14699,7 @@ const CustomTemplate = (() => {
                     const handlers = Array.isArray(handler) ? handler : [handler];
                     handlers.forEach(h => {
                         const fn = typeof h === 'string'
-                            ? activity.logic?.[h]
+                            ? activity?.logic?.[h]
                             : undefined;
 
                         if (!fn) {
@@ -14618,7 +14733,9 @@ const CustomTemplate = (() => {
         __loadCSS(activity);
 
         __bindEvents(activity);
-    }
+
+        Activity.initMathJax();
+    };
 
     return {
         render: __init

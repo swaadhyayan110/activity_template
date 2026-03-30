@@ -13,6 +13,7 @@ const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = [
+        { qid: 44, text: ['Q-44', 'Math'], module: 0 },
         { qid: 0, text: ['Q-0', 'Custom'], module: 0 },
         { qid: 1, text: ['Q-1', 'Match-1'], module: 1, landscape: true },
         { qid: 2, text: ['Q-2', 'Match-2'], module: 2 },
@@ -62,6 +63,105 @@ const Define = (() => {
     // DEFINE QUESTIONS
     const questions = [
         {
+            id: 44,
+            ui: () => {
+                const exp = [
+                    { type: 'symbol', text: '`=`' },
+                    { type: 'symbol', text: '`+`' },
+                    { type: 'symbol', text: '`-`' },
+                    { type: 'symbol', text: '`alpha`' },
+                    { type: 'symbol', text: '`beta`' },
+                    { type: 'symbol', text: '`gamma`' },
+                    { type: 'symbol', text: '`theta`' },
+                    { type: 'symbol', text: '`sum`' },
+                    { type: 'symbol', text: '`prod`' },
+                    { type: 'symbol', text: '`int`' },
+                    { type: 'symbol', text: '`lim`' },
+                    { type: 'symbol', text: '`e`' },
+                    { type: 'symbol', text: '`infty`' },
+                    { type: 'symbol', text: '`sigma`' },
+                    { type: 'symbol', text: '`mu`' },
+                    { type: 'symbol', text: '`pi`' },
+                    { type: 'symbol', text: '`Omega`' },
+                    { type: 'symbol', text: '`pm`' },
+                    { type: 'symbol', text: '`log`' },
+                    { type: 'symbol', text: '`ln`' },
+                    { type: 'symbol', text: '`int`' },
+                    { type: 'symbol', text: '`to`' },
+                    { type: 'symbol', text: '`approx`' },
+                    { type: 'symbol', text: '`propto`' },
+                    { type: 'symbol', text: '`P(A)`' },
+                    { type: 'symbol', text: '`P(B)`' },
+                    { type: 'symbol', text: '`mathbb(N)`' },
+                    { type: 'symbol', text: '`mathbb(Z)`' },
+                    { type: 'symbol', text: '`mathbb(Q)`' },
+                    { type: 'symbol', text: '`mathbb(R)`' },
+                    { type: 'symbol', text: '`cap`' },
+                    { type: 'symbol', text: '`cup`' },
+                    { type: 'symbol', text: '`in`' },
+                    { type: 'symbol', text: '`notin`' },
+                    { type: 'symbol', text: '`subset`' },
+                    { type: 'symbol', text: '`subseteq`' },
+                    { type: 'symbol', text: '`emptyset`' },
+                    { type: 'symbol', text: '`n!`' },
+                    { type: 'symbol', text: '`vec(a)`' },
+                    { type: 'symbol', text: '`bar(x)`' },
+                    { type: 'power', text: '`6^7`' },
+                    { type: 'fraction', text: '`7/8`' },
+                    { type: 'modulo', text: '`7%8`' },
+                    { type: 'division', text: '`7 divide 8`' },
+                    { type: 'multiplication', text: '`7 times 8`' },
+                    { type: 'multiplication', text: '`7 * 8`' },
+                    { type: 'subtraction', text: '`7 - 8`' },
+                    { type: 'addition', text: '`7 + 8`' },
+                    { type: 'mixed', text: '`1 1/2`' },
+                    { type: 'root', text: '`sqrt(x)`' },
+                    { type: 'absolute', text: '`|x - 5|`' },
+                    { type: 'trigonometry', text: '`sin^2 theta`' },
+                ];
+
+                const html = [];
+
+                const heading = `
+                    <div class="border border-success text-center fs-5 fst-italic text-success-emphasis bg-success-subtle rounded my-3 shadow-sm p-2 w-75 mx-auto">
+                        MathJax V2 Syntax
+                    </div>
+                    <div class="w-75 mx-auto">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Type</th>
+                                <th>Usage</th>
+                                <th>Expected Output</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                html.push( heading );
+
+                const express = exp?.map(({type, text}) => {
+                    return `
+                        <tr>
+                            <td class="text-capitalize">${type}</td>
+                            <td class="text-center">
+                                <span>\`</span>
+                                <span class="text-muted">
+                                    ${text.replace(/`/g, '')}
+                                </span>
+                                <span>\`</span>
+                            </td>
+                            <td class="text-center">${text}</td>
+                        </tr>
+                    `;
+                }).join( '' );
+
+                const tableEnd = `</tbody></table></div>`;
+                html.push( express + tableEnd );
+
+                return html.join( '' );
+            }
+        },
+        {
             id: 0,
             ui: () => {
                 const options = [
@@ -75,48 +175,48 @@ const Define = (() => {
                 ];
 
                 const html = `
-                <div class="container py-4">
-                    <h5 class="text-center mb-3">
-                        Tick the things you can see in the plate
-                    </h5>
+                    <div class="container py-4">
+                        <h5 class="text-center mb-3">
+                            Tick the things you can see in the plate
+                        </h5>
 
-                    <div class="row">
-                        <!-- Options -->
-                        <div class="col-md-6">
-                            <div class="card p-3 shadow-sm">
-                                ${options.map((opt, i) => `
-                                    <div class="form-check my-2">
-                                        <input 
-                                            class="form-check-input option-check" 
-                                            type="checkbox" 
-                                            id="opt${i}"
-                                            data-correct="${opt.correct}"
-                                        >
-                                        <label class="form-check-label" for="opt${i}">
-                                            ${opt.name}
-                                        </label>
-                                    </div>
-                                `).join('')}
+                        <div class="row">
+                            <!-- Options -->
+                            <div class="col-md-6">
+                                <div class="card p-3 shadow-sm">
+                                    ${options.map((opt, i) => `
+                                        <div class="form-check my-2">
+                                            <input 
+                                                class="form-check-input option-check" 
+                                                type="checkbox" 
+                                                id="opt${i}"
+                                                data-correct="${opt.correct}"
+                                            >
+                                            <label class="form-check-label" for="opt${i}">
+                                                ${opt.name}
+                                            </label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Plate Image -->
+                            <div class="col-md-6 text-center">
+                                <img 
+                                    src="img/plate.png" 
+                                    class="img-fluid rounded shadow-sm"
+                                    style="max-height:300px;"
+                                />
                             </div>
                         </div>
 
-                        <!-- Plate Image -->
-                        <div class="col-md-6 text-center">
-                            <img 
-                                src="img/plate.png" 
-                                class="img-fluid rounded shadow-sm"
-                                style="max-height:300px;"
-                            />
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary check-btn">
+                                Check Answer
+                            </button>
+                            <div id="resultBox" class="mt-3 fw-bold text-center"></div>
                         </div>
                     </div>
-
-                    <div class="text-center mt-4">
-                        <button class="btn btn-primary check-btn">
-                            Check Answer
-                        </button>
-                        <div id="resultBox" class="mt-3 fw-bold text-center"></div>
-                    </div>
-                </div>
                 `;
                 return html;
             },
@@ -149,14 +249,12 @@ const Define = (() => {
                             }
                         }
                     });
-
-                    // 🚫 No selection
+                    
                     if (!hasChecked) {
                         alert("Please select at least one option!");
                         return;
                     }
 
-                    // 🧾 Build answer display
                     const userHTML = `
                         <div class="mb-2">
                             <div class="fw-bold">Your Answer</div>
@@ -170,17 +268,16 @@ const Define = (() => {
                             ${correctAnswers.map((item, i) => `<div>${i + 1}. ${item}</div>`).join('')}
                         </div>
                     `;
-
-                    // ✅ / ❌ Result
+                    
                     if (allCorrect) {
                         result.innerHTML = `
-                            <div class="text-success fw-bold">✅ Correct!</div>
+                            <div class="text-success fw-bold">Correct!</div>
                             ${userHTML}
                             ${correctHTML}
                         `;
                     } else {
                         result.innerHTML = `
-                            <div class="text-danger fw-bold">❌ Incorrect</div>
+                            <div class="text-danger fw-bold">Incorrect</div>
                             ${userHTML}
                             ${correctHTML}
                         `;
@@ -195,9 +292,9 @@ const Define = (() => {
             id: 1,
             lang: 'en',
             head: 'Template : 1',
-            subhead: 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
+            subhead: 'Look at `theta` the expression eye-opener in your textbook. Now join the expression to its idiom.',
             content: [
-                { id: 1, left: 'Bird\'s&nbsp;<u>eye</u>&nbsp;view', right: 'Seen from above, as a bird does' },
+                { id: 1, left: 'Bird\'s&nbsp;<u>eye</u>&nbsp;view', right: 'Seen &nbsp; `theta` &nbsp; from above, as a bird does' },
                 { id: 2, left: 'Feast for the eyes', right: 'To look with great enjoyment' },
                 { id: 3, left: { path: 'img/1.png', width: '40px' }, right: 'To be very attentive' },
                 { id: 4, left: 'Apple of someone\'s eye', right: 'To be a favourite or loved one of someone' },
@@ -209,7 +306,7 @@ const Define = (() => {
             id: 2,
             lang: 'hi',
             head: 'Template : 2',
-            subhead: 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
+            subhead: 'Look at the `theta` expression eye-opener in your textbook. Now join the expression to its idiom.',
             content: {
                 col1: [
                     { id: 1, img: 'img/1.png', width: '80%' },
@@ -217,7 +314,7 @@ const Define = (() => {
                     { id: 3, img: 'img/3.png' },
                 ],
                 col2: [
-                    { id: 1, text: 'जादू दिखाना' },
+                    { id: 1, text: '`theta` जादू दिखाना' },
                     { id: 2, text: 'पत्र बाँटना' },
                     { id: 3, img: 'img/2.png' },
                     { id: 4, text: 'रखवाली करना' },
@@ -237,9 +334,9 @@ const Define = (() => {
             id: 3,
             lang: 'hi',
             head: 'Template : 3',
-            subhead: 'Look at the expression eye-opener in your textbook. Now join the expression to its idiom.',
+            subhead: 'Look at the expression eye-opener `theta` in your textbook. Now join the expression to its idiom.',
             content: [
-                { id: 1, top: 'Bird\'s eye view', bottom: 'To understand something' },
+                { id: 1, top: 'Bird\'s eye view `theta`', bottom: 'To understand something' },
                 { id: 2, top: 'Feast for the eyes', bottom: 'Be noticed by someone' },
                 { id: 3, top: 'All eyes and ears', bottom: 'To be very attentive' },
                 { id: 4, top: 'Apple of someone\'s eye', bottom: 'Seen from above' },
@@ -250,11 +347,11 @@ const Define = (() => {
             id: 4,
             lang: 'en',
             head: 'Template : 4',
-            subhead: 'text..',
+            subhead: 'text.. `theta`',
             content: {
                 hintimage: 'img/ch4_1.png',
                 hinttext: [
-                    'Broad Gauge RailwayLine',
+                    'Broad Gauge RailwayLine `theta`',
                     'Pond',
                     'Police Station',
                     'Bridge',
@@ -268,7 +365,7 @@ const Define = (() => {
                     'Railway Crossing'
                 ],
                 blanks: [
-                    { img: 'img/ch4_2.png', ans: 'Settlement' },
+                    { img: 'img/ch4_2.png', ans: 'Settlement `theta`' },
                     { img: 'img/ch4_3.png', ans: 'Forest' },
                     { img: 'img/ch4_4.png', ans: 'Places of Worship' },
                     { img: 'img/ch4_5.png', ans: 'River' },
@@ -296,7 +393,7 @@ const Define = (() => {
                 },
                 questionGridSize: { md: 12, sm: 12, col: 12 },      // [OPTIONAL]
                 hint: {        // ['string' || {}]
-                    text: 'आदरणीया चाची जी, #img#; गर्मियों की छुट्टियाँ, #img# <br> बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
+                    text: '`theta` आदरणीया चाची जी, #img#; गर्मियों की छुट्टियाँ, #img# <br> बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
                     images: [
                         { path: 'img/2.png', width: '15%' },
                         { path: 'img/3.png' },
@@ -367,9 +464,9 @@ const Define = (() => {
             id: 6,
             lang: 'hi',
             head: 'Template : 6',
-            subhead: 'text..',
+            subhead: 'text.. `theta`',
             content: [
-                'SCHOOL', 'TEACHER', 'STUDENT', 'BOOK',
+                'SCHOOL', 'TEACHER', 'STUDENT', 'BOOK', '`theta`',
                 'CLASS', 'COLLEGE', 'EXAM', 'LEARN', 'STUDY'
             ]
         },
@@ -377,9 +474,9 @@ const Define = (() => {
             id: 7,
             lang: 'en',
             head: 'Template : 7',
-            subhead: 'text ...',
+            subhead: 'text ... `theta`',
             content: [
-                'A short, statement expressing an opinion.',
+                'A short, statement expressing an opinion. `theta`',
                 'A stance where both feet are placed in line, often used for balance.',
                 'Actions speak louder than words.',
                 'A picture is worth a thousand words.',
@@ -393,7 +490,7 @@ const Define = (() => {
             id: 8,
             lang: 'hi',
             head: 'Template : 8',
-            subhead: '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो )',
+            subhead: '( शब्दों को सुनकर लिंगानुसार सही बॉक्स में रखो ) `theta`',
             content: {
                 shuffle: false,
                 audio: './bg.mp3',
@@ -410,6 +507,7 @@ const Define = (() => {
                 options: [
                     { id: 1, ans: 'm', text: '', images: [{ path: 'img/1.png', width: '50px' }]},
                     { id: 2, ans: 'f', text: 'अध्यापिके' },
+                    { id: 6, ans: 'f', text: '`theta`' },
                     { id: 3, ans: 'n', text: 'क्रीडनकानि', images: [{ path: 'img/3.png', width: '50px' }]},
                     { id: 4, ans: 'm', text: 'हंसौक्री', images: [{ path: 'img/4.png', width: '50px' }]},
                     { id: 5, ans: 'm', text: 'अध्याकानि', images: [{ path: 'img/5.png', width: '50px' }]},
@@ -422,7 +520,7 @@ const Define = (() => {
             head: 'Template : 9',
             content: {
                 text: {
-                    text: 'वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
+                    text: '`theta` वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
                     side: 'right'
                 },
                 img: {
@@ -442,7 +540,7 @@ const Define = (() => {
                             text: 'दूसरों के खिलौनों को खराब #_# कहना'
                         },
                         options: [
-                            { text : 'text test', image: 'img/4.png' },
+                            { text : 'text `theta` test', image: 'img/4.png' },
                             { image: 'img/6.png' },
                             { image: 'img/1.png' },
                             { text: 'none of these' }
@@ -455,7 +553,7 @@ const Define = (() => {
                         },
                         options: [
                             { text: 'अच्छा है।' },
-                            { text: 'अच्छी बात है' },
+                            { text: 'अच्छी `theta` बात है' },
                             { text: 'आम बात है।' },
                             { text : 'text test', image: 'img/3.png', width: '100%' },
                         ],
@@ -505,7 +603,7 @@ const Define = (() => {
                     {
                         level: 1,
                         heading: {
-                            text: 'this is sample heading',
+                            text: 'this is `theta` sample heading',
                             classes: [
                                 'text-center', 'fs-4', 'text-capitalize',
                                 'text-primary-emphasis', 'bg-primary-subtle',
@@ -520,7 +618,7 @@ const Define = (() => {
                                     width: '10%'
                                 },
                                 question: {
-                                    text: 'कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
+                                    text: '`theta` कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
                                     images: {
                                         path: ['img/1.png', 'img/2.png']
                                     }
@@ -546,7 +644,7 @@ const Define = (() => {
                                 ],
                                 answer: 1
                             },
-                            { question: 'कविता में ‘नव निर्माण’ का अर्थ है -', options: ['नया खाना बनाना', 'नई इमारत बनाना', 'समाज का पुनर्निर्माण करना', 'नई सड़क बनाना'], answer: 3 },
+                            { question: '`theta` कविता में ‘नव निर्माण’ का अर्थ है -', options: ['नया खाना बनाना', 'नई इमारत बनाना', 'समाज का पुनर्निर्माण करना', 'नई सड़क बनाना'], answer: 3 },
                             { question: '‘उठो’ शब्द से कवि क्या करना चाहता है?', options: ['जगाना', 'सुलाना', 'डराना', 'चुप कराना'], answer: 3 },
                             { question: '‘नव प्रात’ का अर्थ है -', options: ['नया गाँव', 'नई सुबह', 'नया जीवन', 'नया काम'], answer: 3 },
                             { question: '‘नव’ शब्द का अर्थ क्या है?', options: ['पुराना', 'रंगीन', 'नया', 'अधूरा'], answer: 3 },
@@ -594,18 +692,18 @@ const Define = (() => {
             id: 11,
             lang: 'hi',
             content: {
-                desc: 'audio description',
+                desc: 'audio description `theta`',
                 src: 'https://swaadhyayan.com/data/learningContent/3/Hindi/video/cca24b220e4c0b05f1b84310b587da95.mp4',
             }
         },
         {
             id: 12,
             lang: 'hi',
-            head: 'Template : 12, Drop Down',
+            head: 'Template : 12, Drop Down `theta`',
             content: {
                 replacement: '#_#',
                 questions: [
-                    { text: '(क) सितार के लिए #_# खोखला किया गया।', options: ['लकड़ी', 'कद्दू', 'धातु'], answer: 'कद्दू' },
+                    { text: '(क) सितार के लिए #_# खोखला किया गया।', options: ['लकड़ी', 'कद्दू', 'धातु', '`theta`'], answer: '`theta`' },
                     { text: '(ख) सितार की लकड़ी में ताँबा #_# जोड़ा गया।', options: ['तार', 'ताँबा', 'धातु'], answer: 'तार' },
                     { text: '(ग) #_# ने अपने कौशल से सितार को सजाया।', options: ['कारीगर', 'कवि', 'विद्यार्थी'], answer: 'कारीगर' },
                     { text: '(घ) सितार से #_# आवाज़ निकलने लगी।', options: ['मधुर', 'तेज़', 'भारी'], answer: 'मधुर' },
@@ -616,10 +714,10 @@ const Define = (() => {
         {
             id: 13,
             lang: 'hi',
-            head: 'Template : 13, Circle ',
+            head: 'Template : 13, Circle `theta` ',
             mode: 'single',
             content: [
-                { id: 1, text: 'दादा जी के लिए - तू, आप, तुम', answer: 'आप' },
+                { id: 1, text: 'दादा जी के लिए - तू, आप, तुम `theta`', answer: '`theta`' },
                 { id: 2, text: 'अध्यापक जी के लिए - आप, वह, तुम', answer: 'आप' },
                 { id: 3, text: 'नानी जी के लिए - आप, तू, तुम', answer: 'आप' },
                 { id: 4, text: 'माँ के लिए - आप, वह, तुम', answer: 'आप' },
@@ -632,15 +730,15 @@ const Define = (() => {
             id: 14,
             lang: 'hi',
             head: 'Template : 14',
-            subhead: 'वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
+            subhead: '`theta` वाक्यांश को ध्यान से सुनकर उनके लिए प्रयुक्त किए जाने वाले एक शब्द के सही क्रमसंख्या को लिखो-',
             content: {
                 questions: [
-                    { id: 1, text: 'लेखक', ans: 4, popuptext: 'जो पुस्तकें लिखता है' },
-                    { id: 2, text: 'चिकित्सक', ans: 3, popuptext: 'जो मरीज़ों का इलाज़ करता है' },
+                    { id: 1, text: 'लेखक', ans: 4, popuptext: 'जो पुस्तकें लिखता है `theta`' },
+                    { id: 2, text: 'चिकित्सक `theta`', ans: 3, popuptext: 'जो मरीज़ों का इलाज़ करता है' },
                     { id: 3, text: 'अध्यापक', ans: 1, popuptext: 'जो पढ़ाता है' },
                     { id: 4, text: 'धोबी', ans: 6, popuptext: 'जो कपड़े धोता है' },
                     { id: 5, text: 'कुम्हार', ans: 2, popuptext: 'जो मिट्टी के बर्तन बनाता है' },
-                    { id: 6, text: 'दरज़ी', ans: 5, popuptext: 'जो कपड़े सिलता है' }
+                    { id: 6, text: 'दरज़ी `theta`', ans: 5, popuptext: 'जो कपड़े सिलता है' }
                 ],
                 audio: {
                     headsrc: './audio/heading.mp3',
@@ -666,7 +764,7 @@ const Define = (() => {
                     answer: false,
                 },
                 {
-                    question: 'सितार में लगाने के लिए सूखा तँूबा खोखला किया गया।',
+                    question: 'सितार में `theta` लगाने के लिए सूखा तँूबा खोखला किया गया।',
                     answer: true
                 },
                 {
@@ -698,9 +796,9 @@ const Define = (() => {
                 option_side: 'top',
                 singleQuestionMode: false,
                 col: { col: 12, md: 4, sm: 6 },
-                addOptions: ['op1', 'op2', 'op3', 'op1'],
+                addOptions: ['op1', 'op2', 'op3', '`theta`', 'op1'],
                 text: {
-                    text: 'वर्षा ऋतु अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
+                    text: 'वर्षा ऋतु `theta` अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
                     side: 'right'
                 },
                 img: {
@@ -719,7 +817,7 @@ const Define = (() => {
                         answer: 1,
                         imageSide: 'right'
                     },
-                    { qid: 2, text: '#_#', image: 'img/1.png', options: ['जंगल'], answer: 0 },
+                    { qid: 2, text: '#_#', image: 'img/1.png', options: ['`theta`'], answer: 0 },
                     { qid: 3, text: 'सितार पर खाली जगह पर #_# की गई।', image: 'img/1.png', options: ['नक्काषी'], answer: 0 },
                     { qid: 4, text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image: 'img/1.png', options: ['खूँटी'], answer: 0 },
                     { qid: 5, text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image: 'img/1.png', options: ['जतन'], answer: 0 }
@@ -733,8 +831,8 @@ const Define = (() => {
             head: 'Template : 16',
             content: {
                 set: {
-                    answers: ['पंख', 'जंगल', 'नक्काषी'],
-                    options: ['पंख', 'जंगल', 'नक्काषी', 'नाचने', 'पंखूँटी', 'पंख'],
+                    answers: ['पंख', 'जंगल', 'नक्काषी', '`theta`'],
+                    options: ['पंख', 'जंगल', 'नक्काषी', 'नाचने', 'पंखूँटी', 'पंख', '`theta`'],
                 },
             }
         },
@@ -743,7 +841,7 @@ const Define = (() => {
             lang: 'en',
             head: 'Template : 17',
             content: {
-                sequence: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+                sequence: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', '`theta`'],
             }
         },
         {
@@ -763,12 +861,12 @@ const Define = (() => {
                     id: 1,
                     tabtitle: 'aPPle',
                     meaning: 'कूद-कूदकर',
-                    sentence: 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
+                    sentence: 'छोटी चिड़ियाँ appleing `theta` चलना सीखती हैं। appleing',
                     image: [
                         {
                             path    : 'img/1.png',
                             width   : '40%',
-                            caption : 'image-text'
+                            caption : 'image-text `theta`'
                         },
                         {
                             path    : 'img/2.png',
@@ -788,7 +886,7 @@ const Define = (() => {
                 },
                 {
                     id: 2,
-                    tabtitle: 'कूद-कूदकर',
+                    tabtitle: 'कूद-कूदकर `theta`',
                     meaning: 'कूद-कूदकर',
                     sentence: 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।'
                 },
@@ -845,7 +943,7 @@ const Define = (() => {
             },
             content: [
                 {
-                    text: 'A drawing of Earth on a flat surface (3 letters)',
+                    text: 'A drawing of Earth on `theta` a flat surface (3 letters)',
                     answer: 'Map',
                     row: 0,
                     col: 0,
@@ -943,7 +1041,7 @@ const Define = (() => {
                 replacement: '#_#',
                 showInput: false,
                 text: {
-                    text: 'sfsf  jsfjsvbf jsbvfjsfs jsfjsf',
+                    text: 'sfsf `theta` jsfjsvbf jsbvfjsfs jsfjsf',
                     side: 'left'
                 },
                 img: {
@@ -952,8 +1050,8 @@ const Define = (() => {
                     imageclass: 'text-center'
                 },
                 questions: [
-                    { text: 'sfsf  jsfjsvbf jsbvfjsfs jsfjsf <br> #_#', answer: 'a' },
-                    { text: 'sfsf  jsfjsvbf jsbvfjsfs jsfjsf <br> #_#', answer: 'b' }
+                    { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'a' },
+                    { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'b' }
                 ]
             }
         },
@@ -969,7 +1067,7 @@ const Define = (() => {
                     showQuestion: true,
                 },
                 questions: [
-                    { sequence: 1, direction: 'v', row: [2, 16], col: [20], question: 'Fossil scientists', answer: "paLEONTOLOGISTS" },
+                    { sequence: 1, direction: 'v', row: [2, 16], col: [20], question: '`theta` Fossil scientists', answer: "paLEONTOLOGISTS" },
                     { sequence: 2, direction: 'v', row: [4, 10], col: [6], question: { text: 'Coins, tools, art #_#', image: { path: 'img/414.png', width: '20%' } }, answer: { text: 'SOURCES', image: { path: 'img/2.png', row: 1, col: 6 } } },
                     { sequence: 3, direction: 'h', row: [5], col: [1, 14], question: 'Scientist who studies humans', answer: { text: 'ANTHROPOLOGIST', image: { path: 'img/3.png', row: 2, col: 1 } } },
                     { sequence: 4, direction: 'v', row: [5, 11], col: [13], question: 'Biographies, plays etc', answer: { text: 'SECULAR', image: { path: 'img/4.png', row: 2, col: 13 } } },
@@ -989,7 +1087,7 @@ const Define = (() => {
             content: {
                 main: {
                     text: {
-                        text: `करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।`,
+                        text: `करता \`theta\` था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।करता था शैतानी दिनभर, गिरकर लगती चोट मुझे, होते घरवाले सब परेशान। समझ न आती उनकी बात, जितना मचाता तूफ़ान मैं, घर के होते खुश सब लोग।`,
                         side: 'bottom'
                     },
                     img: {
@@ -1007,7 +1105,7 @@ const Define = (() => {
                             audio: 'audio/1.mp3'
                         },
                         options: [
-                            { text: 'खेल-कूद में तूफ़ान मचाने पर' },
+                            { text: 'खेल-कूद में तूफ़ान मचाने पर `theta`' },
                             { text: 'खूब सोते रहने से', },
                             { text: 'हर बात में ज़िद करने से', image: 'img/ch4_1.png' },
                             { text: 'इनमें से कोई नहीं ', image: 'img/ch4_1.png' }
@@ -1046,7 +1144,7 @@ const Define = (() => {
         {
             id: 26,
             lang: 'en',
-            head: 'Template : 25',
+            head: 'Template : 25 `theta`',
             content: {
                 video: {
                     path: './video.mp4',
@@ -1066,7 +1164,7 @@ const Define = (() => {
                     width: '15%',
                     replacement: '#_#'
                 },
-                text: "पेड़-पौधे हमारी धरती माँ के सिर्फ़ शृंगार ही नहीं, #_# बल्कि उसपर स्थित जीवन के आधार भी हैं। इनके बिना हम जीवन की कल्पना भी #_# नहीं कर सकते। प्राचीन काल से ही हमारे ऋषियों, मुनियों और विचारकों ने पेड़-पौधों के महत्त्व को समझा। यही कारण है कि हमारी संस्कृति में वनों का इतना महत्त्व है। हमारे यहाँ पेड़-पौधों को लगाना, इनकी पूजा करना और वन-महोत्सव की प्रथा का प्रचलन प्राचीन काल से है और इसके वैज्ञानिक कारण भी हैं। #_# पेड़ों की पूजा अंधविश्वास नहीं है। पेड़-पौधे हमारे लिए बहुत लाभदायक हैं। इनसे हमें खाने के लिए फ़ल, विश्राम के लिए छाया, रोगों के लिए औषधियाँ, जलाने के लिए ईंधन एवं शुद्ध वातावरण आदि मिलता है। अतः उनके प्रति कृतज्ञता प्रकट करना हमारा प्रथम कर्तव्य है। पेड़-पौधे हमेशा से हम पर उपकार करते आए हैं। पेड़-पौधों द्वारा जलवायु औरवातावरण का संतुलन बना रहता है। इनकी जड़ें मिट्टी को जकड़कर रखती हैं तथा पत्तियाँ सड़कर खाद (ह्यूमस) का काम करती हैं। #_# इससे मृदा-क्षरण कम होता है। यह तो हम सभी जानते हैं कि पेड़-पौधों में जीवन होता है। वे भी हमारी तरह दुख-सुख का अनुभव कर अपनी प्रतिक्रिया व्यक्त करते हैं। कहा जाता है कि मनुष्य पर उसके चारों ओर के वातावरण का असर पड़ता है, इसलिए अगर हम अपने चारों तरफ़ की धरती को पेड़ लगाकर हरा कर दें, तो चारों तरफ़ का सौंदर्य देखने लायक होगा, फिर जो मनुष्य ऐसे वातावरण में रहेगा, उसका हृदय भी उसी तरह खुशहाल हो जाएगा। पेड़ तो प्रकृति का सबसे बड़ा वरदान है। #_# अगर पेड़ हैं तो वर्षा होगी, पानी की समस्या नहीं रहेगी एवं ऑक्सीजन और कार्बन डाइऑक्साइड गैसों में संतुलन रहेगा। यदि पेड़ों की संख्या बढ़ा दी जाए तो ग्रीन हाउस गैसों के असर से भी हम बच सकते हैं। प्रगति की ओर बढ़ रहे मानव ने नगर, महानगर, यहाँ तक कि कस्बे और देहात तक में छोटे-बड़े उद्योग-धंधों के रूप में अनेक छोटी-बड़ी फ़ैक्टरियाँ लगाई हैं। उनसे धुआँ, तरह-तरह की विषैली गैसें आदि निकलकर पर्यावरण को प्रदूषित कर रही हैं। पेड़-पौधे उनसे निकलने वाली प्रदूषित गैसों को पर्यावरण में घुलने से रोककर पर्यावरण को दूषित होने से बचाते हैं। पेड़-पौधे उस कामधेनु की भाँति हैं, जिसके बिना जीना असंभव है। इनके बिना हमारा अस्तित्व ही समाप्त हो जाएगा, अतः हमें चाहिए कि ज़्यादा-से-ज़्यादा पेड़ लगाकर अपनी पृथ्वी को बचाएँ, अन्यथा वह समय दूर नहीं, जब पृथ्वी पर जीव और जीवन एक इतिहास बन जाएगा।",
+                text: "पेड़-पौधे `theta` हमारी धरती माँ के सिर्फ़ शृंगार ही नहीं, #_# बल्कि उसपर स्थित जीवन के आधार भी हैं। इनके बिना हम जीवन की कल्पना भी #_# नहीं कर सकते। प्राचीन काल से ही हमारे ऋषियों, मुनियों और विचारकों ने पेड़-पौधों के महत्त्व को समझा। यही कारण है कि हमारी संस्कृति में वनों का इतना महत्त्व है। हमारे यहाँ पेड़-पौधों को लगाना, इनकी पूजा करना और वन-महोत्सव की प्रथा का प्रचलन प्राचीन काल से है और इसके वैज्ञानिक कारण भी हैं। #_# पेड़ों की पूजा अंधविश्वास नहीं है। पेड़-पौधे हमारे लिए बहुत लाभदायक हैं। इनसे हमें खाने के लिए फ़ल, विश्राम के लिए छाया, रोगों के लिए औषधियाँ, जलाने के लिए ईंधन एवं शुद्ध वातावरण आदि मिलता है। अतः उनके प्रति कृतज्ञता प्रकट करना हमारा प्रथम कर्तव्य है। पेड़-पौधे हमेशा से हम पर उपकार करते आए हैं। पेड़-पौधों द्वारा जलवायु औरवातावरण का संतुलन बना रहता है। इनकी जड़ें मिट्टी को जकड़कर रखती हैं तथा पत्तियाँ सड़कर खाद (ह्यूमस) का काम करती हैं। #_# इससे मृदा-क्षरण कम होता है। यह तो हम सभी जानते हैं कि पेड़-पौधों में जीवन होता है। वे भी हमारी तरह दुख-सुख का अनुभव कर अपनी प्रतिक्रिया व्यक्त करते हैं। कहा जाता है कि मनुष्य पर उसके चारों ओर के वातावरण का असर पड़ता है, इसलिए अगर हम अपने चारों तरफ़ की धरती को पेड़ लगाकर हरा कर दें, तो चारों तरफ़ का सौंदर्य देखने लायक होगा, फिर जो मनुष्य ऐसे वातावरण में रहेगा, उसका हृदय भी उसी तरह खुशहाल हो जाएगा। पेड़ तो प्रकृति का सबसे बड़ा वरदान है। #_# अगर पेड़ हैं तो वर्षा होगी, पानी की समस्या नहीं रहेगी एवं ऑक्सीजन और कार्बन डाइऑक्साइड गैसों में संतुलन रहेगा। यदि पेड़ों की संख्या बढ़ा दी जाए तो ग्रीन हाउस गैसों के असर से भी हम बच सकते हैं। प्रगति की ओर बढ़ रहे मानव ने नगर, महानगर, यहाँ तक कि कस्बे और देहात तक में छोटे-बड़े उद्योग-धंधों के रूप में अनेक छोटी-बड़ी फ़ैक्टरियाँ लगाई हैं। उनसे धुआँ, तरह-तरह की विषैली गैसें आदि निकलकर पर्यावरण को प्रदूषित कर रही हैं। पेड़-पौधे उनसे निकलने वाली प्रदूषित गैसों को पर्यावरण में घुलने से रोककर पर्यावरण को दूषित होने से बचाते हैं। पेड़-पौधे उस कामधेनु की भाँति हैं, जिसके बिना जीना असंभव है। इनके बिना हमारा अस्तित्व ही समाप्त हो जाएगा, अतः हमें चाहिए कि ज़्यादा-से-ज़्यादा पेड़ लगाकर अपनी पृथ्वी को बचाएँ, अन्यथा वह समय दूर नहीं, जब पृथ्वी पर जीव और जीवन एक इतिहास बन जाएगा।",
             }
         },
         {
@@ -1074,13 +1172,13 @@ const Define = (() => {
             lang: 'hi',
             head: 'Template : 27',
             hintText: false,
-            subhead: "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
+            subhead: "‘विज्ञान के चमत्कार’ `theta` विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
             content: {
                 heading: " • विज्ञान का उद्देश्य मानव जीवन को सरल व कष्टरहित बनाना • विभिन्न क्षेत्रों में चमत्कार • चिकित्सा क्षेत्र में• संचार व परिवहन क्षेत्र में • शिक्षा व कृषि क्षेत्र में • विभिन्न  ष्कारों ने मानव जीवन को सुविधासंपन्न बना दिया है।",
                 answer: `<div class='headingInDtaAns'>विज्ञान के चमत्कार</div>
                         यदि विज्ञान के क्षेत्र में निरंतर नए-नए आविष्कार न होते तो कदाचित आज मानव प्रगति के सर्वोच्च शिखर पर
                         आसीन न होता। 
-                        वैज्ञानिकों ने नित्य नए आविष्कार करके मनुष्य के जीवन को कष्टरहित एवं आनंददायी बना दिया है। आज
+                        वैज्ञानिकों ने \`theta\` नित्य नए आविष्कार करके मनुष्य के जीवन को कष्टरहित एवं आनंददायी बना दिया है। आज
                         स्थिति यह है कि विज्ञान की सहायता लिए बिना मनुष्य की सुबह से शाम नहीं होती है। विज्ञान ने स्वर्ग
                         की सुखद सुंदर कल्पना को ज़मीन पर उतार दिया है। तीव्रगामी यातायात के साधनों से संपूर्ण विश्व की
                         यात्रा करना संभव हो गया है। टेलीफ़ोन, मोबाइल और कंप्यूटर ने हजारों मीलों की दूरियाँ समाप्त कर
@@ -1113,13 +1211,13 @@ const Define = (() => {
             id: 29,
             lang: 'hi',
             head: 'Template : 28',
-            subhead: "‘विज्ञान के चमत्कार’ विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
+            subhead: "‘विज्ञान के चमत्कार’ `theta` विषय पर लगभग 200-250 शब्दों में निबंध लिखिए।",
             content: {
-                heading: "दादा जी को स्वास्थ्य का ध्यान रखने की सलाह देते हुए पत्र",
+                heading: "दादा जी `theta` को स्वास्थ्य का ध्यान रखने की सलाह देते हुए पत्र",
                 questions: [
                     { label: "घर का पता एवं स्थान", answer: `<b>डी-32/3 लाजपत नगर <br/>नई दिल्ली </b>` },
                     { label: "तिथि", answer: `दिनांक- ............................` },
-                    { label: "संबोधन", answer: `पूजनीय दादा जी,` },
+                    { label: "संबोधन", answer: `पूजनीय \`theta\` दादा जी,` },
                     { label: "अभिवादन", answer: `सादर चरण स्पर्श।` },
                     { label: "समाचार विस्तार से", answer: `आपका पत्र मिला। घर का समाचार पढ़कर खुशी हुई, किंतु आपके स्वास्थ्य को लेकर चिंता बढ़ गई है। आपने लिखा है कि आपके पैरों में दर्द बढ़ गया है, जिससे चलने-फि़रने में तकलीफ़ होती है। आप अपना ध्यान रखें और किसी अच्छे अस्पताल में इलाज- कराएँ, जिससे आप ठीक प्रकार से चल सकें। व्यायाम करते रहें, जिससे हाथ-पैर चलते रहें। दवाई भी समय पर लें। मेरी तरफ़ से आप निशि्ंचत रहें। इस वर्ष भी मैं प्रथम आने के लिए जी-तोड़ मेहनत कर रहा हूँ। आजकल परीक्षा की तैयारी में व्यस्त हूँ। मैं दीपावली की छुट्टियों में आपसे मिलने आ रहा हूँ। मेरी ओर से घर में दादी जी, माता जी को सादर प्रणाम तथा शोभा को प्यार कहिएगा।` },
                     { label: "अपना रिश्ता बताते हुए", answer: `आपका प्यारा पोता` },
@@ -1131,7 +1229,7 @@ const Define = (() => {
             id: 30,
             lang: 'hi',
             head: 'Template : 29',
-            subhead: 'अपनी छोटी बहन को मोबाइल पर व्यर्थ समय बिताने की जगह पढ़ाई पर ध्यान देने का सुझाव देते हुए पत्र लिखिए।',
+            subhead: 'अपनी छोटी बहन को मोबाइल पर `theta` व्यर्थ समय बिताने की जगह पढ़ाई पर ध्यान देने का सुझाव देते हुए पत्र लिखिए।',
             content: {
                 showButtons: true,
                 showAnswerOfId: 1,
@@ -1163,7 +1261,7 @@ const Define = (() => {
         {
             id: 31,
             lang: 'en',
-            head: "Template : 30",
+            head: "Template : 30 `theta`",
             content: {
                 width: "200px",
                 height: "200px",
@@ -1185,7 +1283,7 @@ const Define = (() => {
             content: {
                 replacement: '#_#',
                 question: [
-                    { text: 'The maximum tally marks fell in a #_# range', options: ['general', 'particular'], answer: 0 },
+                    { text: 'The `theta` maximum tally marks fell in a #_# range', options: ['general', 'particular'], answer: 0 },
                     { text: 'Raw data can be condensed using a #_#', options: ['class intervals', 'age intervals'], answer: 1 },
                     { text: 'No two students had identical #_#', options: ['heights and weights', 'health requirements'], answer: 1 },
                     { text: 'Many students had their data falling under the same #_#', options: ['index', 'range'], answer: 1 },
@@ -1197,9 +1295,9 @@ const Define = (() => {
             id: 33,
             lang: 'en',
             head: 'Template : 32',
-            subhead: '(Drag and arrange each word in the order you will find them in a dictionary.)',
+            subhead: '(Drag and `theta` arrange each word in the order you will find them in a dictionary.)',
             content: [
-                'Negligence', 'Untruthfulness', 'Omnibus', 'Flustered', 'Stupidity',
+                'Negligence', 'Untruthfulness', '`theta`', 'Omnibus', 'Flustered', 'Stupidity',
                 'Scrimping', 'Patronage', 'Relinquished', 'Celestial', 'Xenophobia',
                 'Grimly', 'Hankering', 'Quavered', 'Angel', 'Deterrence', 'Lavender', 'aeroplane',
             ]
@@ -1207,7 +1305,7 @@ const Define = (() => {
         {
             id: 34,
             lang: 'en',
-            head: 'Numbers and Numeration',
+            head: '`theta` Numbers and Numeration',
             subhead: 'Drag the correct answer',
             content: {
                 shuffle: false,
@@ -1215,14 +1313,14 @@ const Define = (() => {
                     {
                         type: 'x',
                         replacement: '#_#',
-                        text: ['\\( \\sqrt{49} \\)  = #_# + 200 = 207 x #_# = #img#'],
+                        text: ['`theta` \\( \\sqrt{49} \\)  = #_# + 200 = 207 x #_# = #img#'],
                         image: {
                             width: '200px',
                             path: 'img/414.png',
                             replacement: '#img#',
                         },
-                        options: ['7', '2', '20'],
-                        correct: [0, 1]
+                        options: ['7', '2', '20', '`theta`'],
+                        correct: [0, 3]
                     },
                     {
                         type: '+',
@@ -1244,7 +1342,7 @@ const Define = (() => {
             id: 35,
             content: {
                 buttons: [
-                    { ytId: 'xyxlR0DNyRI', isVideo: false, label: '1 पुल्लिङ्गम् प्रथम:' },
+                    { ytId: 'xyxlR0DNyRI', isVideo: false, label: '1 पुल्लिङ्गम् `theta` प्रथम:' },
                     { ytId: '1h5JA1fqXvo', isVideo: true, label: '2 स्त्रीलिङ्गम्' },
                     { ytId: 'xyxlR0DNyRI', isVideo: true, label: '3 नपुंसकलिङ्गम्' },
                     { ytId: 'xyxlR0DNyRI', isVideo: true, label: '4 पुल्लिङ्गम्' },
@@ -1262,11 +1360,11 @@ const Define = (() => {
             lang: 'en',
             head: 'Template : 35',
             content: {
-                options: ['120', '40', '160', '180', '480'],
+                options: ['`theta`', '120', '40', '160', '180', '480'],
                 section: {
                     visible: true,
                     heading: {
-                        primary: 'XYZ Sweets',
+                        primary: 'XYZ `theta` Sweets',
                         secondary: '9876543210',
                     },
                     list: [
@@ -1325,7 +1423,7 @@ const Define = (() => {
             id: 37,
             lang: 'en',
             head: 'Template : 36',
-            subhead: 'वर्णों को सही क्रम में लगाकर सार्थक शब्द बनाओ-',
+            subhead: 'वर्णों को `theta` सही क्रम में लगाकर सार्थक शब्द बनाओ-',
             content: {
                 width: {
                     heading: '240px'
@@ -1356,7 +1454,7 @@ const Define = (() => {
         {
             id: 38,
             lang: 'en',
-            head: 'Template : 37, Spell Check',
+            head: 'Template : 37, Spell Check `theta`',
             mode: 'multiple',
             content: {
                 replacement: '#{word}#',
@@ -1368,7 +1466,7 @@ const Define = (() => {
         {
             id: 39,
             lang: 'en',
-            head: 'Template : 38, Spell It Out',
+            head: 'Template : 38, Spell It Out `theta`',
             content: {
                 count: 6,
                 words: ['Jeans', 'Sweater', 'cap', 'shorts', 'frock', 'skirt', 'hat', 'Vest', 'clothes', 'socks', 't-shirt', 'trousers', 'shirt', 'scarf', 'tie']
@@ -1377,7 +1475,7 @@ const Define = (() => {
         {
             id: 40,
             lang: 'hi',
-            head: 'Template : 39, Vowel Drag and Drop',
+            head: 'Template : 39, `theta` Vowel Drag and Drop',
             content: {
                 replacement: '#',
                 col: { col: 12, md: 6, sm: 12 },
@@ -1386,7 +1484,7 @@ const Define = (() => {
                     width: '20%',
                 },
                 words: [
-                    { text: "#बल्टी# #घड़या# नद #सरस्वत#", answer: ['बाल्टी', 'घड़िया', 'सरस्वती'] },
+                    { text: "#बल्टी# #घड़या# नद #सरस्वत# `theta`", answer: ['बाल्टी', 'घड़िया', 'सरस्वती'] },
                     { text: "नद", answer: "नदी" },
                     { text: "#घड़या#", image: { path: 'img/3.png', width: '15%' }, answer: ["घड़िया"] },
                     { text: "सरस्वत #बल्टी# #नद#", image: { path: 'img/4.png', width: '15%' }, answer: ['बाल्टी', 'नदी'] },
@@ -1398,20 +1496,20 @@ const Define = (() => {
         {
             id: 41,
             lang: 'en',
-            head: 'Template : 19, Shabdkosh',
+            head: 'Template : 19, Shabdkosh `theta`',
             shuffle: false,
             content: [
                 {
                     id: 1,
                     tabtitle: 'aPPle',
                     meaning: 'कूद-कूदकर',
-                    sentence: 'छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing',
+                    sentence: 'छोटी चिड़ियाँ `theta` appleing चलना सीखती हैं। appleing',
                     image: {
                         path: 'img/1.png',
                         width: '20%'
                     },
                     titles: [
-                        { title: "1कूद-कूदकर", text: "1छोटी चिड़ियाँ appleing चलना सीखती हैं। appleing" },
+                        { title: "1कूद-कूदकर", text: "1छोटी चिड़ियाँ `theta` appleing चलना सीखती हैं। appleing" },
                         { title: "SentenCe", text: "छोटी apple" },
                         { title: "1Antonyms", text: "चिड़ियाँ" },
                     ]
@@ -1435,7 +1533,7 @@ const Define = (() => {
         },
         {
             id: 42,
-            head: 'Template : 40, VirtualTour',
+            head: 'Template : 40, VirtualTour `theta`',
             lang: 'en',
             content: {
                 questions: [
@@ -1443,11 +1541,11 @@ const Define = (() => {
                         id: 1,
                         title: {
                             main: {
-                                text: 'Fascinating Facts'
+                                text: '`theta` Fascinating Facts'
                             },
                             sub: {
-                                text: 'here some sub title text',
-                                classes: 'text-success bg-success-subtle border-success border rounded-3 w-50 text-uppercase p-2'
+                                text: 'here `theta` some sub title text',
+                                classes: 'text-success `theta` bg-success-subtle border-success border rounded-3 w-50 text-uppercase p-2'
                             }
                         },
                         set: {
@@ -1455,14 +1553,14 @@ const Define = (() => {
                             questions: [
                                 {
                                     head: 'image - position - top',
-                                    sentence: 'question set sentencehere and item size lorem.',
+                                    sentence: 'question `theta` set sentencehere and item size lorem.',
                                     imageLayout: {
                                         col: { md: 4, sm: 6, col: 12 },
                                         position: 'top',
                                         width: '50%',
                                         images: [
                                             { path: 'img/1.png', caption: 'police-man-1' },
-                                            { path: 'img/2.png', caption: 'police-man-2' },
+                                            { path: 'img/2.png', caption: 'police-man-2 `theta`' },
                                             { path: 'img/3.png', caption: 'police-man-3' },
                                             { path: 'img/3.png', caption: 'police-man-3' }
                                         ]
@@ -1478,7 +1576,7 @@ const Define = (() => {
                                 text: 'Virtual Tour'
                             },
                             sub: {
-                                text: 'here some sub title text',
+                                text: 'here some sub `theta` title text',
                                 classes: 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
                             }
                         },
@@ -1504,7 +1602,7 @@ const Define = (() => {
                         id: 2,
                         title: {
                             main: {
-                                text: 'Fascinating Facts-2'
+                                text: 'Fascinating Facts-2 `theta`'
                             },
                             sub: {
                                 text: 'here some sub title text',
@@ -1516,7 +1614,7 @@ const Define = (() => {
                             questions: [
                                 {
                                     head: 'image - position - left',
-                                    sentence: 'question set sentencehere and item size lorem.',
+                                    sentence: 'question set `theta` sentencehere and item size lorem.',
                                     imageLayout: {
                                         position: 'left',
                                         width: '150px',
@@ -1535,13 +1633,13 @@ const Define = (() => {
         },
         {
             id      : 43,
-            head    : 'Template : 43, CircleAndUnderline',
+            head    : 'Template : 43, CircleAndUnderline `theta`',
             lang    : 'en',
             content : {
                 questions: [
                     {
                         id    : 1,
-                        words : [ 'lorem', 'ipsum', 'red dipsum', 'bipsum', 'chipsum', 'lipsum', '.' ],
+                        words : [ 'lorem', 'ipsum', 'red dipsum', 'bipsum', 'chipsum', '`theta`', 'lipsum', '.' ],
                         highlight : { // Index of words
                             circle    : [ 0, 2 ],
                             underLine : [ 4, 5 ],
