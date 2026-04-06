@@ -5794,8 +5794,8 @@ const DragAndDropMulti = (() => {
 
     let shuffledQuestions;
     let DragEnabled = false;
-    let userAns;
     let __singleQuesIndex = 0;
+    const userAns = new Map();
 
     const ui = (questionId) => {
         try {
@@ -5962,14 +5962,14 @@ const DragAndDropMulti = (() => {
             compareAnswerArrays(type_set?.answers, userAns)
         } else {
             shuffledQuestions.forEach((item, i) => {
-                const userAnswer = userAns[i];
+                const userAnswer = userAns.get(i) ?? '';
                 let count = 0;
                 let isCorrect = false;
 
-                let correctAnswerText = item.options;
-                if (option_side == 'right') {
-                    correctAnswerText = item.options[item.answer] ?? '';
-                }
+                const correctAnswerText = ( option_side == 'right' )
+                    ? ( item.options[item.answer] ?? '' )
+                    : item.options;
+                // ..
 
                 if (strictMatch) {
                     isCorrect = userAnswer.toString() === correctAnswerText.toString();
@@ -5979,33 +5979,23 @@ const DragAndDropMulti = (() => {
                         correctCount++;
                     }
                 } else {
-                    let remaining = [...correctAnswerText];
-                    let match = undefined;
                     if (option_side == 'right') {
-                        remaining = [correctAnswerText];
-                        match = userAnswer.map(userWord => {
-                            const match = userWord === remaining[0];
-                            return match;
-                        });
+                        isCorrect = userAnswer === correctAnswerText;
+                        if (isCorrect) correctCount++;
                     } else {
-                        match = userAnswer.map(userWord => {
-                            const id = remaining.indexOf(userWord);
-                            const match = id !== -1;
-                            if (match) remaining.splice(id, 1);
-                            return match;
-                        });
+                        if (Array.isArray(correctAnswerText)) {
+                            const isMatch = correctAnswerText.includes(userAnswer);
+                            if (isMatch) {
+                                isCorrect = true;
+                                correctCount++;
+                            }
+                        } else {
+                            if (userAnswer === correctAnswerText) {
+                                isCorrect = true;
+                                correctCount++;
+                            }
+                        }
                     }
-
-                    match.map((item) => {
-                        if (item == true) {
-                            count++;
-                        }
-                        const ansLen = option_side == "right" ? remaining.length : correctAnswerText.length;
-                        if (count == ansLen) {
-                            isCorrect = true;
-                            correctCount++;
-                        }
-                    });
                 }
 
                 const body = `
@@ -6315,6 +6305,7 @@ const DragAndDropMulti = (() => {
                     imgDiv.css('order', 2);
                 }
             }
+
             const option_side = content?.option_side ?? 'top';
             const type_set = content?.set ?? {};
             const hasTypeSet = Object.keys(type_set).length > 0;
@@ -6439,8 +6430,6 @@ const DragAndDropMulti = (() => {
             }
             $('.drag-question-box2').html(questionHtml.join(''));
 
-            userAns = Array(questions.length).fill([]);
-
             makeDraggable(`.wordDrag`);
             initDroppable('.dropBox_2');
             DragEnabled = true;
@@ -6453,10 +6442,10 @@ const DragAndDropMulti = (() => {
 
     const __getQuestionData = () => {
         const questionId = Activity.getQid('#' + containerId);
-        const data = Activity.getDefine(questionId);
-        const lang = data?.lang ?? 'en';
-        const content = data?.content ?? {};
-        const questions = content?.questions ?? [];
+        const data       = Activity.getDefine(questionId);
+        const lang       = data?.lang ?? 'en';
+        const content    = data?.content ?? {};
+        const questions  = content?.questions ?? [];
 
         return {
             lang: lang,
@@ -6465,10 +6454,13 @@ const DragAndDropMulti = (() => {
         }
     }
 
-    const __setGetUserAttemptedAns = () => {
-        userAns[__singleQuesIndex]?.forEach((ans, ind) => {
-            $('.drop-Box.dropBox_2').eq(ind).attr('data-val', ans).html(ans);
-        });
+    const __setGetUserAttemptedAns = (index) => {
+        const ans = userAns.get(index);
+        $(`div[data-queindex=${index}]`)
+            .children('.drop-Box.dropBox_2')
+            .attr('data-val', ans)
+            .html(ans);
+        // ..
     }
 
     const __renderSingleQuesWithDataOnChange = () => {
@@ -6486,7 +6478,7 @@ const DragAndDropMulti = (() => {
         initDroppable('.dropBox_2');
         DragEnabled = true;
 
-        __setGetUserAttemptedAns();
+        __setGetUserAttemptedAns(__singleQuesIndex);
 
         Activity.initMathJax();
     }
@@ -6560,20 +6552,20 @@ const DragAndDropMulti = (() => {
 
     const __showAnswerPopupSingleType = () => {
 
-        const data = __getQuestionData();
-        const lang = data?.lang ?? 'en';
+        const data      = __getQuestionData();
+        const lang      = data?.lang ?? 'en';
+        const questions = data?.questions ?? [];
 
         const popupLabels = Activity.translatePopupLabels(lang);
 
-        if (!userAns.every(arr => arr.length > 0 && arr.every(v => v != null && v !== ""))) {
+        if ( questions.length != userAns.size ) {
             Swal.fire({
                 title: popupLabels.attemptAll,
                 icon: "error"
             });
             return;
         }
-
-        const questions = data?.questions ?? [];
+        
         const strictMatch = data?.content?.strictMatch ?? false;
         const option_side = data?.content?.option_side ?? 'top';
 
@@ -6599,14 +6591,14 @@ const DragAndDropMulti = (() => {
         table.push(tablePartStart);
 
         questions.forEach((item, i) => {
-            const userAnswer = userAns[i];
-            let count = 0;
-            let isCorrect = false;
+            const userAnswer = userAns.get(i) ?? '';
+            let count        = 0;
+            let isCorrect    = false;
 
-            let correctAnswerText = item.options;
-            if (option_side == 'right') {
-                correctAnswerText = item.options[item.answer] ?? '';
-            }
+            const correctAnswerText = option_side == 'right' 
+                ? ( item.options[item.answer] ?? '' )
+                : item.options;
+            // ..
 
             if (strictMatch) {
                 isCorrect = userAnswer.toString() === correctAnswerText.toString();
@@ -6615,33 +6607,23 @@ const DragAndDropMulti = (() => {
                     correctCount++;
                 }
             } else {
-                let remaining = [...correctAnswerText];
-                let match = undefined;
                 if (option_side == 'right') {
-                    remaining = [correctAnswerText];
-                    match = userAnswer.map(userWord => {
-                        const match = userWord === remaining[0];
-                        return match;
-                    });
+                    isCorrect = userAnswer === correctAnswerText;
+                    if (isCorrect) correctCount++;
                 } else {
-                    match = userAnswer.map(userWord => {
-                        const id = remaining.indexOf(userWord);
-                        const match = id !== -1;
-                        if (match) remaining.splice(id, 1);
-                        return match;
-                    });
-                }
-
-                match.map((item) => {
-                    if (item == true) {
-                        count++;
+                    if (Array.isArray(correctAnswerText)) {
+                        const isMatch = correctAnswerText.includes(userAnswer);
+                        if (isMatch) {
+                            isCorrect = true;
+                            correctCount++;
+                        }
+                    } else {
+                        if (userAnswer === correctAnswerText) {
+                            isCorrect = true;
+                            correctCount++;
+                        }
                     }
-                    const ansLen = option_side == "right" ? remaining.length : correctAnswerText.length;
-                    if (count == ansLen) {
-                        isCorrect = true;
-                        correctCount++;
-                    }
-                });
+                }              
             }
 
             const body = `
@@ -6690,30 +6672,10 @@ const DragAndDropMulti = (() => {
                 revert: true,
                 drop: function (event, ui) {
                     const dragVal = ui.draggable.attr('data-ans');
-                    $(this).html(dragVal).attr('data-val', `${dragVal}`);
-                    const index = $(this).parent().attr('data-queindex');
-                    const qID = $(`#${containerId}`).attr('data-qid');
+                    $(this).html(dragVal).attr('data-val', dragVal);
 
-                    const activity = Activity.getDefine(qID) ?? {};
-                    const hasCol = typeof activity?.content?.col === 'object' ? true : false;
-
-                    if (Array.isArray(userAns[index])) {
-                        const totalDropBox = (hasCol === true)
-                            ? $(this).parent().children()
-                            : $(`.question-container_2`).eq(index).children().find(selector);
-                        // ..
-
-                        const tempArr = [];
-                        for (let i = 0; i < totalDropBox.length; i++) {
-                            if ($(totalDropBox).eq(i).attr('data-val') != "") {
-                                tempArr.push($(totalDropBox).eq(i).attr('data-val'));
-                            }
-                        }
-
-                        userAns[index] = tempArr.filter(Boolean);
-                    } else {
-                        userAns[index] = dragVal;
-                    }
+                    const index = Number($(this).parent().attr( 'data-queindex' ));
+                    userAns.set(index, dragVal);
 
                     Activity.initMathJax();
 
@@ -6758,6 +6720,8 @@ const DragAndDropMulti = (() => {
 
     return {
         render: renderDataDND,
+        answer: userAns,
+        show  : __showAnswerPopupSingleType
     }
 
 })();
