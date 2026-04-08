@@ -163,6 +163,9 @@ const Define = (() => {
         },
         {
             id: 0,
+            path : {
+                css : [ 'style.css' ]
+            },
             ui: () => {
                 const options = [
                     { name: "Salad", correct: true },
@@ -221,7 +224,9 @@ const Define = (() => {
                 return html;
             },
             logic: {
-                checkAnswer: ({ root }) => {
+                // Each function automatically receives event, element, and root container
+                checkAnswer: ({ event, el, root }) => {
+                    console.log( {event, el, root} );
                     const checks = root.querySelectorAll('.option-check');
                     const result = root.querySelector('#resultBox');
 
