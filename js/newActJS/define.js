@@ -206,7 +206,7 @@ const Define = (() => {
                             <!-- Plate Image -->
                             <div class="col-md-6 text-center">
                                 <img 
-                                    src="img/plate.png" 
+                                    src="test.png" 
                                     class="img-fluid rounded shadow-sm"
                                     style="max-height:300px;"
                                 />
