@@ -182,9 +182,7 @@ const Define = (() => {
                         <h5 class="text-center mb-3">
                             Tick the things you can see in the plate
                         </h5>
-
                         <div class="row">
-                            <!-- Options -->
                             <div class="col-md-6">
                                 <div class="card p-3 shadow-sm">
                                     ${options.map((opt, i) => `
@@ -202,14 +200,22 @@ const Define = (() => {
                                     `).join('')}
                                 </div>
                             </div>
-
-                            <!-- Plate Image -->
                             <div class="col-md-6 text-center">
+                                <audio src="bg.mp3" id="audioEle"></audio>
+                                <div class="border border-danger">
+                                    <video src="video.mp4" id="videoEle" class="w-100" controls="true"></video>
+                                </div>
                                 <img 
+                                    id="audioImage"
                                     src="test.png" 
                                     class="img-fluid rounded shadow-sm"
                                     style="max-height:300px;"
+                                    alt="Click here to play audio and video"
+                                    role="button"
                                 />
+                                <div class="text-muted">
+                                    <small>Click swa-icon to play audio and video</small>
+                                </div>
                             </div>
                         </div>
 
@@ -287,10 +293,17 @@ const Define = (() => {
                             ${correctHTML}
                         `;
                     }
+                },
+                playMedia :({event, el, root}) => {
+                    const audioEl = root.querySelector( '#audioEle' );
+                    const videoEl = root.querySelector( '#videoEle' );
+                    audioEl.play();
+                    videoEl.play();
                 }
             },
             events: [
-                { event: 'click', selector: '.check-btn', handle: ['checkAnswer'] }
+                { event: 'click', selector: '.check-btn', handle: ['checkAnswer'] },
+                { event: 'click', selector: '#audioImage', handle: ['playMedia'] }
             ]
         },
         {

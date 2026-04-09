@@ -14605,13 +14605,13 @@ const CustomTemplate = (() => {
     let __containerID;
     let __container;
 
-    const __prefixImagePath = (html) => {
+    const __prefixMediaPaths = (html) => {
         const base = Activity.pathToCWD();
 
         return html.replace(
-            /<img([^>]*?)src=["'](.*?)["']([^>]*?)>/g,
-            (match, before, path, after) => {
-                return `<img${before}src="${base}${path}"${after}>`;
+            /<(img|audio|video|source)([^>]*?)src=["'](.*?)["']([^>]*?)>/g,
+            (match, tag, before, path, after) => {
+                return `<${tag}${before}src="${base}${path}"${after}>`;
             }
         );
     };
@@ -14622,7 +14622,7 @@ const CustomTemplate = (() => {
 
         if (!parent) return { flag: false };
 
-        html = __prefixImagePath(html);
+        html = __prefixMediaPaths(html);
 
         parent.innerHTML = `<div class="question p-3 h-100" id="${id}">${html}</div>`;
 
