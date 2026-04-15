@@ -264,17 +264,7 @@ const Activity = (() => {
                 replay: 'दुबारा खेलें',
                 try: 'पुनः प्रयास करें'
             };
-        }
-        else if (lang == 'en' || lang == 'mt') {
-            return {
-                check: 'Check Answers',
-                show: 'Show Answers',
-                submit: 'Submit',
-                replay: 'Replay',
-                try: 'Try Again'
-            };
-        }
-        else if (lang == 'fr') {
+        } else if (lang == 'fr') {
             return {
                 check: 'Vérifier les réponses',
                 show: 'Afficher les réponses',
@@ -282,14 +272,21 @@ const Activity = (() => {
                 replay: 'Rejouer',
                 try: 'Essayer à nouveau'
             };
-        }
-        else if (lang == 'sk') {
+        } else if (lang == 'sk') {
             return {
                 check: 'उत्तराणि पश्यन्तु',
                 show: 'उत्तराणि दर्शयतु',
                 submit: 'उपस्थापयतु',
                 replay: 'पुनः वादयति',
                 try: 'पुनः प्रयासं कुरुत'
+            };
+        } else {
+            return {
+                check: 'Check Answers',
+                show: 'Show Answers',
+                submit: 'Submit',
+                replay: 'Replay',
+                try: 'Try Again'
             };
         }
     };
@@ -3597,7 +3594,7 @@ const Adaptiv = (() => {
                                     </div>
                                     <div id="overlay">
                                         <div id="popupDialog">
-                                            <p class="text-danger fw-bold">
+                                            <p class="text-danger-adaptive fw-bold">
                                                 <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
                                             </p>
                                             <ul class="instructionsList">${instructions.join('')}</ul>
@@ -3954,7 +3951,7 @@ const Adaptiv = (() => {
                 <div class="result-box">
                     ${!skipnextbtn ? `<h4><strong class="fs-1">${popupLabels.levelLabel} ${currentLevel} ${whenCompleteLevel}</strong></h4>` : ''}
                     ${!skipOptions ? `
-                        <p class="text-danger my-3">
+                        <p class="text-danger-adaptive my-3">
                             ${popupLabels.totalQuestions} : 
                             ${currentQuizData?.length || 0}
                         </p>
@@ -4138,7 +4135,7 @@ const Adaptiv = (() => {
             totalQuestion++;
 
             let resultSymbol = '✘';
-            let resultClass = 'text-danger';
+            let resultClass = 'text-danger-adaptive';
             if (userAnswerText === correctAnswerText) {
                 resultSymbol = '✔';
                 resultClass = 'text-success';
@@ -4146,7 +4143,7 @@ const Adaptiv = (() => {
 
             midData2 += `<tr class="trData">
                 <th>${lang == 'hi' ? 'प्र' : 'Q'}${totalQuestion}.</th>
-                <td class="text-danger">${userAnswerText}</td>
+                <td class="text-danger-adaptive">${userAnswerText}</td>
                 <td class="text-success">${correctAnswerText}</td>
                 <td class="${resultClass}">${resultSymbol}</td>
             </tr>`;
@@ -4592,8 +4589,9 @@ const Circle = (() => {
         renderDiv.innerHTML = "";
 
         const activity = Activity.getDefine(questionId);
-        const content = activity?.content;
-        const lang = activity?.lang ?? 'en';
+        const content  = activity?.content;
+        const lang     = activity?.lang ?? 'en';
+        const disableBefore = activity?.config?.disableCircleBefore;
 
         if (!Array.isArray(content)) {
             console.error("renderQuestions: activity content should be an array", content);
@@ -4609,14 +4607,39 @@ const Circle = (() => {
         if (!userSelections[dataKey]) userSelections[dataKey] = {};
 
         content.forEach((item, ind) => {
-            const parts = item.text.split(/(\s+|,)/);
-            const html = parts.map((part) => {
-                if (part.trim() === "" || part === ",") return part;
-                return `<span class="clickable" data-act="${dataKey}" data-id="${item.id}" data-word="${part.trim()}">${part}</span>`;
-            }).join("");
+            let html = "";
+
+            if (disableBefore && item.text.includes(disableBefore)) {
+                const [beforeText, afterText] = item.text.split(disableBefore);
+                html += beforeText + disableBefore;
+                const parts = afterText.split(/(\s+|,)/);
+
+                html += parts.map((part) => {
+                    if (part.trim() === "" || part === ",") return part;
+                    return `<span class="clickable" 
+                                data-act="${dataKey}" 
+                                data-id="${item.id}" 
+                                data-word="${part.trim()}">${part}</span>`;
+                }).join("");
+
+            } else {
+                const parts = item.text.split(/(\s+|,)/);
+
+                html = parts.map((part) => {
+                    if (part.trim() === "" || part === ",") return part;
+                    return `<span class="clickable" 
+                                data-act="${dataKey}" 
+                                data-id="${item.id}" 
+                                data-word="${part.trim()}">${part}</span>`;
+                }).join("");
+            }
+
             renderDiv.innerHTML += `
             <div class="questInC" data-id="${item.id}">
-                <span class="label">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</span> ${html}
+                <span class="label">
+                    (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
+                </span> 
+                ${html}
             </div>`;
         });
 
@@ -8174,7 +8197,9 @@ const WordSearch = (() => {
                     const c = direction === 'h' ? col + i : col;
                     const btn = document.querySelector(`input[data-row="${r}"][data-col="${c}"]`);
                     if (btn) buttons.push(btn);
-                    if (btn && btn.dataset.selected == 1) formed += btn.value;
+                    if (btn && (btn.dataset.selected == 1 || btn.dataset.selected == 2)) {
+                        formed += btn.value;
+                    }
                 });
 
                 if (formed === up) {
@@ -12795,34 +12820,48 @@ const SpellCheck = (() => {
         content?.questions.forEach((item, ind) => {
             const regex = new RegExp(`${replacement[0]}[^${replacement[0]}]+${replacement[replacement.length - 1]}[.,?!-]?|[^\\s]+[.,?!-]?`, "g");
 
-            if (!item?.text) return false;
-            const parts = item?.text.match(regex);
-            if (!item?.answer) return false;
-            const answers = item?.answer;
+            if (!item?.text || !item?.answer ) return false;
+
+            const parts   = item.text.match(regex);
+            const answers = item.answer;
+
             let count = 0;
 
             const html = parts?.map((part, i) => {
-                if (part.trim() === "" || part === ",") return part;
-                const match = hasHashPhrases(replacement[0], part);
-                let word = match ? part.replaceAll(replacement[0], '') : part;
-                let data_word = match ? answers[count] : part;
-                const isSymbol = /^[.,?!-]$/.test(part);
+                if ( part.trim() === '' || part === ',' ) return part;
+                const match     = hasHashPhrases(replacement[0], part);
+                const word      = match ? part.replaceAll(replacement[0], '') : part;
+                const data_word = match ? answers[count] : part;
+                const isSymbol  = /^[.,?!-]$/.test(part);
+
                 if (match) count++;
-                return `<span class="${isSymbol ? 'px-0' : 'clickable'}" data-act="${containerId}" data-id="${item.id}" data-word="${data_word}">
+
+                if( word == '<br>' ) return word;
+
+                return `
+                    <span 
+                        class="${isSymbol ? 'px-0' : 'clickable'}" 
+                        data-act="${containerId}" 
+                        data-id="${item.id}" 
+                        data-word="${data_word}"
+                    >
                         ${word}
-                    </span>`
-            }).join("");
+                    </span>
+                `;
+
+            }).join('');
 
             renderDiv.innerHTML += `
-            <div class="questInC border-0" data-id="${item.id}">
-                ${content?.questions.length > 1 ?
-                    `<span class="label">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</span>` : ''
-                }
-                ${html}
-            </div>`;
+                <div class="questInC border-0" data-id="${item.id}">
+                    ${content?.questions.length > 1 ?
+                        `<span class="label">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</span>` : ''
+                    }
+                    ${html}
+                </div>
+            `;
 
             const input_container = document.createElement('div');
-            input_container.id = "inputFlipToCir" + ind;
+            input_container.id    = "inputFlipToCir" + ind;
             input_container.classList.add('questInC', 'row');
             input_container.style.border = "none";
 
@@ -14276,7 +14315,8 @@ const CircleAndUnderline = (() => {
 
         ui(questionId);
 
-        const activity = Activity.getDefine(questionId) ?? {};
+        const activity  = Activity.getDefine(questionId) ?? {};
+        const lang      = activity?.lang ?? 'en';
         const questions = activity?.content?.questions ?? [];
 
         const container = document.querySelector('#sentence');
@@ -14299,11 +14339,16 @@ const CircleAndUnderline = (() => {
                     >
                         ${word}
                     </span>`;
-            }).join(' ');
+            }).join('');
+
+            const bullet = Activity.translateBulletLabels({
+                lang : lang, 
+                ind  : qIndex
+            });
 
             return `
                 <div class="question-block mb-3 p-2 border-bottom row g-0 align-items-center">
-                    <div class="col-auto w50 me-1">Q.${qIndex + 1}</div>
+                    <div class="col-auto w50 me-1">${bullet}.</div>
                     <div class="col ps-0 p-3">${wordsHtml}</div>
                 </div>
             `;
@@ -14329,48 +14374,76 @@ const CircleAndUnderline = (() => {
 
     const showMenu = (target, qIndex, index) => {
 
-        removeMenu();
+        const qid    = Activity.getQid(`#${containerId}`);
+        const define = Activity.getDefine(qid) ?? {};
+        const config = define?.config ?? {};
+        const menuOptions = config?.menuOptions ?? null;
 
-        const wrapper = document.querySelector(`#${containerId}`);
-        if (!wrapper) return;
+        const circle    = menuOptions?.circle ?? false;
+        const underline = menuOptions?.underline ?? false;
 
-        const menu = document.createElement('div');
-        menu.className = 'cu-word-menu border rounded p-1 bg-white user-select-none';
-        menu.innerHTML = `
-            <button data-type="cu-circle">Circle</button>
-            <button data-type="cu-underline">Underline</button>
-        `;
+        const flag = !menuOptions || Object.keys(menuOptions).length === 0 || circle === underline;
 
-        wrapper.appendChild(menu);
-
-        const rect = target.getBoundingClientRect();
-        const parentRect = wrapper.getBoundingClientRect();
-
-        menu.style.position = 'absolute';
-        menu.style.top = `${rect.bottom - parentRect.top + wrapper.scrollTop}px`;
-        menu.style.left = `${rect.left - parentRect.left + wrapper.scrollLeft}px`;
-
-        menu.addEventListener('click', (e) => {
-            e.stopPropagation();
-
-            const type = e.target.dataset.type;
-            if (!type) return;
-
-            applyStyle(target, type, qIndex, index);
+        if( flag ) {
 
             removeMenu();
-        });
 
-        const handleOutsideClick = (e) => {
-            if (!e.target.closest('.cu-word-menu')) {
+            const wrapper = document.querySelector(`#${containerId}`);
+            if (!wrapper) return;
+
+            const menu = document.createElement('div');
+            menu.className = 'cu-word-menu border rounded p-1 bg-white user-select-none';
+            menu.innerHTML = `
+                <button data-type="cu-circle">Circle</button>
+                <button data-type="cu-underline">Underline</button>
+            `;
+
+            wrapper.appendChild(menu);
+
+            const rect = target.getBoundingClientRect();
+            const parentRect = wrapper.getBoundingClientRect();
+
+            menu.style.position = 'absolute';
+            menu.style.top = `${rect.bottom - parentRect.top + wrapper.scrollTop}px`;
+            menu.style.left = `${rect.left - parentRect.left + wrapper.scrollLeft}px`;
+
+            menu.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                const type = e.target.dataset.type;
+                if (!type) return;
+
+                applyStyle(target, type, qIndex, index);
+
                 removeMenu();
-                document.removeEventListener('click', handleOutsideClick);
-            }
-        };
+            });
 
-        setTimeout(() => {
-            document.addEventListener('click', handleOutsideClick);
-        }, 0);
+            const handleOutsideClick = (e) => {
+                if (!e.target.closest('.cu-word-menu')) {
+                    removeMenu();
+                    document.removeEventListener('click', handleOutsideClick);
+                }
+            };
+
+            setTimeout(() => {
+                document.addEventListener('click', handleOutsideClick);
+            }, 0);
+        } else {
+
+            const class_circle    = 'cu-circle';
+            const class_underline = 'cu-underline';
+
+            const type = circle 
+                            ? class_circle 
+                            : underline
+                                ? class_underline
+                                : null;
+            // ..
+
+            if( !type ) return;
+            
+            applyStyle(target, type, qIndex, index);
+        }
     };
 
     const removeMenu = () => {
@@ -14669,7 +14742,7 @@ const CustomTemplate = (() => {
                             return;
                         }
 
-                        fn({ event: e, el: ele, root: __container });
+                        fn({ event: e, el: ele, root: __container, logic: activity.logic });
                     });
                 });
             });
@@ -14678,12 +14751,12 @@ const CustomTemplate = (() => {
 
     const __init = (questionId) => {
         __containerID = __baseContainerID + questionId;
-        const activity = Activity.getDefine(questionId) ?? undefined;
+        const define = Activity.getDefine(questionId) ?? undefined;
 
-        if (activity === undefined) return;
+        if ( !define ) return;
 
         const isUI = __ui({
-            html: activity?.ui() ?? '',
+            html: define?.ui() ?? '',
             id: __containerID
         });
 
@@ -14692,9 +14765,9 @@ const CustomTemplate = (() => {
         const containerRef = isUI.parent.querySelector('#' + __containerID);
         if (containerRef) __container = containerRef;
 
-        __loadCSS(activity);
+        __loadCSS(define);
 
-        __bindEvents(activity);
+        __bindEvents(define);
 
         Activity.initMathJax();
     };

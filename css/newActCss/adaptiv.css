@@ -584,7 +584,7 @@
     }
 }
 
-.text-danger {
+.text-danger-adaptive {
     color: #f44336;
     font-size: 20px;
     font-weight: bold;

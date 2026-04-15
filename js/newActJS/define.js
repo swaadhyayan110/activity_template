@@ -8,56 +8,57 @@ const Define = (() => {
         hi : "हिन्दी"
         en : "English"
         fr : "French"
+        ro : "Roman"
         ==============
     */
 
     // DEFINE BUTTONS
     const buttons = [
-        { qid: 44, text: ['Q-44', 'Math'], module: 0 },
-        { qid: 0, text: ['Q-0', 'Custom'], module: 0 },
-        { qid: 1, text: ['Q-1', 'Match-1'], module: 1, landscape: true },
-        { qid: 2, text: ['Q-2', 'Match-2'], module: 2 },
-        { qid: 3, text: ['Q-3', 'Match-3'], module: 3 },
-        { qid: 4, text: ['Q-4', 'Fill-1'], module: 4 },
-        { qid: 5, text: ['Q-5', 'Fill-2'], module: 5 },
-        { qid: 6, text: ['Q-6', 'Jumble-Letter'], module: 6 },
-        { qid: 7, text: ['Q-7', 'Jumble-Word'], module: 7 },
-        { qid: 8, text: ['Q-8', 'DND-1'], module: 8 },
-        { qid: 9, text: ['Q-9', 'MCQ-1'], module: 9 },
-        { qid: 10, text: ['Q-10', 'Adaptiv'], module: 10 },
-        { qid: 11, text: ['Q-11', 'Audio'], module: 11 },
-        { qid: 12, text: ['Q-12', 'Drop Down'], module: 12 },
-        { qid: 13, text: ['Q-13', 'Circle'], module: 13 },
-        { qid: 14, text: ['Q-14', 'श्रवण कौशल'], module: 14 },
-        { qid: 15, text: ['Q-15', 'T&F'], module: 15 },
-        { qid: 16, text: ['Q-16', 'DND-2'], module: 16 },
-        { qid: 17, text: ['Q-17', 'DND-3'], module: 16 },
-        { qid: 18, text: ['Q-18', 'Sorting'], module: 17 },
-        { qid: 19, text: ['Q-19', 'PDF'], module: 18 },
-        { qid: 20, text: ['Q-20', 'Shabdkosh'], module: 19 },
-        { qid: 21, text: ['Q-21', 'Shrutlekh'], module: 20 },
-        { qid: 22, text: ['Q-22', 'WordSearch'], module: 21 },
-        { qid: 23, text: ['Q-23', 'TextArea'], module: 22 },
-        { qid: 24, text: ['Q-24', 'CrossWord'], module: 23 },
-        { qid: 25, text: ['Q-25', 'ShravanKaushalWithPara'], module: 24 },
-        { qid: 26, text: ['Q-26', 'VideoPlayer'], module: 25 },
-        { qid: 27, text: ['Q-27', 'Rachnatmak_Para-1'], module: 26 },
-        { qid: 28, text: ['Q-28', 'Rachnatmak_Inputs&Images-2'], module: 27 },
-        { qid: 29, text: ['Q-29', 'Rachnatmak_Tab_Btns-3'], module: 28 },
-        { qid: 30, text: ['Q-30', 'Rachnatmak_multi_Inputs-4'], module: 29 },
-        { qid: 31, text: ['Q-31', 'ClickOnImage'], module: 30 },
-        { qid: 32, text: ['Q-32', 'FillOnClick'], module: 31 },
-        { qid: 33, text: ['Q-33', 'Dictionary'], module: 32 },
-        { qid: 34, text: ['Q-34', 'MentalMath'], module: 33 },
-        { qid: 35, text: ['Q-35', 'Youtube-Audio-Video'], module: 34 },
-        { qid: 36, text: ['Q-36', 'Math Money'], module: 35 },
-        { qid: 37, text: ['Q-37', 'Shabd Rachna'], module: 36 },
-        { qid: 38, text: ['Q-38', 'Spell Check'], module: 37 },
-        { qid: 39, text: ['Q-39', 'Spell It out'], module: 38 },
-        { qid: 40, text: ['Q-40', 'Vowel Drag and Drop'], module: 39 },
-        { qid: 41, text: ['Q-41', 'Shabdkosh type-2'], module: 19 },
-        { qid: 42, text: ['Q-42', 'Virtual Tour'], module: 40 },
-        { qid: 43, text: ['Q-43', 'Circle and underline'], module: 41 },
+        { qid: 44, text: ['Q-44', 'id : 0 - Math'], module: 0 },
+        { qid: 0, text: ['Q-0', 'id : 0 - Audio'], module: 0 },
+        { qid: 1, text: ['Q-1', 'id : 1 - Match-1'], module: 1, landscape: true },
+        { qid: 2, text: ['Q-2', 'id : 2 - Match-2'], module: 2 },
+        { qid: 3, text: ['Q-3', 'id : 3 - Match-3'], module: 3 },
+        { qid: 4, text: ['Q-4', 'id : 4 - Fill-1'], module: 4 },
+        { qid: 5, text: ['Q-5', 'id : 5 - Fill-2'], module: 5 },
+        { qid: 6, text: ['Q-6', 'id : 6 - Jumble-Letter'], module: 6 },
+        { qid: 7, text: ['Q-7', 'id : 7 - Jumble-Word'], module: 7 },
+        { qid: 8, text: ['Q-8', 'id : 8 - DND-1'], module: 8 },
+        { qid: 9, text: ['Q-9', 'id : 9 - MCQ-1'], module: 9 },
+        { qid: 10, text: ['Q-10', 'id : 10 - Adaptiv'], module: 10 },
+        { qid: 11, text: ['Q-11', 'id : 11 - Audio'], module: 11 },
+        { qid: 12, text: ['Q-12', 'id : 12 - Drop Down'], module: 12 },
+        { qid: 13, text: ['Q-13', 'id : 13 - Circle'], module: 13 },
+        { qid: 14, text: ['Q-14', 'id : 14 - श्रवण कौशल'], module: 14 },
+        { qid: 15, text: ['Q-15', 'id : 15 - T&F'], module: 15 },
+        { qid: 16, text: ['Q-16', 'id : 16 - DND-2'], module: 16 },
+        { qid: 17, text: ['Q-17', 'id : 16 - DND-3'], module: 16 },
+        { qid: 18, text: ['Q-18', 'id : 17 - Sorting'], module: 17 },
+        { qid: 19, text: ['Q-19', 'id : 18 - PDF'], module: 18 },
+        { qid: 20, text: ['Q-20', 'id : 19 - Shabdkosh'], module: 19 },
+        { qid: 21, text: ['Q-21', 'id : 20 - Shrutlekh'], module: 20 },
+        { qid: 22, text: ['Q-22', 'id : 21 - WordSearch'], module: 21 },
+        { qid: 23, text: ['Q-23', 'id : 22 - TextArea'], module: 22 },
+        { qid: 24, text: ['Q-24', 'id : 23 - CrossWord'], module: 23 },
+        { qid: 25, text: ['Q-25', 'id : 24 - ShravanKaushalWithPara'], module: 24 },
+        { qid: 26, text: ['Q-26', 'id : 25 - VideoPlayer'], module: 25 },
+        { qid: 27, text: ['Q-27', 'id : 26 - Rachnatmak_Para-1'], module: 26 },
+        { qid: 28, text: ['Q-28', 'id : 27 - Rachnatmak_Inputs&Images-2'], module: 27 },
+        { qid: 29, text: ['Q-29', 'id : 28 - Rachnatmak_Tab_Btns-3'], module: 28 },
+        { qid: 30, text: ['Q-30', 'id : 29 - Rachnatmak_multi_Inputs-4'], module: 29 },
+        { qid: 31, text: ['Q-31', 'id : 30 - ClickOnImage'], module: 30 },
+        { qid: 32, text: ['Q-32', 'id : 31 - FillOnClick'], module: 31 },
+        { qid: 33, text: ['Q-33', 'id : 32 - Dictionary'], module: 32 },
+        { qid: 34, text: ['Q-34', 'id : 33 - MentalMath'], module: 33 },
+        { qid: 35, text: ['Q-35', 'id : 34 - Youtube-Audio-Video'], module: 34 },
+        { qid: 36, text: ['Q-36', 'id : 35 - Math Money'], module: 35 },
+        { qid: 37, text: ['Q-37', 'id : 36 - Shabd Rachna'], module: 36 },
+        { qid: 38, text: ['Q-38', 'id : 37 - Spell Check'], module: 37 },
+        { qid: 39, text: ['Q-39', 'id : 38 - Spell It out'], module: 38 },
+        { qid: 40, text: ['Q-40', 'id : 39 - Vowel Drag and Drop'], module: 39 },
+        { qid: 41, text: ['Q-41', 'id : 19 - Shabdkosh type-2'], module: 19 },
+        { qid: 42, text: ['Q-42', 'id : 40 - Virtual Tour'], module: 40 },
+        { qid: 43, text: ['Q-43', 'id : 41 - Circle and underline'], module: 41 },
     ];
 
     // DEFINE QUESTIONS
@@ -71,18 +72,23 @@ const Define = (() => {
                     { type: 'symbol', text: '`-`' },
                     { type: 'symbol', text: '`alpha`' },
                     { type: 'symbol', text: '`beta`' },
-                    { type: 'symbol', text: '`gamma`' },
-                    { type: 'symbol', text: '`theta`' },
+                    { type: 'symbol', text: '#{lc :}# `gamma` #{and uc :}# `Gamma`' },
+                    { type: 'symbol', text: '#{lc :}# `delta` #{and uc :}# `Delta`' },
+                    { type: 'symbol', text: '#{lc :}# `theta` #{and uc :}# `Theta`' },
+                    { type: 'symbol', text: '#{lc :}# `lambda` #{and uc :}# `Lambda`' },
+                    { type: 'symbol', text: '`mu`' },
+                    { type: 'symbol', text: '#{lc :}# `pi` #{and uc :}# `Pi`' },
+                    { type: 'symbol', text: '#{lc :}# `sigma` #{and uc :}# `Sigma`' },
+                    { type: 'symbol', text: '#{lc :}# `omega` #{and uc :}# `Omega`' },
+                    { type: 'symbol', text: '`angle`' },
+                    { type: 'symbol', text: '`le`' },
+                    { type: 'symbol', text: '`ge`' },
                     { type: 'symbol', text: '`sum`' },
                     { type: 'symbol', text: '`prod`' },
                     { type: 'symbol', text: '`int`' },
                     { type: 'symbol', text: '`lim`' },
                     { type: 'symbol', text: '`e`' },
                     { type: 'symbol', text: '`infty`' },
-                    { type: 'symbol', text: '`sigma`' },
-                    { type: 'symbol', text: '`mu`' },
-                    { type: 'symbol', text: '`pi`' },
-                    { type: 'symbol', text: '`Omega`' },
                     { type: 'symbol', text: '`pm`' },
                     { type: 'symbol', text: '`log`' },
                     { type: 'symbol', text: '`ln`' },
@@ -123,19 +129,43 @@ const Define = (() => {
                 const html = [];
 
                 const heading = `
-                    <div class="border border-success text-center fs-5 fst-italic text-success-emphasis bg-success-subtle rounded my-3 shadow-sm p-2 w-75 mx-auto">
+                    <style>
+                        .copy-text {
+                            transition : 0.3s all ease;
+                            display: inline-block;
+                        }
+                        .copy-text:hover {
+                            transform: scale(1.4);
+                            color : #58151c !important;
+                        }
+                    </style>
+                    <div 
+                        id="toast-container" 
+                        class="position-fixed top-50 start-50 translate-middle-x p-3"
+                    ></div>
+                    <div 
+                        class="border border-primary-subtle text-center fs-5 fw-semibold text-primary-emphasis bg-primary-subtle rounded-3 my-3 shadow-sm p-2 w-75 mx-auto"
+                    >
                         MathJax V2 Syntax
                     </div>
-                    <div class="w-75 mx-auto">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Type</th>
-                                <th>Usage</th>
-                                <th>Expected Output</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+
+                    <div class="w-75 mx-auto bg-body-tertiary p-3 rounded-3 shadow-sm">
+                        <p class="text-muted">
+                            <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">lc</span> = lowercase ;
+                            <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">uc</span> = uppercase
+                        </p>
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-dark position-sticky top-0 z-1 align-middle text-center">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Usage</th>
+                                    <th>
+                                        Expected Output 
+                                        <small class="text-white-50">(click on symbols to copy)</small>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
                 `;
                 html.push( heading );
 
@@ -143,14 +173,32 @@ const Define = (() => {
                     return `
                         <tr>
                             <td class="text-capitalize">${type}</td>
-                            <td class="text-center">
-                                <span>\`</span>
-                                <span class="text-muted">
-                                    ${text.replace(/`/g, '')}
+                            <td class="text-center font-monospace">
+                                <span class="text-warning-emphasis">
+                                    ${
+                                        text
+                                            .replace(/`/g, '<span class="text-danger fw-bold">`</span>')
+                                            .replace(/#\{([^}]+)\}#/g, '<span class="text-primary-emphasis fw-semibold">$1</span>')
+                                    }
                                 </span>
-                                <span>\`</span>
                             </td>
-                            <td class="text-center">${text}</td>
+                            <td class="text-center font-monospace">
+                                ${
+                                    text
+                                        .replace(/`([^`]+)`/g, (_, word) => {
+                                            return `
+                                                <span 
+                                                    class="copy-text text-warning-emphasis fw-semibold" 
+                                                    data-copy="\`${word}\`"
+                                                    role="button"
+                                                >
+                                                    \`${word}\`
+                                                </span>
+                                            `;
+                                        })
+                                        .replace(/#\{([^}]+)\}#/g, '<span class="text-primary-emphasis fw-semibold">$1</span>')
+                                }
+                            </td>
                         </tr>
                     `;
                 }).join( '' );
@@ -159,7 +207,59 @@ const Define = (() => {
                 html.push( express + tableEnd );
 
                 return html.join( '' );
-            }
+            },
+            logic : {
+                // Each function automatically receives `event`, `el`, `root`, and `logic`
+                // These are injected only for handlers defined in `events`
+                copyText : ({ event, el, root, logic }) => {
+                    if (!el) return;
+
+                    const text = el.dataset.copy ?? undefined;
+
+                    if( !text ) {
+                        logic.renderToast({message:'Couldn\'t copy symbol.', bsClass:"warning"});
+                        return;
+                    }
+
+                    navigator.clipboard.writeText(text).then(() => {
+                        logic.renderToast({text:text});
+                    });
+                },
+
+                // This (`renderToast`) function is not registered in `events.handle`,
+                // so it does not receive the default injected parameters
+                renderToast : ({text,bsClass,message}={}) => {
+                    document.querySelector( '#copyToast' )?.remove();
+
+                    const toastClass = bsClass ?? 'success';
+
+                    const toastHtml = `
+                            <div 
+                                id="copyToast"
+                                class="toast align-items-center text-${toastClass}-emphasis bg-${toastClass}-subtle border-${toastClass}-subtle"
+                            >
+                            <div class="d-flex">
+                                <div class="toast-body fs-6 font-monospace"></div>
+                                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
+                            </div>
+                        </div>
+                    `;
+                    document.querySelector( '#toast-container' ).innerHTML = toastHtml;
+
+                    const toastEl = document.getElementById('copyToast');
+                    const toast   = bootstrap.Toast.getOrCreateInstance(toastEl);
+
+                    if( !toast ) return;
+
+                    const textMsg = message ?? `${text} copied to clipboard!`;
+                    toast._element.querySelector('.toast-body').innerText = textMsg;
+
+                    toast.show();
+                }
+            },
+            events: [
+                { event: 'click', selector: '.copy-text', handle: ['copyText'] },
+            ]
         },
         {
             id: 0,
@@ -230,8 +330,9 @@ const Define = (() => {
                 return html;
             },
             logic: {
-                // Each function automatically receives event, element, and root container
-                checkAnswer: ({ event, el, root }) => {
+                // Each function automatically receives `event`, `el`, `root`, and `logic`
+                // These are injected only for handlers defined in `events`
+                checkAnswer: ({ event, el, root, logic }) => {
                     console.log( {event, el, root} );
                     const checks = root.querySelectorAll('.option-check');
                     const result = root.querySelector('#resultBox');
@@ -733,7 +834,10 @@ const Define = (() => {
             id: 13,
             lang: 'hi',
             head: 'Template : 13, Circle `theta` ',
-            mode: 'single',
+            mode: 'single', // `single` || `multi`
+            config : {
+                disableCircleBefore : '-'
+            },
             content: [
                 { id: 1, text: 'दादा जी के लिए - तू, आप, तुम `theta`', answer: '`theta`' },
                 { id: 2, text: 'अध्यापक जी के लिए - आप, वह, तुम', answer: 'आप' },
@@ -938,14 +1042,14 @@ const Define = (() => {
         {
             id: 22,
             lang: 'en',
-            head: 'Template : 21',
+            head: 'Search the following from the word maze.',
             config: {
                 replacement: '#_#',
-                side: 'left',
+                side: 'top',
                 questionSection: {
                     heading: {
                         main: {
-                            text: 'Hints'
+                            text: ''
                         },
                         vertical: {
                             text: 'Across'
@@ -954,101 +1058,69 @@ const Define = (() => {
                             text: 'Down'
                         }
                     },
-                    col: { col: 12, md: 6, sm: 12 },
+                    col: { col: 12, md: 12, sm: 12 },
                 },
                 shuffle: false,
                 numeric: false
             },
             content: [
                 {
-                    // text: 'A drawing of Earth on `theta` a flat surface (3 letters)',
-                    answer: 'Map',
+                    text: 'a person who controls traffic on the road _______________',
+                    answer: 'policeman',
                     row: 0,
                     col: 0,
-                    direction: 'h',
-                    colSize: { col: 12, md: 12, sm: 6 }
+                    direction: 'h'
                 },
                 {
-                    text1: 'Spherical model of Earth (5 letters) #_#',
-                    answer: 'Globe',
-                    row: 15,
-                    col: 6,
-                    direction: 'h',
-                    image: { path: 'img/1.png', width: '15%' },
-                    colSize: { col: 12, md: 12, sm: 6 }
+                    text: 'It is the other name of roundabout in the road _______________',
+                    answer: 'circle',
+                    row: 3,
+                    col: 3,
+                    direction: 'h'
                 },
                 {
-                    text: 'Ratio between map & ground distance (5 letters) #_#',
-                    answer: 'Scale',
+                    text: 'a covered road on which people can walk _______________',
+                    answer: 'pavement',
+                    row: 6,
+                    col: 5,
+                    direction: 'h'
+                },
+                {
+                    text: 'this is worn to protect the head _______________',
+                    answer: 'helmet',
+                    row: 10,
+                    col: 7,
+                    direction: 'h'
+                },
+                {
+                    text: 'you must stop when this light is on _______________',
+                    answer: 'red',
                     row: 4,
                     col: 0,
-                    direction: 'h',
-                    image: { path: 'img/2.png', width: '15%' },
-                    colSize: { col: 12, md: 6, sm: 6 }
+                    direction: 'h'
+                },
+
+                {
+                    text: 'It is the opposite of up _______________',
+                    answer: 'down',
+                    row: 4,
+                    col: 2,
+                    direction: 'v'
                 },
                 {
-                    text: 'Angular distance north or south of Equator (8 letters) #_#',
-                    answer: 'Latitude',
-                    row: 0,
-                    col: 8,
-                    direction: 'v',
-                    image: { path: 'img/3.png', width: '15%' },
-                    colSize: { col: 12, md: 6, sm: 6 }
-                },
-                {
-                    text: 'Angular distance east or west of Prime Meridian (9 letters) #_#',
-                    answer: 'Longitude',
-                    row: 0,
-                    col: 12,
-                    direction: 'v',
-                    image: { path: 'img/4.png', width: '15%' },
-                    colSize: { col: 12, md: 6, sm: 6 }
-                },
-                {
-                    text: 'Network of latitude & longitude (4 letters) #_#',
-                    answer: 'Grid',
-                    row: 8,
-                    col: 0,
-                    direction: 'h',
-                    image: { path: 'img/5.png', width: '15%' },
-                    colSize: { col: 12, md: 6, sm: 6 }
-                },
-                {
-                    text: 'Magnetic needle tool (7 letters) #_#',
-                    answer: 'Compass',
-                    row: 10,
-                    col: 0,
-                    direction: 'h',
-                    image: { path: 'img/6.png', width: '15%' },
-                    colSize: { col: 12, md: 6, sm: 6 }
-                },
-                {
-                    text: 'A conventional sign (6 letters) #_#',
-                    answer: 'Symbol',
-                    row: 12,
-                    col: 0,
-                    direction: 'h',
-                    image: { path: 'img/414.png', width: '15%' },
-                    colSize: { col: 12, md: 6, sm: 6 }
-                },
-                {
-                    text: '0° latitude dividing hemispheres (7 letters) #_#',
-                    answer: 'Equator',
-                    row: 6,
-                    col: 0,
-                    direction: 'h',
-                    image: { path: 'img/ch4_1.png', width: '15%' },
-                    colSize: { col: 12, md: 6, sm: 6 }
-                },
-                {
-                    text: 'North-south line measuring longitude (8 letters) #_#',
-                    answer: 'Meridian',
+                    text: 'you need these to start a car _______________',
+                    answer: 'keys',
                     row: 2,
-                    col: 14,
-                    direction: 'v',
-                    image: { path: 'img/ch4_2.png', width: '15%' },
-                    colSize: { col: 12, md: 6, sm: 6 }
+                    col: 8,
+                    direction: 'v'
                 },
+                {
+                    text: 'you must wear this before you drive or ride a car _______________',
+                    answer: 'seatbelt',
+                    row: 5,
+                    col: 8,
+                    direction: 'v'
+                }
             ]
         },
         {
@@ -1477,7 +1549,11 @@ const Define = (() => {
             content: {
                 replacement: '#{word}#',
                 questions: [
-                    { id: 1, text: 'I am six years old. I study in Class 1. I have #blac# #hare# and #broun# eyes. I have strong #leggs#. They help me #ren# fast. Today, I fell and hurt my #kne asdf#. I hope to get well soon and run again.', answer: ['black', 'hair', 'brown', 'legs', 'run', 'knee'] }
+                    {
+                        id: 1, 
+                        text: 'I am six years old. I study in Class 1. <br> I have #blac# #hare# and #broun# eyes. I have strong #leggs#. They help me #ren# fast. Today, I fell and hurt my #kne asdf#. I hope to get well soon and run again.',
+                        answer: ['black', 'hair', 'brown', 'legs', 'run', 'knee'] 
+                    }
                 ]
             }
         },
@@ -1652,7 +1728,14 @@ const Define = (() => {
         {
             id      : 43,
             head    : 'Template : 43, CircleAndUnderline `theta`',
-            lang    : 'en',
+            lang    : 'mt',
+            config  : {
+                // To hide the menu, make either of them true, but not both.
+                menuOptions : {
+                    circle    : false,
+                    underline : true
+                }
+            },
             content : {
                 questions: [
                     {
@@ -1702,7 +1785,7 @@ const Define = (() => {
             };
             document.body.appendChild(s);
         });
-    }
+    };
 
     (async () => {
         const scriptPath = 'js/newActJS';
