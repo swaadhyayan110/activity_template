@@ -10244,7 +10244,7 @@ const VideoPlayer = (() => {
                                             allowfullscreen
                                             style="background: #000">
                                         </iframe>`
-                }
+                                    }
                                 </div>
                             </div>`;
             // ..
