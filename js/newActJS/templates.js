@@ -9683,11 +9683,26 @@ const ShravanKaushalWithImages = (() => {
 
         questions?.forEach((q, index) => {
             const selected = userAnswers[index];
-            userTextAns.push(q.options[selected].text);
-            correctTextAns.push(q.options[q.answer].text);
+            userTextAns.push({
+                text  : q?.options[selected]?.text ?? undefined,
+                image : q?.options[selected]?.image ?? undefined,
+                qInd  : index
+            });
+
+            correctTextAns.push({
+                text  : q?.options[q?.answer]?.text ?? undefined,
+                image : q?.options[q?.answer]?.image ?? undefined,
+                qInd  : index
+            });
+
+            // userTextAns.push(q.options[selected].text ?? q.options[selected].image);
+            // correctTextAns.push(q.options[q.answer].text ?? q.options[q.answer].image);
         });
 
-        const score = userTextAns.filter((ans, i) => ans === correctTextAns[i]).length;
+        const score = userTextAns.filter((ans, i) => {
+            const ca = correctTextAns[i];
+            return ans.text == ca.text && ans.image == ca.image;
+        }).length;
         const total = questions.length;
 
         showResultPopup(score, total, userTextAns, correctTextAns, lang);
@@ -9716,15 +9731,45 @@ const ShravanKaushalWithImages = (() => {
         `;
         table.push(tableHead);
 
+        const __renderTextImage = (text, image) => {
+            if( !text && !image ) return '';
+
+            const html = [];
+            if( text ) html.push( `<div class="col">${text}</div>` );
+
+            if( image ) {
+                const img = `
+                    ${ text 
+                        ? `<div class="text-end p-1 col-5">`
+                        : '<div class="col p-1">'
+                    }
+                        <img 
+                            src="${Activity.pathToCWD()}${image}" 
+                            class="rounded-2"
+                            ondragstart="return false;"
+                            style="width:50px;"
+                        ></img>                   
+                    </div>
+                `;
+                // ..
+                html.push( img );
+            }
+            return `
+                <div class="d-flex align-items-center">
+                    ${html.join('')}
+                </div>
+            `;
+        }
+
         userAns.forEach((ua, i) => {
             const ca = correctAns[i];
-            const isCorrect = ua === ca;
+            const isCorrect = ua.text == ca.text && ua.image == ca.image;
 
             const tr = `
                 <tr>
                     <th>${i + 1}</th>
-                    <td class="${isCorrect ? "text-success" : "text-danger"}">${ua}</td>
-                    <td class="text-success">${ca}</td>
+                    <td class="${isCorrect ? "text-success" : "text-danger"}">${__renderTextImage(ua.text, ua.image)}</td>
+                    <td class="text-success">${__renderTextImage(ca.text, ca.image)}</td>
                     <td class="${isCorrect ? "text-success" : "text-danger"}">
                         ${isCorrect ? "✔" : "✘"}
                     </td>

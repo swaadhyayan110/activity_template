@@ -1197,10 +1197,10 @@ const Define = (() => {
                         options: [
                             { text: 'खेल-कूद में तूफ़ान मचाने पर `theta`' },
                             { text: 'खूब सोते रहने से', },
-                            { text: 'हर बात में ज़िद करने से', image: 'img/ch4_1.png' },
+                            { image: 'img/ch4_1.png' },
                             { text: 'इनमें से कोई नहीं ', image: 'img/ch4_1.png' }
                         ],
-                        answer: 0
+                        answer: 2
                     },
                     {
                         question: {
@@ -1222,7 +1222,7 @@ const Define = (() => {
                         },
                         options: [
                             { text: 'खूब रोने से' },
-                            { text: 'खेलने में चोट लगने से' },
+                            { text: 'खेलने में चोट लगने से 2' },
                             { text: 'बार-बार खाने की इच्छा करने से' },
                             { text: 'इनमें से कोई नहीं' }
                         ],
