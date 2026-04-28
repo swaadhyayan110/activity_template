@@ -6186,7 +6186,7 @@ const DragAndDropMulti = (() => {
                                 <div class='col-auto'>
                                     ${image.join('')}
                                 </div>
-                                <div class='col d-flex' data-queindex="${ind}">
+                                <div class='col d-flex flex-wrap' data-queindex="${ind}">
                                     ${replacedText}
                                 </div>
                             </div>
@@ -6217,7 +6217,10 @@ const DragAndDropMulti = (() => {
                                         </div>
                                     ` : ''
                     }
-                                <div class="row g-0 gap-4 my-3 ${!singleQuestionMode && col_size.md == 4 ? 'justify-content-center' : ''}" data-queindex="${ind}">
+                                <div 
+                                    class="row g-0 gap-4 my-3 ${!singleQuestionMode && col_size.md == 4 ? 'justify-content-center' : ''}" 
+                                    data-queindex="${ind}"
+                                >
                                     ${replacedText}
                                 </div>
                             </div>
