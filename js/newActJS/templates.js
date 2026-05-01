@@ -3721,20 +3721,37 @@ const Adaptiv = (() => {
 
         const __renderQuestionText = (data) => {
 
-            const imageData = data?.images ?? {};
-            const imagePath = imageData?.path ?? [];
+            const imageData  = data?.images ?? {};
+            const imagePath  = imageData?.path ?? [];
+            const imageStyle = imageData?.style ?? [];
             const text = data?.text ?? '';
 
             if (!text && !imagePath.length) return '';
 
             if (!imagePath.length) return text;
 
-            const __image = (src) => `<img src="${Activity.pathToCWD()}${src}" style="height:50px; width:50px; object-fit:contain;" ondragstart="return false;">`;
+            const __image = (index) => {
+                const src   = imagePath[index];
+                const style = imageStyle[index] ?? null;
+
+                const w_h_style = !style
+                                    ? `height:50px;width:50px;`
+                                    : `height:${style.height};width:${style.height};`;
+                // ..
+
+                return `
+                    <img 
+                        src="${Activity.pathToCWD()}${src}" 
+                        style="${w_h_style} object-fit:contain;" 
+                        ondragstart="return false;"
+                    >
+                `;
+            }
 
             const regex = new RegExp(imageReplacement, 'g');
 
             let index = 0;
-            return text.replace(regex, () => __image(imagePath[index++]));
+            return text.replace(regex, () => __image(index++));
         }
 
         const questionText = (q?.question && typeof q?.question === 'string')

@@ -739,7 +739,13 @@ const Define = (() => {
                                 question: {
                                     text: '`theta` कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
                                     images: {
-                                        path: ['img/1.png', 'img/2.png']
+                                        path: ['img/1.png', 'img/2.png'],
+                                        style : [ // style[i] applies to path[i]
+                                            { 
+                                                height : '100px',
+                                                width  : '100px'
+                                            },
+                                        ]
                                     }
                                 },
                                 options: [
