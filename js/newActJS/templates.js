@@ -5982,55 +5982,110 @@ const DragAndDropMulti = (() => {
 
                 return { ok, missing, duplicates, extras };
             }
-            compareAnswerArrays(type_set?.answers, userAns)
+
+            const flatUserAnswers = [];
+            userAns.forEach(obj => {
+                flatUserAnswers.push(...Object.values(obj));
+            });
+
+            compareAnswerArrays(type_set?.answers, flatUserAnswers);
         } else {
             shuffledQuestions.forEach((item, i) => {
-                const userAnswer = userAns.get(i) ?? '';
-                let count = 0;
-                let isCorrect = false;
+            const answersObj = userAns.get(i) || {};
+            const userAnswerArr = Object.values(answersObj); // ✅ extract values
 
-                const correctAnswerText = ( option_side == 'right' )
-                    ? ( item.options[item.answer] ?? '' )
-                    : item.options;
-                // ..
+            let isCorrect = false;
 
-                if (strictMatch) {
-                    isCorrect = userAnswer.toString() === correctAnswerText.toString();
+            const correctAnswerText = (option_side == 'right')
+                ? [item.options[item.answer] ?? '']
+                : (Array.isArray(item.options) ? item.options : [item.options]);
+            // ..
 
-                    if (isCorrect) {
-                        count++;
-                        correctCount++;
-                    }
+            if (strictMatch) {
+                isCorrect =
+                    userAnswerArr.length === correctAnswerText.length &&
+                    userAnswerArr.every((val, idx) =>
+                        val.toString() === correctAnswerText[idx].toString()
+                    );
+
+                if (isCorrect) correctCount++;
+            } else {
+                if (option_side == 'right') {
+                    isCorrect = userAnswerArr[0] === correctAnswerText[0];
+                    if (isCorrect) correctCount++;
                 } else {
-                    if (option_side == 'right') {
-                        isCorrect = userAnswer === correctAnswerText;
-                        if (isCorrect) correctCount++;
-                    } else {
-                        if (Array.isArray(correctAnswerText)) {
-                            const isMatch = correctAnswerText.includes(userAnswer);
-                            if (isMatch) {
-                                isCorrect = true;
-                                correctCount++;
-                            }
-                        } else {
-                            if (userAnswer === correctAnswerText) {
-                                isCorrect = true;
-                                correctCount++;
-                            }
-                        }
-                    }
-                }
+                    const correctSet = new Set(correctAnswerText);
 
-                const body = `
-                    <tr clsss='trData'>
-                        <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
-                        <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString() || popupLabels.notAttempted}</td>
-                        <td class="text-success">${correctAnswerText.toString()}</td>
-                        <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
-                    </tr>
-                `;
-                table.push(body);
-            });
+                    isCorrect =
+                        userAnswerArr.length === correctAnswerText.length &&
+                        userAnswerArr.every(val => correctSet.has(val));
+
+                    if (isCorrect) correctCount++;
+                }
+            }
+
+            const body = `
+                <tr clsss='trData'>
+                    <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">
+                        ${userAnswerArr.length ? userAnswerArr.join(', ') : popupLabels.notAttempted}
+                    </td>
+                    <td class="text-success">${correctAnswerText.join(', ')}</td>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">
+                        ${isCorrect ? '✔' : '✘'}
+                    </td>
+                </tr>
+            `;
+            table.push(body);
+        });
+
+            // shuffledQuestions.forEach((item, i) => {
+            //     const userAnswer = userAns.get(i) ?? '';
+            //     let count = 0;
+            //     let isCorrect = false;
+
+            //     const correctAnswerText = ( option_side == 'right' )
+            //         ? ( item.options[item.answer] ?? '' )
+            //         : item.options;
+            //     // ..
+
+            //     if (strictMatch) {
+            //         isCorrect = userAnswer.toString() === correctAnswerText.toString();
+
+            //         if (isCorrect) {
+            //             count++;
+            //             correctCount++;
+            //         }
+            //     } else {
+            //         if (option_side == 'right') {
+            //             isCorrect = userAnswer === correctAnswerText;
+            //             if (isCorrect) correctCount++;
+            //         } else {
+            //             if (Array.isArray(correctAnswerText)) {
+            //                 const isMatch = correctAnswerText.includes(userAnswer);
+            //                 if (isMatch) {
+            //                     isCorrect = true;
+            //                     correctCount++;
+            //                 }
+            //             } else {
+            //                 if (userAnswer === correctAnswerText) {
+            //                     isCorrect = true;
+            //                     correctCount++;
+            //                 }
+            //             }
+            //         }
+            //     }
+
+            //     const body = `
+            //         <tr clsss='trData'>
+            //             <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
+            //             <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString() || popupLabels.notAttempted}</td>
+            //             <td class="text-success">${correctAnswerText.toString()}</td>
+            //             <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
+            //         </tr>
+            //     `;
+            //     table.push(body);
+            // });
         }
 
         const tableBodyL = `</tbody></table></div>`;
@@ -6124,11 +6179,12 @@ const DragAndDropMulti = (() => {
         const replacementRegex = new RegExp(replacement, "g");
 
         replacedText = replacedText.replace(replacementRegex, () => {
-            const ans = quesOptions[index++] || '';
+            const ans = quesOptions[index] || '';
             return `
                 <div 
                     class="drop-Box dropBox_2 ui-droppable" 
-                    data-ans="${ans}" 
+                    data-ans="${ans}"
+                    data-blankindex="${index++}"
                     style="width:${inputWidth};">
                 </div>
             `;
@@ -6481,12 +6537,21 @@ const DragAndDropMulti = (() => {
     }
 
     const __setGetUserAttemptedAns = (index) => {
-        const ans = userAns.get(index);
-        $(`div[data-queindex=${index}]`)
-            .children('.drop-Box.dropBox_2')
-            .attr('data-val', ans)
-            .html(ans);
-        // ..
+        const answers = userAns.get(index);
+
+        if( !answers ) return null;
+
+        const question = document.querySelector( `div[data-queindex="${index}"]` );
+        if( !question ) return null;
+
+        for( const [index, value] of Object.entries(answers) ) {
+            const blank = question.querySelector(`div[data-blankindex="${index}"]`);
+
+            if( !blank ) return;
+
+            blank.dataset.val = value;
+            blank.innerHTML   = value;
+        }
     }
 
     const __renderSingleQuesWithDataOnChange = () => {
@@ -6617,47 +6682,47 @@ const DragAndDropMulti = (() => {
         table.push(tablePartStart);
 
         questions.forEach((item, i) => {
-            const userAnswer = userAns.get(i) ?? '';
-            let count        = 0;
-            let isCorrect    = false;
+            const answersObj = userAns.get(i) || {};
+            const userAnswerArr = Object.values(answersObj);
+            let isCorrect = false;
 
-            const correctAnswerText = option_side == 'right' 
-                ? ( item.options[item.answer] ?? '' )
-                : item.options;
+            const correctAnswerText = option_side == 'right'
+                ? [item.options[item.answer] ?? '']
+                : (Array.isArray(item.options) ? item.options : [item.options]);
             // ..
 
             if (strictMatch) {
-                isCorrect = userAnswer.toString() === correctAnswerText.toString();
-                if (isCorrect) {
-                    count++;
-                    correctCount++;
-                }
+                isCorrect =
+                    userAnswerArr.length === correctAnswerText.length &&
+                    userAnswerArr.every((val, idx) => val.toString() === correctAnswerText[idx].toString());
+
+                if (isCorrect) correctCount++;
             } else {
                 if (option_side == 'right') {
-                    isCorrect = userAnswer === correctAnswerText;
+                    isCorrect = userAnswerArr[0] === correctAnswerText[0];
                     if (isCorrect) correctCount++;
                 } else {
-                    if (Array.isArray(correctAnswerText)) {
-                        const isMatch = correctAnswerText.includes(userAnswer);
-                        if (isMatch) {
-                            isCorrect = true;
-                            correctCount++;
-                        }
+                    const correctSet = new Set(correctAnswerText);
+                    isCorrect = userAnswerArr.every(val => correctSet.has(val));
+
+                    if (isCorrect && userAnswerArr.length === correctAnswerText.length) {
+                        correctCount++;
                     } else {
-                        if (userAnswer === correctAnswerText) {
-                            isCorrect = true;
-                            correctCount++;
-                        }
+                        isCorrect = false;
                     }
-                }              
+                }
             }
 
             const body = `
                 <tr clsss='trData'>
                     <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
-                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">${userAnswer.toString()}</td>
-                    <td class="text-success">${correctAnswerText.toString()}</td>
-                    <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">
+                        ${userAnswerArr.length ? userAnswerArr.join(', ') : '-'}
+                    </td>
+                    <td class="text-success">${correctAnswerText.join(', ')}</td>
+                    <td class="${isCorrect ? 'text-success' : 'text-danger'}">
+                        ${isCorrect ? '✔' : '✘'}
+                    </td>
                 </tr>
             `;
             table.push(body);
@@ -6697,16 +6762,25 @@ const DragAndDropMulti = (() => {
             $(selector).droppable({
                 revert: true,
                 drop: function (event, ui) {
-                    const dragVal = ui.draggable.attr('data-ans');
-                    $(this).html(dragVal).attr('data-val', dragVal);
+                    try{
+                        const dragVal = ui.draggable.attr('data-ans');
+                        const dataset = this.dataset;
+                        const blankindex = dataset?.blankindex ?? 0;
+                        $(this).html(dragVal).attr('data-val', dragVal);
 
-                    const index = Number($(this).parent().attr( 'data-queindex' ));
-                    userAns.set(index, dragVal);
+                        const index = Number($(this).parent().attr( 'data-queindex' ));
 
-                    Activity.initMathJax();
+                        if( !userAns.has( index ) ) userAns.set(index, {} );
 
-                    if (enableDragCheckSubmitBtn() == $(selector).length) {
-                        $(`#submit2`).removeClass('disable');
+                        userAns.get(index)[blankindex] = dragVal;
+
+                        Activity.initMathJax();
+
+                        if (enableDragCheckSubmitBtn() == $(selector).length) {
+                            $(`#submit2`).removeClass('disable');
+                        }
+                    } catch( error ) {
+                        console.log(error)
                     }
                 }
             });
