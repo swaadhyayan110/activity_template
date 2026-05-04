@@ -742,7 +742,7 @@ const Define = (() => {
                                         path: ['img/1.png', 'img/2.png'],
                                         style : [ // style[i] applies to path[i]
                                             { 
-                                                height : '100px',
+                                                height : 'auto',
                                                 width  : '100px'
                                             },
                                         ]

@@ -3736,7 +3736,7 @@ const Adaptiv = (() => {
 
                 const w_h_style = !style
                                     ? `height:50px;width:50px;`
-                                    : `height:${style.height};width:${style.height};`;
+                                    : `height:${style.height};width:${style.width};`;
                 // ..
 
                 return `
