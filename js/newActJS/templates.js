@@ -10162,7 +10162,7 @@ const OnlyAudio = (() => {
         const activity = Activity.getDefine(questionId) ?? {};
         const content = activity.content ?? {};
 
-        let source = `${content?.src}`;
+        let source = `${Activity.pathToCWD()}${content?.src}`;
 
         if (!source || typeof source !== "string") throw new Error("source string required");
 
