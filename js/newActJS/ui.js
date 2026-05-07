@@ -89,11 +89,11 @@ const UI = (() => {
 
         document.querySelector('.question-container').innerHTML = '';       
 
-        if( landscape === true ) {
-            landscapeMode();
-        } else {
-            portraitMode();
-        }
+        // if( landscape === true ) {
+        //     landscapeMode();
+        // } else {
+        //     portraitMode();
+        // }
 
         const quesEle = document.getElementById(selector);        
         if( quesEle ) {
