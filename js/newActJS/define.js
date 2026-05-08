@@ -1776,19 +1776,20 @@ const Define = (() => {
 
     const loadScript = (src) => {
         return new Promise((resolve, reject) => {
-            if (!src) {
+            if( !src ) {
                 reject(new Error('No script src provided'));
                 return;
             }
+            
             const exists = [...document.querySelectorAll('script')].some(script => script.src.includes(src));
-            if (exists) {
+            if( exists ) {
                 resolve('already-loaded');
                 return;
             }
-
-            const s = document.createElement('script');
-            s.src = src;
-            s.onload = () => resolve(s);
+            
+            const s   = document.createElement('script');
+            s.src     = `${src}?v=${Date.now()}`;
+            s.onload  = () => resolve(s);
             s.onerror = (err) => {
                 s.remove();
                 reject(new Error(`Failed to load script: ${src}`));
