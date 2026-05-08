@@ -509,6 +509,29 @@ const Activity = (() => {
         };
     };
 
+    const __splitGraphemes = (str) => {
+        return [...new Intl.Segmenter('hi', { granularity: 'grapheme' })
+            .segment(str)]
+            .map(x => x.segment);
+    };
+    
+    const shuffleStringArray = (array) => {
+        const original = array.join('');
+        let shuffled = [];
+
+        do {
+            shuffled = [...array];
+
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+
+        } while (shuffled.join('') === original);
+
+        return shuffled;
+    };
+
     const translateBooleanLabels = (lang = 'hi') => lang == 'hi' ? ['सही', 'गलत'] : ['True', 'False'];
     const translateWordLabel = (lang = 'hi') => lang == 'hi' ? 'शब्द' : 'Word';
     const translateSentenceLabel = (lang = 'hi') => lang == 'hi' ? 'वाक्य' : 'Sentence';
@@ -579,6 +602,7 @@ const Activity = (() => {
         initMathJax,
         shuffleArray,
         shuffleWords,
+        shuffleStringArray,
         hindiKeyboard,
         toggleCheckBtn,
         translateBoxLabel,
@@ -12726,7 +12750,7 @@ const ShabdRachna = (() => {
                 const view = question.map((ques, ind) => {
                     const subBullets = Activity.translateBulletLabels({ lang: 'mt', ind: ind });
                     const dragOptions = shuffle === true
-                        ? Activity.shuffleArray(ques?.answer ?? []) ?? []
+                        ? Activity.shuffleStringArray(ques?.answer ?? []) ?? []
                         : ques?.answer ?? [];
                     // ..
 
