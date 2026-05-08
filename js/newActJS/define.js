@@ -818,7 +818,11 @@ const Define = (() => {
             lang: 'hi',
             content: {
                 desc: 'audio description `theta`',
-                src: 'https://swaadhyayan.com/data/learningContent/3/Hindi/video/cca24b220e4c0b05f1b84310b587da95.mp4',
+                src : 'video.mp4',
+                // src : 'audio/1.mp3',
+                // src : 'https://swaadhyayan.com/data/learningContent/3/Hindi/video/cca24b220e4c0b05f1b84310b587da95.mp4',                
+                // src : 'https://www.youtube.com/watch?v=gIoyGYYCAxE',
+                // src : 'https://www.youtube.com/embed/gIoyGYYCAxE?si=8bhfXCJ1WKJpoIp8',
             }
         },
         {

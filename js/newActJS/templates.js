@@ -9917,6 +9917,7 @@ const OnlyAudio = (() => {
     };
 
     const isYouTube = (u) => typeof u === "string" && (u.includes("youtube.com") || u.includes("youtu.be"));
+    const isSwaadhyayan = (u) => typeof u === "string" && (u.includes("swaadhyayan.com") );
 
     const extractYouTubeId = (url) => {
         if (!url) return null;
@@ -10160,11 +10161,15 @@ const OnlyAudio = (() => {
         ui(questionId);
 
         const activity = Activity.getDefine(questionId) ?? {};
-        const content = activity.content ?? {};
+        const content  = activity.content ?? {};
+        const src      = content?.src ?? null;
 
-        let source = `${Activity.pathToCWD()}${content?.src}`;
+        if( !src ) return null;
 
-        if (!source || typeof source !== "string") throw new Error("source string required");
+        const source = ( isYouTube(src) || isSwaadhyayan(src) ) 
+                            ? src 
+                            : `${Activity.pathToCWD()}${src}`;
+        // ..
 
         state.playBtn.addEventListener("click", async () => {
             try {
