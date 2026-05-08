@@ -7495,13 +7495,7 @@ const Shabdkosh = (() => {
                         ? titles?.sentence
                             .replaceAll(
                                 titleLower,
-                                `
-                                            <span 
-                                                class="blinking-underline sometextcolor"
-                                            >
-                                                ${titleLower}
-                                            </span>
-                                        `
+                                `<span class="blinking-underline sometextcolor">${titleLower}</span>`
                             )
                         : ''
                     }
