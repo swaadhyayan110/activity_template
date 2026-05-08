@@ -6220,6 +6220,7 @@ const DragAndDropMulti = (() => {
             const mergedOptions = Activity.shuffleArray([...new Set([...options, ...addOptions])] || []) || [];
             mergedOptions.forEach((item, ind) => {
                 const html = drag_option_html(item, ind);
+                if( !html ) return null;
                 optionHtml.push(html);
             });
             $('.drag-container2').html(optionHtml.join(''));
@@ -6228,7 +6229,9 @@ const DragAndDropMulti = (() => {
         if (option_side == 'right') {
             const options = [];
             quesOptions.map((item, ind) => {
-                options.push(drag_option_html(item, ind));
+                const html = drag_option_html(item, ind);
+                if( !html ) return null;
+                options.push(html);
             });
             const html = `
                 <div class="row g-0 my-3 align-items-center">
@@ -6422,6 +6425,7 @@ const DragAndDropMulti = (() => {
                 const mergedOptions = Activity.shuffleArray([...new Set([...options, ...addOptions])] || []) || [];
                 mergedOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
+                    if( !html ) return null;
                     optionHtml.push(html);
                 });
                 $('.drag-container2').html(optionHtml.join(''));
@@ -6432,6 +6436,7 @@ const DragAndDropMulti = (() => {
                 const uniqueOptions = [...new Set(options)];
                 uniqueOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
+                    if( !html ) return null;
                     optionHtml.push(html);
                 });
                 $('.drag-container2').html(optionHtml.join(''));
@@ -6756,7 +6761,19 @@ const DragAndDropMulti = (() => {
         Activity.initMathJax();
     }
 
-    const drag_option_html = (item, ind) => `<div class="drag_${ind} wordDrag font17" data-text="${item}" data-ans="${item}">${item}</div>`;
+    const drag_option_html = (item, ind) => {
+        if( !item ) return null;
+
+        return `
+            <div 
+                class="drag_${ind} wordDrag font17" 
+                data-text="${item}" 
+                data-ans="${item}"
+            >
+                ${item}
+            </div>
+        `;
+    }
 
     const makeDraggable = (selector) => {
         try {
