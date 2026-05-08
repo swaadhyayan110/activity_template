@@ -1780,7 +1780,7 @@ const Define = (() => {
                 reject(new Error('No script src provided'));
                 return;
             }
-            
+
             const exists = [...document.querySelectorAll('script')].some(script => script.src.includes(src));
             if( exists ) {
                 resolve('already-loaded');
@@ -1788,7 +1788,7 @@ const Define = (() => {
             }
             
             const s   = document.createElement('script');
-            s.src     = `${src}?v=${Date.now()}`;
+            s.src     = src;
             s.onload  = () => resolve(s);
             s.onerror = (err) => {
                 s.remove();
@@ -1799,10 +1799,12 @@ const Define = (() => {
     };
 
     (async () => {
-        const scriptPath = 'js/newActJS';
-        await loadScript(`${scriptPath}/modules.js`);
-        await loadScript(`${scriptPath}/templates.js`);
-        await loadScript(`${scriptPath}/ui.js`);
+        const p = 'js/newActJS';
+        const v = Date.now()
+
+        await loadScript(`${p}/modules.js?v=${v}`);
+        await loadScript(`${p}/templates.js?v=${v}`);
+        await loadScript(`${p}/ui.js?v=${v}`);
     })();
 
     const store = {
