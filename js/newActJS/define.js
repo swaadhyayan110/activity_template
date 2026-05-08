@@ -1800,7 +1800,7 @@ const Define = (() => {
 
     (async () => {
         const p = 'js/newActJS';
-        const v = Date.now()
+        const v = Date.now();
 
         await loadScript(`${p}/modules.js?v=${v}`);
         await loadScript(`${p}/templates.js?v=${v}`);
