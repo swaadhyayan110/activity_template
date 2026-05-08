@@ -7071,24 +7071,92 @@ const Pdf = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
+            const svgWidth   = 18;
             parent.innerHTML = `<div class="question">
                                     <div class="container contAdapt py-0 shadow-lg" id="${containerId}">
                                         <div class="wrap">
-                                            <div class="d-flex align-items-center justify-content-center p-1 gap-2 mt-2">
-                                                <div class="col-2 text-center">
-                                                    <button class="btn btn-sm btn-primary p-2" id="downloadBtn">⬇ Download</button>
-                                                </div>
-                                                <div class="col mx-auto d-flex align-items-center justify-content-center">
-                                                    <button class="btn btn-sm btn-primary p-2" id="prevBtn">◀ Prev</button>
-                                                    <input class="mx-1 border rounded-2" id="pageNum" type="number" value="0" min="1" autocomplete="off" style="width: 3rem;text-align: center;">
-                                                    /
-                                                    <span id="pageCount" class="mx-1">0</span>
-                                                    <button class="btn btn-sm btn-primary p-2" id="nextBtn">Next ▶</button>
-                                                </div>
-                                                <div class="col-2 text-center">
-                                                    <button class="btn btn-sm btn-primary p-2" id="zoomOutBtn">-</button>
-                                                    <button class="btn btn-sm btn-primary p-2" id="zoomInBtn">+</button>
-                                                    <button class="btn btn-sm btn-primary p-2" id="resetBtn">Reset</button>
+                                            <div class="container-fluid mt-2 px-2">
+                                                <div 
+                                                    class="row g-0 mx-auto align-items-center justify-content-between border border-success-subtle bg-success-subtle shadow-sm rounded-4 p-2 mb-2"
+                                                    style="width:min(95%,1100px);"
+                                                >
+                                                    <div class="col-12 col-lg-3 text-center text-lg-start my-1">
+                                                        <button
+                                                            class="btn btn-outline-success btn-sm px-3 rounded-pill shadow-sm w-100 w-md-75"
+                                                            id="downloadBtn"
+                                                        >
+                                                            <span>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgWidth}" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                                                                </svg>
+                                                            </span>
+                                                            Download
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-12 col-lg-6 my-1">
+                                                        <div class="d-flex align-items-center justify-content-center flex-wrap gap-2">
+                                                            <button
+                                                                class="btn btn-light btn-sm rounded-pill px-3 shadow-sm d-inline-flex align-items-center"
+                                                                id="prevBtn"
+                                                            >
+                                                                <span>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgWidth}" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                                                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                                                    </svg>
+                                                                </span>
+                                                                Prev
+                                                            </button>
+                                                            <div class="d-flex align-items-center bg-light rounded-pill px-3 py-1 shadow-sm">
+                                                                <input
+                                                                    id="pageNum"
+                                                                    type="number"
+                                                                    value="0"
+                                                                    min="1"
+                                                                    autocomplete="off"
+                                                                    class="border-0 bg-transparent text-center fw-semibold"
+                                                                    style="width:55px; outline:none;"
+                                                                >
+                                                                <span class="mx-2 text-muted">/</span>
+                                                                <span id="pageCount" class="fw-semibold">0</span>
+                                                            </div>
+                                                            <button
+                                                                class="btn btn-light btn-sm rounded-pill px-3 shadow-sm d-inline-flex align-items-center"
+                                                                id="nextBtn"
+                                                            >
+                                                                Next
+                                                                <span>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgWidth}" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                                                    </svg>
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-3 my-1">
+                                                        <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-2 flex-wrap">
+                                                            <button
+                                                                class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                                id="zoomOutBtn"
+                                                                style="width:30px;height:30px;font-size:16px;"
+                                                            >
+                                                                −
+                                                            </button>
+                                                            <button
+                                                                class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                                id="zoomInBtn"
+                                                                style="width:30px;height:30px;font-size:16px;"
+                                                            >
+                                                                +
+                                                            </button>
+                                                            <button
+                                                                class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm"
+                                                                id="resetBtn"
+                                                            >
+                                                                Reset
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="viewer overflow-auto d-flex align-items-center justify-content-center p-1">
@@ -7119,6 +7187,8 @@ const Pdf = (() => {
             console.log('ERROR : Pdf.toggle_loader', err);
         }
     };
+
+    const __scale = () => window.innerWidth <= 768 ? 0.5 : 1.2;
 
     const renderPdf = async (questionId) => {
         try {
@@ -7161,7 +7231,7 @@ const Pdf = (() => {
 
             let pdfDoc = null;
             let currentPage = 1;
-            let scale = 1.2;
+            let scale = __scale();
             let rotation = 0;
 
             const loadingTask = pdfjsLib.getDocument(path);
@@ -7216,7 +7286,7 @@ const Pdf = (() => {
                     const transform = outputScale !== 1
                         ? [outputScale, 0, 0, outputScale, 0, 0]
                         : null;
-
+                    // ..
                     await page.render({
                         canvasContext: ctx,
                         viewport,
@@ -7256,7 +7326,7 @@ const Pdf = (() => {
             };
             document.getElementById("zoomInBtn").onclick = () => { scale *= 1.2; renderPage(); };
             document.getElementById("zoomOutBtn").onclick = () => { scale /= 1.2; renderPage(); };
-            document.getElementById("resetBtn").onclick = () => { scale = 1.2; rotation = 0; renderPage(); };
+            document.getElementById("resetBtn").onclick = () => { scale = __scale(); rotation = 0; renderPage(); };
 
         } catch (e) {
             toggle_loader(true);
