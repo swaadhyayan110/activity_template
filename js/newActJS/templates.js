@@ -14260,7 +14260,7 @@ const VirtualTour = (() => {
                             ${title?.main?.text && title.main.text != ''
                         ? `
                                     <div 
-                                        class="col-auto p-3 fw-bold text-light text-uppercase rounded-3" 
+                                        class="col-12 col-sm-3 p-3 fw-bold text-light text-uppercase rounded-3" 
                                         style="${style().get.css.title}"
                                     >${title.main.text}</div>
                                 ` : ''
