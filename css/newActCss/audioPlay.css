@@ -1,4 +1,3 @@
-
 .exerciseDiv {
     position: relative;
 }
@@ -19,11 +18,13 @@
     height: 500px;
     position: relative;
 }
-.rowAudioBtns{
+
+.rowAudioBtns {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .audio-music-bg {
     background-image: url('../images/music.png');
     background-size: cover;
@@ -144,5 +145,12 @@ input[type="range"] {
 
     .audio-replay-btn {
         width: 30px;
+    }
+}
+
+@media (min-width:300px) and (max-width:880px) {
+    .audio-container {
+        width: 100%;
+        height: 77%;
     }
 }

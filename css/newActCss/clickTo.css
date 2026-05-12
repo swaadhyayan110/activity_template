@@ -271,14 +271,14 @@
     /* थोड़ा fade दिखे */
 }
 
-.itemDisabled{
+.itemDisabled {
     pointer-events: none;
 }
 
 
 /* spell-it-out */
 
-.spell-out-box{
+.spell-out-box {
     margin: 0;
     color: #041d29;
     border: 3px dashed #dfdfdf;
@@ -293,7 +293,7 @@
     color: #4364f7;
 }
 
-.spell-out-font-23{
+.spell-out-font-23 {
     font-size: 23px;
 }
 
@@ -318,8 +318,34 @@
         padding: 8px 6px;
     }
 
-    .spell-out-font-23{
+    .spell-out-font-23 {
         font-size: 13px;
     }
 
+}
+
+@media (min-width:300px) and (max-width:880px) {
+    #scoreTextQ1Click {
+        font-size: 14px;
+    }
+
+    .report_clicks {
+        background: #fff;
+        border-radius: 12px;
+        padding: 10px;
+        width: 98%;
+        max-width: 850px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        animation: slideUp 0.6s ease;
+        overflow: hidden;
+        margin: 3vh auto;
+    }
+
+    .report_clicks thead th {
+        padding: 6px !important;
+        font-size: 13px !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-radius: 10px 10px 0 0;
+    }
 }

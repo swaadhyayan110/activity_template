@@ -422,7 +422,7 @@
   width: 930px;
   position: relative;
   height: max-content;
-  margin: 5vw 0 !important;
+  margin: 5vw 1vw !important;
 }
 
 .headingReadyPatr {
@@ -592,12 +592,12 @@
   }
 
   .textNormalRun {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .saketText {
     color: #000;
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .instForFillText {
@@ -641,4 +641,17 @@
   #dataForReadyPatar {
     font-size: 14px;
   }
+  .dynamicImgRachna{
+    width: 100% !important;
+  }
+  .inForContRach {
+  padding: 10px;
+  }
+  .sampleAnsBox {
+  font-size: 15px;
+  width: 98%;
+  }
+  .wrapers {
+  padding: 0 0;
+}
 }

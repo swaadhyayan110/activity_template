@@ -284,5 +284,31 @@
 @media (max-width: 880px) {
     .mcq-text {
         font-size: 15px;
+        text-align: justify;
     }
+}
+@media (min-width:300px) and (max-width:880px) {
+  .answerdiv {
+  background: #fff;
+  border-radius: 20px;
+  padding: 10px;
+  width: 99%;
+  max-width: 850px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.6s ease;
+  overflow: auto;
+  max-height: 85vh;
+}
+#scoreTextQ1 {
+  font-size: 17px !important;
+  margin-bottom: 1px !important;
+}
+.answerdiv thead th {
+  background: linear-gradient(135deg, #24cae6, #1485c6);
+  color: #fff;
+  padding: 7px;
+  font-size: 13px;
+  border-radius: 10px 10px 0 0;
+
+}
 }

@@ -52,7 +52,7 @@
 }
 
 .imgBoxFill img:hover {
-  transform: scale(1.03);
+  /* transform: scale(1.03); */
   box-shadow: 0 8px 20px rgba(52,128,221,0.25);
 }
 
@@ -81,7 +81,7 @@
 }
 
 .fillBox:hover {
-  transform: translateY(-3px) scale(1.03);
+  /* transform: translateY(-3px) scale(1.03); */
   color: #fff;
   box-shadow: 0 8px 18px rgba(52,128,221,0.35);
 }

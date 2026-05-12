@@ -1,4 +1,3 @@
-
 .qu_22 {
     background: #fff;
     height: 93vh;
@@ -323,5 +322,10 @@
 
     .shrutlekh .number-buttons {
         gap: 10px;
+    }
+
+    .shrutlekh .word-btn {
+        padding: 8px 8px;
+        margin: 0px auto;
     }
 }

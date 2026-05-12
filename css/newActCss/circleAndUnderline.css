@@ -196,3 +196,11 @@
 .cu-tag.expected.cu-underline {
     border: none;
 }
+
+
+@media (min-width: 200px) and (max-width:767px) {
+.cu-popup-content {
+  padding: 10px;
+  min-width: 97%;
+}
+}

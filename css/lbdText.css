@@ -934,7 +934,7 @@ body {
 
 /* Listening Common CSS End */
 
-.question-container{
+.question-container {
   height: 84vh;
   overflow: auto;
 }
@@ -990,7 +990,7 @@ body {
   }
 
   .machiNgs button {
-    padding: 8px 20px;
+    padding: 8px 8px;
     border: none;
     border-radius: 32px;
     cursor: pointer;
@@ -1008,7 +1008,7 @@ body {
 
   .machiNgs {
     padding: 0px;
-    gap: 5px;
+    gap: 3px;
     bottom: 0px;
     width: 100%;
     border-radius: 50px;
@@ -1027,19 +1027,43 @@ body {
   }
 
   .imgBoxes {
-    width: 80px;
-    height: 80px;
+    width: 67px;
+    height: 67px;
   }
 
   .centerItems {
-    max-width: 120px;
+    max-width: 77px;
     margin: 7px auto;
-    padding: 10px;
-    font-size: 13px;
+    padding: 8px;
+    font-size: 11px;
     background: #fff;
   }
 
   .WhiteBoxes {
     height: 87vh;
+  }
+
+  .mcq-image img {
+    width: 100% !important;
+    border-radius:  10px !important;
+  }
+
+  #puzzle {
+    width: 100%;
+    overflow: auto;
+  }
+
+  .outerDiv {
+    width: 100%;
+    overflow: auto;
+  }
+  .imgDisplay{
+    width: 100% !important;
+  }
+  .forAndWidth{
+    width: 100% !important;
+  }
+  .forAndWidth img{
+    width: 100% !important;
   }
 }
