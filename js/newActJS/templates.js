@@ -8984,12 +8984,15 @@ const CrossWord = (() => {
                     table.push('<td>');
                     if (__isBox(r, c, renderedQuestion)) {
                         let answer = undefined;
-                        if (num != "") {
-                            if (typeof questions[num - 1]?.answer === 'string') {
-                                answer = questions[num - 1]?.answer;
+                        if (nums.length) {
+                            const firstSequence = nums[0];
+                            const question = questions[firstSequence - 1];
+
+                            if (typeof question?.answer === 'string') {
+                                answer = question.answer;
                             }
-                            else if (typeof questions[num - 1]?.answer === 'object') {
-                                answer = questions[num - 1]?.answer?.text;
+                            else if (typeof question?.answer === 'object') {
+                                answer = question.answer?.text;
                             }
                         }
                         const showFirstLetter = (showHint && answer != undefined) ? `value='${answer[0]}'` : ''
@@ -9103,7 +9106,11 @@ const CrossWord = (() => {
                             `#puzzle2 table tr:nth-child(${r}) td:nth-child(${start + i}) input.box`
                         );
                         if (cell) {
-                            cell.value = ch;
+                            if (cell.value && cell.value !== ch) {
+                                console.warn('Crossword conflict at:', q.sequence);
+                            } else {
+                                cell.value = ch;
+                            }
                             cell.style.background = correctColor;
                             cell.style.pointerEvents = "none";
                         }
@@ -9280,10 +9287,10 @@ const CrossWord = (() => {
 
     const showHints = () => {
         $('.num').each(function () {
-            let numValue = $(this).html();
-            if (numValue && numValue.trim() != '') {
+            let numValue = $(this).text().trim();
+            if (numValue.length) {
                 $(this).siblings('input').each(function () {
-                    this.value = this.getAttribute('value');
+                    this.value = this.getAttribute('value') || '';
                 });
             }
         });
