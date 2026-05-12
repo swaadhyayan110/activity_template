@@ -8959,21 +8959,27 @@ const CrossWord = (() => {
             for (let r = 1; r <= maxRow; r++) {
                 table.push('<tr>');
                 for (let c = 1; c <= maxCol; c++) {
-                    let num = '';
+                    let nums = [];
                     for (let i = 0; i < horizontal.length; i++) {
                         const item = horizontal[i];
                         const rowStart = startOf(item.row);
                         const colStart = startOf(item.col);
-                        if (r === rowStart && c === colStart) { num = item.sequence; break; }
-                    }
-                    if (!num) {
-                        for (let i = 0; i < vertical.length; i++) {
-                            const item = vertical[i];
-                            const rowStart = startOf(item.row);
-                            const colStart = startOf(item.col);
-                            if (r === rowStart && c === colStart) { num = item.sequence; break; }
+
+                        if (r === rowStart && c === colStart) {
+                            nums.push(item.sequence);
                         }
                     }
+                    
+                    for (let i = 0; i < vertical.length; i++) {
+                        const item = vertical[i];
+                        const rowStart = startOf(item.row);
+                        const colStart = startOf(item.col);
+
+                        if (r === rowStart && c === colStart) {
+                            nums.push(item.sequence);
+                        }
+                    }
+                    const num = nums.join(',');
 
                     table.push('<td>');
                     if (__isBox(r, c, renderedQuestion)) {
