@@ -21,7 +21,6 @@
   z-index: 9999;
   text-align: center;
   display: flex !important;
-  justify-content: center;
   overflow: auto;
   margin: 0 1.5vw;
 }

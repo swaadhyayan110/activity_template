@@ -7342,7 +7342,7 @@ const Shabdkosh = (() => {
                                         <div class="question-block mt-3">
                                             <div class="tab-containerz">
                                                 <div class="tab-content mx-auto">
-                                                    <div class="tab-buttons" id="tabButtons"></div>
+                                                    <div class="tab-buttons gap-3" id="tabButtons"></div>
                                                     <div class="content-bg" id="tabPanes"></div>
                                                 </div>
                                             </div>
@@ -7377,7 +7377,7 @@ const Shabdkosh = (() => {
                 const titleLower = item.tabtitle.toLowerCase();
                 const tabTitle = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
                 const tab = `
-                    <button class="tab-btn" data-id="${item.id}" data-title="${titleLower}">
+                    <button class="tab-btn mx-auto" data-id="${item.id}" data-title="${titleLower}">
                         ${tabTitle}
                     </button>
                 `;
@@ -9393,37 +9393,41 @@ const ShravanKaushalWithImages = (() => {
                                             <div class="icon"></div>
                                         </div>
                                     </div>
-                                    ${activity.content?.main?.text != undefined ?
-                    `<div class="poem-sec" style="display:none;">
-                                            <div class="my-3 container" id="questionTitle">
-                                                <b class="${Define.get('head')}"></b>
-                                                <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn common_playBtn" viewBox="0 0 16 16">
-                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
-                                                </svg>
-                                                <svg id="stop-audio-icon" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16">
-                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
-                                                </svg>
-                                            </div>
-                                            <div class="container contListen">
-                                                <div class="poem-text my-2" id="poemContainer"></div>
-                                                <div class="buttons machiNgs">
-                                                    <button class="show-btn" id='para-next-btn'>${prevNextLabel.next}</button>
-                                                </div>
-                                            </div>
-                                        </div>`: ''
-                }
-                                    <div class="question-sec" style="${activity.content?.main != undefined ? "display:none" : 'display:block'}">
-                                        <div class="container contListen">
-                                            <div class="my-3 container" id="questionTitle">
-                                                <b class="${Define.get('head')}"></b>
-                                                ${isMain ?
-                    `<svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn common_playBtn" viewBox="0 0 16 16">
+                                    ${
+                                        isMain ? `
+                                            <div class="poem-sec" style="display:none;">
+                                                <div class="my-3 container" id="questionTitle">
+                                                    <b class="${Define.get('head')}"></b>
+                                                    <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn common_playBtn" viewBox="0 0 16 16">
                                                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
                                                     </svg>
                                                     <svg id="stop-audio-icon" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16">
                                                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
-                                                    </svg>`: ''
-                }
+                                                    </svg>
+                                                </div>
+                                                <div class="container contListen">
+                                                    <div class="poem-text my-2" id="poemContainer"></div>
+                                                    <div class="buttons machiNgs">
+                                                        <button class="show-btn" id='para-next-btn'>${prevNextLabel.next}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ` : ''
+                                    }
+                                    <div class="question-sec" style="${activity.content?.main != undefined ? "display:none" : 'display:block'}">
+                                        <div class="container contListen">
+                                            <div class="my-3 container" id="questionTitle">
+                                                <b class="${Define.get('head')}"></b>
+                                                ${
+                                                    isMain ? `
+                                                        <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn common_playBtn" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
+                                                        </svg>
+                                                        <svg id="stop-audio-icon" width="33" height="33" fill="currentColor" class="bi bi-pause-circle-fill common_pauseBtn" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
+                                                        </svg>
+                                                    `: ''
+                                                }
                                             </div>
                                             <div id="mcqContainer"></div>
                                             <div class="listen-buttonection">
