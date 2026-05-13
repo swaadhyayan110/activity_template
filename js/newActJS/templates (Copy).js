@@ -3541,16 +3541,16 @@ const Adaptiv = (() => {
     const headerContainer = 'headersTopT';
     const levelHeadingID = 'levelHeading';
 
-    let currentLevel    = 1;
+    let currentLevel = 1;
     let currentQuestion = 0;
-    let attemptCount    = 0;
-    let submitted       = false;
-    let currentQuizData    = undefined;
+    let attemptCount = 0;
+    let submitted = false;
+    let currentQuizData = undefined;
     let userAnswersAdaptiv = undefined;
-    let showResultPending  = false;    
+    let showResultPending = false;
     let retryWrongOnly = false;
     let wrongQuestions = [];
-    let __activity     = undefined;
+    let __activity = undefined;
 
     const ui = (questionId, totalQues) => {
         try {
@@ -3562,8 +3562,8 @@ const Adaptiv = (() => {
             }
 
             const activity = Activity.getDefine(questionId);
-            const data     = activity?.content;
-            const lang     = activity?.lang ?? 'en';
+            const data = activity?.content;
+            const lang = activity?.lang ?? 'en';
 
             const instructions = [];
             (data?.headings?.right?.instruction || []).forEach((item) => {
@@ -3571,44 +3571,45 @@ const Adaptiv = (() => {
             });
 
             const prevNextLabel = Activity.translateNextPrevLabel(lang);
-            const buttonLabels  = Activity.translateButtonLabels(lang);
+            const buttonLabels = Activity.translateButtonLabels(lang);
             parent.innerHTML = `<div class="question">
                                     <div class="container-fluid">
                                         <div class="${headerContainer}">
                                             ${data?.headings?.left ?
-                                                `<div class="btnAdapt shadow-sm">
+                    `<div class="btnAdapt shadow-sm">
                                                     <span class="level-text">${data?.headings?.left ?? ''}</span>
                                                     - 
                                                     <span class="levelUpdate">${currentLevel}</span>
                                                 </div>`
-                                                : ''
-                                            }
+                    : ''
+                }
                                             ${data?.headings?.mid ?
-                                                `<div class="btnAdapt shadow-sm">
+                    `<div class="btnAdapt shadow-sm">
                                                     <span id="attempted-text">${data?.headings?.mid?.attempted ?? ''}</span> 
                                                     <span class="showD" id="attempted-count"> 0 </span> 
                                                     <span id="outof-text">${data?.headings?.mid?.outof ?? ''}</span>
                                                     <span class="showD" id="total-questions"> ${totalQues ?? 0} </span>
                                                 </div>`
-                                                : ''
-                                            }
-                                            ${data?.headings?.right ? 
-                                                `<div class="btnAdapt shadow-sm" id="nirdesh" style="cursor: pointer;">
+                    : ''
+                }
+                                            ${data?.headings?.right ?
+                    `<div class="btnAdapt shadow-sm" id="nirdesh" style="cursor: pointer;">
                                                     <svg class="iconsIns" fill="currentColor" viewBox="0 0 16 16">
                                                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
                                                     </svg>
                                                     <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
                                                 </div>`
-                                                : ''
-                                            }
+                    : ''
+                }
                                         </div>
                                         <div class="container my-5 contAdapt shadow-lg">
+                                            <div class="mb-2" id="${levelHeadingID}"></div>
                                             <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
                                             <div class="buttonection" id="nav-buttons">
                                                 <div class="buttons machiNgs">
-                                                    <button class="submit-btn" id="prev-btn">${ prevNextLabel.prev }</button>
-                                                    <button class="show-btn" id="next-btn">${ prevNextLabel.next }</button>
-                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${ buttonLabels.submit }</button>
+                                                    <button class="submit-btn adaptive" id="prev-btn">${prevNextLabel.prev}</button>
+                                                    <button class="show-btn adaptive" id="next-btn">${prevNextLabel.next}</button>
+                                                    <button class="reset-btn adaptive" id="sub-btn" style="display: none;">${buttonLabels.submit}</button>
                                                 </div>
                                                 <div id="submit-btn-wrapper" class="text-center"></div>
                                             </div>
@@ -3617,7 +3618,7 @@ const Adaptiv = (() => {
                                     </div>
                                     <div id="overlay">
                                         <div id="popupDialog">
-                                            <p class="text-danger fw-bold">
+                                            <p class="text-danger-adaptive fw-bold">
                                                 <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
                                             </p>
                                             <ul class="instructionsList">${instructions.join('')}</ul>
@@ -3641,20 +3642,20 @@ const Adaptiv = (() => {
 
             updateAttemptedCount();
 
-            const prevBtn    = parent.querySelector( '#prev-btn' );
-            const nextBtn    = parent.querySelector( '#next-btn' );
-            const submitBtn  = parent.querySelector( '#sub-btn' );
-            const nirdeshBtn = parent.querySelector( '#nirdesh' );
-            const closeOverlayBtn = parent.querySelector( '.close-overlay' );
+            const prevBtn = parent.querySelector('#prev-btn');
+            const nextBtn = parent.querySelector('#next-btn');
+            const submitBtn = parent.querySelector('#sub-btn');
+            const nirdeshBtn = parent.querySelector('#nirdesh');
+            const closeOverlayBtn = parent.querySelector('.close-overlay');
 
-            if( closeOverlayBtn ) closeOverlayBtn.addEventListener("click", closeFn);
-            if( prevBtn ) prevBtn.addEventListener("click", prevQuestion);
-            if( nextBtn ) nextBtn.addEventListener("click", nextQuestion);
-            if( submitBtn ) submitBtn.addEventListener("click", showResult);
-            if( nirdeshBtn ) nirdeshBtn.addEventListener("click", openFn);
+            if (closeOverlayBtn) closeOverlayBtn.addEventListener("click", closeFn);
+            if (prevBtn) prevBtn.addEventListener("click", prevQuestion);
+            if (nextBtn) nextBtn.addEventListener("click", nextQuestion);
+            if (submitBtn) submitBtn.addEventListener("click", showResult);
+            if (nirdeshBtn) nirdeshBtn.addEventListener("click", openFn);
 
         } catch (e) {
-            console.error( 'Adaptiv.ui :', e );
+            console.error('Adaptiv.ui :', e);
         }
     }
 
@@ -3678,37 +3679,35 @@ const Adaptiv = (() => {
     }
 
     const renderQuestion = (questionId, direction) => {
-        const level     = currentLevel;
-        const activity  = Activity.getDefine(questionId);
-        const lang      = activity?.lang ?? 'en';
-        const content   = activity?.content;
-        const data      = content?.levels;
+        const level = currentLevel;
+        const activity = Activity.getDefine(questionId);
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content;
+        const data = content?.levels;
         const skipOptions = content?.skipOptions ?? false;
         const skipQuestionSequence = content?.skipQuestionSequence ?? false;
-        const found     = (data || []).find( lvl => lvl.level === level );
-        const questLen  = found?.questions?.length || 0;
+        const found = (data || []).find(lvl => lvl.level === level);
+        const questLen = found?.questions?.length || 0;
         let realIndex = currentQuestion;
 
         __activity = activity;
 
-        if (retryWrongOnly) {
-            realIndex = wrongQuestions[currentQuestion];
-        }
+        if (retryWrongOnly) realIndex = wrongQuestions[currentQuestion];
 
         const q = found?.questions?.[realIndex];
         currentQuizData = found?.questions || [];
 
-        ui(questionId, questLen );
+        ui(questionId, questLen);
 
-        if( userAnswersAdaptiv == undefined ) {
+        if (userAnswersAdaptiv == undefined) {
             userAnswersAdaptiv = new Array(questLen).fill(null);
-        } else if( userAnswersAdaptiv.length !== questLen ) {
+        } else if (userAnswersAdaptiv.length !== questLen) {
             const newArr = new Array(questLen).fill(null);
-            for (let i=0;i<Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
+            for (let i = 0; i < Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
                 newArr[i] = userAnswersAdaptiv[i];
             }
             userAnswersAdaptiv = newArr;
-        }        
+        }
 
         const container = document.getElementById("quizContainerAdaptiv");
         if (!container) return;
@@ -3749,11 +3748,11 @@ const Adaptiv = (() => {
             const imageData  = data?.images ?? {};
             const imagePath  = imageData?.path ?? [];
             const imageStyle = imageData?.style ?? [];
-            const text       = data?.text ?? '';
+            const text = data?.text ?? '';
 
-            if( !text && !imagePath.length ) return '';
+            if (!text && !imagePath.length) return '';
 
-            if( !imagePath.length ) return text;
+            if (!imagePath.length) return text;
 
             const __image = (index) => {
                 const src   = imagePath[index];
@@ -3779,19 +3778,19 @@ const Adaptiv = (() => {
             return text.replace(regex, () => __image(index++));
         }
 
-        const questionText = ( q?.question && typeof q?.question === 'string' ) 
+        const questionText = (q?.question && typeof q?.question === 'string')
             ? q.question
             : __renderQuestionText(q.question);
         // ..
 
-         const imageAboveOption = ( q?.imageAboveOption && q?.imageAboveOption?.image != '' ) ?
-                    `
+        const imageAboveOption = (q?.imageAboveOption && q?.imageAboveOption?.image != '') ?
+            `
                         <div class="text-center my-1">
                             <img src="${Activity.pathToCWD()}${q.imageAboveOption.image}" style="width :${q.imageAboveOption.width ?? '150px'};">
                         </div>
                     ` : '';
         // ..
-        
+
         const popupLabels = Activity.translatePopupLabels(lang);
 
         container.innerHTML = `${questionText != ''
@@ -3848,8 +3847,8 @@ const Adaptiv = (() => {
                 ` : ''
             }
         `;
-        
-        if( !skipOptions ) {
+
+        if (!skipOptions) {
             Array.from(document.querySelectorAll('.option-btnAdpt')).forEach((optionEl) => {
                 optionEl.addEventListener("click", (ev) => {
                     const idxAttr = optionEl.getAttribute('data-option-index');
@@ -3867,6 +3866,10 @@ const Adaptiv = (() => {
     const selectOption = (realIndex, optIndex) => {
         if (submitted) return;
         if (!Array.isArray(userAnswersAdaptiv) || realIndex < 0) return;
+
+        if (retryWrongOnly && userAnswersAdaptiv[realIndex] === currentQuizData[realIndex]?.answer) {
+            return;
+        }
 
         userAnswersAdaptiv[realIndex] = optIndex;
         updateAttemptedCount();
@@ -3913,9 +3916,9 @@ const Adaptiv = (() => {
     };
 
     const prevQuestion = () => {
-        if( currentQuestion > 0 ) {
+        if (currentQuestion > 0) {
             currentQuestion--;
-            renderQuestion(Activity.getQid( `.${headerContainer}` ), 'prev');
+            renderQuestion(Activity.getQid(`.${headerContainer}`), 'prev');
         }
         updateNavButtons();
     }
@@ -3936,7 +3939,7 @@ const Adaptiv = (() => {
 
         if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
         if (nextBtn && subBtn) {
-            if (isLast && ( allAnswered || skipOptions ) ) {
+            if (isLast && (allAnswered || skipOptions)) {
                 nextBtn.style.display = 'none';
                 subBtn.style.display = 'inline-block';
             } else {
@@ -3948,12 +3951,12 @@ const Adaptiv = (() => {
 
     const showResult = () => {
         try {
-            const activity    = Activity.getDefine(Activity.getQid( `.${headerContainer}` )) ?? {};
-            const lang        = activity?.lang ?? 'en';
-            const content     = activity?.content ?? {};
-            const levels      = content?.levels ?? [];
-            const skiplevels  = content?.skiplevels ?? false;
-            const skipansbtn  = content?.skipanswerbutton ?? false;
+            const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
+            const levels = content?.levels ?? [];
+            const skiplevels = content?.skiplevels ?? false;
+            const skipansbtn = content?.skipanswerbutton ?? false;
             const skipnextbtn = content?.skipnextlevel ?? false;
             const skipOptions = __activity?.content?.skipOptions ?? false;
 
@@ -4030,7 +4033,7 @@ const Adaptiv = (() => {
                 }
                     </div>
                 </div>`;
-            
+
             const btnNextLevel = document.getElementById('btn-next-level');
             const btnRetry = document.getElementById('btn-retry');
             const btnShowAnswers = document.getElementById('btn-show-answers');
@@ -4060,7 +4063,7 @@ const Adaptiv = (() => {
             showResultPending = false;
             $(".instruc").hide();
             $(".submit-info").hide();
-            
+
             const hideBtn = document.getElementById("btn-next-level");
             if (finished && showNextLevel) {
                 if (hideBtn) hideBtn.style.display = 'none';
@@ -4083,8 +4086,8 @@ const Adaptiv = (() => {
     const loadNextLevel = () => {
         const levelTextEl = document.getElementById("levelText");
         if (levelTextEl) levelTextEl.style.display = 'block';
-        if( currentLevel < 3 )currentLevel++;
-        
+        if (currentLevel < 3) currentLevel++;
+
         if (currentLevel === 2 && typeof quizDataLevelB !== 'undefined') currentQuizData = quizDataLevelB;
         if (currentLevel === 3 && typeof quizDataLevelC !== 'undefined') currentQuizData = quizDataLevelC;
         currentQuestion = 0;
@@ -4095,8 +4098,8 @@ const Adaptiv = (() => {
         if (navButtonsEl) navButtonsEl.style.display = "block";
         const levelUpdateEl = document.querySelector(".levelUpdate");
         if (levelUpdateEl && typeof levelHeadings !== 'undefined') levelUpdateEl.textContent = levelHeadings[currentLevel];
-        
-        renderQuestion(Activity.getQid( `.${headerContainer}` ));
+
+        renderQuestion(Activity.getQid(`.${headerContainer}`));
         updateAttemptedCount();
         $(".instruc").show();
         $(".submit-info").show();
@@ -4123,18 +4126,24 @@ const Adaptiv = (() => {
     const retryQuiz = () => {
         submitted = false;
 
-        if (wrongQuestions.length > 0) {
-            retryWrongOnly = true;
-            currentQuestion = 0;
+        retryWrongOnly = false;
+        currentQuestion = 0;
+        userAnswersAdaptiv = new Array(currentQuizData.length).fill(null);
 
-            wrongQuestions.forEach(i => {
-                userAnswersAdaptiv[i] = null;
-            });
-        } else {
-            retryWrongOnly = false;
-            currentQuestion = 0;
-            userAnswersAdaptiv = new Array(currentQuizData.length).fill(null);
-        }
+        // if( wrongQuestions.length > 0 ) {
+        //     console.log('if')
+        //     retryWrongOnly = true;
+        //     currentQuestion = 0;
+
+        //     wrongQuestions.forEach(i => {
+        //         userAnswersAdaptiv[i] = null;
+        //     });
+        // } else {
+        //     console.log('else')
+        //     retryWrongOnly = false;
+        //     currentQuestion = 0;
+        //     userAnswersAdaptiv = new Array(currentQuizData.length).fill(null);
+        // }
 
         renderQuestion(Activity.getQid(`.${headerContainer}`));
         updateAttemptedCount();
@@ -4245,7 +4254,7 @@ const Adaptiv = (() => {
     }
 
     return {
-        render:renderQuestion,
+        render: renderQuestion,
         userAnswersAdaptiv,
         currentLevel,
         currentQuestion,
