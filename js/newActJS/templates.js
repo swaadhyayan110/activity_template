@@ -8506,7 +8506,7 @@ const TextArea = (() => {
                                         <div class="text-center">
                                             <div class="buttons machiNgs">
                                                 <button class="submit-btn ${!showInput ? 'd-none' : ''}">${buttonLabel.check}</button>
-                                                <button class="show-btn">${!showInput ? 'उत्तर नमुना' : `${buttonLabel.show}`}</button>
+                                                <button class="show-btn">${!showInput ? 'उत्तर नमूना' : `${buttonLabel.show}`}</button>
                                                 <button class="reset-btn ${!showInput ? 'd-none' : ''}" >${buttonLabel.try}</button>
                                             </div>
                                         </div>
@@ -10566,7 +10566,7 @@ const RachnatmakWithKeyboard = (() => {
                                     </div>
                                     <div class="buttons machiNgs">
                                         <button class="submit-btn ${!showInput ? 'd-none' : ''}">${buttonLabel.check}</button>
-                                        <button class="show-btn">${!showInput ? 'उत्तर नमुना' : `${buttonLabel.show}`}</button>
+                                        <button class="show-btn">${!showInput ? 'उत्तर नमूना' : `${buttonLabel.show}`}</button>
                                         <button class="reset-btn ${!showInput ? 'd-none' : ''}">${buttonLabel.try}</button>
                                     </div>
                                 </div>
@@ -10940,7 +10940,7 @@ const RachnatmakWithInputs = (() => {
                                             ${content?.showButtons ?
                     `<div class="buttons machiNgs">
                                                     <button class="submit-btn ${lang == 'hi' ? 'd-none' : ''}">${buttonLabel.check}</button>
-                                                    <button class="show-btn">${lang == 'hi' ? 'उत्तर नमुना' : `${buttonLabel.show}`} </button>
+                                                    <button class="show-btn">${lang == 'hi' ? 'उत्तर नमूना' : `${buttonLabel.show}`} </button>
                                                     <button class="reset-btn ${lang == 'hi' ? 'd-none' : ''}">${buttonLabel.try}</button>
                                                 </div>`: ''
                 }
