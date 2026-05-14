@@ -832,8 +832,8 @@ const MatchLeftToRight = (() => {
                     </div>
                     <hr/>
                     <div class="forLevelAB">
-                        <div class="levelText">${columnLabel}-<span class='text-uppercase'>${Activity.translateBulletLabels({ lang: lang, ind: 0 })}</span></div>
-                        <div class="levelText">${columnLabel}-<span class='text-uppercase'>${Activity.translateBulletLabels({ lang: lang, ind: 1 })}</span></div>
+                        <div class="levelText">${columnLabel}-<span class='text-uppercase'>${lang === 'hi' ? 'अ' : 'A' }</span></div>
+                        <div class="levelText">${columnLabel}-<span class='text-uppercase'>${lang === 'hi' ? 'ब' : 'B' }</span></div>
                     </div>
                     <div class="content user-select-none">
                         <div class="instructions">
@@ -11698,6 +11698,21 @@ const Dictionary = (() => {
         }
     };
 
+    const sortDictionaryItems = (container) => {
+        const items = $(container).children(".wordDragDic").get();
+
+        items.sort((a, b) => {
+            const textA = $(a).text().trim().toLowerCase();
+            const textB = $(b).text().trim().toLowerCase();
+
+            return textA.localeCompare(textB);
+        });
+
+        $.each(items, function (_, item) {
+            $(container).append(item);
+        });
+    };
+
     const renderActivity = (questionId) => {
         ui(questionId);
 
@@ -11739,14 +11754,14 @@ const Dictionary = (() => {
         initDroppable(".container");
 
         Activity.initMathJax();
-    }
+    };
 
     const makeDraggable = (selector) => {
         $(selector).draggable({
             helper: "original",
             revert: "invalid",
         });
-    }
+    };
 
     const initDroppable = (containerSelector) => {
         $(`${containerSelector} .dropBoxDict`).droppable({
@@ -11755,6 +11770,8 @@ const Dictionary = (() => {
                 const $dragged = ui.draggable;
                 $dragged.css({ position: "relative", top: "auto", left: "auto" });
                 $(this).append($dragged);
+
+                sortDictionaryItems(this);
             }
         });
         $(`${containerSelector} .dragItems`).droppable({
@@ -11763,10 +11780,12 @@ const Dictionary = (() => {
                 const $dragged = ui.draggable;
                 $dragged.css({ position: "relative", top: "auto", left: "auto" });
                 $(this).append($dragged);
+
+                sortDictionaryItems(this);
             }
         });
         Activity.initMathJax();
-    }
+    };
 
     const checkAnswers = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
@@ -11805,12 +11824,12 @@ const Dictionary = (() => {
             });
         }
         Activity.initMathJax();
-    }
+    };
 
     const resetActivity = () => {
         $(".submit-btn").removeClass("noclickMe");
         renderActivity(Activity.getQid(`#${containerId}`));
-    }
+    };
 
     const showAnswers = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
@@ -11828,7 +11847,7 @@ const Dictionary = (() => {
         });
         $(".dropBoxDict").droppable("disable");
         Activity.initMathJax();
-    }
+    };
 
     return {
         render: renderActivity
