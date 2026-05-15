@@ -10741,9 +10741,16 @@ const RachnatmakWithKeyboard = (() => {
         $(".studentAnsBox").show();
 
         studentBox.innerHTML = `
-                <div class='headingYourAns'>आपके उत्तर :</div><br>
+                <div class='headingYourAns'>
+                    ${ lang == 'hi' ? 'आपके उत्तर' : 'Your Answers'} : 
+                </div><br>
                 <span class='studentTextApp'>${studentText}</span><br><br>
-                <div class='scoreInRachNamat'>आपको 100 में से ${score} अंक मिले हैं</div>`;
+                <div class='scoreInRachNamat'>
+                    ${ lang == 'hi' 
+                        ? `आपको 100 में से ${score} अंक मिले हैं`
+                        : `You scored ${score} out of 100`
+                    }
+                    </div>`;
     }
 
     const closePopUp = () => {
