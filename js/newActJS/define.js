@@ -1601,8 +1601,8 @@ const Define = (() => {
                 questions: [
                     {
                         id: 1, 
-                        text: 'I am six years old. I study in Class 1. <br> I have #blac# #hare# and #broun# eyes. I have strong #leggs#. They help me #ren# fast. Today, I fell and hurt my #kne asdf#. I hope to get well soon and run again.',
-                        answer: ['black', 'hair', 'brown', 'legs', 'run', 'knee'] 
+                        text: 'I am six years old. I study in Class #calss# 1. <br> I have #blac# #hare# and #broun# eyes. I have strong #leggs#. They help me #ren# fast. Today, I fell and hurt my #kne asdf#. I hope to get well soon and run again.',
+                        answer: ['black', 'hair', 'brown', 'legs', 'run', 'knee', 'class'] 
                     }
                 ]
             }

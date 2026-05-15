@@ -13055,6 +13055,7 @@ const SpellCheck = (() => {
 
             let count = 0;
 
+            const partsToIgnore = [ '<br>' ];
             const html = parts?.map((part, i) => {
                 if ( part.trim() === '' || part === ',' ) return part;
                 const match     = hasHashPhrases(replacement[0], part);
@@ -13064,7 +13065,7 @@ const SpellCheck = (() => {
 
                 if (match) count++;
 
-                if( word == '<br>' ) return word;
+                if( partsToIgnore.includes( word ) ) return word;
 
                 return `
                     <span 
