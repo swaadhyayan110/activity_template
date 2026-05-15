@@ -20,10 +20,9 @@
     margin: 20px auto;
     z-index: 2;
     transition: all 0.35s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    width: 100px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);    
     flex: 0 0 100px;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
@@ -176,8 +175,9 @@
     display: flex;
     text-align: center;
     margin: 0 auto;
-    gap: 20px;
-    flex-wrap: wrap;
+    gap: 30px;    
+    width: 80%;
+    overflow: auto;
 }
 
 .shrutlekh #singleInput {
@@ -243,17 +243,14 @@
     display: flex;
 }
 
-.shrutlekh .correct-spell {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+.shrutlekh .correct-spell {   
+    border-radius: 5px;
     background: #115f97;
     margin: 0 auto;
     color: #fff;
-    text-align: center;
-    align-items: center;
-    display: flex;
-    justify-content: center;
+    text-align: center;    
+    display: inline-block;
+    padding: 5px 10px;
     font-size: 23px;
 }
 
