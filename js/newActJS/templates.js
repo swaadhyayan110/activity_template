@@ -382,7 +382,7 @@ const Activity = (() => {
                 selectTopFirst: 'Please select top item first!',
                 selectImageFirst: 'Please select an image from left or right column first.',
                 writeAtLeastOne: 'Please write at least one answer and then check the answer.',
-                noAnswerWritten: 'No answer was written',
+                noAnswerWritten: 'No answer was written.',
                 answerReview: 'Answer review',
                 correctLabel: 'Correct',
                 wrongLabel: 'Wrong',
