@@ -1183,7 +1183,7 @@ const Define = (() => {
         // id : 24,
         {
             id: 24,
-            lang: 'sk',
+            lang: 'hi',
             head: 'Template : 23',
             content: {
                 replacement: '#_#',

@@ -9159,58 +9159,59 @@ const CrossWord = (() => {
                 return;
             }
 
-            let total = 0;
+            let total = questions.length;
             let correctCount = 0;
 
             const startOf = arr => Array.isArray(arr) ? arr[0] : arr;
             const endOf = arr => Array.isArray(arr) ? (arr.length > 1 ? arr[1] : arr[0]) : arr;
 
             questions?.forEach(q => {
-                let answer = undefined;
+                let answer = '';
 
                 if (typeof q.answer === 'string') {
                     answer = (q.answer || '').toUpperCase().replace(/\s+/g, '');
-                }
-                else if (typeof q.answer === 'object') {
+                } else if (typeof q.answer === 'object') {
                     answer = (q.answer.text || '').toUpperCase().replace(/\s+/g, '');
                 }
 
                 if (!answer) return;
 
-                if (q.direction === 'h') {
-                    const r = startOf(q.row);
-                    const cStart = startOf(q.col);
+                let userAnswer = '';
 
-                    [...answer].forEach((ch, i) => {
+                if (q.direction === 'h') {
+                    const r = Array.isArray(q.row) ? q.row[0] : q.row;
+                    const cStart = Array.isArray(q.col) ? q.col[0] : q.col;
+
+                    [...answer].forEach((_, i) => {
                         const c = cStart + i;
                         const selector = `#puzzle2 table tr:nth-child(${r}) td:nth-child(${c}) input.box`;
                         const input = document.querySelector(selector);
-                        if (!input) return;
-                        total++;
-                        const val = (input.value || '').toUpperCase().trim();
-                        input.value = val;
-                        if (val === ch) {
-                            input.style.background = correctColor;
-                            correctCount++;
+                        if (input) {
+                            userAnswer += (input.value || '').toUpperCase().trim();
+                            if ((input.value || '').toUpperCase().trim() === answer[i]) {
+                                input.style.background = correctColor;
+                            }
                         }
                     });
 
                 } else {
-                    const c = startOf(q.col);
-                    const rStart = startOf(q.row);
-                    [...answer].forEach((ch, i) => {
+                    const c = Array.isArray(q.col) ? q.col[0] : q.col;
+                    const rStart = Array.isArray(q.row) ? q.row[0] : q.row;
+                    [...answer].forEach((_, i) => {
                         const r = rStart + i;
-                        const selector = `#puzzle2 table tr:nth-child(${r}) td:nth-child(${c}) input.box`;
+                        const selector =`#puzzle2 table tr:nth-child(${r}) td:nth-child(${c}) input.box`;
                         const input = document.querySelector(selector);
-                        if (!input) return;
-                        total++;
-                        const val = (input.value || '').toUpperCase().trim();
-                        input.value = val;
-                        if (val === ch) {
-                            input.style.background = correctColor;
-                            correctCount++;
+                        if (input) {
+                            userAnswer += (input.value || '').toUpperCase().trim();
+                            if ((input.value || '').toUpperCase().trim() === answer[i]) {
+                                input.style.background = correctColor;
+                            }
                         }
                     });
+                }
+
+                if (userAnswer === answer) {
+                    correctCount++;
                 }
             });
 
