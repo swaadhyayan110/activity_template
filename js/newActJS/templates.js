@@ -3239,6 +3239,8 @@ const Mcq_PathKaSaar = (() => {
                     mcqContextContainer.append(textDiv);
                     const mcq_txt_class = hasImg ? `${commonClassText}` : 'col';
                     textDiv.addClass(mcq_txt_class).html(text.text || '');
+
+                    if( data.length === 0 ) textDiv.css({'font-size':'2.5rem','text-align':'center'});
                 }
 
                 if (hasImg) {
