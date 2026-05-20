@@ -3603,6 +3603,7 @@ const Adaptiv = (() => {
                                             }
                                         </div>
                                         <div class="container my-5 contAdapt shadow-lg">
+                                            <div class="mb-2" id="${levelHeadingID}"></div>
                                             <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
                                             <div class="buttonection" id="nav-buttons">
                                                 <div class="buttons machiNgs">
