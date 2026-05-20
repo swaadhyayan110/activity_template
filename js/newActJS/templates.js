@@ -10798,7 +10798,7 @@ const RachnatmakWithTabBtns = (() => {
                                             </div>
                                             <div class="readyLetterBox" id="readyLetterBox"></div>
                                             <div class="buttons machiNgs">
-                                                <button class="show-btn readyPatar">${buttonLabel.show}</button>
+                                                <button class="show-btn readyPatar">${lang == 'hi' ? 'उत्तर नमूना' : buttonLabel.show}</button>
                                             </div>
                                         </div>
                                     </div>
