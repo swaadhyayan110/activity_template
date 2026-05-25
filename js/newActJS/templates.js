@@ -7804,13 +7804,13 @@ const Shrutlekh = (() => {
             const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
             const curQues = questions[questionIndex] ?? {};
-            const answer = curQues?.answer;
+            const answer = curQues?.answer.toLowerCase();
 
             let boxID;
             let boxInput;
             let correctCount = 0;
             $('.correction-input').each((ind, item) => {
-                if (item.value == answer) {
+                if (item.value.toLowerCase() == answer) {
                     correctCount++;
                     item.style.borderColor = 'green';
                 } else {
