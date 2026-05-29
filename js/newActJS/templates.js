@@ -2674,12 +2674,28 @@ const JumbleLetters = (() => {
 
             $("#letterContainer").empty();
 
-            const words = data?.content;
+            const config = data?.config;
+
+            const defaultCol = {
+                md: 6,
+                sm: 12,
+                col: 12
+            };
+            const col = {
+                md: config?.col?.md ?? defaultCol.md,
+                sm: config?.col?.sm ?? defaultCol.sm,
+                col: config?.col?.col ?? defaultCol.col
+            };
+
+            
+            const colSize = `col-sm-${col.sm} col-md-${col.md} col-${col.col}`;
+
+            const words   = data?.content;
             words.forEach((word, index) => {
                 const jumbled = shuffle(word);
 
                 const gameBox = $(`
-                    <div class="col-md-6 col-12 col-sm-12">
+                    <div class="${colSize}">
                         <div class="rowLines">
                         <div class="numb">${index + 1}.</div>
                         <div class="letterjumbRow" id="letters-${index}" aria-label="Arrange the letters for ${word}"></div>

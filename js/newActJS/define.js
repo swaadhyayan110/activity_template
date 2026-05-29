@@ -592,6 +592,13 @@ const Define = (() => {
             lang: 'hi',
             head: 'Template : 6',
             subhead: 'text.. `theta`',
+            config : {
+                col: {
+                    md: 12,
+                    sm: 12,
+                    col: 12
+                },
+            },
             content: [
                 'SCHOOL', 'TEACHER', 'STUDENT', 'BOOK', '`theta`',
                 'CLASS', 'COLLEGE', 'EXAM', 'LEARN', 'STUDY'
