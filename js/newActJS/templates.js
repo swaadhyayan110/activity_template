@@ -8479,7 +8479,8 @@ const WordSearch = (() => {
 const TextArea = (() => {
 
     const containerId = 'text-area-container';
-    const quesContId = 'question-container';
+    const quesContId  = 'question-container';
+    let __questionID  = null; 
 
     let shuffledQuestions;
 
@@ -8543,9 +8544,17 @@ const TextArea = (() => {
         }
     };
 
+    const __autoResizeTextarea = (el) => {
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
+    }
+
     const render = (questionId) => {
         try {
+            __questionID = null;
+
             ui(questionId);
+            __questionID = questionId;
 
             const activity = Activity.getDefine(questionId);
             const content = activity?.content ?? {};
@@ -8628,9 +8637,7 @@ const TextArea = (() => {
             const replacement = content?.replacement ?? '#_#';
             let showInput = content?.showInput ?? true;
 
-            if (lang === 'en') {
-                showInput = true;
-            }
+            if( lang === 'en' ) showInput = true;
 
             shuffledQuestions = Activity.shuffleArray(content?.questions ?? []) ?? [];
 
@@ -8648,7 +8655,7 @@ const TextArea = (() => {
             });
             $('#' + quesContId).html(questions.join(''));
 
-            if (lang == 'hi') {
+            if( lang == 'hi' ) {
                 const inputs = $('#' + quesContId)[0].querySelectorAll('.hindiInput');
 
                 $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
@@ -8669,8 +8676,16 @@ const TextArea = (() => {
     };
 
     const resetAnswers = () => {
-        const input = document.querySelectorAll('textarea.hindiInput');
-        if (input) input.forEach(input => input.value = '');
+        const activity = Activity.getDefine(__questionID) ?? {};
+        const lang     = activity.lang ?? 'en';
+
+        const textAreas = document.querySelectorAll('textarea.hindiInput');
+        if( textAreas ) textAreas.forEach(textArea => {
+            textArea.value = '';
+            __autoResizeTextarea(textArea);
+
+            if( lang == 'en' ) textArea.style.pointerEvents = 'all';
+        });
         $('.submit-btn').removeClass('disable');
     };
 
@@ -8772,12 +8787,21 @@ const TextArea = (() => {
     };
 
     const showAnswers = () => {
-        const inputs = document.querySelectorAll('textarea.hindiInput');
-        if (inputs.length) {
-            inputs.forEach((input, ind) => {
-                const { index, flag, correct, user } = getAnswer(input, ind);
-                input.value = correct;
-                $(input).slideDown();
+        const activity = Activity.getDefine(__questionID) ?? {};
+        const lang     = activity.lang ?? 'en';
+
+        const textAreas = document.querySelectorAll('textarea.hindiInput');
+        if( textAreas.length ) {
+            textAreas.forEach((textArea, ind) => {
+                const { index, flag, correct, user } = getAnswer(textArea, ind);
+                if( lang == 'en' ) textArea.style.pointerEvents = 'none';
+
+                textArea.value = correct;
+                $(textArea).slideDown({
+                    complete() {
+                        __autoResizeTextarea(this);
+                    }
+                });             
             });
             $('.submit-btn').addClass('disable');
         }

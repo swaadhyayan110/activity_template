@@ -63,7 +63,7 @@ const Define = (() => {
 
     // DEFINE QUESTIONS
     const questions = [
-        // id : 44
+        // qId : 44 mId : 0
         {
             id: 44,
             ui: () => {
@@ -262,7 +262,7 @@ const Define = (() => {
                 { event: 'click', selector: '.copy-text', handle: ['copyText'] },
             ]
         },
-        // id : 0
+        //Iqid : 0 mId : 0
         {
             id: 0,
             path : {
@@ -409,7 +409,7 @@ const Define = (() => {
                 { event: 'click', selector: '#audioImage', handle: ['playMedia'] }
             ]
         },
-        // id : 1
+        //Iqid : 1 mId : 1
         {
             id: 1,
             lang: 'en',
@@ -424,7 +424,7 @@ const Define = (() => {
                 { id: 6, left: 'Be an eye-opener', right: 'To understand something' }
             ]
         },
-        // id : 2
+        //Iqid : 2 mId : 2
         {
             id: 2,
             lang: 'hi',
@@ -453,7 +453,7 @@ const Define = (() => {
                 correctRight: { 1: 6, 2: 1, 3: 2 }
             },
         },
-        // id : 3
+        //Iqid : 3 mId : 3
         {
             id: 3,
             lang: 'hi',
@@ -467,7 +467,7 @@ const Define = (() => {
                 { id: 5, top: 'Catch someone\'s eye', bottom: 'To be a favourite or loved' }
             ]
         },
-        // id : 4
+        //Iqid : 4 mId : 4
         {
             id: 4,
             lang: 'en',
@@ -505,7 +505,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 5
+        //Iqid : 5 mId : 5
         {
             id: 5,
             lang: 'hi',
@@ -586,7 +586,7 @@ const Define = (() => {
                 audio: ''
             }
         },
-        // id : 6
+        //Iqid : 6 mId : 6
         {
             id: 6,
             lang: 'hi',
@@ -604,7 +604,7 @@ const Define = (() => {
                 'CLASS', 'COLLEGE', 'EXAM', 'LEARN', 'STUDY'
             ]
         },
-        // id : 7,
+        // qId : 7, mId : 7
         {
             id: 7,
             lang: 'en',
@@ -621,7 +621,7 @@ const Define = (() => {
                 'Honesty is the best policy.'
             ]
         },
-        // id : 8,
+        // qId : 8, mId : 8
         {
             id: 8,
             lang: 'hi',
@@ -650,7 +650,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 9,
+        // qId : 9, mId : 9
         {
             id: 9,
             lang: 'hi',
@@ -711,7 +711,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 10,
+        // qId : 10, mId : 10
         {
             id: 10,
             lang: 'en',
@@ -832,7 +832,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 11,
+        // qId : 11, mId : 11
         {
             id: 11,
             lang: 'hi',
@@ -845,7 +845,7 @@ const Define = (() => {
                 // src : 'https://www.youtube.com/embed/gIoyGYYCAxE?si=8bhfXCJ1WKJpoIp8',
             }
         },
-        // id : 12,
+        // qId : 12, mId : 12
         {
             id: 12,
             lang: 'hi',
@@ -861,7 +861,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 13,
+        // qId : 13, mId : 13
         {
             id: 13,
             lang: 'hi',
@@ -880,7 +880,7 @@ const Define = (() => {
                 { id: 7, text: 'छोटी बहन के लिए - तुम, तू, आप', answer: 'तुम' },
             ]
         },
-        // id : 14,
+        // qId : 14, mId : 14
         {
             id: 14,
             lang: 'hi',
@@ -908,7 +908,7 @@ const Define = (() => {
                 }
             }
         },
-        // id : 15,
+        // qId : 15, mId : 15
         {
             id: 15,
             lang: 'en',
@@ -941,7 +941,7 @@ const Define = (() => {
                 audio: 'audio/1.mp3'
             }
         },
-        // id : 16,
+        // qId : 16, mId : 16
         {
             id: 16,
             lang: 'hi',
@@ -982,7 +982,7 @@ const Define = (() => {
                 // audio     : 'audio/1.mp3'
             }
         },
-        // id : 17,
+        // qId : 17, mId : 16
         {
             id: 17,
             lang: 'hi',
@@ -994,7 +994,7 @@ const Define = (() => {
                 },
             }
         },
-        // id : 18,
+        // qId : 18, mId : 17
         {
             id: 18,
             lang: 'en',
@@ -1003,7 +1003,7 @@ const Define = (() => {
                 sequence: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', '`theta`'],
             }
         },
-        // id : 19,
+        // qId : 19, mId : 18
         {
             id: 19,
             lang: 'en',
@@ -1012,7 +1012,7 @@ const Define = (() => {
                 download: true
             }
         },
-        // id : 20,
+        // qId : 20, mId : 19
         {
             id: 20,
             lang: 'en',
@@ -1064,7 +1064,7 @@ const Define = (() => {
                 },
             ]
         },
-        // id : 21,
+        // qId : 21, mId : 20
         {
             id: 21,
             lang: 'en',
@@ -1079,7 +1079,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 22,
+        // qId : 22, mId : 21
         {
             id: 22,
             lang: 'en',
@@ -1164,10 +1164,10 @@ const Define = (() => {
                 }
             ]
         },
-        // id : 23,
+        // qId : 23, mId : 22
         {
             id: 23,
-            lang: 'en',
+            lang: 'hi',
             head: 'Template : 22',
             content: {
                 replacement: '#_#',
@@ -1182,12 +1182,15 @@ const Define = (() => {
                     imageclass: 'text-center'
                 },
                 questions: [
-                    { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'a' },
+                    { 
+                        text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', 
+                        answer: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti dolor enim repellendus nisi saepe sed eos, maxime molestias cumque aspernatur fugit, quasi officia voluptatum quisquam perspiciatis rem! Dolorem esse odit commodi, deleniti iste rerum? Quis, officia voluptas. Perferendis quae nam, dignissimos totam porro itaque unde sunt minima doloribus nesciunt? Consectetur voluptas quisquam dolore quaerat commodi atque quam delectus rerum soluta reprehenderit facilis, corporis totam, nostrum reiciendis placeat non, ratione ipsum? Ipsam beatae vitae, alias, voluptas distinctio sunt totam debitis mollitia consectetur corporis a maxime, consequuntur iusto error animi. Asperiores, doloribus pariatur enim ut suscipit iure quidem, corrupti totam blanditiis similique vitae dolorem. Sapiente ducimus nostrum debitis, laudantium dolorem molestiae asperiores aperiam labore est culpa aspernatur aut ipsam doloremque fugiat eius! Inventore porro neque nam consequatur reiciendis nisi architecto asperiores tempore cumque maxime quos hic ratione, placeat dignissimos id voluptatum blanditiis aut quia quisquam, ad rem optio repellat corrupti. Suscipit corporis consectetur hic esse animi magni delectus labore voluptatibus! Nam minus reprehenderit velit et excepturi possimus, voluptate quaerat eligendi exercitationem voluptatem at, ut, placeat harum! Eveniet quasi ipsum quas quisquam error deserunt enim consequuntur laboriosam autem incidunt nemo voluptates sit accusantium ad, similique quam nobis, nostrum neque et molestias provident maiores velit esse officiis. Cupiditate minus voluptatem amet corporis optio, distinctio eaque fugit dignissimos! Mollitia, quaerat eum molestiae voluptas dolore tempore eius nulla optio ea exercitationem debitis commodi omnis. Necessitatibus eaque qui ab ratione tenetur illo aliquam ex perspiciatis aut! Mollitia repudiandae officiis nostrum fugiat autem iste, aliquid possimus deleniti animi, consequuntur iusto beatae veritatis cumque soluta! Voluptatibus quasi nobis consectetur odio! Commodi temporibus in labore similique quos laboriosam facere exercitationem vitae iure magnam blanditiis accusamus, nesciunt tempora praesentium optio tenetur asperiores tempore unde explicabo dicta? Quos, cumque! Voluptate possimus doloremque culpa voluptatibus, facere totam ipsam numquam sed nisi placeat quo velit cumque non libero, eligendi nulla et iure, deleniti accusamus sapiente aperiam labore nobis repellendus exercitationem! Quas eum illum doloremque voluptas illo sequi itaque consequuntur incidunt blanditiis dicta, impedit temporibus explicabo labore beatae molestias earum magnam vel perferendis eaque ipsa, pariatur commodi molestiae? Assumenda, ex quaerat, rem, nobis voluptatem expedita reiciendis veniam mollitia at eius harum numquam nulla iure cum magnam. Facere recusandae, molestias ducimus at, corporis voluptatibus minus tempore ea iure unde quis qui alias exercitationem voluptates quas suscipit nam omnis asperiores tenetur earum quaerat magnam nisi labore consequatur? Maiores mollitia nemo ratione, quisquam eligendi deserunt, similique velit earum eius adipisci maxime omnis. Quae, ratione velit aut adipisci quos suscipit provident quidem in consequatur sit dignissimos tenetur quisquam dolorem iusto doloremque. Ad quidem aperiam saepe nisi debitis excepturi praesentium dicta accusamus totam dignissimos, quisquam a sit odio vitae fugiat magni perferendis consequuntur repellat animi magnam ab. Quam fuga consectetur quisquam quos est at maxime. Blanditiis aperiam deserunt quaerat perspiciatis animi, voluptas tempora ratione temporibus est commodi dignissimos distinctio vel, odit molestias repudiandae sint voluptatem consectetur! Repellat delectus illum quidem odio modi velit reiciendis, quam tenetur eaque quos obcaecati soluta a unde dolorum laborum doloribus sint fugit quas, natus sed iure temporibus voluptatem molestiae animi? Sapiente cum suscipit ipsam minima, tempore recusandae velit quam voluptatum minus iusto, impedit modi, consequuntur aperiam? Vel veniam, magni illo officia molestias nostrum deleniti repellat veritatis consequatur quod reiciendis atque vitae dolorem quas ad nobis assumenda repellendus possimus culpa fuga laudantium nam dolore ipsum. Ab, quibusdam ipsum autem iusto, dolor minima praesentium nam delectus dicta cupiditate ullam deleniti illo pariatur dolores saepe laboriosam quis voluptatum dolore sequi tempora? Dignissimos quibusdam iusto quas exercitationem beatae ut sed. Saepe, placeat? Asperiores, placeat omnis, quasi cupiditate, distinctio id alias facere tenetur magnam quia recusandae magni maiores. Ipsam laboriosam voluptatibus at sequi accusantium repellat exercitationem dolor? Harum eos adipisci distinctio a obcaecati, explicabo magni. Quae consectetur inventore atque qui suscipit dolores ratione dolorem quis! Quam numquam minima sunt iste nisi eius aliquid ut ratione! Provident ad labore corrupti ipsum nam. Harum nisi in repellat natus officia sapiente alias laboriosam totam id, assumenda vitae accusamus? Minima sint, aperiam facere nisi vero enim qui veniam fugiat, eveniet autem necessitatibus minus repellendus itaque voluptatem quas eligendi assumenda doloribus, ipsam alias! Adipisci, quidem praesentium doloribus rem, iure soluta aspernatur dolores dolorem dolore cum nulla repellat corporis architecto tenetur consequuntur? Quidem tempora enim doloremque nihil dolorum accusamus sequi vitae unde, perferendis alias labore nobis harum! Dolore eligendi aut temporibus deleniti unde facere rem reprehenderit libero illum quisquam. Cumque explicabo beatae dolorem nobis? Autem tempora ratione est distinctio, qui totam nesciunt numquam. Eligendi, inventore suscipit! Ratione porro repellendus maiores quae voluptatem. Aliquam vel voluptatibus quae ullam temporibus deleniti itaque magnam! Perspiciatis distinctio cupiditate molestias voluptates quos repudiandae beatae repellendus rerum dignissimos autem nihil soluta, tempora alias ut incidunt aliquid vero eius enim in sapiente laborum placeat quidem nemo! Ipsam rem similique nisi animi id dolor nulla molestiae commodi magni asperiores facilis, quas dicta excepturi, suscipit quidem iure at. Quisquam quos mollitia accusantium velit similique necessitatibus quaerat deleniti suscipit obcaecati illo, repellendus cupiditate dicta consequatur ab voluptatem placeat quis hic totam blanditiis odio dolores? Eius unde ab dicta harum quod rem eligendi nesciunt. Accusantium in tenetur laboriosam. Eligendi consectetur assumenda non maxime. Quae dignissimos quisquam facere perferendis ut dicta odit quos sint optio. Expedita voluptates delectus labore. Porro enim omnis mollitia quod necessitatibus suscipit modi minus quam animi nihil iste iure ut autem voluptas magnam sequi reprehenderit distinctio a, quas repellendus nisi? Optio quidem eius mollitia neque cumque voluptatem aliquam magni praesentium, fugiat id commodi, ipsam numquam modi quas deserunt dolorum voluptates itaque a necessitatibus. Illo, iure sunt veritatis animi temporibus perspiciatis commodi voluptate tempore? Facere facilis at repudiandae quibusdam, temporibus consectetur ipsam provident porro blanditiis iusto laborum ullam expedita. Alias beatae libero consectetur et ipsum. Mollitia quae autem sequi eos vel, nulla nostrum cum aspernatur perferendis distinctio aut id, voluptatibus beatae obcaecati! Quos beatae hic, ad ullam totam et omnis aperiam neque saepe tenetur a expedita provident aliquid quia aliquam sequi rem, minus odit velit, sunt ex. Officiis error inventore provident quibusdam numquam, harum cum libero, vel, iure debitis dolorem facere a tenetur deserunt quod.' 
+                    },
                     { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'b' }
                 ]
             }
         },
-        // id : 24,
+        // qId : 24, mId : 23
         {
             id: 24,
             lang: 'hi',
@@ -1213,7 +1216,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 25,
+        // qId : 25, mId : 24
         {
             id: 25,
             lang: 'hi',
@@ -1275,7 +1278,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 26,
+        // qId : 26, mId : 25
         {
             id: 26,
             lang: 'en',
@@ -1287,7 +1290,7 @@ const Define = (() => {
                 }
             }
         },
-        // id : 27,
+        // qId : 27, mId : 26
         {
             id: 27,
             lang: 'hi',
@@ -1303,7 +1306,7 @@ const Define = (() => {
                 text: "पेड़-पौधे `theta` हमारी धरती माँ के सिर्फ़ शृंगार ही नहीं, #_# बल्कि उसपर स्थित जीवन के आधार भी हैं। इनके बिना हम जीवन की कल्पना भी #_# नहीं कर सकते। प्राचीन काल से ही हमारे ऋषियों, मुनियों और विचारकों ने पेड़-पौधों के महत्त्व को समझा। यही कारण है कि हमारी संस्कृति में वनों का इतना महत्त्व है। हमारे यहाँ पेड़-पौधों को लगाना, इनकी पूजा करना और वन-महोत्सव की प्रथा का प्रचलन प्राचीन काल से है और इसके वैज्ञानिक कारण भी हैं। #_# पेड़ों की पूजा अंधविश्वास नहीं है। पेड़-पौधे हमारे लिए बहुत लाभदायक हैं। इनसे हमें खाने के लिए फ़ल, विश्राम के लिए छाया, रोगों के लिए औषधियाँ, जलाने के लिए ईंधन एवं शुद्ध वातावरण आदि मिलता है। अतः उनके प्रति कृतज्ञता प्रकट करना हमारा प्रथम कर्तव्य है। पेड़-पौधे हमेशा से हम पर उपकार करते आए हैं। पेड़-पौधों द्वारा जलवायु औरवातावरण का संतुलन बना रहता है। इनकी जड़ें मिट्टी को जकड़कर रखती हैं तथा पत्तियाँ सड़कर खाद (ह्यूमस) का काम करती हैं। #_# इससे मृदा-क्षरण कम होता है। यह तो हम सभी जानते हैं कि पेड़-पौधों में जीवन होता है। वे भी हमारी तरह दुख-सुख का अनुभव कर अपनी प्रतिक्रिया व्यक्त करते हैं। कहा जाता है कि मनुष्य पर उसके चारों ओर के वातावरण का असर पड़ता है, इसलिए अगर हम अपने चारों तरफ़ की धरती को पेड़ लगाकर हरा कर दें, तो चारों तरफ़ का सौंदर्य देखने लायक होगा, फिर जो मनुष्य ऐसे वातावरण में रहेगा, उसका हृदय भी उसी तरह खुशहाल हो जाएगा। पेड़ तो प्रकृति का सबसे बड़ा वरदान है। #_# अगर पेड़ हैं तो वर्षा होगी, पानी की समस्या नहीं रहेगी एवं ऑक्सीजन और कार्बन डाइऑक्साइड गैसों में संतुलन रहेगा। यदि पेड़ों की संख्या बढ़ा दी जाए तो ग्रीन हाउस गैसों के असर से भी हम बच सकते हैं। प्रगति की ओर बढ़ रहे मानव ने नगर, महानगर, यहाँ तक कि कस्बे और देहात तक में छोटे-बड़े उद्योग-धंधों के रूप में अनेक छोटी-बड़ी फ़ैक्टरियाँ लगाई हैं। उनसे धुआँ, तरह-तरह की विषैली गैसें आदि निकलकर पर्यावरण को प्रदूषित कर रही हैं। पेड़-पौधे उनसे निकलने वाली प्रदूषित गैसों को पर्यावरण में घुलने से रोककर पर्यावरण को दूषित होने से बचाते हैं। पेड़-पौधे उस कामधेनु की भाँति हैं, जिसके बिना जीना असंभव है। इनके बिना हमारा अस्तित्व ही समाप्त हो जाएगा, अतः हमें चाहिए कि ज़्यादा-से-ज़्यादा पेड़ लगाकर अपनी पृथ्वी को बचाएँ, अन्यथा वह समय दूर नहीं, जब पृथ्वी पर जीव और जीवन एक इतिहास बन जाएगा।",
             }
         },
-        // id : 28,
+        // qId : 28, mId : 27
         {
             id: 28,
             lang: 'hi',
@@ -1344,7 +1347,7 @@ const Define = (() => {
                 showInput: false,
             }
         },
-        // id : 29,
+        // qId : 29, mId : 28
         {
             id: 29,
             lang: 'hi',
@@ -1363,7 +1366,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 30,
+        // qId : 30, mId : 29
         {
             id: 30,
             lang: 'hi',
@@ -1397,7 +1400,7 @@ const Define = (() => {
                 ]
             },
         },
-        // id : 31,
+        // qId : 31, mId : 30
         {
             id: 31,
             lang: 'en',
@@ -1416,7 +1419,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 32,
+        // qId : 32, mId : 31
         {
             id: 32,
             lang: 'en',
@@ -1432,7 +1435,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 33,
+        // qId : 33, mId : 32
         {
             id: 33,
             lang: 'en',
@@ -1444,7 +1447,7 @@ const Define = (() => {
                 'Grimly', 'Hankering', 'Quavered', 'Angel', 'Deterrence', 'Lavender', 'aeroplane',
             ]
         },
-        // id : 34,
+        // qId : 34, mId : 33
         {
             id: 34,
             lang: 'en',
@@ -1481,7 +1484,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 35,
+        // qId : 35, mId : 34
         {
             id: 35,
             content: {
@@ -1499,7 +1502,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 36,
+        // qId : 36, mId : 35
         {
             id: 36,
             lang: 'en',
@@ -1564,7 +1567,7 @@ const Define = (() => {
                 }
             }
         },
-        // id : 37,
+        // qId : 37, mId : 36
         {
             id: 37,
             lang: 'en',
@@ -1597,7 +1600,7 @@ const Define = (() => {
                 }
             }
         },
-        // id : 38,
+        // qId : 38, mId : 37
         {
             id: 38,
             lang: 'en',
@@ -1614,7 +1617,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 39,
+        // qId : 39, mId : 38
         {
             id: 39,
             lang: 'en',
@@ -1624,7 +1627,7 @@ const Define = (() => {
                 words: ['Jeans', 'Sweater', 'cap', 'shorts', 'frock', 'skirt', 'hat', 'Vest', 'clothes', 'socks', 't-shirt', 'trousers', 'shirt', 'scarf', 'tie']
             }
         },
-        // id : 40,
+        // qId : 40, mId : 39
         {
             id: 40,
             lang: 'hi',
@@ -1646,7 +1649,7 @@ const Define = (() => {
                 vowels: ["ा", "ि", "ी", "ु", "ू", "े", "ै", "ो", "ौ", "ं", "ः", "ँ"]
             }
         },
-        // id : 41,
+        // qId : 41, mId : 19
         {
             id: 41,
             lang: 'en',
@@ -1685,7 +1688,7 @@ const Define = (() => {
                 }
             ]
         },
-        // id : 42,
+        // qId : 42, mId : 40
         {
             id: 42,
             head: 'Template : 40, VirtualTour `theta`',
@@ -1786,7 +1789,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 43,
+        // qId : 43, mId : 41
         {
             id      : 43,
             head    : 'Template : 43, CircleAndUnderline `theta`',
