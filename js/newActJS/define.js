@@ -262,7 +262,7 @@ const Define = (() => {
                 { event: 'click', selector: '.copy-text', handle: ['copyText'] },
             ]
         },
-        //Iqid : 0 mId : 0
+        // qId : 0 mId : 0
         {
             id: 0,
             path : {
@@ -409,7 +409,7 @@ const Define = (() => {
                 { event: 'click', selector: '#audioImage', handle: ['playMedia'] }
             ]
         },
-        //Iqid : 1 mId : 1
+        // qId : 1 mId : 1
         {
             id: 1,
             lang: 'en',
@@ -424,7 +424,7 @@ const Define = (() => {
                 { id: 6, left: 'Be an eye-opener', right: 'To understand something' }
             ]
         },
-        //Iqid : 2 mId : 2
+        // qId : 2 mId : 2
         {
             id: 2,
             lang: 'hi',
@@ -453,7 +453,7 @@ const Define = (() => {
                 correctRight: { 1: 6, 2: 1, 3: 2 }
             },
         },
-        //Iqid : 3 mId : 3
+        // qId : 3 mId : 3
         {
             id: 3,
             lang: 'hi',
@@ -467,7 +467,7 @@ const Define = (() => {
                 { id: 5, top: 'Catch someone\'s eye', bottom: 'To be a favourite or loved' }
             ]
         },
-        //Iqid : 4 mId : 4
+        // qId : 4 mId : 4
         {
             id: 4,
             lang: 'en',
@@ -505,7 +505,7 @@ const Define = (() => {
                 ]
             }
         },
-        //Iqid : 5 mId : 5
+        // qId : 5 mId : 5
         {
             id: 5,
             lang: 'hi',
@@ -586,7 +586,7 @@ const Define = (() => {
                 audio: ''
             }
         },
-        //Iqid : 6 mId : 6
+        // qId : 6 mId : 6
         {
             id: 6,
             lang: 'hi',
