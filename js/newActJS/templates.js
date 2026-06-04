@@ -35,7 +35,7 @@ const Helper = (() => {
 
         }
 
-    }
+    };
 
     const pauseAudio = () => {
 
@@ -44,7 +44,7 @@ const Helper = (() => {
         $('.common_playBtn').show();
         $('.common_pauseBtn').hide();
 
-    }
+    };
 
     const stopAudio = () => {
 
@@ -56,7 +56,7 @@ const Helper = (() => {
 
         $("#question-container-box").slideDown('slow');
 
-    }
+    };
 
     const setAudio = (src) => {
 
@@ -72,12 +72,30 @@ const Helper = (() => {
         // set new source
         __audio.src = src;
 
-    }
+    };
 
     const defaultCol = {
         md: 12,
         sm: 12,
         col: 12
+    };
+
+    const loadPdfJs = async () => {
+        const locations = [
+            '/data/e-Learning/js/newActJS/pdf_v6',
+            '/js/newActJS/pdf_v6'
+        ];
+
+        for (const base of locations) {
+            try {
+                const pdfjsLib = await import(`${base}/pdf.mjs`);
+                pdfjsLib.GlobalWorkerOptions.workerSrc = `${base}/pdf.worker.mjs`;
+                return pdfjsLib;
+            } catch (err) {
+                console.warn(`Failed to load PDF.js from ${base}`);
+            }
+        }
+        throw new Error('Unable to load PDF.js');
     };
 
     return {
@@ -86,7 +104,8 @@ const Helper = (() => {
         stopAudio,
         pauseAudio,
         audio: __audio,
-        defaultCol
+        defaultCol,
+        loadPdfJs
     }
 })();
 
@@ -7060,7 +7079,7 @@ const Pdf = (() => {
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent = document.querySelector(container);
+            const parent    = document.querySelector(container);
 
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -7200,7 +7219,22 @@ const Pdf = (() => {
             const path = activity?.content?.pdf ? Activity.pathToCWD() + activity?.content?.pdf : '';
 
             if (!path) {
-                console.warn('No PDF path found');
+                console.warn('Oops! The PDF file could not be found.');
+                return;
+            }
+
+            const response = await fetch(path, { method: 'HEAD' });
+            if ( !response.ok ) {
+                toggle_loader(false);
+
+                const containerClass = Define.get('questionContainer');
+                const container = document.querySelector(containerClass);
+
+                container.querySelector('.viewer').innerHTML = `
+                    <div class="p-3 rounded-3 border border-danger bg-danger-subtle text-danger-emphasis">
+                        Unable to load the PDF right now.
+                    </div>
+                `;
                 return;
             }
 
@@ -7218,12 +7252,8 @@ const Pdf = (() => {
             }
 
             toggle_loader(true);
-            await Define.get('loadScript')('js/pdf.js');
-            await Define.get('loadScript')('js/pdf.worker.js');
 
-            if (window.pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/pdf.worker.js';
-            }
+            window.pdfjsLib = await Helper.loadPdfJs();
 
             const canvas = document.getElementById("pdfCanvas");
             const ctx = canvas.getContext("2d");
@@ -7235,16 +7265,18 @@ const Pdf = (() => {
             let scale = __scale();
             let rotation = 0;
 
-            const loadingTask = pdfjsLib.getDocument(path);
+            const loadingTask = pdfjsLib.getDocument({
+                url: path
+            });
+
             loadingTask.onProgress = (data) => {
                 if (data.total && data.loaded === data.total) toggle_loader(false);
             };
 
             try {
                 pdfDoc = await loadingTask.promise;
-                console.info('[OK] ', 'PDF loaded.');
             } catch (err) {
-                console.info('[ERROR]', 'Failed to load PDF =>', err.message ?? err);
+                console.log( err );
                 return;
             }
 
