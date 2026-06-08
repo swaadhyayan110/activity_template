@@ -209,8 +209,8 @@
 
 /* CORRECT / WRONG STATES */
 .correct {
-    border: 2px solid green;
-    color: green;
+    border: 2px solid green !important;
+    color: green !important;
 }
 
 .wrong {
