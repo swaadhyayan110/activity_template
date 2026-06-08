@@ -81,7 +81,7 @@ const UI = (() => {
             console.log('Exiting fullscreen failed:', err?.message || err);
         }
     };
-
+    
     const activity = (selector, id, moduleId, landscape=false) => {
         document.querySelectorAll('.boxQ').forEach(btn =>
             btn.classList.remove('activeBtns')
@@ -115,12 +115,12 @@ const UI = (() => {
     };
 
     const buttons = (selector='qNumbers') => {
-        try {            
+        try {
             const container = document.getElementById(selector);
             if( !container ) {
                 console.warn('UI.buttons: container not found:', selector);
                 return;
-            }            
+            }
 
             const mobile = detectMobile();
 
@@ -130,11 +130,17 @@ const UI = (() => {
                     const itemId       = item.qid;
                     const itemSelector = `q${itemId}`;
                     const moduleId     = item.module ?? '';
-                    const landscape    = item.landscape ?? false;                
-                    container.style.display = 'none';
-                    
+                    const landscape    = item.landscape ?? false;
+
+                    if( tabs[0].module != 18 ) {
+                        const image = document.createElement('img');
+                        image.src   = 'images/headerImage_button.png';
+                        image.id    = 'header-image-button';
+                        container.insertAdjacentElement( 'beforebegin', image );
+                    }
+
                     activity(itemSelector, itemId, moduleId, landscape);
-                    return;
+                    return null;
                 }
 
                 const frag   = document.createDocumentFragment();
@@ -175,7 +181,7 @@ const UI = (() => {
                         }
                     });
                 });
-            }
+            };
 
             const viaJson = () => {
                 fetch('js/newActJS/tabs.json')
@@ -184,12 +190,12 @@ const UI = (() => {
                     render(tabs);
                 })
                 .catch(err => console.error('[FATAL]',err));
-            }
+            };
 
             const viaJs = () => {
                 const tabs = Define.get('buttons') ?? [];
                 render(tabs);
-            }
+            };
             
             viaJs();
         } catch( err ) {

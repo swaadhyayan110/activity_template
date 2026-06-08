@@ -2701,4 +2701,13 @@ body {
     padding: 5px !important;
     font-size: 14px;    
   }
+
+  #header-image-button {
+    height: auto !important;
+  }
+}
+
+#header-image-button {
+  width: 80% !important;
+  height: 12vh;
 }

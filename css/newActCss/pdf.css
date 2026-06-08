@@ -19,7 +19,7 @@
 
         .pdfFrame3D {
             width: 90%;
-            height: 79vh;
+            height: 88vh;
             /* background: white; */
             border-radius: 35px;
             padding: 12px;
@@ -29,7 +29,7 @@
             position: absolute;
             top: -1vh;
             left: 4.5%;
-            margin-top: 16vh;
+            margin-top: 7vh;
         }
 
         .pdfFrame3D:before {
@@ -79,7 +79,7 @@
 
         .pdfHeader button {
             position: relative;
-            padding: 12px 26px;
+            padding: 5px 15px;
             cursor: pointer;
             border-radius: 50px;
             font-size: 16px;
@@ -226,7 +226,7 @@
 
         .zoomBox,
         .statusBox {
-            padding: 12px 18px;
+            padding: 7px 15px;
             border-radius: 15px;
             background: rgb(255 255 255 / 95%);
             backdrop-filter: blur(10px);
