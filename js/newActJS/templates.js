@@ -7219,14 +7219,7 @@ const Pdf = (() => {
                                             </button>
                                             <button class="magicBtn" id="zoomInBtn">+</button>
                                         </div>
-                                        <div class="viewerArea">
-                                            <div id="loader">
-                                                <div class="loaderCircle"></div>
-                                                <div class="loaderText">
-                                                    Loading PDF...
-                                                    <span id="loadPercent">0%</span>
-                                                </div>
-                                            </div>
+                                        <div class="viewerArea viewer">
                                             <canvas id="pdfCanvas" width="756" height="972" style="width: 756px; height: 972px;"></canvas>
                                         </div>
                                     </div>
