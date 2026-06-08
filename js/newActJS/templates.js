@@ -581,8 +581,8 @@ const Activity = (() => {
             }
 
             temp.render(questionId, activityId);
-
-            await Define.get('loadScript')('js/newActJS/MathJax-2.7.9/MathJax.js?config=TeX-MML-AM_CHTML');
+            
+            if( Define.get('loadScript') ) await Define.get('loadScript')('js/newActJS/MathJax-2.7.9/MathJax.js?config=TeX-MML-AM_CHTML');
         } catch (err) {
             console.error('Activity.render : ', err);
         }
@@ -7161,6 +7161,7 @@ const Sorting = (() => {
 
 const Pdf = (() => {
     const containerId = 'pdf-container';
+    Activity.css('pdf.css');
 
     const ui = (questionId) => {
         try {
@@ -7178,99 +7179,59 @@ const Pdf = (() => {
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             const svgWidth = 18;
-            parent.innerHTML = `<div class="question">
-                                    <div class="container contAdapt py-0 shadow-lg" id="${containerId}">
-                                        <div class="wrap">
-                                            <div class="container-fluid mt-2 px-2">
-                                                <div 
-                                                    class="row g-0 mx-auto align-items-center justify-content-between border border-success-subtle bg-success-subtle shadow-sm rounded-4 p-2 mb-2"
-                                                    style="width:min(95%,1100px);"
+            parent.innerHTML = `
+                                <div class="question" id="${containerId}">
+                                    <img src="images/pdf.png" class="backImgs" draggable="false" />
+                                    <div class="pdfFrame3D">
+                                        <div class="pdfHeader">
+                                            <button
+                                                class=""
+                                                id="downloadBtn"
+                                            >
+                                                <span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgWidth}" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                                                    </svg>
+                                                </span>
+                                                Download
+                                            </button>
+                                            <button class="magicBtn" id="prevBtn">Prev</button>
+                                            <div class="statusBox">
+                                                <input
+                                                    id="pageNum"
+                                                    type="number"
+                                                    value="0"
+                                                    min="1"
+                                                    autocomplete="off"
+                                                    class="border-0 bg-transparent text-center fw-semibold"
+                                                    style="width:55px; outline:none;"
                                                 >
-                                                    <div class="col-12 col-lg-3 text-center text-lg-start my-1">
-                                                        <button
-                                                            class="btn btn-outline-success btn-sm px-3 rounded-pill shadow-sm w-100 w-md-75"
-                                                            id="downloadBtn"
-                                                        >
-                                                            <span>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgWidth}" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
-                                                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
-                                                                </svg>
-                                                            </span>
-                                                            Download
-                                                        </button>
-                                                    </div>
-                                                    <div class="col-12 col-lg-6 my-1">
-                                                        <div class="d-flex align-items-center justify-content-center flex-wrap gap-2">
-                                                            <button
-                                                                class="btn btn-light btn-sm rounded-pill px-3 shadow-sm d-inline-flex align-items-center"
-                                                                id="prevBtn"
-                                                            >
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgWidth}" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                                                                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                                                                    </svg>
-                                                                </span>
-                                                                Prev
-                                                            </button>
-                                                            <div class="d-flex align-items-center bg-light rounded-pill px-3 py-1 shadow-sm">
-                                                                <input
-                                                                    id="pageNum"
-                                                                    type="number"
-                                                                    value="0"
-                                                                    min="1"
-                                                                    autocomplete="off"
-                                                                    class="border-0 bg-transparent text-center fw-semibold"
-                                                                    style="width:55px; outline:none;"
-                                                                >
-                                                                <span class="mx-2 text-muted">/</span>
-                                                                <span id="pageCount" class="fw-semibold">0</span>
-                                                            </div>
-                                                            <button
-                                                                class="btn btn-light btn-sm rounded-pill px-3 shadow-sm d-inline-flex align-items-center"
-                                                                id="nextBtn"
-                                                            >
-                                                                Next
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgWidth}" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                                                                    </svg>
-                                                                </span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 col-lg-3 my-1">
-                                                        <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-2 flex-wrap">
-                                                            <button
-                                                                class="btn btn-light btn-sm rounded-circle shadow-sm"
-                                                                id="zoomOutBtn"
-                                                                style="width:30px;height:30px;font-size:16px;"
-                                                            >
-                                                                −
-                                                            </button>
-                                                            <button
-                                                                class="btn btn-light btn-sm rounded-circle shadow-sm"
-                                                                id="zoomInBtn"
-                                                                style="width:30px;height:30px;font-size:16px;"
-                                                            >
-                                                                +
-                                                            </button>
-                                                            <button
-                                                                class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm"
-                                                                id="resetBtn"
-                                                            >
-                                                                Reset
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                <span id="pageCount">0</span>
+                                            </div>
+                                            <button class="magicBtn" id="nextBtn">Next</button>
+                                            <button class="magicBtn" id="zoomOutBtn">-</button>
+                                            <button
+                                                class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm"
+                                                id="resetBtn"
+                                            >
+                                                Reset
+                                            </button>
+                                            <button class="magicBtn" id="zoomInBtn">+</button>
+                                        </div>
+                                        <div class="viewerArea">
+                                            <div id="loader">
+                                                <div class="loaderCircle"></div>
+                                                <div class="loaderText">
+                                                    Loading PDF...
+                                                    <span id="loadPercent">0%</span>
                                                 </div>
                                             </div>
-                                            <div class="viewer overflow-auto d-flex align-items-center justify-content-center p-1">
-                                                <canvas id="pdfCanvas" width="756" height="972" style="width: 756px; height: 972px;"></canvas>
-                                            </div>
+                                            <canvas id="pdfCanvas" width="756" height="972" style="width: 756px; height: 972px;"></canvas>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+            `;
             // ..
 
         } catch (e) {
@@ -7319,12 +7280,21 @@ const Pdf = (() => {
                     a.click();
                 };
             } else {
-                downloadBtn.remove();
+                if( downloadBtn ) downloadBtn.remove();
             }
 
             toggle_loader(true);
-            await Define.get('loadScript')('js/pdf.js');
-            await Define.get('loadScript')('js/pdf.worker.js');
+            let pdfJsLoaded = false;
+            if( Define.get('loadScript') ) {
+                await Define.get('loadScript')('js/pdf.js');
+                await Define.get('loadScript')('js/pdf.worker.js');
+                pdfJsLoaded = true;
+            }
+
+            if( !pdfJsLoaded ) {
+                console.log( 'Couldn\'t load PDF JS.' );
+                return null;
+            }
 
             if (window.pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/pdf.worker.js';
@@ -12457,11 +12427,14 @@ const AudioAndVideoFromYoutube = (() => {
                 });
             }
 
-            await Define.get('loadScript')('https://www.youtube.com/iframe_api');
-            await ytReady;
-            buttonUI();
+            if( Define.get('loadScript') ) {
+                await Define.get('loadScript')('https://www.youtube.com/iframe_api');
+                await ytReady;
+                buttonUI();
 
-            if (buttons.length) loadandplay(0);
+                if (buttons.length) loadandplay(0);
+                return null;
+            }
         } catch (err) {
             console.error('AudioAndVideoFromYoutube.render :', err);
         }
