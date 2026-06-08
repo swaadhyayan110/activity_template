@@ -183,7 +183,7 @@
   margin-bottom: 15px;
   text-align: center;
   border-radius: 8px;
-  background: linear-gradient(to right, #1e5799, #2989d8, #4fc3f7);
+  background: linear-gradient(to right, var(--bs-purple), #2989d8, var(--bs-primary-text-emphasis));
   color: #fff;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
   animation: fadeInDown 0.8s ease;
@@ -248,7 +248,7 @@
 
 /* vowe Drag and Drop start*/
 
-.vowel-container{
+.vowel-container {
   margin: 5px;
   padding: 8px 14px;
   border-radius: 10px;
@@ -262,7 +262,7 @@
   position: relative;
 }
 
-.vowel-drop-box{
+.vowel-drop-box {
   font-size: 23px;
 }
 
@@ -308,10 +308,15 @@
 
   /* vowe Drag and Drop start*/
 
-  .vowel-drop-box{
+  .vowel-drop-box {
     font-size: 20px;
   }
-  
+
+  .dragItems {
+    gap: 4px;
+    flex-wrap: wrap;
+    top: 0px;
+  }
+
   /* vowe Drag and Drop end*/
 }
-

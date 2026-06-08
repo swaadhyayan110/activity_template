@@ -35,7 +35,7 @@ const Helper = (() => {
 
         }
 
-    };
+    }
 
     const pauseAudio = () => {
 
@@ -44,7 +44,7 @@ const Helper = (() => {
         $('.common_playBtn').show();
         $('.common_pauseBtn').hide();
 
-    };
+    }
 
     const stopAudio = () => {
 
@@ -56,7 +56,7 @@ const Helper = (() => {
 
         $("#question-container-box").slideDown('slow');
 
-    };
+    }
 
     const setAudio = (src) => {
 
@@ -72,30 +72,12 @@ const Helper = (() => {
         // set new source
         __audio.src = src;
 
-    };
+    }
 
     const defaultCol = {
         md: 12,
         sm: 12,
         col: 12
-    };
-
-    const loadPdfJs = async () => {
-        const locations = [
-            '/data/e-Learning/js/newActJS/pdf_v6',
-            '/js/newActJS/pdf_v6'
-        ];
-
-        for (const base of locations) {
-            try {
-                const pdfjsLib = await import(`${base}/pdf.mjs`);
-                pdfjsLib.GlobalWorkerOptions.workerSrc = `${base}/pdf.worker.mjs`;
-                return pdfjsLib;
-            } catch (err) {
-                console.warn(`Failed to load PDF.js from ${base}`);
-            }
-        }
-        throw new Error('Unable to load PDF.js');
     };
 
     return {
@@ -104,8 +86,7 @@ const Helper = (() => {
         stopAudio,
         pauseAudio,
         audio: __audio,
-        defaultCol,
-        loadPdfJs
+        defaultCol
     }
 })();
 
@@ -118,7 +99,7 @@ const Activity = (() => {
         if (!container) return;
 
         const interval = setInterval(() => {
-            if( window.MathJax && MathJax.Hub ) {
+            if (window.MathJax && MathJax.Hub) {
                 clearInterval(interval);
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, container]);
             }
@@ -533,7 +514,7 @@ const Activity = (() => {
             .segment(str)]
             .map(x => x.segment);
     };
-    
+
     const shuffleStringArray = (array) => {
         const original = array.join('');
         let shuffled = [];
@@ -600,7 +581,7 @@ const Activity = (() => {
             }
 
             temp.render(questionId, activityId);
-            
+
             await Define.get('loadScript')('js/newActJS/MathJax-2.7.9/MathJax.js?config=TeX-MML-AM_CHTML');
         } catch (err) {
             console.error('Activity.render : ', err);
@@ -843,47 +824,52 @@ const MatchLeftToRight = (() => {
             const buttonLabel = Activity.translateButtonLabels(lang);
             const columnLabel = Activity.translateColumnLabel(lang);
 
-            const html = `<div class="question">
-                <div class="container">
-                    <div class="qSections">
-                        <div class="${Define.get('head')}"></div>
-                        <p class="${Define.get('subHead')}"></p>
-                    </div>
-                    <hr/>
-                    <div class="forLevelAB">
-                        <div class="levelText">${columnLabel}-<span class='text-uppercase'>${lang === 'hi' ? 'अ' : 'A' }</span></div>
-                        <div class="levelText">${columnLabel}-<span class='text-uppercase'>${lang === 'hi' ? 'ब' : 'B' }</span></div>
-                    </div>
-                    <div class="content user-select-none">
-                        <div class="instructions">
-                            <div class="activity-wrapper">
-                            <div class="matching-area ${activityId}" data-id="${activityId}">
-                                <div class="left-items" id="leftItems_${activityId}"></div>
-                                <svg width="100%" height="100%">
-                                    <defs>
-                                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
-                                        </marker>
-                                    </defs>
-                                </svg>
-                                <svg width="100%" height="100%">
-                                    <defs>
-                                        <marker id="arrowheadRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="red"></polygon>
-                                        </marker>
-                                    </defs>
-                                </svg>
-                                <div class="right-items" id="rightItems_${activityId}"></div>
-                            </div>
+            const html = `<div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
+                <div class="onImgLayer">
+                <div class="question match1_V2">
+                    <div class="container">
+                        <div class="qSections">
+                            <div class="${Define.get('head')}"></div>
+                            <p class="${Define.get('subHead')}"></p>
+                        </div>
+                        <hr/>
+                        <div class="forLevelAB">
+                            <div class="levelText">${columnLabel}-<span class='text-uppercase'>${lang === 'hi' ? 'अ' : 'A'}</span></div>
+                            <div class="levelText">${columnLabel}-<span class='text-uppercase'>${lang === 'hi' ? 'ब' : 'B'}</span></div>
+                        </div>
+                        <div class="content user-select-none">
+                            <div class="instructions scroll_v2">
+                                <div class="activity-wrapper">
+                                <div class="matching-area ${activityId}" data-id="${activityId}">
+                                    <div class="left-items" id="leftItems_${activityId}"></div>
+                                    <svg width="100%" height="100%">
+                                        <defs>
+                                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                                            </marker>
+                                        </defs>
+                                    </svg>
+                                    <svg width="100%" height="100%">
+                                        <defs>
+                                            <marker id="arrowheadRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="red"></polygon>
+                                            </marker>
+                                        </defs>
+                                    </svg>
+                                    <div class="right-items" id="rightItems_${activityId}"></div>
+                                </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="buttons machiNgs">
-                    <button class="submit-btn disable" data-activity="${activityId}">${buttonLabel.check}</button>
-                    <button class="show-btn">${buttonLabel.show}</button>
-                    <button class="reset-btn">${buttonLabel.try}</button>
-                </div>
+                    <div class="buttons machiNgs">
+                        <button class="submit-btn disable" data-activity="${activityId}">${buttonLabel.check}</button>
+                        <button class="show-btn">${buttonLabel.show}</button>
+                        <button class="reset-btn">${buttonLabel.try}</button>
+                    </div>
+                    </div>
+                    </div>
                 </div>`;
             // ..
             const cont = document.querySelector(Define.get('questionContainer'));
@@ -1350,14 +1336,18 @@ const MatchLeftRightToCenter = (() => {
                 return;
             }
 
-            cont.innerHTML = `<div id="${activityId}" class="question">
+            cont.innerHTML = `
+            <div class="match1Back">
+               <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
+                <div class="onImgLayer">
+                     <div id="${activityId}" class="question match1_V2">
                             <div class="container">
                                 <div class="qSections">
                                     <div class="${Define.get('head')}"></div>
                                     <p class="${Define.get('subHead')}"></p>
                                 </div>
                                 <hr />
-                                <div class="rowM3 matching-area user-select-none" style="position:relative;">
+                                <div class="rowM3 matching-area user-select-none match2ForScrollV2" style="position:relative; ">
                                     <div class="colmn1 matchItems1"></div>
                                     <div class="colmn1 matchItems2"></div>
                                     <div class="colmn1 matchItems3"></div>
@@ -1382,7 +1372,9 @@ const MatchLeftRightToCenter = (() => {
                                     <button class="reset-btn">${btnLabels.try}</button>
                                 </div>
                             </div>
-                        </div>`;
+                         </div> 
+                        </div>
+                    </div>`;
             // ..           
 
             let activityRoot = null;
@@ -1728,40 +1720,46 @@ const MatchTopToBottom = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            cont.innerHTML = `<div class="question">
-                <div class="container">
-                <div class="qSections">
-                    <div class="${Define.get('head')}"></div>
-                    <p class="${Define.get('subHead')}"></p>
-                </div>
+            cont.innerHTML = `
+            <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/op1.png"/>
+                <div class="onImgLayer">
+                    <div class="question match1_V2">
+                        <div class="container">
+                        <div class="qSections">
+                            <div class="${Define.get('head')}"></div>
+                            <p class="${Define.get('subHead')}"></p>
+                        </div>
 
-                <div class="m3Holders">
-                    <div class="matching-area3 user-select-none" data-activity="${activityId}">
-                    <div class="rowHoriZ topItem" data-top="">
+                        <div class="m3Holders">
+                            <div class="matching-area3 user-select-none" data-activity="${activityId}">
+                            <div class="rowHoriZ topItem" data-top="">
+                            </div>
+                            <svg data-svg width="100%" height="100%" style="position: absolute; left: 0; top: 0;">
+                                <defs>
+                                <marker id="arrowhead_${activityId}" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
+                                </marker>
+                                </defs>
+                            </svg>
+                            <svg data-svg width="100%" height="100%" style="position: absolute; left: 0; top: 0;">
+                                <defs>
+                                <marker id="arrowhead_${activityId}_red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="red"></polygon>
+                                </marker>
+                                </defs>
+                            </svg>
+                            <div class="rowHoriZ bottItem" style="margin-top: 10vw;" data-bottom="">
+                            </div>
+                            </div>
+                        </div>
+                        <div class="buttons machiNgs">
+                            <button class="submit-btn" data-check>${buttonLabel.check}</button>
+                            <button class="show-btn" data-show>${buttonLabel.show}</button>
+                            <button class="reset-btn" data-reset>${buttonLabel.try}</button>
+                        </div>
+                        </div>
                     </div>
-                    <svg data-svg width="100%" height="100%" style="position: absolute; left: 0; top: 0;">
-                        <defs>
-                        <marker id="arrowhead_${activityId}" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                            <polygon points="0 0, 10 3.5, 0 7" fill="green"></polygon>
-                        </marker>
-                        </defs>
-                    </svg>
-                    <svg data-svg width="100%" height="100%" style="position: absolute; left: 0; top: 0;">
-                        <defs>
-                        <marker id="arrowhead_${activityId}_red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                            <polygon points="0 0, 10 3.5, 0 7" fill="red"></polygon>
-                        </marker>
-                        </defs>
-                    </svg>
-                    <div class="rowHoriZ bottItem" style="margin-top: 10vw;" data-bottom="">
-                    </div>
-                    </div>
-                </div>
-                <div class="buttons machiNgs">
-                    <button class="submit-btn" data-check>${buttonLabel.check}</button>
-                    <button class="show-btn" data-show>${buttonLabel.show}</button>
-                    <button class="reset-btn" data-reset>${buttonLabel.try}</button>
-                </div>
                 </div>
             </div>`;
         } catch (err) {
@@ -1897,30 +1895,36 @@ const FillInTheBlanksWithImage = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question user-select-none">
-                <div class="container-fluid">
-                    <div class="qSections">
-                        <div class="${Define.get('head')}"></div>
-                        <p class="${Define.get('subHead')}"></p>
-                    </div>
-                    <div class="wordRows"></div>
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="imgBoxFill"></div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="fillBoxSections shadow-sm">
-                                <div id="inputsContainer" class="row"></div>
+            parent.innerHTML = `
+             <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
+                    <div class="onTheImages">
+                        <div class="question user-select-none v2FIllForScrolls">
+                            <div class="container">
+                                <div class="qSections">
+                                    <div class="${Define.get('head')}"></div>
+                                    <p class="${Define.get('subHead')}"></p>
+                                </div>
+                                <div class="wordRows"></div>
+                                <div class="row">
+                                    <div class="col-md-5 col-12">
+                                        <div class="imgBoxFill"></div>
+                                    </div>
+                                    <div class="col-md-7 col-12">
+                                        <div class="fillBoxSections shadow-sm">
+                                            <div id="inputsContainer" class="row"></div>
+                                        </div>
+                                        <div class="buttons machiNgs">
+                                            <button class="submit-btn" id="checkBtnF">${buttonLabel.check}</button>
+                                            <button class="show-btn" id="showBtnF">${buttonLabel.show}</button>
+                                            <button class="reset-btn" id="resetBtnF">${buttonLabel.try}</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="buttons machiNgs">
-                                <button class="submit-btn" id="checkBtnF">${buttonLabel.check}</button>
-                                <button class="show-btn" id="showBtnF">${buttonLabel.show}</button>
-                                <button class="reset-btn" id="resetBtnF">${buttonLabel.try}</button>
-                            </div>
                         </div>
-                    </div>
                 </div>
-                </div>`;
+            </div>`;
             // ..
 
             const checkBtn = parent.querySelector("#checkBtnF");
@@ -2124,7 +2128,11 @@ const FillInTheBlanksHindiKb = (() => {
 
             const definedCol = content?.questionGridSize ?? {};
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+            <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/fill2.png"/>
+                    <div class="onTheImagesFill2">
+            <div class="question">
                                     <div class="container">
                                         ${audioSrc ?
                     `<div class="common_listening_container" id="listening_container">
@@ -2168,7 +2176,8 @@ const FillInTheBlanksHindiKb = (() => {
                                         </div>
                                     </div>
                                     <div class="result" id="result"></div>
-                                </div>`;
+                                </div>
+                                </div> </div>`;
             // ..
 
             Activity.setHeader(questionId);
@@ -2322,7 +2331,7 @@ const FillInTheBlanksHindiKb = (() => {
                 const colCondition = definedCol instanceof Object && Object.entries(definedCol).length;
                 const inputBelowCondition = question?.inputBelow === true && question?.answers;
 
-                if (colCondition) div.classList.add(`row`, `gap-2`, `flex-wrap`, `col-sm-${col.sm}`, `col-md-${col.md}`, `col-${col.col}`, `${subQuestion.length == 0 && !inputBelowCondition ? 'align-items-center' : 'align-items-start'}`);
+                if (colCondition) div.classList.add(`d-flex`, `gap-2`, `flex-wrap`, `col-sm-${col.sm}`, `col-md-${col.md}`, `col-${col.col}`, `${subQuestion.length == 0 && !inputBelowCondition ? 'align-items-center' : 'align-items-start'}`);
 
                 if (subQuestion.length || inputBelowCondition) {
                     const imageView = __renderImageInQuestionText({
@@ -2651,20 +2660,26 @@ const JumbleLetters = (() => {
             const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
-                <div class="container">
-                    <div class="qSections">
-                        <div class="${Define.get('head')}"></div>
-                        <p class="${Define.get('subHead')}"></p>
-                    <hr />
-                    <div class="row" id="letterContainer"></div>
-                </div>
-                <div class="buttons machiNgs">
-                    <button class="submit-btn" id="submit">${buttonLabel.check}</button>
-                    <button class="show-btn">${buttonLabel.show}</button>
-                    <button class="reset-btn" data-qid="">${buttonLabel.try}</button>
-                </div>
-                </div>`;
+            parent.innerHTML = `
+            <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/fill2.png"/>
+                    <div class="onTheImagesFill2">
+                    <div class="question">
+                        <div class="container">
+                            <div class="qSections">
+                                <div class="${Define.get('head')}"></div>
+                                <p class="${Define.get('subHead')}"></p>
+                            <hr />
+                            <div class="row" id="letterContainer"></div>
+                        </div>
+                        <div class="buttons machiNgs">
+                            <button class="submit-btn" id="submit">${buttonLabel.check}</button>
+                            <button class="show-btn">${buttonLabel.show}</button>
+                            <button class="reset-btn" data-qid="">${buttonLabel.try}</button>
+                        </div>
+                        </div>
+                    </div>
+            </div>`;
             // ..            
 
             const checkBtn = parent.querySelector("#submit");
@@ -2693,28 +2708,12 @@ const JumbleLetters = (() => {
 
             $("#letterContainer").empty();
 
-            const config = data?.config;
-
-            const defaultCol = {
-                md: 6,
-                sm: 12,
-                col: 12
-            };
-            const col = {
-                md: config?.col?.md ?? defaultCol.md,
-                sm: config?.col?.sm ?? defaultCol.sm,
-                col: config?.col?.col ?? defaultCol.col
-            };
-
-            
-            const colSize = `col-sm-${col.sm} col-md-${col.md} col-${col.col}`;
-
-            const words   = data?.content;
+            const words = data?.content;
             words.forEach((word, index) => {
                 const jumbled = shuffle(word);
 
                 const gameBox = $(`
-                    <div class="${colSize}">
+                    <div class="col-md-6 col-12 col-sm-12">
                         <div class="rowLines">
                         <div class="numb">${index + 1}.</div>
                         <div class="letterjumbRow" id="letters-${index}" aria-label="Arrange the letters for ${word}"></div>
@@ -2907,7 +2906,11 @@ const JumbleWords = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+             <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/fill2.png"/>
+                    <div class="onTheImagesFill2">
+                                <div class="question">
                                     <div class="container">
                                         <div class="${Define.get('head')}"></div>
                                         <p class="${Define.get('subHead')}"></p>
@@ -2918,7 +2921,9 @@ const JumbleWords = (() => {
                                             <button class="reset-btn">${buttonLabel.try}</button>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                                </div>
+            </div>`;
             // ..        
 
             const checkBtn = parent.querySelector('.submit-btn');
@@ -3194,7 +3199,10 @@ const Mcq_PathKaSaar = (() => {
             const activity = Activity.getDefine(questionId) ?? {};
             const lang = activity.lang ?? 'en';
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                            <div class="mcqOuterScorV2_">
+                                <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
+                                <div class="question mcq_1MenV2">
                                     <div class="container">
                                         <div class="rowWithAudios">
                                             <span class="m-0 ${Define.get('head')}"></span> 
@@ -3202,7 +3210,9 @@ const Mcq_PathKaSaar = (() => {
                                         </div>
                                         <div class="mcq-context p-1"></div>
                                         <div id="${heading}"></div>
-                                        <div id="popupDialogAns">
+                                    </div>
+                                </div>
+                                 <div id="popupDialogAns">
                                             <div class="baseMod">
                                                 <div class="answerdiv">
                                                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -3212,9 +3222,10 @@ const Mcq_PathKaSaar = (() => {
                                                     <div id="answerShowMCW"></div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>`;
+                                </div>
+                            </div>
+                   `;
+
             // ..
 
             const closeBtn = parent.querySelector('#close-popup');
@@ -3576,16 +3587,16 @@ const Adaptiv = (() => {
     const headerContainer = 'headersTopT';
     const levelHeadingID = 'levelHeading';
 
-    let currentLevel    = 1;
+    let currentLevel = 1;
     let currentQuestion = 0;
-    let attemptCount    = 0;
-    let submitted       = false;
-    let currentQuizData    = undefined;
+    let attemptCount = 0;
+    let submitted = false;
+    let currentQuizData = undefined;
     let userAnswersAdaptiv = undefined;
-    let showResultPending  = false;    
+    let showResultPending = false;
     let retryWrongOnly = false;
     let wrongQuestions = [];
-    let __activity     = undefined;
+    let __activity = undefined;
 
     const ui = (questionId, totalQues) => {
         try {
@@ -3597,8 +3608,8 @@ const Adaptiv = (() => {
             }
 
             const activity = Activity.getDefine(questionId);
-            const data     = activity?.content;
-            const lang     = activity?.lang ?? 'en';
+            const data = activity?.content;
+            const lang = activity?.lang ?? 'en';
 
             const instructions = [];
             (data?.headings?.right?.instruction || []).forEach((item) => {
@@ -3606,52 +3617,60 @@ const Adaptiv = (() => {
             });
 
             const prevNextLabel = Activity.translateNextPrevLabel(lang);
-            const buttonLabels  = Activity.translateButtonLabels(lang);
-            parent.innerHTML = `<div class="question">
+            const buttonLabels = Activity.translateButtonLabels(lang);
+            parent.innerHTML = `
+             <div class="mcqOuterScorV2_">
+                                <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
+                                <div class="question mcq_1MenV2">
+            <div class="question">
                                     <div class="container-fluid">
                                         <div class="${headerContainer}">
                                             ${data?.headings?.left ?
-                                                `<div class="btnAdapt shadow-sm">
+                    `<div class="btnAdapt">
                                                     <span class="level-text">${data?.headings?.left ?? ''}</span>
                                                     - 
                                                     <span class="levelUpdate">${currentLevel}</span>
                                                 </div>`
-                                                : ''
-                                            }
+                    : ''
+                }
                                             ${data?.headings?.mid ?
-                                                `<div class="btnAdapt shadow-sm">
+                    `<div class="btnAdapt">
                                                     <span id="attempted-text">${data?.headings?.mid?.attempted ?? ''}</span> 
                                                     <span class="showD" id="attempted-count"> 0 </span> 
                                                     <span id="outof-text">${data?.headings?.mid?.outof ?? ''}</span>
                                                     <span class="showD" id="total-questions"> ${totalQues ?? 0} </span>
                                                 </div>`
-                                                : ''
-                                            }
-                                            ${data?.headings?.right ? 
-                                                `<div class="btnAdapt shadow-sm" id="nirdesh" style="cursor: pointer;">
+                    : ''
+                }
+                                            ${data?.headings?.right ?
+                    `<div class="btnAdapt" id="nirdesh" style="cursor: pointer;">
                                                     <svg class="iconsIns" fill="currentColor" viewBox="0 0 16 16">
                                                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
                                                     </svg>
                                                     <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
                                                 </div>`
-                                                : ''
-                                            }
+                    : ''
+                }
                                         </div>
-                                        <div class="container my-5 contAdapt shadow-lg">
+                                        <div class="container contAdapt">
                                             <div class="mb-2" id="${levelHeadingID}"></div>
                                             <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
                                             <div class="buttonection" id="nav-buttons">
                                                 <div class="buttons machiNgs">
-                                                    <button class="submit-btn" id="prev-btn">${ prevNextLabel.prev }</button>
-                                                    <button class="show-btn" id="next-btn">${ prevNextLabel.next }</button>
-                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${ buttonLabels.submit }</button>
+                                                    <button class="submit-btn" id="prev-btn">${prevNextLabel.prev}</button>
+                                                    <button class="show-btn" id="next-btn">${prevNextLabel.next}</button>
+                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${buttonLabels.submit}</button>
                                                 </div>
                                                 <div id="submit-btn-wrapper" class="text-center"></div>
                                             </div>
                                         </div>
                                         <div id="overlayAns"></div>
                                     </div>
-                                    <div id="overlay">
+                                   
+                                </div>
+                               
+                            </div>
+                             <div id="overlay">
                                         <div id="popupDialog">
                                             <p class="text-danger fw-bold">
                                                 <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
@@ -3662,13 +3681,13 @@ const Adaptiv = (() => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div id="popupDialogAnsAd">
+                             <div id="popupDialogAnsAd">
                                     <div class="baseMod2">
                                         <div class="answerdiv2" id="answer-reviewAD">
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                        </div>`;
 
             const headerCont = document.querySelector('.' + headerContainer);
             if (headerCont && questionId !== undefined) {
@@ -3677,20 +3696,20 @@ const Adaptiv = (() => {
 
             updateAttemptedCount();
 
-            const prevBtn    = parent.querySelector( '#prev-btn' );
-            const nextBtn    = parent.querySelector( '#next-btn' );
-            const submitBtn  = parent.querySelector( '#sub-btn' );
-            const nirdeshBtn = parent.querySelector( '#nirdesh' );
-            const closeOverlayBtn = parent.querySelector( '.close-overlay' );
+            const prevBtn = parent.querySelector('#prev-btn');
+            const nextBtn = parent.querySelector('#next-btn');
+            const submitBtn = parent.querySelector('#sub-btn');
+            const nirdeshBtn = parent.querySelector('#nirdesh');
+            const closeOverlayBtn = parent.querySelector('.close-overlay');
 
-            if( closeOverlayBtn ) closeOverlayBtn.addEventListener("click", closeFn);
-            if( prevBtn ) prevBtn.addEventListener("click", prevQuestion);
-            if( nextBtn ) nextBtn.addEventListener("click", nextQuestion);
-            if( submitBtn ) submitBtn.addEventListener("click", showResult);
-            if( nirdeshBtn ) nirdeshBtn.addEventListener("click", openFn);
+            if (closeOverlayBtn) closeOverlayBtn.addEventListener("click", closeFn);
+            if (prevBtn) prevBtn.addEventListener("click", prevQuestion);
+            if (nextBtn) nextBtn.addEventListener("click", nextQuestion);
+            if (submitBtn) submitBtn.addEventListener("click", showResult);
+            if (nirdeshBtn) nirdeshBtn.addEventListener("click", openFn);
 
         } catch (e) {
-            console.error( 'Adaptiv.ui :', e );
+            console.error('Adaptiv.ui :', e);
         }
     }
 
@@ -3714,15 +3733,15 @@ const Adaptiv = (() => {
     }
 
     const renderQuestion = (questionId, direction) => {
-        const level     = currentLevel;
-        const activity  = Activity.getDefine(questionId);
-        const lang      = activity?.lang ?? 'en';
-        const content   = activity?.content;
-        const data      = content?.levels;
+        const level = currentLevel;
+        const activity = Activity.getDefine(questionId);
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content;
+        const data = content?.levels;
         const skipOptions = content?.skipOptions ?? false;
         const skipQuestionSequence = content?.skipQuestionSequence ?? false;
-        const found     = (data || []).find( lvl => lvl.level === level );
-        const questLen  = found?.questions?.length || 0;
+        const found = (data || []).find(lvl => lvl.level === level);
+        const questLen = found?.questions?.length || 0;
         let realIndex = currentQuestion;
 
         __activity = activity;
@@ -3734,17 +3753,17 @@ const Adaptiv = (() => {
         const q = found?.questions?.[realIndex];
         currentQuizData = found?.questions || [];
 
-        ui(questionId, questLen );
+        ui(questionId, questLen);
 
-        if( userAnswersAdaptiv == undefined ) {
+        if (userAnswersAdaptiv == undefined) {
             userAnswersAdaptiv = new Array(questLen).fill(null);
-        } else if( userAnswersAdaptiv.length !== questLen ) {
+        } else if (userAnswersAdaptiv.length !== questLen) {
             const newArr = new Array(questLen).fill(null);
-            for (let i=0;i<Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
+            for (let i = 0; i < Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
                 newArr[i] = userAnswersAdaptiv[i];
             }
             userAnswersAdaptiv = newArr;
-        }        
+        }
 
         const container = document.getElementById("quizContainerAdaptiv");
         if (!container) return;
@@ -3782,22 +3801,22 @@ const Adaptiv = (() => {
 
         const __renderQuestionText = (data) => {
 
-            const imageData  = data?.images ?? {};
-            const imagePath  = imageData?.path ?? [];
+            const imageData = data?.images ?? {};
+            const imagePath = imageData?.path ?? [];
             const imageStyle = imageData?.style ?? [];
-            const text       = data?.text ?? '';
+            const text = data?.text ?? '';
 
-            if( !text && !imagePath.length ) return '';
+            if (!text && !imagePath.length) return '';
 
-            if( !imagePath.length ) return text;
+            if (!imagePath.length) return text;
 
             const __image = (index) => {
-                const src   = imagePath[index];
+                const src = imagePath[index];
                 const style = imageStyle[index] ?? null;
 
                 const w_h_style = !style
-                                    ? `height:50px;width:50px;`
-                                    : `height:${style.height};width:${style.width};`;
+                    ? `height:50px;width:50px;`
+                    : `height:${style.height};width:${style.width};`;
                 // ..
 
                 return `
@@ -3815,19 +3834,19 @@ const Adaptiv = (() => {
             return text.replace(regex, () => __image(index++));
         }
 
-        const questionText = ( q?.question && typeof q?.question === 'string' ) 
+        const questionText = (q?.question && typeof q?.question === 'string')
             ? q.question
             : __renderQuestionText(q.question);
         // ..
 
-         const imageAboveOption = ( q?.imageAboveOption && q?.imageAboveOption?.image != '' ) ?
-                    `
+        const imageAboveOption = (q?.imageAboveOption && q?.imageAboveOption?.image != '') ?
+            `
                         <div class="text-center my-1">
                             <img src="${Activity.pathToCWD()}${q.imageAboveOption.image}" style="width :${q.imageAboveOption.width ?? '150px'};">
                         </div>
                     ` : '';
         // ..
-        
+
         const popupLabels = Activity.translatePopupLabels(lang);
 
         container.innerHTML = `${questionText != ''
@@ -3884,8 +3903,8 @@ const Adaptiv = (() => {
                 ` : ''
             }
         `;
-        
-        if( !skipOptions ) {
+
+        if (!skipOptions) {
             Array.from(document.querySelectorAll('.option-btnAdpt')).forEach((optionEl) => {
                 optionEl.addEventListener("click", (ev) => {
                     const idxAttr = optionEl.getAttribute('data-option-index');
@@ -3949,9 +3968,9 @@ const Adaptiv = (() => {
     };
 
     const prevQuestion = () => {
-        if( currentQuestion > 0 ) {
+        if (currentQuestion > 0) {
             currentQuestion--;
-            renderQuestion(Activity.getQid( `.${headerContainer}` ), 'prev');
+            renderQuestion(Activity.getQid(`.${headerContainer}`), 'prev');
         }
         updateNavButtons();
     }
@@ -3972,7 +3991,7 @@ const Adaptiv = (() => {
 
         if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
         if (nextBtn && subBtn) {
-            if (isLast && ( allAnswered || skipOptions ) ) {
+            if (isLast && (allAnswered || skipOptions)) {
                 nextBtn.style.display = 'none';
                 subBtn.style.display = 'inline-block';
             } else {
@@ -3984,12 +4003,12 @@ const Adaptiv = (() => {
 
     const showResult = () => {
         try {
-            const activity    = Activity.getDefine(Activity.getQid( `.${headerContainer}` )) ?? {};
-            const lang        = activity?.lang ?? 'en';
-            const content     = activity?.content ?? {};
-            const levels      = content?.levels ?? [];
-            const skiplevels  = content?.skiplevels ?? false;
-            const skipansbtn  = content?.skipanswerbutton ?? false;
+            const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
+            const levels = content?.levels ?? [];
+            const skiplevels = content?.skiplevels ?? false;
+            const skipansbtn = content?.skipanswerbutton ?? false;
             const skipnextbtn = content?.skipnextlevel ?? false;
             const skipOptions = __activity?.content?.skipOptions ?? false;
 
@@ -4066,7 +4085,7 @@ const Adaptiv = (() => {
                 }
                     </div>
                 </div>`;
-            
+
             const btnNextLevel = document.getElementById('btn-next-level');
             const btnRetry = document.getElementById('btn-retry');
             const btnShowAnswers = document.getElementById('btn-show-answers');
@@ -4096,7 +4115,7 @@ const Adaptiv = (() => {
             showResultPending = false;
             $(".instruc").hide();
             $(".submit-info").hide();
-            
+
             const hideBtn = document.getElementById("btn-next-level");
             if (finished && showNextLevel) {
                 if (hideBtn) hideBtn.style.display = 'none';
@@ -4119,8 +4138,8 @@ const Adaptiv = (() => {
     const loadNextLevel = () => {
         const levelTextEl = document.getElementById("levelText");
         if (levelTextEl) levelTextEl.style.display = 'block';
-        if( currentLevel < 3 )currentLevel++;
-        
+        if (currentLevel < 3) currentLevel++;
+
         if (currentLevel === 2 && typeof quizDataLevelB !== 'undefined') currentQuizData = quizDataLevelB;
         if (currentLevel === 3 && typeof quizDataLevelC !== 'undefined') currentQuizData = quizDataLevelC;
         currentQuestion = 0;
@@ -4131,8 +4150,8 @@ const Adaptiv = (() => {
         if (navButtonsEl) navButtonsEl.style.display = "block";
         const levelUpdateEl = document.querySelector(".levelUpdate");
         if (levelUpdateEl && typeof levelHeadings !== 'undefined') levelUpdateEl.textContent = levelHeadings[currentLevel];
-        
-        renderQuestion(Activity.getQid( `.${headerContainer}` ));
+
+        renderQuestion(Activity.getQid(`.${headerContainer}`));
         updateAttemptedCount();
         $(".instruc").show();
         $(".submit-info").show();
@@ -4281,7 +4300,7 @@ const Adaptiv = (() => {
     }
 
     return {
-        render:renderQuestion,
+        render: renderQuestion,
         userAnswersAdaptiv,
         currentLevel,
         currentQuestion,
@@ -4312,7 +4331,11 @@ const DropDown = (() => {
             const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                <div class="mcqOuterScorV2_">
+                                <img class="backImgsM1" draggable="false" src="images/dd.png"/>
+                                <div class="question ddMianBackV2">
+                                <div class="question ddMainV2">
                                     <div class="container">
                                         <div class="qSections">
                                             <div class="questHindi ${Define.get('head')}"></div>
@@ -4325,7 +4348,9 @@ const DropDown = (() => {
                                         <button class="reset-btn">${buttonLabel.try}</button>
                                     </div>
                                 </div>
-                                <div class="reportTBl" id="commonReport">
+                                
+                            </div>
+                            <div class="reportTBl" id="commonReport">
                                     <div class="reportBox">
                                         <div class="holdWhite">
                                         <div class="headerRep">
@@ -4339,7 +4364,8 @@ const DropDown = (() => {
                                         <div id="reportBoxRender"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                        </div>`;
             // ..
 
             const submitBtn = parent.querySelector('.submit-btn');
@@ -4597,7 +4623,11 @@ const Circle = (() => {
             const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                <div class="match1Back">
+                    <img class="backImgsM1" draggable="false" src="images/dd.png"/>
+                    <div class="onTheImagesClickToC">
+                            <div class="question clickToCMainV2">
                                     <div class="container" id="${dataKey}">
                                         <div class="${quesClass}">
                                             <div class="questHindi ${Define.get('head')}"></div>
@@ -4610,7 +4640,8 @@ const Circle = (() => {
                                         </div>
                                     </div>
                                 </div>
-                                <div id="clickAct">
+                           </div>
+                          <div id="clickAct">
                                     <div class="baseFixeds">
                                         <div class="report_clicks">
                                         <div
@@ -4621,7 +4652,9 @@ const Circle = (() => {
                                         <div id="datapendReportClick"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                </div>`
+                ;
             // ..
 
             const submitBtn = parent.querySelector('.submit-btn');
@@ -4657,8 +4690,8 @@ const Circle = (() => {
         renderDiv.innerHTML = "";
 
         const activity = Activity.getDefine(questionId);
-        const content  = activity?.content;
-        const lang     = activity?.lang ?? 'en';
+        const content = activity?.content;
+        const lang = activity?.lang ?? 'en';
         const disableBefore = activity?.config?.disableCircleBefore;
 
         if (!Array.isArray(content)) {
@@ -4937,7 +4970,11 @@ const ShravanKaushal = (() => {
             const buttonLabel = Activity.translateButtonLabels(lang);
             const nextPrevLabel = Activity.translateNextPrevLabel(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                 <div class="match1Back">
+                    <img class="backImgsM1" draggable="false" src="images/skills.png"/>
+                    <div class="lesionSkills">
+                             <div class="question">
                                     <audio id="audioPlayer" preload="auto"></audio>
                                     <div class="startActBtns">
                                         <div class="play-btn" role="button" tabindex="0">
@@ -4963,7 +5000,9 @@ const ShravanKaushal = (() => {
                                         </div>
                                     </div>
                                 </div>
-                                <div id="clickActShravan" style="display:none;">
+                               
+                            </div>
+                             <div id="clickActShravan" style="display:none;">
                                     <div class="baseFixeds">
                                         <div class="report_shravan">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -4974,7 +5013,8 @@ const ShravanKaushal = (() => {
                                             <div class="ansViews"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                    </div>`;
             // ..
 
             const closeBtn = document.getElementById(btnid);
@@ -5251,7 +5291,11 @@ const TrueAndFalse = (() => {
             const audio = activity?.add_content?.audio ?? false;
             const audioSrc = audio != false ? audio : '';
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+            <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/tnf.png"/>
+                    <div class="onTheImagesFill2 mtopTnf">
+                <div class="question">
                                     <div class="container">
                                         ${audioSrc ?
                     `<div class="common_listening_container" id="listening_container">
@@ -5261,7 +5305,7 @@ const TrueAndFalse = (() => {
                                             </div>`: ''
                 }
                                         <div id="question_header_container" ${(audioSrc || !activity.head) ? `style="display: none"` : ''}>
-                                            <div class="qSections row g-0 mt-3">
+                                            <div class="qSections row g-0">
                                                 <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
                                                 ${audioSrc ?
                     `<div class="col-auto" id="listening_common_audio_container">
@@ -5288,7 +5332,10 @@ const TrueAndFalse = (() => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="popupDialogAns">
+                                    
+                                </div>
+                            </div>
+                            <div id="popupDialogAns">
                                         <div class="baseMod">
                                             <div class="answerdiv">
                                                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -5299,7 +5346,7 @@ const TrueAndFalse = (() => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>`;
+                        </div>`;
             // ..
 
             const inputEl = document.getElementById(inputDataId);
@@ -5401,15 +5448,31 @@ const TrueAndFalse = (() => {
             }
 
             const html = `
-                <div class="row m-0 mb-3 question-block ${isImage_Text ? 'align-items-center' : ''}">
+                <div class="row m-0  question-block align-items-center trueAndFalseQuestBlocks">
                     <div style="width:40px">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</div>
                     <div class="col p-0">
-                        <div class="row m-0 ${isImage_Text ? 'align-items-center' : ''}">
-                            <div class="col-lg-7 col-md-7 col-sm-8 col-10 p-0">&nbsp; ${question}</div>
-                            <div class="col-auto options mb-2">
-                                <button class="btn btn-sm btn-outline-success tnfBtn" data-answer="true" data-ind="${ind}">${btnLabels[0]}</button>
-                                <button class="btn btn-sm btn-outline-danger tnfBtn" data-answer="false" data-ind="${ind}">${btnLabels[1]}</button>
-                            </div>
+                        <div class="row m-0 align-items-center ">
+                            <div class="col-9 p-0">&nbsp; ${question}</div>
+                           <div class="col-auto options tnfOptionsRowV2">
+                            <button class="btn btn-sm tnfBtn trueBtnAct"
+                                data-answer="true"
+                                data-ind="${ind}">
+                                <span>
+                                    <span class="emojiBtn">✔</span>
+                                    TRUE
+                                </span>
+                            </button>
+
+                            <button class="btn btn-sm tnfBtn falseBtnAct"
+                                data-answer="false"
+                                data-ind="${ind}">
+                                <span>
+                                    <span class="emojiBtn">✖</span>
+                                    FALSE
+                                </span>
+                            </button>
+
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -5431,6 +5494,9 @@ const TrueAndFalse = (() => {
 
         Activity.initMathJax();
     }
+    // ACTIVE BUTTON EFFECT
+
+
 
     const selectAnswer = (thisObj) => {
         const ind = $(thisObj).attr('data-ind');
@@ -5438,8 +5504,8 @@ const TrueAndFalse = (() => {
         userAns[ind] = answer;
 
         const btnGroup = thisObj.parentElement.querySelectorAll("button");
-        btnGroup.forEach(b => b.classList.remove("active"));
-        thisObj.classList.add("active");
+        btnGroup.forEach(b => b.classList.remove("activeBtn"));
+        thisObj.classList.add("activeBtn");
         checkIfAllAttempt();
     }
 
@@ -5461,22 +5527,23 @@ const TrueAndFalse = (() => {
 
             const opt1ans = opt1.attr('data-answer');
 
-            $(`.options`).eq(index).children('button').removeClass('active');
+            $(`.options`).eq(index).children('button').removeClass('activeBtn');
 
             if (item.answer === (opt1ans === 'true')) {
-                $(opt1).removeClass('active').addClass('active');
+                $(opt1).removeClass('activeBtn').addClass('activeBtn');
             } else {
-                $(opt2).addClass('active');
+                $(opt2).addClass('activeBtn');
             }
         })
     }
 
     const resetTrueFalse = () => {
         const questions = Activity.getDefine(Activity.getQid(`#${inputDataId}`))?.content || [];
-        $(".tnfBtn").removeClass('active');
+        $(".tnfBtn").removeClass('activeBtn');
         $(`.options`).css('pointer-events', 'all');
         userAns = new Array(questions.length).fill(null);
         $(`#submit4`).addClass('disable');
+
     }
 
     const showPopUp = () => {
@@ -5595,7 +5662,11 @@ const DragAndDrop = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+            <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/DND1.png"/>
+                    <div class="onTheImagesFill3">
+                         <div class="question">
                                 <div class="container">
                                     <div class="rowWithAudios">
                                         <p class="questLine"> 
@@ -5620,7 +5691,10 @@ const DragAndDrop = (() => {
                                             <button class="reset-btn">${buttonLabel.try}</button>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
             // ..       
 
             const checkBtn = parent.querySelector('.submit-btn');
@@ -5675,7 +5749,7 @@ const DragAndDrop = (() => {
             };
 
             headings.forEach((item) => {
-                const html = `<div class="col-md-${col.md} col-sm-${col.sm} col-${col.om}">
+                const html = `<div class="col-md-${col.md} col-sm-${col.sm} col-12 ">
                                 <div class="wh1">
                                     ${(item.text != '' && item.text) ? `<div class="headingsDND">${item.text}</div>` : ''}
                                     <div class="dropSect" data-accept="${item.accept}"></div> 
@@ -5910,7 +5984,11 @@ const DragAndDropMulti = (() => {
             const audio = content?.audio ?? false;
             const audioSrc = audio != false ? audio : '';
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+            <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
+                    <div class="onTheImagesFill2 mtopv2 p-0">
+            <div class="question">
                                     <div class="container">
                                         ${audioSrc ?
                     `<div class="common_listening_container" id="listening_container">
@@ -5936,9 +6014,9 @@ const DragAndDropMulti = (() => {
                                         </div>
                                         <div id='question-container-box' ${audioSrc ? `style="display: none"` : ''}>
                                             <div class="mcq-context p-1"></div>
-                                            <div class="question-block position-relative">
-                                                <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
-                                                <div class="drag-question-box2 mt-3"></div>
+                                            <div class="question-block position-relative ">
+                                                <div class="dragItems drag-container2 " id="${containerId}" data-qid="${questionId}"></div>
+                                                <div class="drag-question-box2 mt-3 "></div>
                                             </div>
                                             ${!singleQuestionMode ? `
                                                     <div class="buttons machiNgs">
@@ -5951,7 +6029,8 @@ const DragAndDropMulti = (() => {
                                         </div>
                                     </div>
                                 </div>
-                                <div id="popupDialogAns">
+                            </div>
+                             <div id="popupDialogAns">
                                     <div class="baseMod">
                                         <div class="answerdiv">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -5961,7 +6040,8 @@ const DragAndDropMulti = (() => {
                                             <div id="answer-review"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                        </div>`;
             // ..
 
             const submitBtn = parent.querySelector('.submit-btn');
@@ -6105,7 +6185,7 @@ const DragAndDropMulti = (() => {
                     </tr>
                 `;
                 table.push(body);
-            });            
+            });
         }
 
         const tableBodyL = `</tbody></table></div>`;
@@ -6223,7 +6303,7 @@ const DragAndDropMulti = (() => {
             const mergedOptions = Activity.shuffleArray([...new Set([...options, ...addOptions])] || []) || [];
             mergedOptions.forEach((item, ind) => {
                 const html = drag_option_html(item, ind);
-                if( !html ) return null;
+                if (!html) return null;
                 optionHtml.push(html);
             });
             $('.drag-container2').html(optionHtml.join(''));
@@ -6233,11 +6313,11 @@ const DragAndDropMulti = (() => {
             const options = [];
             quesOptions.map((item, ind) => {
                 const html = drag_option_html(item, ind);
-                if( !html ) return null;
+                if (!html) return null;
                 options.push(html);
             });
             const html = `
-                <div class="row g-0 my-3 align-items-center">
+                <div class="row g-0 my-3 align-items-center ">
                     <div class="col-auto me-1">
                         (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
                     </div>
@@ -6257,7 +6337,7 @@ const DragAndDropMulti = (() => {
 
                 const html = `
                     <div class="my-2 p-1">
-                        <div class="row g-0 border rounded h-100 p-2">
+                        <div class="row g-0 border rounded h-100 p-2 ">
                             <div class="col-auto me-1 d-flex align-items-center">
                                 (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
                             </div>
@@ -6428,7 +6508,7 @@ const DragAndDropMulti = (() => {
                 const mergedOptions = Activity.shuffleArray([...new Set([...options, ...addOptions])] || []) || [];
                 mergedOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
-                    if( !html ) return null;
+                    if (!html) return null;
                     optionHtml.push(html);
                 });
                 $('.drag-container2').html(optionHtml.join(''));
@@ -6439,7 +6519,7 @@ const DragAndDropMulti = (() => {
                 const uniqueOptions = [...new Set(options)];
                 uniqueOptions.forEach((item, ind) => {
                     const html = drag_option_html(item, ind);
-                    if( !html ) return null;
+                    if (!html) return null;
                     optionHtml.push(html);
                 });
                 $('.drag-container2').html(optionHtml.join(''));
@@ -6449,12 +6529,12 @@ const DragAndDropMulti = (() => {
             if (hasTypeSet) {
                 type_set?.answers.map((_, ind) => {
                     const html = `
-                        <div class="row g-0 my-3">
+                        <div class="row g-0 my-3 qblockRow">
                             <div class="col-auto me-2">
                                 (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
                             </div>
                             <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
-                                <div class="drop-Box dropBox_2 ui-droppable"></div>
+                                <div class="drop-Box dropBox_2 ui-droppable changeBorderV2"></div>
                             </div>
                         </div>
                     `;
@@ -6549,10 +6629,10 @@ const DragAndDropMulti = (() => {
 
     const __getQuestionData = () => {
         const questionId = Activity.getQid('#' + containerId);
-        const data       = Activity.getDefine(questionId);
-        const lang       = data?.lang ?? 'en';
-        const content    = data?.content ?? {};
-        const questions  = content?.questions ?? [];
+        const data = Activity.getDefine(questionId);
+        const lang = data?.lang ?? 'en';
+        const content = data?.content ?? {};
+        const questions = content?.questions ?? [];
 
         return {
             lang: lang,
@@ -6564,18 +6644,18 @@ const DragAndDropMulti = (() => {
     const __setGetUserAttemptedAns = (index) => {
         const answers = userAns.get(index);
 
-        if( !answers ) return null;
+        if (!answers) return null;
 
-        const question = document.querySelector( `div[data-queindex="${index}"]` );
-        if( !question ) return null;
+        const question = document.querySelector(`div[data-queindex="${index}"]`);
+        if (!question) return null;
 
-        for( const [index, value] of Object.entries(answers) ) {
+        for (const [index, value] of Object.entries(answers)) {
             const blank = question.querySelector(`div[data-blankindex="${index}"]`);
 
-            if( !blank ) return;
+            if (!blank) return;
 
             blank.dataset.val = value;
-            blank.innerHTML   = value;
+            blank.innerHTML = value;
         }
     }
 
@@ -6668,20 +6748,20 @@ const DragAndDropMulti = (() => {
 
     const __showAnswerPopupSingleType = () => {
 
-        const data      = __getQuestionData();
-        const lang      = data?.lang ?? 'en';
+        const data = __getQuestionData();
+        const lang = data?.lang ?? 'en';
         const questions = data?.questions ?? [];
 
         const popupLabels = Activity.translatePopupLabels(lang);
 
-        if( questions.length != userAns.size ) {
+        if (questions.length != userAns.size) {
             Swal.fire({
                 title: popupLabels.attemptAll,
                 icon: "error"
             });
             return;
         }
-        
+
         const strictMatch = data?.content?.strictMatch ?? false;
         const option_side = data?.content?.option_side ?? 'top';
 
@@ -6765,7 +6845,7 @@ const DragAndDropMulti = (() => {
     }
 
     const drag_option_html = (item, ind) => {
-        if( !item ) return null;
+        if (!item) return null;
 
         return `
             <div 
@@ -6799,15 +6879,15 @@ const DragAndDropMulti = (() => {
             $(selector).droppable({
                 revert: true,
                 drop: function (event, ui) {
-                    try{
+                    try {
                         const dragVal = ui.draggable.attr('data-ans');
                         const dataset = this.dataset;
                         const blankindex = dataset?.blankindex ?? 0;
                         $(this).html(dragVal).attr('data-val', dragVal);
 
-                        const index = Number($(this).parent().attr( 'data-queindex' ));
+                        const index = Number($(this).parent().attr('data-queindex'));
 
-                        if( !userAns.has( index ) ) userAns.set(index, {} );
+                        if (!userAns.has(index)) userAns.set(index, {});
 
                         userAns.get(index)[blankindex] = dragVal;
 
@@ -6816,7 +6896,7 @@ const DragAndDropMulti = (() => {
                         if (enableDragCheckSubmitBtn() == $(selector).length) {
                             $(`#submit2`).removeClass('disable');
                         }
-                    } catch( error ) {
+                    } catch (error) {
                         console.log(error)
                     }
                 }
@@ -6858,7 +6938,7 @@ const DragAndDropMulti = (() => {
     return {
         render: renderDataDND,
         answer: userAns,
-        show  : __showAnswerPopupSingleType
+        show: __showAnswerPopupSingleType
     }
 
 })();
@@ -6885,11 +6965,15 @@ const Sorting = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
-                                    <div class="container contAdapt shadow-lg" id="${containerId}">
+            parent.innerHTML = `
+                    <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/shorting.png"/>
+                            <div class="shortingMain">
+                                <div class="question">
+                                    <div class="container contAdapt" id="${containerId}">
                                         <div class="questionHeadingMCQ ${Define.get('head')}"></div>
                                         <div class="question-card justify-content-center animate__animated animate__fadeInDown animate__bounceInLeft" id="quizContainerAdaptiv">
-                                            <ul id="dragOptions" class="${sequenceClass}"></ul>
+                                            <ul id="dragOptions" class="${sequenceClass} ulBoxMain"></ul>
                                         </div>
                                         <div class="buttons machiNgs">
                                             <button class="submit-btn" id="submit2">${buttonLabel.check}</button>
@@ -6897,7 +6981,9 @@ const Sorting = (() => {
                                             <button class="reset-btn">${buttonLabel.try}</button>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                    </div>`;
             // ..
 
             const submitBtn = parent.querySelector('.submit-btn');
@@ -6950,7 +7036,7 @@ const Sorting = (() => {
         try {
             const seqHtml = [];
             seqArray.map((item) => {
-                const li = `<li draggable="true" data-text="${item}" class="ddg ${seqClass}">${item}</li>`;
+                const li = `<li draggable="true" data-text="${item}" class="ddg ${seqClass} liShortingBoxV2">${item}</li>`;
                 seqHtml.push(li);
             });
 
@@ -7079,7 +7165,7 @@ const Pdf = (() => {
     const ui = (questionId) => {
         try {
             const container = Define.get('questionContainer');
-            const parent    = document.querySelector(container);
+            const parent = document.querySelector(container);
 
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -7091,7 +7177,7 @@ const Pdf = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            const svgWidth   = 18;
+            const svgWidth = 18;
             parent.innerHTML = `<div class="question">
                                     <div class="container contAdapt py-0 shadow-lg" id="${containerId}">
                                         <div class="wrap">
@@ -7219,22 +7305,7 @@ const Pdf = (() => {
             const path = activity?.content?.pdf ? Activity.pathToCWD() + activity?.content?.pdf : '';
 
             if (!path) {
-                console.warn('Oops! The PDF file could not be found.');
-                return;
-            }
-
-            const response = await fetch(path, { method: 'HEAD' });
-            if ( !response.ok ) {
-                toggle_loader(false);
-
-                const containerClass = Define.get('questionContainer');
-                const container = document.querySelector(containerClass);
-
-                container.querySelector('.viewer').innerHTML = `
-                    <div class="p-3 rounded-3 border border-danger bg-danger-subtle text-danger-emphasis">
-                        Unable to load the PDF right now.
-                    </div>
-                `;
+                console.warn('No PDF path found');
                 return;
             }
 
@@ -7252,8 +7323,12 @@ const Pdf = (() => {
             }
 
             toggle_loader(true);
+            await Define.get('loadScript')('js/pdf.js');
+            await Define.get('loadScript')('js/pdf.worker.js');
 
-            window.pdfjsLib = await Helper.loadPdfJs();
+            if (window.pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/pdf.worker.js';
+            }
 
             const canvas = document.getElementById("pdfCanvas");
             const ctx = canvas.getContext("2d");
@@ -7265,18 +7340,16 @@ const Pdf = (() => {
             let scale = __scale();
             let rotation = 0;
 
-            const loadingTask = pdfjsLib.getDocument({
-                url: path
-            });
-
+            const loadingTask = pdfjsLib.getDocument(path);
             loadingTask.onProgress = (data) => {
                 if (data.total && data.loaded === data.total) toggle_loader(false);
             };
 
             try {
                 pdfDoc = await loadingTask.promise;
+                console.info('[OK] ', 'PDF loaded.');
             } catch (err) {
-                console.log( err );
+                console.info('[ERROR]', 'Failed to load PDF =>', err.message ?? err);
                 return;
             }
 
@@ -7385,10 +7458,14 @@ const Shabdkosh = (() => {
                 return;
             }
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                        <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/shabdkosh.png"/>
+                            <div class="shabdKoshMain">
+                                <div class="question">
                                     <div class="containe" id="${containerId}">
                                         <div class="rowWithAudios font18 fontBold mx-4 mb-4 ${Define.get('head')}"></div>
-                                        <div class="question-block mt-3">
+                                        <div class="question-block">
                                             <div class="tab-containerz">
                                                 <div class="tab-content mx-auto">
                                                     <div class="tab-buttons gap-3" id="tabButtons"></div>
@@ -7397,7 +7474,9 @@ const Shabdkosh = (() => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                        </div>`;
             // ..
 
             Activity.setHeader(questionId);
@@ -7686,7 +7765,11 @@ const Shrutlekh = (() => {
 
             const btnLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                     <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/shrutlekh.png"/>
+                            <div class="shabdKoshMain">
+                                <div class="question">
                                     <div class="qq-Box" id="${containerId}">
                                         <div class="play-btn">
                                             <div class="icon"></div>
@@ -7718,7 +7801,9 @@ const Shrutlekh = (() => {
                                             <div id="${responseAudioContId}"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                        </div>`;
             // ..
             Activity.setHeader(questionId);
             if (!Activity.setQid(`#${containerId}`, questionId)) return false;
@@ -7852,13 +7937,13 @@ const Shrutlekh = (() => {
             const content = activity?.content ?? {};
             const questions = content?.questions ?? [];
             const curQues = questions[questionIndex] ?? {};
-            const answer = curQues?.answer.toLowerCase();
+            const answer = curQues?.answer;
 
             let boxID;
             let boxInput;
             let correctCount = 0;
             $('.correction-input').each((ind, item) => {
-                if (item.value.toLowerCase() == answer) {
+                if (item.value == answer) {
                     correctCount++;
                     item.style.borderColor = 'green';
                 } else {
@@ -8093,10 +8178,16 @@ const WordSearch = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question word-searched">                                    
+            parent.innerHTML = `
+                    <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/wordSearch.png"/>
+                            <div class="onTheImagesFill2">
+                                <div class="question word-searched">                                    
                                     <div class="container" id="${containerId}">
                                         <div class="${Define.get('head')}"></div>
-                                        <div class="hints">${isqueSection_mainHeading}</div>
+                                        <div class="hints" style="${isqueSection_mainHeading ? 'display:block;' : 'display:none;'}">
+                                            ${isqueSection_mainHeading}
+                                        </div>
                                         <div class="divDisplay gap-3 justify-content-center ${que_side === 'top' || que_side === 'bottom' ? 'flex-column' : ''} ${que_side === 'bottom' ? 'flex-column-reverse' : que_side === 'right' ? 'flex-row-reverse' : ''}">
                                             <div id="${puzzleTextId}" class="text ${que_side === 'top' || que_side === 'bottom' ? 'w-100 d-flex justify-content-evenly flex-wrap' : ''}"></div>
                                             <div id="${puzzleContId}"></div>
@@ -8108,7 +8199,9 @@ const WordSearch = (() => {
                                         </div>
                                         <div class="note" id="${puzzleAnsId}" style="display:none;"></div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                    </div>`;
             // ..
 
             const resetBtn = parent.querySelector('.reset-btn');
@@ -8158,7 +8251,7 @@ const WordSearch = (() => {
 
                 let __acrossIndex = 1;
                 ques?.across.map((item, index) => {
-                    if( !item?.text && !item?.image ) return;
+                    if (!item?.text && !item?.image) return;
                     const html = `<div class="criss-item clues-text mb-1">
                                     ${__acrossIndex}. ${renderQuestion(item)}
                                 </div>`;
@@ -8171,14 +8264,14 @@ const WordSearch = (() => {
 
                 let __downIndex = 1;
                 ques?.down.map((item, index) => {
-                    if( !item?.text && !item?.image ) return;
+                    if (!item?.text && !item?.image) return;
                     const html = `<div class="criss-item clues-text mb-1">
                                     ${__downIndex}. ${renderQuestion(item)}
                                 </div>`;
                     puzzle.push(html);
                     __downIndex++;
                 });
-                
+
             } else {
                 col = Helper.defaultCol;
                 puzzle.push(`<div class='col-md-${col?.md} col-sm-${col?.sm} col-${col?.col}  ${queSection == undefined ? 'd-flex flex-wrap' : ''}'>`);
@@ -8511,8 +8604,7 @@ const WordSearch = (() => {
 const TextArea = (() => {
 
     const containerId = 'text-area-container';
-    const quesContId  = 'question-container';
-    let __questionID  = null; 
+    const quesContId = 'question-container';
 
     let shuffledQuestions;
 
@@ -8537,29 +8629,35 @@ const TextArea = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
-                                    <div class="container" id="${containerId}">
-                                        <h5 class="questionHeading mt-3 border-bottom pb-2 ${Define.get('head')}"></h5>
-                                        <div class="mcq-context p-1"></div>
-                                        <div id="short-answer-container" class="ps-1 pe-3">
-                                            <div id="${quesContId}" class="mb-2" style="font-size: 20px;"></div>
-                                        </div>
-                                        <div class="text-center">
-                                            <div class="buttons machiNgs">
-                                                <button class="submit-btn ${!showInput ? 'd-none' : ''}">${buttonLabel.check}</button>
-                                                <button class="show-btn">${!showInput ? 'उत्तर नमूना' : `${buttonLabel.show}`}</button>
-                                                <button class="reset-btn ${!showInput ? 'd-none' : ''}" >${buttonLabel.try}</button>
+            parent.innerHTML = `
+                        <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/textArea.png"/>
+                                <div class="textAreaOnImgs">
+                                    <div class="question">
+                                        <div class="container" id="${containerId}">
+                                            <h5 class="questionHeading mt-3 border-bottom pb-2 ${Define.get('head')}"></h5>
+                                            <div class="mcq-context p-1"></div>
+                                            <div id="short-answer-container" class="ps-1 pe-3">
+                                                <div id="${quesContId}" class="mb-2" style="font-size: 20px;"></div>
                                             </div>
-                                        </div>
-                                        <div id="popupDialogAns">
-                                            <div class="baseMod">
-                                                <div class="answerdiv">                                                    
-                                                    <div id="answerShowMCW"></div>
+                                            <div class="text-center">
+                                                <div class="buttons machiNgs">
+                                                    <button class="submit-btn ${!showInput ? 'd-none' : ''}">${buttonLabel.check}</button>
+                                                    <button class="show-btn">${!showInput ? 'उत्तर नमूना' : `${buttonLabel.show}`}</button>
+                                                    <button class="reset-btn ${!showInput ? 'd-none' : ''}" >${buttonLabel.try}</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                                 <div id="popupDialogAns">
+                                        <div class="baseMod">
+                                            <div class="answerdiv">                                                    
+                                                <div id="answerShowMCW"></div>
+                                            </div>
+                                        </div>
+                                 </div>
+                        </div>`;
             // ..
 
             Activity.setHeader(questionId);
@@ -8576,17 +8674,9 @@ const TextArea = (() => {
         }
     };
 
-    const __autoResizeTextarea = (el) => {
-        el.style.height = "auto";
-        el.style.height = el.scrollHeight + "px";
-    }
-
     const render = (questionId) => {
         try {
-            __questionID = null;
-
             ui(questionId);
-            __questionID = questionId;
 
             const activity = Activity.getDefine(questionId);
             const content = activity?.content ?? {};
@@ -8669,7 +8759,9 @@ const TextArea = (() => {
             const replacement = content?.replacement ?? '#_#';
             let showInput = content?.showInput ?? true;
 
-            if( lang === 'en' ) showInput = true;
+            if (lang === 'en') {
+                showInput = true;
+            }
 
             shuffledQuestions = Activity.shuffleArray(content?.questions ?? []) ?? [];
 
@@ -8687,7 +8779,7 @@ const TextArea = (() => {
             });
             $('#' + quesContId).html(questions.join(''));
 
-            if( lang == 'hi' ) {
+            if (lang == 'hi') {
                 const inputs = $('#' + quesContId)[0].querySelectorAll('.hindiInput');
 
                 $.keyboard.layouts['hindi'] = Activity.hindiKeyboard();
@@ -8708,16 +8800,8 @@ const TextArea = (() => {
     };
 
     const resetAnswers = () => {
-        const activity = Activity.getDefine(__questionID) ?? {};
-        const lang     = activity.lang ?? 'en';
-
-        const textAreas = document.querySelectorAll('textarea.hindiInput');
-        if( textAreas ) textAreas.forEach(textArea => {
-            textArea.value = '';
-            __autoResizeTextarea(textArea);
-
-            if( lang == 'en' ) textArea.style.pointerEvents = 'all';
-        });
+        const input = document.querySelectorAll('textarea.hindiInput');
+        if (input) input.forEach(input => input.value = '');
         $('.submit-btn').removeClass('disable');
     };
 
@@ -8819,21 +8903,12 @@ const TextArea = (() => {
     };
 
     const showAnswers = () => {
-        const activity = Activity.getDefine(__questionID) ?? {};
-        const lang     = activity.lang ?? 'en';
-
-        const textAreas = document.querySelectorAll('textarea.hindiInput');
-        if( textAreas.length ) {
-            textAreas.forEach((textArea, ind) => {
-                const { index, flag, correct, user } = getAnswer(textArea, ind);
-                if( lang == 'en' ) textArea.style.pointerEvents = 'none';
-
-                textArea.value = correct;
-                $(textArea).slideDown({
-                    complete() {
-                        __autoResizeTextarea(this);
-                    }
-                });             
+        const inputs = document.querySelectorAll('textarea.hindiInput');
+        if (inputs.length) {
+            inputs.forEach((input, ind) => {
+                const { index, flag, correct, user } = getAnswer(input, ind);
+                input.value = correct;
+                $(input).slideDown();
             });
             $('.submit-btn').addClass('disable');
         }
@@ -8894,7 +8969,11 @@ const CrossWord = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            const uiHtml = `<div class="question">
+            const uiHtml = `
+                     <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/wp.png"/>
+                        <div class="wordPuzzleBox">
+                         <div class="question">
                             <div class="container" id="${containerId}">                                        
                                 <div class="cross-word-puzzle crossword-content" style="text-align:left;">
                                     <div class="${Define.get('head')}"></div>
@@ -8911,8 +8990,10 @@ const CrossWord = (() => {
                                         </div>
                                     </div>
                                 </div>
+                                </div>
                             </div>
-                        </div>`;
+                         </div>
+                     </div>`;
             // ..
             parent.innerHTML = uiHtml;
 
@@ -9033,7 +9114,7 @@ const CrossWord = (() => {
                             nums.push(item.sequence);
                         }
                     }
-                    
+
                     for (let i = 0; i < vertical.length; i++) {
                         const item = vertical[i];
                         const rowStart = startOf(item.row);
@@ -9272,7 +9353,7 @@ const CrossWord = (() => {
                     const rStart = Array.isArray(q.row) ? q.row[0] : q.row;
                     [...answer].forEach((_, i) => {
                         const r = rStart + i;
-                        const selector =`#puzzle2 table tr:nth-child(${r}) td:nth-child(${c}) input.box`;
+                        const selector = `#puzzle2 table tr:nth-child(${r}) td:nth-child(${c}) input.box`;
                         const input = document.querySelector(selector);
                         if (input) {
                             userAnswer += (input.value || '').toUpperCase().trim();
@@ -9460,15 +9541,18 @@ const ShravanKaushalWithImages = (() => {
             const prevNextLabel = Activity.translateNextPrevLabel(lang);
             const isMain = content?.main ?? false;
 
-            const uiHtml = `<div class="question">
+            const uiHtml = `
+            <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/shravanKaushalWithPara.png"/>
+                        <div class="ShravanKaushalWithParaBox">
+                     <div class="question">
                                 <div class="container shrawan-kaushal" id="${containerId}">
                                     <div class="listen-activity-container ${!isMain ? 'd-none' : ''}">
                                         <div class="play-btn">
                                             <div class="icon"></div>
                                         </div>
                                     </div>
-                                    ${
-                                        isMain ? `
+                                    ${isMain ? `
                                             <div class="poem-sec" style="display:none;">
                                                 <div class="my-3 container" id="questionTitle">
                                                     <b class="${Define.get('head')}"></b>
@@ -9487,13 +9571,12 @@ const ShravanKaushalWithImages = (() => {
                                                 </div>
                                             </div>
                                         ` : ''
-                                    }
+                }
                                     <div class="question-sec" style="${activity.content?.main != undefined ? "display:none" : 'display:block'}">
                                         <div class="container contListen">
                                             <div class="my-3 container" id="questionTitle">
                                                 <b class="${Define.get('head')}"></b>
-                                                ${
-                                                    isMain ? `
+                                                ${isMain ? `
                                                         <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn common_playBtn" viewBox="0 0 16 16">
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
                                                         </svg>
@@ -9501,7 +9584,7 @@ const ShravanKaushalWithImages = (() => {
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5" />
                                                         </svg>
                                                     `: ''
-                                                }
+                }
                                             </div>
                                             <div id="mcqContainer"></div>
                                             <div class="listen-buttonection">
@@ -9515,7 +9598,9 @@ const ShravanKaushalWithImages = (() => {
                                         </div>
                                     </div>
                                 </div>
-                                <div id="popupDialogAns" style="display: none;">
+                            </div>
+                        </div>
+                        <div id="popupDialogAns" style="display: none;">
                                     <div class="baseMod">
                                         <div class="answerdiv">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -9526,7 +9611,7 @@ const ShravanKaushalWithImages = (() => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>`;
+                    </div>`;
             // ..
 
             parent.innerHTML = uiHtml;
@@ -9917,15 +10002,15 @@ const ShravanKaushalWithImages = (() => {
         questions?.forEach((q, index) => {
             const selected = userAnswers[index];
             userTextAns.push({
-                text  : q?.options[selected]?.text ?? undefined,
-                image : q?.options[selected]?.image ?? undefined,
-                qInd  : index
+                text: q?.options[selected]?.text ?? undefined,
+                image: q?.options[selected]?.image ?? undefined,
+                qInd: index
             });
 
             correctTextAns.push({
-                text  : q?.options[q?.answer]?.text ?? undefined,
-                image : q?.options[q?.answer]?.image ?? undefined,
-                qInd  : index
+                text: q?.options[q?.answer]?.text ?? undefined,
+                image: q?.options[q?.answer]?.image ?? undefined,
+                qInd: index
             });
 
             // userTextAns.push(q.options[selected].text ?? q.options[selected].image);
@@ -9965,14 +10050,14 @@ const ShravanKaushalWithImages = (() => {
         table.push(tableHead);
 
         const __renderTextImage = (text, image) => {
-            if( !text && !image ) return '';
+            if (!text && !image) return '';
 
             const html = [];
-            if( text ) html.push( `<div class="col">${text}</div>` );
+            if (text) html.push(`<div class="col">${text}</div>`);
 
-            if( image ) {
+            if (image) {
                 const img = `
-                    ${ text 
+                    ${text
                         ? `<div class="text-end p-1 col-5">`
                         : '<div class="col p-1">'
                     }
@@ -9985,7 +10070,7 @@ const ShravanKaushalWithImages = (() => {
                     </div>
                 `;
                 // ..
-                html.push( img );
+                html.push(img);
             }
             return `
                 <div class="d-flex align-items-center">
@@ -10056,7 +10141,7 @@ const OnlyAudio = (() => {
     };
 
     const isYouTube = (u) => typeof u === "string" && (u.includes("youtube.com") || u.includes("youtu.be"));
-    const isSwaadhyayan = (u) => typeof u === "string" && (u.includes("swaadhyayan.com") );
+    const isSwaadhyayan = (u) => typeof u === "string" && (u.includes("swaadhyayan.com"));
 
     const extractYouTubeId = (url) => {
         if (!url) return null;
@@ -10100,9 +10185,13 @@ const OnlyAudio = (() => {
 
     const updatePlayButton = (playing) => {
         if (!state.playBtn) return;
-        state.playBtn.src = playing
-            ? "images/pause2.png"
-            : "images/play2.png";
+        if (playing) {
+            state.playBtn.src = "images/pause2.png"
+            $(".bar").addClass("starPlaying");
+        } else {
+            state.playBtn.src = "images/play2.png"
+            $(".bar").removeClass("starPlaying");
+        }
     };
 
     const startProgressLoop = () => {
@@ -10243,41 +10332,54 @@ const OnlyAudio = (() => {
             const description = content?.desc ?? defaultDesc;
 
             parent.innerHTML = `
-            <div class="question">
-                <div class="container">
-                    <div class="audio-music-bg"></div>
-                    <div class="container-sub">
-                        <div class="row g-0 justify-content-center audio-box">
-                            <div class="col-lg-11 col-md-10 col-sm-10 col-12 d-flex justify-content-center align-items-center">
-                                <div class="audio-container">
-                                    <div class="audio-banner">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" fill="#fff"
-                                        class="bi bi-music-note-beamed" viewBox="0 0 16 16">
-                                        <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
-                                        <path fill-rule="evenodd" d="M14 11V2h1v9zM6 3v10H5V3z" />
-                                        <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
-                                        </svg>
-                                    </div>
-                                    <div class="audio-name my-3">${description}</div>
-                                    <div>
-                                        <input type="range" class="w-100" id="seekSlider" min="0" max="100" value="0" step="0.1">
-                                        <div class="d-flex justify-content-between align-items-center progress-bar-seek">
-                                            <span id="currentTime">00:00</span>
-                                            <span id="duration">00:00</span>
-                                        </div>
-                                        <div id="oas-iframe-wrap" class="hidden-iframe d-none" aria-hidden="true"></div>
-                                        <div class="rowAudioBtns">
-                                            <img src="images/replay2.png" class="audio-replay-btn" id="replayBtn" alt="replay">
-                                            <div id="loader" style="display:none">Loading... 0%</div>
-                                            <img src="images/play2.png" class="w-25 play-icon" alt="play-pause" id="playPauseBtn">
-                                            <img src="images/replay2.png" class="audio-replay-btn invisible" alt>
+            <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/audioBgs.png"/>
+                    <div class="onTheImagesFill2 overtFHideV2">
+                    <div class="question" id="particle-container">
+                        <div class="container">
+                            <div class="audio-music-bg"></div>
+                            <div class="container-sub">
+                                <div class="row g-0 justify-content-center audio-box">
+                                    <div class="col-lg-12 col-md-10 col-sm-12 col-12 d-flex justify-content-center align-items-center">
+                                        <div class="audio-container">
+                                            <div class="audio-banner">
+                                               
+                                            </div>
+                                            <img src="images/audioIcons.png" class="audioIcons3D"/>
+                                            <!-- Music Icon -->
+                                                <!-- Wave Bars -->
+                                                <div class="wave">
+                                                    <div class="bar"></div>
+                                                    <div class="bar"></div>
+                                                    <div class="bar"></div>
+                                                    <div class="bar"></div>
+                                                    <div class="bar"></div>
+                                                    <div class="bar"></div>
+                                                    <div class="bar"></div>
+                                                    <div class="bar"></div>
+                                                </div>
+                                            <div class="audio-name my-3">${description}</div>
+                                            <div>
+                                                <input type="range" class="w-100" id="seekSlider" min="0" max="100" value="0" step="0.1">
+                                                <div class="d-flex justify-content-between align-items-center progress-bar-seek">
+                                                    <span id="currentTime">00:00</span>
+                                                    <span id="duration">00:00</span>
+                                                </div>
+                                                <div id="oas-iframe-wrap" class="hidden-iframe d-none" aria-hidden="true"></div>
+                                                <div class="rowAudioBtns">
+                                                    <img src="images/replay2.png" class="audio-replay-btn" id="replayBtn" alt="replay">
+                                                    <div id="loader" style="display:none">Loading... 0%</div>
+                                                    <img src="images/play2.png" class="play-icon playIconsAud" alt="play-pause" id="playPauseBtn">
+                                                    <img src="images/replay2.png" class="audio-replay-btn invisible" alt>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+            </div>
             </div>`;
 
             state.container = parent;
@@ -10298,19 +10400,33 @@ const OnlyAudio = (() => {
     const init = async (questionId) => {
 
         ui(questionId);
+        // Create floating particles dynamically
+        const container = document.getElementById("particle-container");
+
+        for (let i = 0; i < 40; i++) {
+            let particle = document.createElement("div");
+            particle.classList.add("particle");
+
+            particle.style.left = Math.random() * 100 + "%";
+            particle.style.top = Math.random() * 100 + "%";
+            particle.style.animationDuration = (Math.random() * 5 + 3) + "s";
+
+            container.appendChild(particle);
+        }
 
         const activity = Activity.getDefine(questionId) ?? {};
-        const content  = activity.content ?? {};
-        const src      = content?.src ?? null;
+        const content = activity.content ?? {};
+        const src = content?.src ?? null;
 
-        if( !src ) return null;
+        if (!src) return null;
 
-        const source = ( isYouTube(src) || isSwaadhyayan(src) ) 
-                            ? src 
-                            : `${Activity.pathToCWD()}${src}`;
+        const source = (isYouTube(src) || isSwaadhyayan(src))
+            ? src
+            : `${Activity.pathToCWD()}${src}`;
         // ..
 
         state.playBtn.addEventListener("click", async () => {
+
             try {
                 if (state.mode === "file" && state.audioEl) {
                     if (state.audioEl.paused) await state.audioEl.play();
@@ -10319,6 +10435,7 @@ const OnlyAudio = (() => {
                     const st = state.__ytPlayer.getPlayerState();
                     if (st === YT.PlayerState.PLAYING) state.__ytPlayer.pauseVideo();
                     else state.__ytPlayer.playVideo();
+
                 } else {
                     await setupSource(source);
                     if (state.mode === "file" && state.audioEl) state.audioEl.play();
@@ -10472,19 +10589,24 @@ const VideoPlayer = (() => {
             const isYouTube = video?.youtube ?? false;
             const path = (video?.path && isYouTube) ? video?.path : Activity.pathToCWD() + video?.path;
 
-            const uiHtml = `<div class="question">
+            const uiHtml = `
+                     <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/vdoFrame.png"/>
+                        <div class="vdeoFrameBox">
+                            <div class="question">
                                 <div class="p-2 d-flex align-items-center justify-content-center" id="${containerId}" style="height:85vh !important;">
                                     ${`<iframe id="ytVideo" 
-                                            class="w-100 h-100"
+                                            class="videoSizeSetV2"
                                             src="${path}"
                                             frameborder="0"
-                                            allow="autoplay; fullscreen;"
-                                            allowfullscreen
+                                           
                                             style="background: #000">
                                         </iframe>`
-                                    }
+                }
                                 </div>
-                            </div>`;
+                            </div>
+                        </div>
+                    </div>`;
             // ..
             parent.innerHTML = uiHtml;
             Activity.setHeader(questionId);
@@ -10519,7 +10641,11 @@ const RachnatmakParaWithImages = (() => {
             const activity = Activity.getDefine(questionId) ?? {};
             const lang = activity?.lang ?? 'en';
 
-            const uiHtml = `<div class="question">
+            const uiHtml = `
+                    <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
+                        <div class="rachNatmalPara1V2">
+                            <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="menHeading ${Define.get('head')}"></div>
                                     <p class="nameOfTopic ${Define.get('subHead')}"></p>
@@ -10531,7 +10657,8 @@ const RachnatmakParaWithImages = (() => {
                 }
                                     <div class="textNormalRun"></div>
                                 </div>
-                                `;
+                               </div>
+                            </div> `;
             // ..
             parent.innerHTML = uiHtml;
             Activity.setHeader(questionId);
@@ -10615,31 +10742,36 @@ const RachnatmakWithKeyboard = (() => {
 
             const showInput = content?.showInput ?? true;
 
-            const uiHtml = `<div class="question">
+            const uiHtml = `
+                     <div class="match1Back">
+                         <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
+                            <div class="onTheImagesFill2 forHeightControl">
+                            <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="menHeading ${Define.get('head')}"></div>
                                     <div class="nameOfTopic ${Define.get('subHead')}"></div>
                                     <div id="activitiesRachnatmal"></div>
                                     <div class='clear'></div>
-                                    <div class="studentAnsBox" style="display:none;">
-                                        <div class="inForContRach animate__animated  animate__fadeInDown">
-                                            <div class="closeBtnsRachna">X</div>
-                                            <div class="studentOutPut"></div>
-                                        </div>
-                                    </div>
-                                    <div class="sampleBox" style="display:none;">
-                                        <div class="sampleAnsBox inForContRach animate__animated  animate__fadeInDown">
-                                            <div class="closeBtnsRachna closeAnsBox">X</div>
-                                            ${content.answer}
-                                        </div>
-                                    </div>
                                     <div class="buttons machiNgs">
                                         <button class="submit-btn ${!showInput ? 'd-none' : ''}">${buttonLabel.check}</button>
                                         <button class="show-btn">${!showInput ? 'उत्तर नमूना' : `${buttonLabel.show}`}</button>
                                         <button class="reset-btn ${!showInput ? 'd-none' : ''}">${buttonLabel.try}</button>
                                     </div>
-                                </div>
-                            `;
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sampleBox" style="display:none;">
+                                        <div class="sampleAnsBox inForContRach animate__animated  animate__fadeInDown">
+                                            <div class="closeBtnsRachna closeAnsBox">X</div>
+                                            ${content.answer}
+                                        </div>
+                                <div class="studentAnsBox" style="display:none;">
+                                        <div class="inForContRach animate__animated  animate__fadeInDown">
+                                            <div class="closeBtnsRachna">X</div>
+                                            <div class="studentOutPut"></div>
+                                        </div>
+                                    </div>
+                    </div>`;
             // ..
             parent.innerHTML = uiHtml;
             Activity.setHeader(questionId);
@@ -10816,14 +10948,14 @@ const RachnatmakWithKeyboard = (() => {
 
         studentBox.innerHTML = `
                 <div class='headingYourAns'>
-                    ${ lang == 'hi' ? 'आपके उत्तर' : 'Your Answers'} : 
+                    ${lang == 'hi' ? 'आपके उत्तर' : 'Your Answers'} : 
                 </div><br>
                 <span class='studentTextApp'>${studentText}</span><br><br>
                 <div class='scoreInRachNamat'>
-                    ${ lang == 'hi' 
-                        ? `आपको 100 में से ${score} अंक मिले हैं`
-                        : `You scored ${score} out of 100`
-                    }
+                    ${lang == 'hi'
+                ? `आपको 100 में से ${score} अंक मिले हैं`
+                : `You scored ${score} out of 100`
+            }
                     </div>`;
     }
 
@@ -10859,7 +10991,11 @@ const RachnatmakWithTabBtns = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            const uiHtml = `<div class="question">
+            const uiHtml = `
+                    <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
+                        <div class="onTheImagesFill2">
+                             <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
                                         <div class="wrapers">
@@ -10869,14 +11005,15 @@ const RachnatmakWithTabBtns = (() => {
                                                 <div class="rowRachnaButtons animate__animated animate__fadeInDown" id="dynamicTabs"></div>
                                                 <div class="showContentBox" id="dynamicContent"></div>
                                             </div>
-                                            <div class="readyLetterBox" id="readyLetterBox"></div>
                                             <div class="buttons machiNgs">
                                                 <button class="show-btn readyPatar">${lang == 'hi' ? 'उत्तर नमूना' : buttonLabel.show}</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                `;
+                            </div>
+                    </div>
+                    <div class="readyLetterBox" id="readyLetterBox"></div>`;
             // ..
             parent.innerHTML = uiHtml;
             Activity.setHeader(questionId);
@@ -10995,7 +11132,11 @@ const RachnatmakWithInputs = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            const uiHtml = `<div class="question">
+            const uiHtml = `
+                    <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
+                        <div class="onTheImagesFill2">
+                            <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
                                         <div class="wrapers">
@@ -11023,7 +11164,9 @@ const RachnatmakWithInputs = (() => {
                                         </div>
                                     </div>
                                 </div>
-                                `;
+                            </div>
+                        </div>
+                        `;
             // ..
             parent.innerHTML = uiHtml;
             Activity.setHeader(questionId);
@@ -11068,7 +11211,7 @@ const RachnatmakWithInputs = (() => {
                     `<textarea 
                                         data-type="left" id="leftValue_${index}"
                                         class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
-                                        placeholder="${content?.placeholder?.left ?? ""}" style="${lang == 'hi'? 'pointer-events: none;': ''}">
+                                        placeholder="${content?.placeholder?.left ?? ""}" style="${lang == 'hi' ? 'pointer-events: none;' : ''}">
                                     </textarea>`
                 }
                             </div>
@@ -11077,7 +11220,7 @@ const RachnatmakWithInputs = (() => {
                                     style="display:${colRight?.show ? "block" : "none"}">
                                     <textarea data-type="right" id="inputAns_${index}"
                                     class="form-control hindiInput fillAppli animate__animated animate__fadeInUp"
-                                    placeholder="${content?.placeholder?.right ?? ""}" style="${lang == 'hi'? 'pointer-events: none;': ''}"></textarea>
+                                    placeholder="${content?.placeholder?.right ?? ""}" style="${lang == 'hi' ? 'pointer-events: none;' : ''}"></textarea>
                                 </div>` : ''
                 }
                         </div>`;
@@ -11367,7 +11510,11 @@ const ClickOnImage = (() => {
             const buttonLabel = Activity.translateButtonLabels(lang);
 
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+            <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/imgClick.png"/>
+                     <div class="onTheImagesFill2">
+                        <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
                                         <div class="wrapers">
@@ -11382,7 +11529,8 @@ const ClickOnImage = (() => {
                                         </div>
                                     </div>
                                 </div>
-                                `;
+                        </div>
+                    </div>`;
             // ..
 
             Activity.setHeader(questionId);
@@ -11546,7 +11694,11 @@ const FillOnClick = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+             <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/imgClick.png"/>
+                     <div class="onTheImagesFill2">
+                        <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
                                         <div class="wrapers">                                            
@@ -11558,11 +11710,12 @@ const FillOnClick = (() => {
                                                 <button class="show-btn">${buttonLabel.show}</button>
                                                 <button class="reset-btn">${buttonLabel.try}</button>
                                             </div>
-                                            <div id="reportBoxReading" class="reportBoxReading"></div>
                                         </div>
                                     </div>
                                 </div>
-                                `;
+                        </div>
+                     </div>
+                 <div id="reportBoxReading" class="reportBoxReading"></div>`;
             // ..
 
             Activity.setHeader(questionId);
@@ -11744,7 +11897,11 @@ const Dictionary = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                 <div class="match1Back">
+                    <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
+                         <div class="onTheImagesFill2">
+                             <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="wrapers">
                                         <div class="menHeDic">
@@ -11760,7 +11917,9 @@ const Dictionary = (() => {
                                             <button class="reset-btn">${buttonLabel.try}</button>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                 </div>`;
             // ..
 
             Activity.setHeader(questionId);
@@ -11977,7 +12136,11 @@ const MentalMath = (() => {
                 ? (Activity.shuffleArray(questions) ?? [])
                 : questions;
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+               <div class="match1Back">
+                    <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
+                         <div class="onTheImagesFill2">
+            <div class="question">
                                     <div class="container" id="${containerId}">
                                         ${activity?.head
                     ?
@@ -11993,7 +12156,9 @@ const MentalMath = (() => {
                                         <div class="${dropOptionsMathCls}" id="optLoop"></div>
                                         <div class="${questionContentCls} shadow-sm"></div>
                                     </div>
-                                </div>`;
+                                </div>
+                        </div>
+                    </div>`;
             // ..
             Activity.setHeader(questionId);
 
@@ -12246,7 +12411,9 @@ const AudioAndVideoFromYoutube = (() => {
                 return;
             }
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                            <div class="mainBackVdoAduV2">
+                                <div class="question">
                                     <div class="container-fluid" id="${containerId}">
                                         <div class="row">
                                             <div class="col-md-3 col-sm-6 col-12">
@@ -12257,7 +12424,8 @@ const AudioAndVideoFromYoutube = (() => {
                                             <div class="col-md-9 col-sm-6 col-12" id="${playerViewId}"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>`;
             // ..
             __playerHtml();
 
@@ -12499,7 +12667,11 @@ const MathMoney = (() => {
                 return;
             }
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                        <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
+                             <div class="mathBackMainDivs">
+                                 <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="menHeDicMath">
                                             <div class="menHeadingMath ${Define.get('head')}"></div>
@@ -12508,7 +12680,9 @@ const MathMoney = (() => {
                                         <div id="${sectionViewId}" class="bill-wrapper d-block"></div>
                                         <div id="${tableViewId}" class="table-responsive mt-3 tblsMaths"></div>
                                     </div>
-                                </div>`;
+                                 </div>
+                            </div>
+                        </div>`;
             // ..
 
             Activity.setHeader(questionId);
@@ -12750,8 +12924,12 @@ const ShabdRachna = (() => {
 
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
-                                    <div class="container" id="${containerId}">                                        
+            parent.innerHTML = `
+                         <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
+                             <div class="mathBackMainDivs addAdvV2">
+                                <div class="question">
+                                    <div class="container-fluid" id="${containerId}">                                        
                                         <div class="nameofChapter d-block ${Define.get('head')}" style="width: ${headWidth};"></div>
                                             <div class="sabadRach">
                                                 <div class="headingTextSabad ${Define.get('subHead')}"></div>
@@ -12761,11 +12939,13 @@ const ShabdRachna = (() => {
                                                     <button class="show-btn">${buttonLabel.show}</button>
                                                     <button class="reset-btn">${buttonLabel.try}</button>
                                                 </div>
-                                                <div id="funnyReport" style="display: none;"></div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                             </div>
+                            <div id="funnyReport" style="display: none;"></div>
+                         </div>`;
             // ..
 
             const checkBtn = document.querySelector('.submit-btn');
@@ -13027,7 +13207,11 @@ const SpellCheck = (() => {
             const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                        <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
+                             <div class="mathBackMainDivs">
+                                <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="${quesClass}">
                                             <div class="questHindi ${Define.get('head')}"></div>
@@ -13051,7 +13235,9 @@ const SpellCheck = (() => {
                                         <div id="datapendReportClick"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                        </div>`;
             // ..
 
             const submitBtn = parent.querySelector('.submit-btn');
@@ -13129,24 +13315,24 @@ const SpellCheck = (() => {
         content?.questions.forEach((item, ind) => {
             const regex = new RegExp(`${replacement[0]}[^${replacement[0]}]+${replacement[replacement.length - 1]}[.,?!-]?|[^\\s]+[.,?!-]?`, "g");
 
-            if (!item?.text || !item?.answer ) return false;
+            if (!item?.text || !item?.answer) return false;
 
-            const parts   = item.text.match(regex);
+            const parts = item.text.match(regex);
             const answers = item.answer;
 
             let count = 0;
 
-            const partsToIgnore = [ '<br>' ];
+            const partsToIgnore = ['<br>'];
             const html = parts?.map((part, i) => {
-                if ( part.trim() === '' || part === ',' ) return part;
-                const match     = hasHashPhrases(replacement[0], part);
-                const word      = match ? part.replaceAll(replacement[0], '') : part;
+                if (part.trim() === '' || part === ',') return part;
+                const match = hasHashPhrases(replacement[0], part);
+                const word = match ? part.replaceAll(replacement[0], '') : part;
                 const data_word = match ? answers[count] : part;
-                const isSymbol  = /^[.,?!-]$/.test(part);
+                const isSymbol = /^[.,?!-]$/.test(part);
 
                 if (match) count++;
 
-                if( partsToIgnore.includes( word ) ) return word;
+                if (partsToIgnore.includes(word)) return word;
 
                 return `
                     <span 
@@ -13164,14 +13350,14 @@ const SpellCheck = (() => {
             renderDiv.innerHTML += `
                 <div class="questInC border-0" data-id="${item.id}">
                     ${content?.questions.length > 1 ?
-                        `<span class="label">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</span>` : ''
-                    }
+                    `<span class="label">(${Activity.translateBulletLabels({ lang: lang, ind: ind })})</span>` : ''
+                }
                     ${html}
                 </div>
             `;
 
             const input_container = document.createElement('div');
-            input_container.id    = "inputFlipToCir" + ind;
+            input_container.id = "inputFlipToCir" + ind;
             input_container.classList.add('questInC', 'row');
             input_container.style.border = "none";
 
@@ -13522,7 +13708,11 @@ const SpellItOut = (() => {
             const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                         <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
+                             <div class="mathBackMainDivs">
+                            <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="${quesClass}">
                                             <div class="questHindi ${Define.get('head')}"></div>
@@ -13546,7 +13736,9 @@ const SpellItOut = (() => {
                                         <div id="datapendReportClick"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                        </div>`;
             // ..
 
             const submitBtn = parent.querySelector('.submit-btn');
@@ -13784,7 +13976,11 @@ const VowelDragAndDrop = (() => {
             const lang = activity.lang ?? 'en';
             const buttonLabel = Activity.translateButtonLabels(lang);
 
-            parent.innerHTML = `<div class="question">
+            parent.innerHTML = `
+                         <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
+                             <div class="mathBackMainDivs">
+                                <div class="question">
                                     <div class="container">
                                         <div class="rowWithAudios font18 fontBold ${Define.get('head')}"></div>
                                         <div class="question-block">
@@ -13810,7 +14006,9 @@ const VowelDragAndDrop = (() => {
                                         <div id="datapendReportClick"></div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                        </div>`;
 
             const submitBtn = parent.querySelector('.submit-btn');
             const showBtn = parent.querySelector('.show-btn');
@@ -14262,26 +14460,32 @@ const VirtualTour = (() => {
 
             const toggleBtns = Activity.translateNextPrevLabel(lang);
 
-            parent.innerHTML = `<div class="question">
-                                    <div class="container w-75 mx-auto">
+            parent.innerHTML = `
+                             <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/vt.png"/>
+                             <div class="vtMainBacks">
+                                <div class="question">
+                                    <div class="container-fluid">
                                         <div class="p-2 rounded-3 border bg-light text-center ${Define.get('head')}"></div>
-                                        <div id="${containerId}" class="py-2 mt-2">
+                                        <div id="${containerId}" class="">
                                             ${questionsLength > 1
-                    ? `
-                                                    <div class="text-end">
-                                                        <button id="previousBtn" class="btn btn-outline-primary rounded m-1" disabled>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                                                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                                                            </svg>
-                                                            ${toggleBtns.prev}
-                                                        </button>
-                                                        <button id="nextBtn" class="btn btn-outline-primary rounded m-1" disabled>
-                                                            ${toggleBtns.next}
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
+                    ? `<div class="text-end navBtnWrapper mt-2">
+                                                <button id="previousBtn" class="nav3dBtn prev3dBtn" disabled>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                                        class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                                    </svg>
+                                                    <span>${toggleBtns.prev}</span>
+                                                </button>
+
+                                                <button id="nextBtn" class="nav3dBtn next3dBtn" disabled>
+                                                    <span>${toggleBtns.next}</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                                        class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
                                                 ` : ''
                 }
                                             <div class="question-content-container">
@@ -14291,7 +14495,9 @@ const VirtualTour = (() => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>
+                        </div>`;
             // ..
 
             __prevBtn = document.querySelector('#previousBtn');
@@ -14365,20 +14571,20 @@ const VirtualTour = (() => {
             const titleHtml =
                 title && (title.hasOwnProperty('main') || title.hasOwnProperty('sub'))
                     ? `
-                        <div class="question-text-container row g-0 gap-2 my-2 fs-5 align-items-start">
+                        <div class="question-text-container row g-0 gap-2  fs-5 align-items-start">
                             ${title?.main?.text && title.main.text != ''
                         ? `
                                     <div 
-                                        class="col-12 col-sm-3 p-3 fw-bold text-light text-uppercase rounded-3" 
-                                        style="${style().get.css.title}"
-                                    >${title.main.text}</div>
+                                        class="col-12 col-sm-3 p-3 fw-bold text-light text-uppercase rounded-3"                  
+                                    ><div class="frintBoxDesignVT2">${title.main.text}</div></div>
                                 ` : ''
                     }
                             ${title?.sub?.text && title.sub.text != ''
                         ? `
                                     <div 
-                                        class="col row g-0 align-items-center ${title?.sub?.classes ? title?.sub?.classes : ''} ${title?.main?.text ? '' : 'justify-content-center'} p-3"
-                                    >${title.sub.text}</div>
+                                        class="col row g-0 align-items-center  ${title?.main?.text ? '' : 'justify-content-center'} p-3"
+                                    >
+                                    <div class="vTSecondHeading">${title.sub.text}</div></div>
                                 ` : ''
                     }
                         </div>
@@ -14440,7 +14646,7 @@ const VirtualTour = (() => {
 
             containerHtml.innerHTML = currentQuestion.set?.images.map(obj => {
                 return `
-                    <div class="col-${col.col} col-md-${col.md} col-sm-${col.sm} p-3 text-center animate__animated animate__fadeInDown">
+                    <div class="col-12 col-md-${col.md} col-sm-${col.sm} p-3 text-center animate__animated animate__fadeInDown">
                         ${renderImage({ path: obj?.path, imageWidth: imageWidth, border: true })}
                         ${obj?.caption && obj?.caption != ''
                         ? captionTextView(obj.caption) : ''
@@ -14589,20 +14795,23 @@ const CircleAndUnderline = (() => {
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             parent.innerHTML = `
-                <div class="question">
-                    <div class="container cu position-relative contAdapt shadow-lg p-3" id="${containerId}">
-                        <div class="questionHeadingMCQ ${Define.get('head')}"></div>
-                        <div class="${Define.get('subHead')}"></div>
-
-                        <div class="sentence my-3" id="sentence"></div>
-
-                        <div class="buttons machiNgs">
-                            <button class="submit-btn">${buttonLabel.check}</button>
-                            <button class="show-btn">${buttonLabel.show}</button>
-                            <button class="reset-btn">${buttonLabel.try}</button>
+              <div class="match1Back">
+                <img class="backImgsM1" draggable="false" src="images/vt.png"/>
+                    <div class="vtMainBacks">
+                        <div class="question">
+                            <div class="container cu position-relative contAdapt p-3" id="${containerId}">
+                                <div class="questionHeadingMCQ ${Define.get('head')}"></div>
+                                <div class="${Define.get('subHead')}"></div>
+                                <div class="sentence my-3" id="sentence"></div>
+                                <div class="buttons machiNgs">
+                                    <button class="submit-btn">${buttonLabel.check}</button>
+                                    <button class="show-btn">${buttonLabel.show}</button>
+                                    <button class="reset-btn">${buttonLabel.try}</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+               </div>
             `;
 
             Activity.setHeader(questionId);
@@ -14625,8 +14834,8 @@ const CircleAndUnderline = (() => {
 
         ui(questionId);
 
-        const activity  = Activity.getDefine(questionId) ?? {};
-        const lang      = activity?.lang ?? 'en';
+        const activity = Activity.getDefine(questionId) ?? {};
+        const lang = activity?.lang ?? 'en';
         const questions = activity?.content?.questions ?? [];
 
         const container = document.querySelector('#sentence');
@@ -14652,8 +14861,8 @@ const CircleAndUnderline = (() => {
             }).join('');
 
             const bullet = Activity.translateBulletLabels({
-                lang : lang, 
-                ind  : qIndex
+                lang: lang,
+                ind: qIndex
             });
 
             return `
@@ -14684,17 +14893,17 @@ const CircleAndUnderline = (() => {
 
     const showMenu = (target, qIndex, index) => {
 
-        const qid    = Activity.getQid(`#${containerId}`);
+        const qid = Activity.getQid(`#${containerId}`);
         const define = Activity.getDefine(qid) ?? {};
         const config = define?.config ?? {};
         const menuOptions = config?.menuOptions ?? null;
 
-        const circle    = menuOptions?.circle ?? false;
+        const circle = menuOptions?.circle ?? false;
         const underline = menuOptions?.underline ?? false;
 
         const flag = !menuOptions || Object.keys(menuOptions).length === 0 || circle === underline;
 
-        if( flag ) {
+        if (flag) {
 
             removeMenu();
 
@@ -14740,18 +14949,18 @@ const CircleAndUnderline = (() => {
             }, 0);
         } else {
 
-            const class_circle    = 'cu-circle';
+            const class_circle = 'cu-circle';
             const class_underline = 'cu-underline';
 
-            const type = circle 
-                            ? class_circle 
-                            : underline
-                                ? class_underline
-                                : null;
+            const type = circle
+                ? class_circle
+                : underline
+                    ? class_underline
+                    : null;
             // ..
 
-            if( !type ) return;
-            
+            if (!type) return;
+
             applyStyle(target, type, qIndex, index);
         }
     };
@@ -15063,7 +15272,7 @@ const CustomTemplate = (() => {
         __containerID = __baseContainerID + questionId;
         const define = Activity.getDefine(questionId) ?? undefined;
 
-        if ( !define ) return;
+        if (!define) return;
 
         const isUI = __ui({
             html: define?.ui() ?? '',

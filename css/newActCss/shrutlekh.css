@@ -20,7 +20,7 @@
     margin: 20px auto;
     z-index: 2;
     transition: all 0.35s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);    
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     flex: 0 0 100px;
     display: inline-flex;
     justify-content: center;
@@ -175,7 +175,7 @@
     display: flex;
     text-align: center;
     margin: 0 auto;
-    gap: 30px;    
+    gap: 30px;
     width: 80%;
     overflow: auto;
 }
@@ -236,19 +236,19 @@
 }
 
 .qq-Box {
-    height: 84vh;
+    height: 56vh;
     overflow: auto;
     justify-content: center;
     align-items: center;
     display: flex;
 }
 
-.shrutlekh .correct-spell {   
+.shrutlekh .correct-spell {
     border-radius: 5px;
     background: #115f97;
     margin: 0 auto;
     color: #fff;
-    text-align: center;    
+    text-align: center;
     display: inline-block;
     padding: 5px 10px;
     font-size: 23px;

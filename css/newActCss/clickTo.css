@@ -23,7 +23,10 @@
     transform: scale(0.95);
     /* visual press effect */
 }
-
+.clickToCMainV2{
+    width: 90%;
+    margin: 0 auto;
+}
 /* Bounce Animation Keyframes */
 @keyframes hoverBounce {
     0% {
@@ -47,26 +50,129 @@
     }
 }
 
-/* QUESTION CONTAINER */
+/* ================= QUESTION CONTAINER ================= */
 .questInC {
-    font-size: 23px;
-    margin: 0;
-    color: #041d29;
-    border-bottom: 1px solid #dfdfdf;
-    padding: 15px 0;
-    transition: color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
     position: relative;
+    font-size: 20px;
+    margin: 6px 0;
+    color: #000000;
+    padding: 6px 17px;
+    border-radius: 40px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+
+    /* High Level Soft Gradient */
+    background: linear-gradient(135deg,
+            #ffffff,
+            #eef8ff,
+            #f4f7ff);
+
+    /* Premium Glow */
+    box-shadow:
+        0 8px 22px rgba(67, 100, 247, 0.12),
+        inset 0 2px 6px rgba(255, 255, 255, 0.9);
+    transition: all 0.35s ease;
+    /* backdrop-filter: blur(6px); */
 }
 
-/* Hover Animation for Questions (only visual) */
+/* Soft Highlight Layer */
+.questInC::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 40px;
+    /* background:
+        radial-gradient(circle at top left,
+            rgba(255, 255, 255, 0.8),
+            transparent 35%),
+
+        radial-gradient(circle at bottom right,
+            rgba(67, 100, 247, 0.08),
+            transparent 40%); */
+    pointer-events: none;
+}
+
+/* Premium Hover */
 .questInC:hover {
-    transform: translateY(-2px);
-    /* subtle lift */
-    color: #4364f7;
-    border-bottom-color: #4364f7;
+    transform: translateY(-3px) scale(1.01);
+
+    background: linear-gradient(135deg,
+            #ffffff,
+            #e9f4ff,
+            #edf1ff);
+
+    box-shadow:
+        0 14px 30px rgba(67, 100, 247, 0.18),
+        0 0 18px rgba(67, 100, 247, 0.12);
+
+    color: #2454ff;
+    border-color: rgba(67, 100, 247, 0.25);
 }
 
-/* Keyframes for text lift and glow */
+/* Optional Shine Effect */
+.questInC::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -30%;
+    width: 100px;
+    height: 220%;
+    background: rgba(255, 255, 255, 0.45);
+    transform: rotate(25deg);
+    animation: shineMove 5s linear infinite;
+}
+
+/* ================= CIRCLE STYLE ================= */
+.circle {
+    /* width: 42px; */
+    /* height: 42px; */
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 600;
+    color: #0f172a;
+
+    background: linear-gradient(145deg,
+            #ffffff,
+            #dff1ff);
+
+    border: 2px solid rgba(67, 100, 247, 0.2);
+
+    box-shadow:
+        0 6px 14px rgba(67, 100, 247, 0.14),
+        inset 0 2px 6px rgba(255, 255, 255, 0.9);
+
+    transition: all 0.3s ease;
+}
+
+/* Glow Hover */
+.circle:hover {
+    transform: scale(1.12);
+
+    background: linear-gradient(145deg,
+            #ffffff,
+            #cfe7ff);
+
+    box-shadow:
+        0 0 20px rgba(67, 100, 247, 0.35),
+        0 8px 20px rgba(67, 100, 247, 0.2);
+
+    color: #2454ff;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes shineMove {
+    0% {
+        left: -40%;
+    }
+
+    100% {
+        left: 140%;
+    }
+}
+
 @keyframes textHover {
     0% {
         transform: translateY(0) scale(1);
@@ -82,22 +188,6 @@
         transform: translateY(-2px) scale(1.02);
         color: #4364f7;
     }
-}
-
-.circle {
-    border: 1px solid #041d29;
-    color: #041d29;
-    padding: 8px;
-    border-radius: 50%;
-    display: inline-block;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Hover Glow for Circles */
-.circle:hover {
-    transform: scale(1.1);
-    /* visual effect only */
-    box-shadow: 0 0 15px rgba(67, 100, 247, 0.4);
 }
 
 @keyframes circleGlow {
@@ -266,9 +356,9 @@
 
 .disabled-click {
     pointer-events: none;
-    /* क्लिक disable */
+    /* Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â²Ã Â¤Â¿Ã Â¤â€¢ disable */
     opacity: 0.7;
-    /* थोड़ा fade दिखे */
+    /* Ã Â¤Â¥Ã Â¥â€¹Ã Â¤Â¡Ã Â¤Â¼Ã Â¤Â¾ fade Ã Â¤Â¦Ã Â¤Â¿Ã Â¤â€“Ã Â¥â€¡ */
 }
 
 .itemDisabled {
@@ -296,7 +386,9 @@
 .spell-out-font-23 {
     font-size: 23px;
 }
-
+#datClikToCir{
+    margin-bottom: 15px;
+}
 /* spell-it-out */
 
 @media (min-width:300px) and (max-width:880px) {

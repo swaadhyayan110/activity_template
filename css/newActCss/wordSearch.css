@@ -1,194 +1,442 @@
+/* ================= ULTRA HD KIDS WORD SEARCH STYLE ================= */
+
+/* IMPORT FONT LOOK */
 .qu_ {
   display: block;
-  margin: 2vw;
-  border-radius: 15px;
-  background: #fff;
+  margin: 1vw;
+  border-radius: 35px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.96), rgba(236,248,255,0.95)),
+    url("https://www.transparenttextures.com/patterns/cubes.png");
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   height: 93vh;
   overflow: auto;
+  padding: 24px;
+  border: 5px solid rgba(255,255,255,0.6);
+  box-shadow:
+    0 25px 60px rgba(0, 140, 255, 0.18),
+    0 10px 25px rgba(0,0,0,0.06),
+    inset 0 0 35px rgba(255,255,255,0.9);
+  position: relative;
+  animation: smoothFloat 7s ease-in-out infinite;
 }
 
-.word-searched .container-sub {
-  margin: 20px auto;
+/* HD GLOW */
+.qu_::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 35px;
+  padding: 2px;
+  background: linear-gradient(
+    130deg,
+    #00d9ff,
+    #4f7cff,
+    #00c3ff,
+    #6fe7ff
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0.7;
+  animation: borderGlow 6s linear infinite;
+}
+
+/* LIGHT ORBS */
+.qu_::after {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0,212,255,0.18), transparent 70%);
+  top: -120px;
+  right: -120px;
+  border-radius: 50%;
+  animation: orbMove 10s infinite alternate ease-in-out;
+  pointer-events: none;
+}
+
+/* ================= TITLE & TEXT ================= */
+
+.word-searched .questionText {
+  font-size: 24px;
+  font-family: 'Poppins';
+  font-weight: 800;
+  margin: 14px 0;
+  line-height: 1.6;
+  background: linear-gradient(
+    90deg,
+    #005bea,
+    #00c6fb,
+    #005bea
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shineText 6s linear infinite;
+  letter-spacing: 0.3px;
 }
 
 .word-searched .divDisplay .text {
-  font-size: 17px;
-  font-family: 'PoppinsLight';
-  color: #000;
-}
-
-.word-searched .questionText {
   font-size: 18px;
   font-family: 'Poppins';
-  color: #000;
-  margin: 11px 0;
+  color: #073b63;
+  /* font-weight: 700; */
+  text-shadow: 0 3px 10px rgba(0,174,255,0.2);
 }
+
+/* ================= HINT TITLE ================= */
 
 .word-searched .hints {
-  font-weight: 600;
-  color: #0a74da;
-  font-size: 20px;
-  margin: 12px 0px;
+  font-weight: 800;
+  color: #fff;
+  font-size: 21px;
+  margin: 14px 0;
+  padding: 12px 22px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(
+    135deg,
+    #00c6ff,
+    #0072ff
+  );
+  box-shadow:
+    0 12px 30px rgba(0, 140, 255, 0.35),
+    inset 0 0 12px rgba(255,255,255,0.35);
+  position: relative;
+  overflow: hidden;
 }
+
+/* SHINE */
+.word-searched .hints::before {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 180%;
+  background: rgba(255,255,255,0.35);
+  top: -30%;
+  left: -90px;
+  transform: rotate(25deg);
+  animation: shineMove 4s linear infinite;
+}
+
+/* ================= HINT ITEM ================= */
 
 .word-searched .hint-item {
-  padding: 10px 8px;
+  padding: 13px 18px;
   cursor: pointer;
   font-size: 17px;
-  font-family: 'PoppinsLight';
-  color: #000;
-  align-items: center;
-  justify-content: start;
-  text-align: left;
-  transition: all 0.35s ease;
+  font-family: 'Poppins';
+  font-weight: 600;
+  color: #083b55;
+  margin: 10px 0;
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, #ffffff, #eff9ff);
+  border: 2px solid rgba(0,183,255,0.15);
+  box-shadow:
+    0 10px 22px rgba(0,183,255,0.10),
+    inset 0 0 12px rgba(255,255,255,0.95);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
+
+/* GLOSS */
+.word-searched .hint-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -140%;
+  width: 80%;
+  height: 100%;
+  background: rgba(255,255,255,0.45);
+  transform: skewX(-20deg);
+  transition: 0.7s;
+}
+
+.word-searched .hint-item:hover::before {
+  left: 150%;
+}
+
+.word-searched .hint-item:hover {
+  transform: translateY(-6px) scale(1.03);
+  background:
+    linear-gradient(145deg, #00cfff, #0088ff);
+  color: #fff;
+  box-shadow:
+    0 18px 35px rgba(0,153,255,0.35),
+    0 0 20px rgba(0,183,255,0.5);
+}
+
+/* ================= PUZZLE CONTAINER ================= */
 
 .word-searched #puzzle table {
-  margin: auto;
-  border-collapse: collapse;
+  margin: 10px;
+  border-collapse: separate;
+  border-spacing: 6px;
+  padding: 18px;
+  border-radius: 30px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.92), rgba(233,248,255,0.88));
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 25px 50px rgba(0,174,255,0.14),
+    inset 0 0 20px rgba(255,255,255,0.95);
+  border: 3px solid rgba(255,255,255,0.5);
 }
 
-.word-searched .divDisplay {
-  display: flex;
-  justify-content: space-between;
-}
+/* ================= GRID BOX ================= */
 
 .word-searched #puzzle table td {
-  width: 35px;
-  height: 35px;
-  font-size: 14px;
+  width: 48px;
+  height: 48px;
   position: relative;
+  transition: all 0.3s ease;
 }
 
+/* LETTER INPUT */
 .word-searched #puzzle table td input {
   width: 100%;
   height: 100%;
-  background: #31cde2;
-  border: 1px solid #000;
+  border: none;
+  border-radius: 16px;
   text-transform: uppercase;
   text-align: center;
-  font-size: 14px;
-}
-
-.word-searched .note {
-  font-size: 22px;
-  border: 2px solid #F2B322;
-  padding: 10px;
-  border-radius: 10px;
-  margin: 20px;
-}
-
-.word-searched .popup-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.word-searched .popup-overlay.active {
-  display: flex;
-}
-
-.word-searched .popup-box {
-  background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-  position: absolute;
-  text-align: center;
-  animation: popupSlide 0.3s ease;
-  left: 31%;
-  top: 39%;
-  width: 20%;
-}
-
-.word-searched .close-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: #000;
-  color: #fff;
-  border: none;
-  width: 30px;
-  height: 30px;
   font-size: 20px;
-  border-radius: 50%;
-  cursor: pointer;
+  font-weight: 800;
+  /* color: #fff; */
+  background:
+    linear-gradient(145deg, #42dfff, #009dff);
+  box-shadow:
+    0 8px 18px rgba(0,153,255,0.30),
+    inset 0 0 12px rgba(255,255,255,0.35);
+  transition: all 0.35s ease;
 }
 
-.word-searched .open-btn {
-  margin: 30px;
-  padding: 10px 18px;
-  font-size: 16px;
-  cursor: pointer;
+/* 3D HOVER */
+.word-searched #puzzle table td input:hover {
+  transform: scale(1.12) rotate(-4deg);
+  background:
+    linear-gradient(145deg, #008cff, #0051ff);
+  box-shadow:
+    0 18px 35px rgba(0,102,255,0.35),
+    0 0 25px rgba(0,183,255,0.65);
 }
 
-@keyframes popupSlide {
-  from {
-    transform: scale(0.7);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+/* ACTIVE PRESS */
+.word-searched #puzzle table td input:active {
+  transform: scale(0.92);
 }
+
+/* ================= BUTTON STYLE ================= */
 
 .word-searched #puzzle input[type="button"] {
-  width: 35px;
-  height: 35px;
+  width: 44px;
+  height: 44px;
   border: none;
-  margin: 2px;
-  font-weight: 500;
-  background: #31cde2;
-  color: black;
+  /* margin: 3px; */
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  /* color: #fff; */
   cursor: pointer;
-  transition: all 0.2s ease;
+  background:
+    linear-gradient(145deg, #3ddfff, #008cff);
+  box-shadow:
+    0 8px 20px rgba(0,153,255,0.28);
+  transition: all 0.35s ease;
 }
 
 .word-searched #puzzle input[type="button"]:hover {
-  transform: scale(1.1);
+  transform: translateY(-5px) rotate(-3deg) scale(1.08);
+  background:
+    linear-gradient(145deg, #0066ff, #003cff);
+  box-shadow:
+    0 18px 35px rgba(0,102,255,0.35),
+    0 0 18px rgba(0,183,255,0.6);
 }
+
+/* ================= NOTE ================= */
+
+.word-searched .note {
+  font-size: 22px;
+  font-weight: 700;
+  border-radius: 26px;
+  padding: 18px 22px;
+  margin: 24px 10px;
+  color: #0a4263;
+  background:
+    linear-gradient(145deg, #ffffff, #ebf9ff);
+  border: 3px dashed #00b4ff;
+  box-shadow:
+    0 14px 30px rgba(0,174,255,0.12);
+}
+
+/* ================= POPUP ================= */
+
+.word-searched .popup-box {
+  background:
+    linear-gradient(145deg, #ffffff, #eef9ff);
+  padding: 35px;
+  border-radius: 30px;
+  box-shadow:
+    0 30px 60px rgba(0,174,255,0.28),
+    inset 0 0 18px rgba(255,255,255,0.95);
+  text-align: center;
+  animation: popupZoom 0.45s ease;
+  width: 24%;
+  border: 3px solid rgba(255,255,255,0.55);
+}
+
+/* CLOSE BTN */
+.word-searched .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  background:
+    linear-gradient(145deg, #ff5a5a, #ff0000);
+  box-shadow:
+    0 8px 18px rgba(255,0,0,0.28);
+  transition: all 0.35s ease;
+}
+
+.word-searched .close-btn:hover {
+  transform: rotate(180deg) scale(1.12);
+}
+
+/* ================= CORRECT TEXT ================= */
 
 .word-searched .hint-correct {
-  color: green;
-  font-weight: bold;
+  color: #00b050;
+  font-weight: 800;
+  animation: pulseCorrect 1.2s infinite;
+  text-shadow: 0 0 10px rgba(0,176,80,0.35);
 }
 
+/* ================= ANIMATIONS ================= */
 
+@keyframes popupZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(30px);
+  }
 
-@media (min-width: 769px) and (max-width: 992px) {
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes shineMove {
+  0% {
+    left: -90px;
+  }
+
+  100% {
+    left: 140%;
+  }
+}
+
+@keyframes shineText {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 300% center;
+  }
+}
+
+@keyframes pulseCorrect {
+  0%,100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes smoothFloat {
+  0%,100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes orbMove {
+  0% {
+    transform: translate(0px, 0px);
+  }
+
+  100% {
+    transform: translate(-40px, 30px);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+
   .word-searched .divDisplay {
-    display: flex;
     flex-direction: column;
   }
 
-  .word-searched .hint-item {
-    padding: 7px 8px;
+  .word-searched .popup-box {
+    width: 60%;
   }
-  .word-searched .hints {
-  margin: 5px 0px;
 }
+
+@media (max-width: 767px) {
+
+  .qu_ {
+    padding: 14px;
+    border-radius: 24px;
+  }
+
+  .word-searched #puzzle table td {
+    width: 36px;
+    height: 36px;
+  }
+
+  .word-searched #puzzle table td input {
+    font-size: 15px;
+  }
+
+  .word-searched .questionText {
+    font-size: 20px;
+  }
+
+  .word-searched .popup-box {
+    width: 85%;
+  }
 }
 
 
-@media (min-width: 481px) and (max-width: 767px) {
-  .word-searched .divDisplay {
-    display: flex;
-    flex-direction: column;
-  }
 
-  .word-searched .hint-item {
-    padding: 7px 8px;
-  }
-  .word-searched .hints {
-  margin: 5px 0px;
-}
-}
+

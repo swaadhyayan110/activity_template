@@ -1,9 +1,9 @@
 .bigHeadingS {
     font-family: 'PoppinsSemiBold', sans-serif;
-    font-size: 36px;
+    font-size: 25px;
     font-weight: bold;
     text-align: center;
-    margin: 26px 0;
+    margin: 12px 0;
     background: linear-gradient(90deg, #9C27B0, #E91E63, #FF9800, #4CAF50, #2196F3);
     background-size: 300% 300%;
     -webkit-background-clip: text;
@@ -19,7 +19,7 @@
 }
 
 .runingHead {
-    font-size: 25px;
+    font-size: 21px;
     margin: 12px 0;
     text-align: center;
     color: #0b5fff;
@@ -49,8 +49,8 @@
     background: linear-gradient(#fff, #fff) padding-box,
         linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd) border-box;
     padding: 18px;
-    margin: 18px 10px;
-    width: 180px;
+    margin: 3px -7px;
+    width: 190px;
     text-align: center;
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
     transition: transform 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
@@ -335,7 +335,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 20px 0;
+    margin: 7px auto;
+    width: 85%;
 }
 
 @media (min-width:300px) and (max-width:880px) {
@@ -390,6 +391,7 @@
         justify-content: space-between;
         align-items: center;
         margin: 9px 0;
+        width: 100%;
     }
 
     .nextPreviRow {

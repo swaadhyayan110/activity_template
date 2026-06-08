@@ -14,56 +14,56 @@ const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = [
-        { qid: 44, text: ['Q-44', 'm_id : 0 - Math'], module: 0 },
-        { qid: 0, text: ['Q-0', 'm_id : 0 - Audio'], module: 0 },
-        { qid: 1, text: ['Q-1', 'm_id : 1 - Match-1'], module: 1, landscape: true },
-        { qid: 2, text: ['Q-2', 'm_id : 2 - Match-2'], module: 2 },
-        { qid: 3, text: ['Q-3', 'm_id : 3 - Match-3'], module: 3 },
-        { qid: 4, text: ['Q-4', 'm_id : 4 - Fill-1'], module: 4 },
-        { qid: 5, text: ['Q-5', 'm_id : 5 - Fill-2'], module: 5 },
-        { qid: 6, text: ['Q-6', 'm_id : 6 - Jumble-Letter'], module: 6 },
-        { qid: 7, text: ['Q-7', 'm_id : 7 - Jumble-Word'], module: 7 },
-        { qid: 8, text: ['Q-8', 'm_id : 8 - DND-1'], module: 8 },
-        { qid: 9, text: ['Q-9', 'm_id : 9 - MCQ-1'], module: 9 },
-        { qid: 10, text: ['Q-10', 'm_id : 10 - Adaptiv'], module: 10 },
-        { qid: 11, text: ['Q-11', 'm_id : 11 - Audio'], module: 11 },
-        { qid: 12, text: ['Q-12', 'm_id : 12 - Drop Down'], module: 12 },
-        { qid: 13, text: ['Q-13', 'm_id : 13 - Circle'], module: 13 },
-        { qid: 14, text: ['Q-14', 'm_id : 14 - श्रवण कौशल'], module: 14 },
-        { qid: 15, text: ['Q-15', 'm_id : 15 - T&F'], module: 15 },
-        { qid: 16, text: ['Q-16', 'm_id : 16 - DND-2'], module: 16 },
-        { qid: 17, text: ['Q-17', 'm_id : 16 - DND-3'], module: 16 },
-        { qid: 18, text: ['Q-18', 'm_id : 17 - Sorting'], module: 17 },
-        { qid: 19, text: ['Q-19', 'm_id : 18 - PDF'], module: 18 },
-        { qid: 20, text: ['Q-20', 'm_id : 19 - Shabdkosh'], module: 19 },
-        { qid: 21, text: ['Q-21', 'm_id : 20 - Shrutlekh'], module: 20 },
-        { qid: 22, text: ['Q-22', 'm_id : 21 - WordSearch'], module: 21 },
-        { qid: 23, text: ['Q-23', 'm_id : 22 - TextArea'], module: 22 },
-        { qid: 24, text: ['Q-24', 'm_id : 23 - CrossWord'], module: 23 },
-        { qid: 25, text: ['Q-25', 'm_id : 24 - ShravanKaushalWithPara'], module: 24 },
-        { qid: 26, text: ['Q-26', 'm_id : 25 - VideoPlayer'], module: 25 },
-        { qid: 27, text: ['Q-27', 'm_id : 26 - Rachnatmak_Para-1'], module: 26 },
-        { qid: 28, text: ['Q-28', 'm_id : 27 - Rachnatmak_Inputs&Images-2'], module: 27 },
-        { qid: 29, text: ['Q-29', 'm_id : 28 - Rachnatmak_Tab_Btns-3'], module: 28 },
-        { qid: 30, text: ['Q-30', 'm_id : 29 - Rachnatmak_multi_Inputs-4'], module: 29 },
-        { qid: 31, text: ['Q-31', 'm_id : 30 - ClickOnImage'], module: 30 },
-        { qid: 32, text: ['Q-32', 'm_id : 31 - FillOnClick'], module: 31 },
-        { qid: 33, text: ['Q-33', 'm_id : 32 - Dictionary'], module: 32 },
-        { qid: 34, text: ['Q-34', 'm_id : 33 - MentalMath'], module: 33 },
-        { qid: 35, text: ['Q-35', 'm_id : 34 - Youtube-Audio-Video'], module: 34 },
-        { qid: 36, text: ['Q-36', 'm_id : 35 - Math Money'], module: 35 },
-        { qid: 37, text: ['Q-37', 'm_id : 36 - Shabd Rachna'], module: 36 },
-        { qid: 38, text: ['Q-38', 'm_id : 37 - Spell Check'], module: 37 },
-        { qid: 39, text: ['Q-39', 'm_id : 38 - Spell It out'], module: 38 },
-        { qid: 40, text: ['Q-40', 'm_id : 39 - Vowel Drag and Drop'], module: 39 },
-        { qid: 41, text: ['Q-41', 'm_id : 19 - Shabdkosh type-2'], module: 19 },
-        { qid: 42, text: ['Q-42', 'm_id : 40 - Virtual Tour'], module: 40 },
-        { qid: 43, text: ['Q-43', 'm_id : 41 - Circle and underline'], module: 41 },
+        // { qid: 44, text: ['Q-44', 'id : 0 - Math'], module: 0 },
+        // { qid: 0, text: ['Q-0', 'id : 0 - Audio'], module: 0 },
+        { qid: 1, text: ['Q-1', 'id : 1 - Match-1'], module: 1, landscape: true },
+        { qid: 2, text: ['Q-2', 'id : 2 - Match-2'], module: 2 },
+        { qid: 3, text: ['Q-3', 'id : 3 - Match-3'], module: 3 },
+        { qid: 4, text: ['Q-4', 'id : 4 - Fill-1'], module: 4 },
+        { qid: 5, text: ['Q-5', 'id : 5 - Fill-2'], module: 5 },
+        { qid: 6, text: ['Q-6', 'id : 6 - Jumble-Letter'], module: 6 },
+        { qid: 7, text: ['Q-7', 'id : 7 - Jumble-Word'], module: 7 },
+        { qid: 8, text: ['Q-8', 'id : 8 - DND-1'], module: 8 },
+        { qid: 9, text: ['Q-9', 'id : 9 - MCQ-1'], module: 9 },
+        { qid: 10, text: ['Q-10', 'id : 10 - Adaptiv'], module: 10 },
+        { qid: 11, text: ['Q-11', 'id : 11 - Audio'], module: 11 },
+        { qid: 12, text: ['Q-12', 'id : 12 - Drop Down'], module: 12 },
+        { qid: 13, text: ['Q-13', 'id : 13 - Circle'], module: 13 },
+        { qid: 14, text: ['Q-14', 'id : 14 - श्रवण कौशल'], module: 14 },
+        { qid: 15, text: ['Q-15', 'id : 15 - T&F'], module: 15 },
+        { qid: 16, text: ['Q-16', 'id : 16 - DND-2'], module: 16 },
+        { qid: 17, text: ['Q-17', 'id : 16 - DND-3'], module: 16 },
+        { qid: 18, text: ['Q-18', 'id : 17 - Sorting'], module: 17 },
+        { qid: 19, text: ['Q-19', 'id : 18 - PDF'], module: 18 },
+        { qid: 20, text: ['Q-20', 'id : 19 - Shabdkosh'], module: 19 },
+        { qid: 21, text: ['Q-21', 'id : 20 - Shrutlekh'], module: 20 },
+        { qid: 22, text: ['Q-22', 'id : 21 - WordSearch'], module: 21 },
+        { qid: 23, text: ['Q-23', 'id : 22 - TextArea'], module: 22 },
+        { qid: 24, text: ['Q-24', 'id : 23 - CrossWord'], module: 23 },
+        { qid: 25, text: ['Q-25', 'id : 24 - ShravanKaushalWithPara'], module: 24 },
+        { qid: 26, text: ['Q-26', 'id : 25 - VideoPlayer'], module: 25 },
+        { qid: 27, text: ['Q-27', 'id : 26 - Rachnatmak_Para-1'], module: 26 },
+        { qid: 28, text: ['Q-28', 'id : 27 - Rachnatmak_Inputs&Images-2'], module: 27 },
+        { qid: 29, text: ['Q-29', 'id : 28 - Rachnatmak_Tab_Btns-3'], module: 28 },
+        { qid: 30, text: ['Q-30', 'id : 29 - Rachnatmak_multi_Inputs-4'], module: 29 },
+        { qid: 31, text: ['Q-31', 'id : 30 - ClickOnImage'], module: 30 },
+        { qid: 32, text: ['Q-32', 'id : 31 - FillOnClick'], module: 31 },
+        { qid: 33, text: ['Q-33', 'id : 32 - Dictionary'], module: 32 },
+        { qid: 34, text: ['Q-34', 'id : 33 - MentalMath'], module: 33 },
+        { qid: 35, text: ['Q-35', 'id : 34 - Youtube-Audio-Video'], module: 34 },
+        { qid: 36, text: ['Q-36', 'id : 35 - Math Money'], module: 35 },
+        { qid: 37, text: ['Q-37', 'id : 36 - Shabd Rachna'], module: 36 },
+        { qid: 38, text: ['Q-38', 'id : 37 - Spell Check'], module: 37 },
+        { qid: 39, text: ['Q-39', 'id : 38 - Spell It out'], module: 38 },
+        { qid: 40, text: ['Q-40', 'id : 39 - Vowel Drag and Drop'], module: 39 },
+        { qid: 41, text: ['Q-41', 'id : 19 - Shabdkosh type-2'], module: 19 },
+        { qid: 42, text: ['Q-42', 'id : 40 - Virtual Tour'], module: 40 },
+        { qid: 43, text: ['Q-43', 'id : 41 - Circle and underline'], module: 41 },
     ];
 
     // DEFINE QUESTIONS
     const questions = [
-        // qId : 44 mId : 0
+        // id : 44
         {
             id: 44,
             ui: () => {
@@ -168,26 +168,24 @@ const Define = (() => {
                             </thead>
                             <tbody>
                 `;
-                html.push( heading );
+                html.push(heading);
 
-                const express = exp?.map(({type, text}) => {
+                const express = exp?.map(({ type, text }) => {
                     return `
                         <tr>
                             <td class="text-capitalize">${type}</td>
                             <td class="text-center font-monospace">
                                 <span class="text-warning-emphasis">
-                                    ${
-                                        text
-                                            .replace(/`/g, '<span class="text-danger fw-bold">`</span>')
-                                            .replace(/#\{([^}]+)\}#/g, '<span class="text-primary-emphasis fw-semibold">$1</span>')
-                                    }
+                                    ${text
+                            .replace(/`/g, '<span class="text-danger fw-bold">`</span>')
+                            .replace(/#\{([^}]+)\}#/g, '<span class="text-primary-emphasis fw-semibold">$1</span>')
+                        }
                                 </span>
                             </td>
                             <td class="text-center font-monospace">
-                                ${
-                                    text
-                                        .replace(/`([^`]+)`/g, (_, word) => {
-                                            return `
+                                ${text
+                            .replace(/`([^`]+)`/g, (_, word) => {
+                                return `
                                                 <span 
                                                     class="copy-text text-warning-emphasis fw-semibold" 
                                                     data-copy="\`${word}\`"
@@ -196,41 +194,41 @@ const Define = (() => {
                                                     \`${word}\`
                                                 </span>
                                             `;
-                                        })
-                                        .replace(/#\{([^}]+)\}#/g, '<span class="text-primary-emphasis fw-semibold">$1</span>')
-                                }
+                            })
+                            .replace(/#\{([^}]+)\}#/g, '<span class="text-primary-emphasis fw-semibold">$1</span>')
+                        }
                             </td>
                         </tr>
                     `;
-                }).join( '' );
+                }).join('');
 
                 const tableEnd = `</tbody></table></div>`;
-                html.push( express + tableEnd );
+                html.push(express + tableEnd);
 
-                return html.join( '' );
+                return html.join('');
             },
-            logic : {
+            logic: {
                 // Each function automatically receives `event`, `el`, `root`, and `logic`
                 // These are injected only for handlers defined in `events`
-                copyText : ({ event, el, root, logic }) => {
+                copyText: ({ event, el, root, logic }) => {
                     if (!el) return;
 
                     const text = el.dataset.copy ?? undefined;
 
-                    if( !text ) {
-                        logic.renderToast({message:'Couldn\'t copy symbol.', bsClass:"warning"});
+                    if (!text) {
+                        logic.renderToast({ message: 'Couldn\'t copy symbol.', bsClass: "warning" });
                         return;
                     }
 
                     navigator.clipboard.writeText(text).then(() => {
-                        logic.renderToast({text:text});
+                        logic.renderToast({ text: text });
                     });
                 },
 
                 // This (`renderToast`) function is not registered in `events.handle`,
                 // so it does not receive the default injected parameters
-                renderToast : ({text,bsClass,message}={}) => {
-                    document.querySelector( '#copyToast' )?.remove();
+                renderToast: ({ text, bsClass, message } = {}) => {
+                    document.querySelector('#copyToast')?.remove();
 
                     const toastClass = bsClass ?? 'success';
 
@@ -245,12 +243,12 @@ const Define = (() => {
                             </div>
                         </div>
                     `;
-                    document.querySelector( '#toast-container' ).innerHTML = toastHtml;
+                    document.querySelector('#toast-container').innerHTML = toastHtml;
 
                     const toastEl = document.getElementById('copyToast');
-                    const toast   = bootstrap.Toast.getOrCreateInstance(toastEl);
+                    const toast = bootstrap.Toast.getOrCreateInstance(toastEl);
 
-                    if( !toast ) return;
+                    if (!toast) return;
 
                     const textMsg = message ?? `${text} copied to clipboard!`;
                     toast._element.querySelector('.toast-body').innerText = textMsg;
@@ -262,11 +260,11 @@ const Define = (() => {
                 { event: 'click', selector: '.copy-text', handle: ['copyText'] },
             ]
         },
-        // qId : 0 mId : 0
+        // id : 0
         {
             id: 0,
-            path : {
-                css : [ 'style.css' ]
+            path: {
+                css: ['style.css']
             },
             ui: () => {
                 const options = [
@@ -335,7 +333,7 @@ const Define = (() => {
                 // Each function automatically receives `event`, `el`, `root`, and `logic`
                 // These are injected only for handlers defined in `events`
                 checkAnswer: ({ event, el, root, logic }) => {
-                    console.log( {event, el, root} );
+                    console.log({ event, el, root });
                     const checks = root.querySelectorAll('.option-check');
                     const result = root.querySelector('#resultBox');
 
@@ -363,7 +361,7 @@ const Define = (() => {
                             }
                         }
                     });
-                    
+
                     if (!hasChecked) {
                         alert("Please select at least one option!");
                         return;
@@ -382,7 +380,7 @@ const Define = (() => {
                             ${correctAnswers.map((item, i) => `<div>${i + 1}. ${item}</div>`).join('')}
                         </div>
                     `;
-                    
+
                     if (allCorrect) {
                         result.innerHTML = `
                             <div class="text-success fw-bold">Correct!</div>
@@ -397,9 +395,9 @@ const Define = (() => {
                         `;
                     }
                 },
-                playMedia :({event, el, root}) => {
-                    const audioEl = root.querySelector( '#audioEle' );
-                    const videoEl = root.querySelector( '#videoEle' );
+                playMedia: ({ event, el, root }) => {
+                    const audioEl = root.querySelector('#audioEle');
+                    const videoEl = root.querySelector('#videoEle');
                     audioEl.play();
                     videoEl.play();
                 }
@@ -409,7 +407,7 @@ const Define = (() => {
                 { event: 'click', selector: '#audioImage', handle: ['playMedia'] }
             ]
         },
-        // qId : 1 mId : 1
+        // id : 1
         {
             id: 1,
             lang: 'en',
@@ -418,13 +416,13 @@ const Define = (() => {
             content: [
                 { id: 1, left: 'Bird\'s&nbsp;<u>eye</u>&nbsp;view', right: 'Seen &nbsp; `theta` &nbsp; from above, as a bird does' },
                 { id: 2, left: 'Feast for the eyes', right: 'To look with great enjoyment' },
-                { id: 3, left: { path: 'img/1.png', width: '40px' }, right: 'To be very attentive' },
+                { id: 3, left: { path: 'images/1.png', width: '40px' }, right: 'To be very attentive' },
                 { id: 4, left: 'Apple of someone\'s eye', right: 'To be a favourite or loved one of someone' },
-                { id: 5, left: 'Catch someone\'s eye', right: { path: 'img/2.png', width: '10%' } },
+                { id: 5, left: 'Catch someone\'s eye', right: { path: 'images/2.png', width: '10%' } },
                 { id: 6, left: 'Be an eye-opener', right: 'To understand something' }
             ]
         },
-        // qId : 2 mId : 2
+        // id : 2
         {
             id: 2,
             lang: 'hi',
@@ -432,28 +430,28 @@ const Define = (() => {
             subhead: 'Look at the `theta` expression eye-opener in your textbook. Now join the expression to its idiom.',
             content: {
                 col1: [
-                    { id: 1, img: 'img/1.png', width: '80%' },
-                    { id: 2, text: 'img/2.png' },
-                    { id: 3, img: 'img/3.png' },
+                    { id: 1, img: 'images/1.png', width: '80%' },
+                    { id: 2, text: 'images/2.png' },
+                    { id: 3, img: 'images/3.png' },
                 ],
                 col2: [
                     { id: 1, text: '`theta` जादू दिखाना' },
                     { id: 2, text: 'पत्र बाँटना' },
-                    { id: 3, img: 'img/2.png' },
+                    { id: 3, img: 'images/2.png' },
                     { id: 4, text: 'रखवाली करना' },
                     { id: 5, text: 'पढ़ाना' },
                     { id: 6, text: 'खेती करना' },
                 ],
                 col3: [
-                    { id: 1, img: 'img/4.png' },
-                    { id: 2, text: 'img/5.png' },
-                    { id: 3, img: 'img/6.png' },
+                    { id: 1, img: 'images/4.png' },
+                    { id: 2, text: 'images/5.png' },
+                    { id: 3, img: 'images/6.png' },
                 ],
                 correctLeft: { 1: 5, 2: 4, 3: 3 },
                 correctRight: { 1: 6, 2: 1, 3: 2 }
             },
         },
-        // qId : 3 mId : 3
+        // id : 3
         {
             id: 3,
             lang: 'hi',
@@ -467,14 +465,14 @@ const Define = (() => {
                 { id: 5, top: 'Catch someone\'s eye', bottom: 'To be a favourite or loved' }
             ]
         },
-        // qId : 4 mId : 4
+        // id : 4
         {
             id: 4,
             lang: 'en',
             head: 'Template : 4',
             subhead: 'text.. `theta`',
             content: {
-                hintimage: 'img/ch4_1.png',
+                hintimage: 'images/ch4_1.png',
                 hinttext: [
                     'Broad Gauge RailwayLine `theta`',
                     'Pond',
@@ -490,22 +488,22 @@ const Define = (() => {
                     'Railway Crossing'
                 ],
                 blanks: [
-                    { img: 'img/ch4_2.png', ans: 'Settlement `theta`' },
-                    { img: 'img/ch4_3.png', ans: 'Forest' },
-                    { img: 'img/ch4_4.png', ans: 'Places of Worship' },
-                    { img: 'img/ch4_5.png', ans: 'River' },
-                    { img: 'img/ch4_6.png', ans: 'Pond' },
-                    { img: 'img/ch4_7.png', ans: 'Metalled Road' },
-                    { img: 'img/ch4_8.png', ans: 'Unmetalled road' },
-                    { img: 'img/ch4_9.png', ans: 'Broad Gauge Railway Line' },
-                    { img: 'img/ch4_10.png', ans: 'Railway Crossing' },
-                    { img: 'img/ch4_12.png', ans: 'Restaurant' },
-                    { img: 'img/ch4_13.png', ans: 'Police Station' },
-                    { img: 'img/ch4_14.png', ans: 'Bridge' }
+                    { img: 'images/ch4_2.png', ans: 'Settlement `theta`' },
+                    { img: 'images/ch4_3.png', ans: 'Forest' },
+                    { img: 'images/ch4_4.png', ans: 'Places of Worship' },
+                    { img: 'images/ch4_5.png', ans: 'River' },
+                    { img: 'images/ch4_6.png', ans: 'Pond' },
+                    { img: 'images/ch4_7.png', ans: 'Metalled Road' },
+                    { img: 'images/ch4_8.png', ans: 'Unmetalled road' },
+                    { img: 'images/ch4_9.png', ans: 'Broad Gauge Railway Line' },
+                    { img: 'images/ch4_10.png', ans: 'Railway Crossing' },
+                    { img: 'images/ch4_12.png', ans: 'Restaurant' },
+                    { img: 'images/ch4_13.png', ans: 'Police Station' },
+                    { img: 'images/ch4_14.png', ans: 'Bridge' }
                 ]
             }
         },
-        // qId : 5 mId : 5
+        // id : 5
         {
             id: 5,
             lang: 'hi',
@@ -514,15 +512,15 @@ const Define = (() => {
                 imageReplacement: '#img#',
                 replacement: '#_#',
                 image: {
-                    path: 'img/1.png',
+                    path: 'images/1.png',
                     width: '10%'
                 },
                 questionGridSize: { md: 12, sm: 12, col: 12 },      // [OPTIONAL]
                 hint: {        // ['string' || {}]
                     text: '`theta` आदरणीया चाची जी, #img#; गर्मियों की छुट्टियाँ, #img# <br> बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ दिन रहे सब मिलकर मजे करेंगे',
                     images: [
-                        { path: 'img/2.png', width: '15%' },
-                        { path: 'img/3.png' },
+                        { path: 'images/2.png', width: '15%' },
+                        { path: 'images/3.png' },
                     ]
                 },
                 label: { question: true, subQuestion: true },
@@ -531,8 +529,8 @@ const Define = (() => {
                         qid: 1,
                         question: 'हमारे #_# देश का #img# नाम #_# है। #img#',
                         images: [
-                            { path: 'img/5.png', width: '200px' },
-                            { path: 'img/4.png', width: '200px' }
+                            { path: 'images/5.png', width: '200px' },
+                            { path: 'images/4.png', width: '200px' }
                         ],
                         answers: ['हिंदी']
                     },
@@ -543,7 +541,7 @@ const Define = (() => {
                     {
                         question: 'भारत की #_# #img# राजभाषा #_# है।',
                         images: [
-                            { path: 'img/1.png', width: '200px' }
+                            { path: 'images/1.png', width: '200px' }
                         ],
                         inputWidth: '50px',
                         answers: ['हिंदी', 'djf', 'sfdsf'],
@@ -560,8 +558,8 @@ const Define = (() => {
                         qid: 5,
                         question: '#img# जहाँ #img# पढ़ाई होती है उसे #_# कहते हैं।',
                         images: [
-                            { path: 'img/5.png', width: '200px' },
-                            { path: 'img/2.png', width: '200px' },
+                            { path: 'images/5.png', width: '200px' },
+                            { path: 'images/2.png', width: '200px' },
                         ],
                         answers: ['विद्यालय']
                     },
@@ -571,7 +569,7 @@ const Define = (() => {
                         inputWidth: '30px',
                         maxLength: 1,
                         images: [
-                            { path: 'img/5.png', width: '200px' },
+                            { path: 'images/5.png', width: '200px' },
                         ],
                         answers: ['A', 'B', 'C', 'D', 'E']
                     }
@@ -586,25 +584,18 @@ const Define = (() => {
                 audio: ''
             }
         },
-        // qId : 6 mId : 6
+        // id : 6
         {
             id: 6,
             lang: 'hi',
             head: 'Template : 6',
             subhead: 'text.. `theta`',
-            config : {
-                col: {
-                    md: 12,
-                    sm: 12,
-                    col: 12
-                },
-            },
             content: [
                 'SCHOOL', 'TEACHER', 'STUDENT', 'BOOK', '`theta`',
                 'CLASS', 'COLLEGE', 'EXAM', 'LEARN', 'STUDY'
             ]
         },
-        // qId : 7, mId : 7
+        // id : 7,
         {
             id: 7,
             lang: 'en',
@@ -621,7 +612,7 @@ const Define = (() => {
                 'Honesty is the best policy.'
             ]
         },
-        // qId : 8, mId : 8
+        // id : 8,
         {
             id: 8,
             lang: 'hi',
@@ -641,16 +632,16 @@ const Define = (() => {
                     { id: 3, accept: 'n', text: 'नपुंसकलिंग(Neuter)' }
                 ],
                 options: [
-                    { id: 1, ans: 'm', text: '', images: [{ path: 'img/1.png', width: '50px' }]},
+                    { id: 1, ans: 'm', text: '', images: [{ path: 'images/1.png', width: '50px' }] },
                     { id: 2, ans: 'f', text: 'अध्यापिके' },
                     { id: 6, ans: 'f', text: '`theta`' },
-                    { id: 3, ans: 'n', text: 'क्रीडनकानि', images: [{ path: 'img/3.png', width: '50px' }]},
-                    { id: 4, ans: 'm', text: 'हंसौक्री', images: [{ path: 'img/4.png', width: '50px' }]},
-                    { id: 5, ans: 'm', text: 'अध्याकानि', images: [{ path: 'img/5.png', width: '50px' }]},
+                    { id: 3, ans: 'n', text: 'क्रीडनकानि', images: [{ path: 'images/3.png', width: '50px' }] },
+                    { id: 4, ans: 'm', text: 'हंसौक्री', images: [{ path: 'images/4.png', width: '50px' }] },
+                    { id: 5, ans: 'm', text: 'अध्याकानि', images: [{ path: 'images/5.png', width: '50px' }] },
                 ]
             }
         },
-        // qId : 9, mId : 9
+        // id : 9,
         {
             id: 9,
             lang: 'hi',
@@ -662,24 +653,24 @@ const Define = (() => {
                 },
                 img: {
                     width: '35%',
-                    path: 'img/1.png',
+                    path: 'images/1.png',
                     imageclass: 'text-center'
                 },
                 mcq: [
                     {
                         imageaboveoption: {
-                            image: 'img/2.png',
+                            image: 'images/2.png',
                             width: '10%'
                         },
                         question: {
-                            image: 'img/4.png',
+                            image: 'images/4.png',
                             replacement: '#_#',
                             text: 'दूसरों के खिलौनों को खराब #_# कहना'
                         },
                         options: [
-                            { text : 'text `theta` test', image: 'img/4.png' },
-                            { image: 'img/6.png' },
-                            { image: 'img/1.png' },
+                            { text: 'text `theta` test', image: 'images/4.png' },
+                            { image: 'images/6.png' },
+                            { image: 'images/1.png' },
                             { text: 'none of these' }
                         ],
                         answer: 0
@@ -692,7 +683,7 @@ const Define = (() => {
                             { text: 'अच्छा है।' },
                             { text: 'अच्छी `theta` बात है' },
                             { text: 'आम बात है।' },
-                            { text : 'text test', image: 'img/3.png', width: '100%' },
+                            { text: 'text test', image: 'images/3.png', width: '100%' },
                         ],
                         answer: 1
                     },
@@ -711,7 +702,7 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 10, mId : 10
+        // id : 10,
         {
             id: 10,
             lang: 'en',
@@ -752,17 +743,17 @@ const Define = (() => {
                             {
                                 imageReplacement: '#img#',
                                 imageAboveOption: {
-                                    image: 'img/2.png',
+                                    image: 'images/2.png',
                                     width: '10%'
                                 },
                                 question: {
                                     text: '`theta` कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
                                     images: {
-                                        path: ['img/1.png', 'img/2.png'],
-                                        style : [ // style[i] applies to path[i]
-                                            { 
-                                                height : 'auto',
-                                                width  : '100px'
+                                        path: ['images/1.png', 'images/2.png'],
+                                        style: [ // style[i] applies to path[i]
+                                            {
+                                                height: 'auto',
+                                                width: '100px'
                                             },
                                         ]
                                     }
@@ -771,14 +762,14 @@ const Define = (() => {
                                     {
                                         text: '#img# सैनिकों को #img#',
                                         images: {
-                                            path: ['img/ch4_1.png', 'img/5.png'],
+                                            path: ['images/ch4_1.png', 'images/5.png'],
                                             width: '40%'
                                         }
                                     },
                                     {
                                         text: 'किसान #img# सपूतों को',
                                         images: {
-                                            path: ['img/2.png']
+                                            path: ['images/2.png']
                                         }
                                     },
                                     {
@@ -832,20 +823,20 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 11, mId : 11
+        // id : 11,
         {
             id: 11,
             lang: 'hi',
             content: {
                 desc: 'audio description `theta`',
-                src : 'video.mp4',
+                src: 'video.mp4',
                 // src : 'audio/1.mp3',
                 // src : 'https://swaadhyayan.com/data/learningContent/3/Hindi/video/cca24b220e4c0b05f1b84310b587da95.mp4',                
                 // src : 'https://www.youtube.com/watch?v=gIoyGYYCAxE',
                 // src : 'https://www.youtube.com/embed/gIoyGYYCAxE?si=8bhfXCJ1WKJpoIp8',
             }
         },
-        // qId : 12, mId : 12
+        // id : 12,
         {
             id: 12,
             lang: 'hi',
@@ -861,14 +852,14 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 13, mId : 13
+        // id : 13,
         {
             id: 13,
             lang: 'hi',
             head: 'Template : 13, Circle `theta` ',
             mode: 'single', // `single` || `multi`
-            config : {
-                disableCircleBefore : '-'
+            config: {
+                disableCircleBefore: '-'
             },
             content: [
                 { id: 1, text: 'दादा जी के लिए - तू, आप, तुम `theta`', answer: '`theta`' },
@@ -880,7 +871,7 @@ const Define = (() => {
                 { id: 7, text: 'छोटी बहन के लिए - तुम, तू, आप', answer: 'तुम' },
             ]
         },
-        // qId : 14, mId : 14
+        // id : 14,
         {
             id: 14,
             lang: 'hi',
@@ -908,7 +899,7 @@ const Define = (() => {
                 }
             }
         },
-        // qId : 15, mId : 15
+        // id : 15,
         {
             id: 15,
             lang: 'en',
@@ -916,7 +907,7 @@ const Define = (() => {
             replacement: '#_#',
             content: [
                 {
-                    question: { text: 'तार लगाए गए #_#', image: 'img/1.png', width: '20%' },
+                    question: { text: 'तार लगाए गए #_#', image: 'images/1.png', width: '20%' },
                     answer: false,
                 },
                 {
@@ -937,11 +928,11 @@ const Define = (() => {
                 }
             ],
             add_content: {
-                image: { path: "img/1.png", width: "30%" },
+                image: { path: "images/1.png", width: "30%" },
                 audio: 'audio/1.mp3'
             }
         },
-        // qId : 16, mId : 16
+        // id : 16,
         {
             id: 16,
             lang: 'hi',
@@ -952,7 +943,7 @@ const Define = (() => {
                 replacement: '#_#',
                 option_side: 'top',
                 singleQuestionMode: false,
-                col: { col: 12, md: 4, sm: 6 },
+                col: { col: 12, md: 6, sm: 6 },
                 addOptions: ['op1', 'op2', 'op3', '`theta`', 'op1'],
                 text: {
                     text: 'वर्षा ऋतु `theta` अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
@@ -960,7 +951,7 @@ const Define = (() => {
                 },
                 img: {
                     width: '150px',
-                    path: 'img/1.png',
+                    path: 'images/1.png',
                     imageclass: 'text-center'
                 },
                 questions: [
@@ -968,21 +959,21 @@ const Define = (() => {
                         qid: 1,
                         text: 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।',
                         inputWidth: '100px',
-                        image: 'img/1.png',
+                        image: 'images/1.png',
                         width: '120px',      // image-width
                         options: ['पंख', 'नाचने'],
                         answer: 1,
                         imageSide: 'right'
                     },
-                    { qid: 2, text: '#_#', image: 'img/1.png', options: ['`theta`'], answer: 0 },
-                    { qid: 3, text: 'सितार पर खाली जगह पर #_# की गई।', image: 'img/1.png', options: ['नक्काषी'], answer: 0 },
-                    { qid: 4, text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image: 'img/1.png', options: ['खूँटी'], answer: 0 },
-                    { qid: 5, text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image: 'img/1.png', options: ['जतन'], answer: 0 }
+                    { qid: 2, text: '#_#', image: 'images/1.png', options: ['`theta`'], answer: 0 },
+                    { qid: 3, text: 'सितार पर खाली जगह पर #_# की गई।', image: 'images/1.png', options: ['नक्काषी'], answer: 0 },
+                    { qid: 4, text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image: 'images/1.png', options: ['खूँटी'], answer: 0 },
+                    { qid: 5, text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image: 'images/1.png', options: ['जतन'], answer: 0 }
                 ],
                 // audio     : 'audio/1.mp3'
             }
         },
-        // qId : 17, mId : 16
+        // id : 17,
         {
             id: 17,
             lang: 'hi',
@@ -994,7 +985,7 @@ const Define = (() => {
                 },
             }
         },
-        // qId : 18, mId : 17
+        // id : 18,
         {
             id: 18,
             lang: 'en',
@@ -1003,16 +994,16 @@ const Define = (() => {
                 sequence: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', '`theta`'],
             }
         },
-        // qId : 19, mId : 18
+        // id : 19,
         {
             id: 19,
             lang: 'en',
             content: {
-                pdf: 'hindi.pdf',
+                pdf: 'pdf.pdf',
                 download: true
             }
         },
-        // qId : 20, mId : 19
+        // id : 20,
         {
             id: 20,
             lang: 'en',
@@ -1025,23 +1016,23 @@ const Define = (() => {
                     sentence: 'छोटी चिड़ियाँ appleing `theta` चलना सीखती हैं। appleing',
                     image: [
                         {
-                            path    : 'img/1.png',
-                            width   : '40%',
-                            caption : 'image-text `theta`'
+                            path: 'images/1.png',
+                            width: '90%',
+                            caption: 'image-text `theta`'
                         },
                         {
-                            path    : 'img/2.png',
-                            width   : '40%',
-                            caption : 'image-text'
+                            path: 'images/2.png',
+                            width: '90%',
+                            caption: 'image-text'
                         },
                         {
-                            path    : 'img/3.png',
-                            width   : '40%',
-                            caption : 'image-text'
+                            path: 'images/3.png',
+                            width: '90%',
+                            caption: 'image-text'
                         },
                         {
-                            path    : 'img/4.png',
-                            width   : '40%'
+                            path: 'images/4.png',
+                            width: '90%'
                         }
                     ]
                 },
@@ -1057,14 +1048,14 @@ const Define = (() => {
                     meaning: 'कूद-कूद-कूदकर',
                     sentence: 'छोटी चिड़ियाँ amrood चलना सीखती हैं। amrood',
                     image: {
-                        path    : 'img/3.png',
-                        width   : '20%',
-                        caption : 'image-text'
+                        path: 'images/3.png',
+                        width: '30%',
+                        caption: 'image-text'
                     }
                 },
             ]
         },
-        // qId : 21, mId : 20
+        // id : 21,
         {
             id: 21,
             lang: 'en',
@@ -1079,7 +1070,7 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 22, mId : 21
+        // id : 22,
         {
             id: 22,
             lang: 'en',
@@ -1164,10 +1155,10 @@ const Define = (() => {
                 }
             ]
         },
-        // qId : 23, mId : 22
+        // id : 23,
         {
             id: 23,
-            lang: 'hi',
+            lang: 'en',
             head: 'Template : 22',
             content: {
                 replacement: '#_#',
@@ -1178,19 +1169,16 @@ const Define = (() => {
                 },
                 img: {
                     width: '35%',
-                    path: 'img/1.png',
+                    path: 'images/1.png',
                     imageclass: 'text-center'
                 },
                 questions: [
-                    { 
-                        text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', 
-                        answer: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti dolor enim repellendus nisi saepe sed eos, maxime molestias cumque aspernatur fugit, quasi officia voluptatum quisquam perspiciatis rem! Dolorem esse odit commodi, deleniti iste rerum? Quis, officia voluptas. Perferendis quae nam, dignissimos totam porro itaque unde sunt minima doloribus nesciunt? Consectetur voluptas quisquam dolore quaerat commodi atque quam delectus rerum soluta reprehenderit facilis, corporis totam, nostrum reiciendis placeat non, ratione ipsum? Ipsam beatae vitae, alias, voluptas distinctio sunt totam debitis mollitia consectetur corporis a maxime, consequuntur iusto error animi. Asperiores, doloribus pariatur enim ut suscipit iure quidem, corrupti totam blanditiis similique vitae dolorem. Sapiente ducimus nostrum debitis, laudantium dolorem molestiae asperiores aperiam labore est culpa aspernatur aut ipsam doloremque fugiat eius! Inventore porro neque nam consequatur reiciendis nisi architecto asperiores tempore cumque maxime quos hic ratione, placeat dignissimos id voluptatum blanditiis aut quia quisquam, ad rem optio repellat corrupti. Suscipit corporis consectetur hic esse animi magni delectus labore voluptatibus! Nam minus reprehenderit velit et excepturi possimus, voluptate quaerat eligendi exercitationem voluptatem at, ut, placeat harum! Eveniet quasi ipsum quas quisquam error deserunt enim consequuntur laboriosam autem incidunt nemo voluptates sit accusantium ad, similique quam nobis, nostrum neque et molestias provident maiores velit esse officiis. Cupiditate minus voluptatem amet corporis optio, distinctio eaque fugit dignissimos! Mollitia, quaerat eum molestiae voluptas dolore tempore eius nulla optio ea exercitationem debitis commodi omnis. Necessitatibus eaque qui ab ratione tenetur illo aliquam ex perspiciatis aut! Mollitia repudiandae officiis nostrum fugiat autem iste, aliquid possimus deleniti animi, consequuntur iusto beatae veritatis cumque soluta! Voluptatibus quasi nobis consectetur odio! Commodi temporibus in labore similique quos laboriosam facere exercitationem vitae iure magnam blanditiis accusamus, nesciunt tempora praesentium optio tenetur asperiores tempore unde explicabo dicta? Quos, cumque! Voluptate possimus doloremque culpa voluptatibus, facere totam ipsam numquam sed nisi placeat quo velit cumque non libero, eligendi nulla et iure, deleniti accusamus sapiente aperiam labore nobis repellendus exercitationem! Quas eum illum doloremque voluptas illo sequi itaque consequuntur incidunt blanditiis dicta, impedit temporibus explicabo labore beatae molestias earum magnam vel perferendis eaque ipsa, pariatur commodi molestiae? Assumenda, ex quaerat, rem, nobis voluptatem expedita reiciendis veniam mollitia at eius harum numquam nulla iure cum magnam. Facere recusandae, molestias ducimus at, corporis voluptatibus minus tempore ea iure unde quis qui alias exercitationem voluptates quas suscipit nam omnis asperiores tenetur earum quaerat magnam nisi labore consequatur? Maiores mollitia nemo ratione, quisquam eligendi deserunt, similique velit earum eius adipisci maxime omnis. Quae, ratione velit aut adipisci quos suscipit provident quidem in consequatur sit dignissimos tenetur quisquam dolorem iusto doloremque. Ad quidem aperiam saepe nisi debitis excepturi praesentium dicta accusamus totam dignissimos, quisquam a sit odio vitae fugiat magni perferendis consequuntur repellat animi magnam ab. Quam fuga consectetur quisquam quos est at maxime. Blanditiis aperiam deserunt quaerat perspiciatis animi, voluptas tempora ratione temporibus est commodi dignissimos distinctio vel, odit molestias repudiandae sint voluptatem consectetur! Repellat delectus illum quidem odio modi velit reiciendis, quam tenetur eaque quos obcaecati soluta a unde dolorum laborum doloribus sint fugit quas, natus sed iure temporibus voluptatem molestiae animi? Sapiente cum suscipit ipsam minima, tempore recusandae velit quam voluptatum minus iusto, impedit modi, consequuntur aperiam? Vel veniam, magni illo officia molestias nostrum deleniti repellat veritatis consequatur quod reiciendis atque vitae dolorem quas ad nobis assumenda repellendus possimus culpa fuga laudantium nam dolore ipsum. Ab, quibusdam ipsum autem iusto, dolor minima praesentium nam delectus dicta cupiditate ullam deleniti illo pariatur dolores saepe laboriosam quis voluptatum dolore sequi tempora? Dignissimos quibusdam iusto quas exercitationem beatae ut sed. Saepe, placeat? Asperiores, placeat omnis, quasi cupiditate, distinctio id alias facere tenetur magnam quia recusandae magni maiores. Ipsam laboriosam voluptatibus at sequi accusantium repellat exercitationem dolor? Harum eos adipisci distinctio a obcaecati, explicabo magni. Quae consectetur inventore atque qui suscipit dolores ratione dolorem quis! Quam numquam minima sunt iste nisi eius aliquid ut ratione! Provident ad labore corrupti ipsum nam. Harum nisi in repellat natus officia sapiente alias laboriosam totam id, assumenda vitae accusamus? Minima sint, aperiam facere nisi vero enim qui veniam fugiat, eveniet autem necessitatibus minus repellendus itaque voluptatem quas eligendi assumenda doloribus, ipsam alias! Adipisci, quidem praesentium doloribus rem, iure soluta aspernatur dolores dolorem dolore cum nulla repellat corporis architecto tenetur consequuntur? Quidem tempora enim doloremque nihil dolorum accusamus sequi vitae unde, perferendis alias labore nobis harum! Dolore eligendi aut temporibus deleniti unde facere rem reprehenderit libero illum quisquam. Cumque explicabo beatae dolorem nobis? Autem tempora ratione est distinctio, qui totam nesciunt numquam. Eligendi, inventore suscipit! Ratione porro repellendus maiores quae voluptatem. Aliquam vel voluptatibus quae ullam temporibus deleniti itaque magnam! Perspiciatis distinctio cupiditate molestias voluptates quos repudiandae beatae repellendus rerum dignissimos autem nihil soluta, tempora alias ut incidunt aliquid vero eius enim in sapiente laborum placeat quidem nemo! Ipsam rem similique nisi animi id dolor nulla molestiae commodi magni asperiores facilis, quas dicta excepturi, suscipit quidem iure at. Quisquam quos mollitia accusantium velit similique necessitatibus quaerat deleniti suscipit obcaecati illo, repellendus cupiditate dicta consequatur ab voluptatem placeat quis hic totam blanditiis odio dolores? Eius unde ab dicta harum quod rem eligendi nesciunt. Accusantium in tenetur laboriosam. Eligendi consectetur assumenda non maxime. Quae dignissimos quisquam facere perferendis ut dicta odit quos sint optio. Expedita voluptates delectus labore. Porro enim omnis mollitia quod necessitatibus suscipit modi minus quam animi nihil iste iure ut autem voluptas magnam sequi reprehenderit distinctio a, quas repellendus nisi? Optio quidem eius mollitia neque cumque voluptatem aliquam magni praesentium, fugiat id commodi, ipsam numquam modi quas deserunt dolorum voluptates itaque a necessitatibus. Illo, iure sunt veritatis animi temporibus perspiciatis commodi voluptate tempore? Facere facilis at repudiandae quibusdam, temporibus consectetur ipsam provident porro blanditiis iusto laborum ullam expedita. Alias beatae libero consectetur et ipsum. Mollitia quae autem sequi eos vel, nulla nostrum cum aspernatur perferendis distinctio aut id, voluptatibus beatae obcaecati! Quos beatae hic, ad ullam totam et omnis aperiam neque saepe tenetur a expedita provident aliquid quia aliquam sequi rem, minus odit velit, sunt ex. Officiis error inventore provident quibusdam numquam, harum cum libero, vel, iure debitis dolorem facere a tenetur deserunt quod.' 
-                    },
+                    { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'a' },
                     { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'b' }
                 ]
             }
         },
-        // qId : 24, mId : 23
+        // id : 24,
         {
             id: 24,
             lang: 'hi',
@@ -1204,19 +1192,19 @@ const Define = (() => {
                 },
                 questions: [
                     { sequence: 1, direction: 'v', row: [2, 16], col: [20], question: '`theta` Fossil scientists', answer: "paLEONTOLOGISTS" },
-                    { sequence: 2, direction: 'v', row: [4, 10], col: [6], question: { text: 'Coins, tools, art #_#', image: { path: 'img/414.png', width: '20%' } }, answer: { text: 'SOURCES', image: { path: 'img/2.png', row: 1, col: 6 } } },
-                    { sequence: 3, direction: 'h', row: [5], col: [1, 14], question: 'Scientist who studies humans', answer: { text: 'ANTHROPOLOGIST', image: { path: 'img/3.png', row: 2, col: 1 } } },
-                    { sequence: 4, direction: 'v', row: [5, 11], col: [13], question: 'Biographies, plays etc', answer: { text: 'SECULAR', image: { path: 'img/4.png', row: 2, col: 13 } } },
-                    { sequence: 5, direction: 'v', row: [5, 13], col: [22], question: 'Study of Earth\'s history', answer: { text: 'GEOLOGIST', image: { path: 'img/5.png', row: 2, col: 22 } } },
-                    { sequence: 6, direction: 'h', row: [7], col: [5, 15], question: { text: 'Oral accounts from relatives #_#', image: { path: 'img/2.png', width: '20%' } }, answer: { text: 'ORALSOURCES', image: { path: 'img/6.png', row: 6, col: 3 } } },
-                    { sequence: 7, direction: 'v', row: [9, 15], col: [9], question: 'Facts in time order', answer: { text: 'HISTORY', image: { path: 'img/414.png', row: 12, col: 7 } } },
-                    { sequence: 8, direction: 'v', row: [9, 17], col: [25], question: 'Legends & folk stories', answer: { text: 'FOLKLORES', image: { path: 'img/ch4_1.png', row: 6, col: 25 } } },
-                    { sequence: 9, direction: 'h', row: [10], col: [2, 11], question: 'Old handwritten record', answer: { text: 'MANUSCRIPT', image: { path: 'img/ch4_2.png', row: 11, col: 3 } } },
-                    { sequence: 10, direction: 'h', row: [11], col: [12, 25], question: 'Remains to study past life', answer: { text: 'ARCHAEOLOGICAL', image: { path: 'img/ch4_3.png', row: 12, col: 12 } } },
+                    { sequence: 2, direction: 'v', row: [4, 10], col: [6], question: { text: 'Coins, tools, art #_#', image: { path: 'images/414.png', width: '20%' } }, answer: { text: 'SOURCES', image: { path: 'images/2.png', row: 1, col: 6 } } },
+                    { sequence: 3, direction: 'h', row: [5], col: [1, 14], question: 'Scientist who studies humans', answer: { text: 'ANTHROPOLOGIST', image: { path: 'images/3.png', row: 2, col: 1 } } },
+                    { sequence: 4, direction: 'v', row: [5, 11], col: [13], question: 'Biographies, plays etc', answer: { text: 'SECULAR', image: { path: 'images/4.png', row: 2, col: 13 } } },
+                    { sequence: 5, direction: 'v', row: [5, 13], col: [22], question: 'Study of Earth\'s history', answer: { text: 'GEOLOGIST', image: { path: 'images/5.png', row: 2, col: 22 } } },
+                    { sequence: 6, direction: 'h', row: [7], col: [5, 15], question: { text: 'Oral accounts from relatives #_#', image: { path: 'images/2.png', width: '20%' } }, answer: { text: 'ORALSOURCES', image: { path: 'images/6.png', row: 6, col: 3 } } },
+                    { sequence: 7, direction: 'v', row: [9, 15], col: [9], question: 'Facts in time order', answer: { text: 'HISTORY', image: { path: 'images/414.png', row: 12, col: 7 } } },
+                    { sequence: 8, direction: 'v', row: [9, 17], col: [25], question: 'Legends & folk stories', answer: { text: 'FOLKLORES', image: { path: 'images/ch4_1.png', row: 6, col: 25 } } },
+                    { sequence: 9, direction: 'h', row: [10], col: [2, 11], question: 'Old handwritten record', answer: { text: 'MANUSCRIPT', image: { path: 'images/ch4_2.png', row: 11, col: 3 } } },
+                    { sequence: 10, direction: 'h', row: [11], col: [12, 25], question: 'Remains to study past life', answer: { text: 'ARCHAEOLOGICAL', image: { path: 'images/ch4_3.png', row: 12, col: 12 } } },
                 ]
             }
         },
-        // qId : 25, mId : 24
+        // id : 25,
         {
             id: 25,
             lang: 'hi',
@@ -1229,7 +1217,7 @@ const Define = (() => {
                     },
                     img: {
                         width: `20%`,
-                        path: `img/ch4_1.png`,
+                        path: `images/ch4_1.png`,
                     },
                     audio: 'audio/correct.mp3',
                 },
@@ -1238,14 +1226,14 @@ const Define = (() => {
                     {
                         question1: {
                             text: 'बच्चों की किन बातों से घर के लोग खुश होते हैं?',
-                            image: 'img/ch4_1.png',
+                            image: 'images/ch4_1.png',
                             audio: 'audio/1.mp3'
                         },
                         options: [
                             { text: 'खेल-कूद में तूफ़ान मचाने पर `theta`' },
                             { text: 'खूब सोते रहने से', },
-                            { image: 'img/ch4_1.png' },
-                            { text: 'इनमें से कोई नहीं ', image: 'img/ch4_1.png' }
+                            { image: 'images/ch4_1.png' },
+                            { text: 'इनमें से कोई नहीं ', image: 'images/ch4_1.png' }
                         ],
                         answer: 2
                     },
@@ -1278,7 +1266,7 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 26, mId : 25
+        // id : 26,
         {
             id: 26,
             lang: 'en',
@@ -1290,7 +1278,7 @@ const Define = (() => {
                 }
             }
         },
-        // qId : 27, mId : 26
+        // id : 27,
         {
             id: 27,
             lang: 'hi',
@@ -1298,7 +1286,7 @@ const Define = (() => {
             subhead: "पेड़ - प्रकृति का वरदान",
             content: {
                 image: {
-                    path: ['img/1.png', 'img/2.png', 'img/3.png', 'img/4.png'],
+                    path: ['images/1.png', 'images/2.png', 'images/3.png', 'images/4.png'],
                     align: ['right', 'left', 'right', 'left'],
                     width: '15%',
                     replacement: '#_#'
@@ -1306,7 +1294,7 @@ const Define = (() => {
                 text: "पेड़-पौधे `theta` हमारी धरती माँ के सिर्फ़ शृंगार ही नहीं, #_# बल्कि उसपर स्थित जीवन के आधार भी हैं। इनके बिना हम जीवन की कल्पना भी #_# नहीं कर सकते। प्राचीन काल से ही हमारे ऋषियों, मुनियों और विचारकों ने पेड़-पौधों के महत्त्व को समझा। यही कारण है कि हमारी संस्कृति में वनों का इतना महत्त्व है। हमारे यहाँ पेड़-पौधों को लगाना, इनकी पूजा करना और वन-महोत्सव की प्रथा का प्रचलन प्राचीन काल से है और इसके वैज्ञानिक कारण भी हैं। #_# पेड़ों की पूजा अंधविश्वास नहीं है। पेड़-पौधे हमारे लिए बहुत लाभदायक हैं। इनसे हमें खाने के लिए फ़ल, विश्राम के लिए छाया, रोगों के लिए औषधियाँ, जलाने के लिए ईंधन एवं शुद्ध वातावरण आदि मिलता है। अतः उनके प्रति कृतज्ञता प्रकट करना हमारा प्रथम कर्तव्य है। पेड़-पौधे हमेशा से हम पर उपकार करते आए हैं। पेड़-पौधों द्वारा जलवायु औरवातावरण का संतुलन बना रहता है। इनकी जड़ें मिट्टी को जकड़कर रखती हैं तथा पत्तियाँ सड़कर खाद (ह्यूमस) का काम करती हैं। #_# इससे मृदा-क्षरण कम होता है। यह तो हम सभी जानते हैं कि पेड़-पौधों में जीवन होता है। वे भी हमारी तरह दुख-सुख का अनुभव कर अपनी प्रतिक्रिया व्यक्त करते हैं। कहा जाता है कि मनुष्य पर उसके चारों ओर के वातावरण का असर पड़ता है, इसलिए अगर हम अपने चारों तरफ़ की धरती को पेड़ लगाकर हरा कर दें, तो चारों तरफ़ का सौंदर्य देखने लायक होगा, फिर जो मनुष्य ऐसे वातावरण में रहेगा, उसका हृदय भी उसी तरह खुशहाल हो जाएगा। पेड़ तो प्रकृति का सबसे बड़ा वरदान है। #_# अगर पेड़ हैं तो वर्षा होगी, पानी की समस्या नहीं रहेगी एवं ऑक्सीजन और कार्बन डाइऑक्साइड गैसों में संतुलन रहेगा। यदि पेड़ों की संख्या बढ़ा दी जाए तो ग्रीन हाउस गैसों के असर से भी हम बच सकते हैं। प्रगति की ओर बढ़ रहे मानव ने नगर, महानगर, यहाँ तक कि कस्बे और देहात तक में छोटे-बड़े उद्योग-धंधों के रूप में अनेक छोटी-बड़ी फ़ैक्टरियाँ लगाई हैं। उनसे धुआँ, तरह-तरह की विषैली गैसें आदि निकलकर पर्यावरण को प्रदूषित कर रही हैं। पेड़-पौधे उनसे निकलने वाली प्रदूषित गैसों को पर्यावरण में घुलने से रोककर पर्यावरण को दूषित होने से बचाते हैं। पेड़-पौधे उस कामधेनु की भाँति हैं, जिसके बिना जीना असंभव है। इनके बिना हमारा अस्तित्व ही समाप्त हो जाएगा, अतः हमें चाहिए कि ज़्यादा-से-ज़्यादा पेड़ लगाकर अपनी पृथ्वी को बचाएँ, अन्यथा वह समय दूर नहीं, जब पृथ्वी पर जीव और जीवन एक इतिहास बन जाएगा।",
             }
         },
-        // qId : 28, mId : 27
+        // id : 28,
         {
             id: 28,
             lang: 'hi',
@@ -1340,14 +1328,14 @@ const Define = (() => {
                     height: '100px',
                 },
                 image: {
-                    path: 'img/1.png',
+                    path: 'images/1.png',
                     side: 'top',
                     width: '150px',
                 },
-                showInput: false,
+                showInput: true,
             }
         },
-        // qId : 29, mId : 28
+        // id : 29,
         {
             id: 29,
             lang: 'hi',
@@ -1366,7 +1354,7 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 30, mId : 29
+        // id : 30,
         {
             id: 30,
             lang: 'hi',
@@ -1378,12 +1366,12 @@ const Define = (() => {
                 inputLeft: true,
                 hint: 'आदरणीया चाची जी, गर्मियों की छुट्टियाँ, बड़े दिनों से दिल्ली नहीं आईं, रीनू-चीनू को लेकर आएँ, कुछ  दिन रहे सब मिलकर मजे करेंगे',
                 image: {
-                    path: 'img/1.png',
+                    path: 'images/1.png',
                     width: '15%'
                 },
                 col: {
-                    left: { md: 4, sm: 6, col: 6, show: true },
-                    right: { md: 6, sm: 6, col: 6, show: true }
+                    left: { md: 4, sm: 6, col: 12, show: true },
+                    right: { md: 8, sm: 8, col: 12, show: true }
                 },
                 placeholder: {
                     left: 'यहाँ सामग्री लिखें...',
@@ -1400,7 +1388,7 @@ const Define = (() => {
                 ]
             },
         },
-        // qId : 31, mId : 30
+        // id : 31,
         {
             id: 31,
             lang: 'en',
@@ -1409,17 +1397,17 @@ const Define = (() => {
                 width: "200px",
                 height: "200px",
                 question: [
-                    { path: 'img/1.png', answer: true },
-                    { path: 'img/2.png', answer: true },
-                    { path: 'img/3.png', answer: true },
-                    { path: 'img/4.png', answer: false },
-                    { path: 'img/5.png', answer: false },
-                    { path: 'img/6.png', answer: false },
-                    { path: 'img/1.png', answer: false },
+                    { path: 'images/1.png', answer: true },
+                    { path: 'images/2.png', answer: true },
+                    { path: 'images/3.png', answer: true },
+                    { path: 'images/4.png', answer: false },
+                    { path: 'images/5.png', answer: false },
+                    { path: 'images/6.png', answer: false },
+                    { path: 'images/1.png', answer: false },
                 ]
             }
         },
-        // qId : 32, mId : 31
+        // id : 32,
         {
             id: 32,
             lang: 'en',
@@ -1435,7 +1423,7 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 33, mId : 32
+        // id : 33,
         {
             id: 33,
             lang: 'en',
@@ -1447,7 +1435,7 @@ const Define = (() => {
                 'Grimly', 'Hankering', 'Quavered', 'Angel', 'Deterrence', 'Lavender', 'aeroplane',
             ]
         },
-        // qId : 34, mId : 33
+        // id : 34,
         {
             id: 34,
             lang: 'en',
@@ -1462,7 +1450,7 @@ const Define = (() => {
                         text: ['`theta` `sqrt(49)`  = #_# + 200 = 207 x #_# = #img#'],
                         image: {
                             width: '200px',
-                            path: 'img/414.png',
+                            path: 'images/414.png',
                             replacement: '#img#',
                         },
                         options: ['7', '2', '20', '`theta`'],
@@ -1484,7 +1472,7 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 35, mId : 34
+        // id : 35,
         {
             id: 35,
             content: {
@@ -1502,7 +1490,7 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 36, mId : 35
+        // id : 36,
         {
             id: 36,
             lang: 'en',
@@ -1567,7 +1555,7 @@ const Define = (() => {
                 }
             }
         },
-        // qId : 37, mId : 36
+        // id : 37,
         {
             id: 37,
             lang: 'en',
@@ -1600,7 +1588,7 @@ const Define = (() => {
                 }
             }
         },
-        // qId : 38, mId : 37
+        // id : 38,
         {
             id: 38,
             lang: 'en',
@@ -1610,14 +1598,14 @@ const Define = (() => {
                 replacement: '#{word}#',
                 questions: [
                     {
-                        id: 1, 
+                        id: 1,
                         text: 'I am six years old. I study in Class #calss# 1. <br> I have #blac# #hare# and #broun# eyes. I have strong #leggs#. They help me #ren# fast. Today, I fell and hurt my #kne asdf#. I hope to get well soon and run again.',
-                        answer: ['black', 'hair', 'brown', 'legs', 'run', 'knee', 'class'] 
+                        answer: ['black', 'hair', 'brown', 'legs', 'run', 'knee', 'class']
                     }
                 ]
             }
         },
-        // qId : 39, mId : 38
+        // id : 39,
         {
             id: 39,
             lang: 'en',
@@ -1627,7 +1615,7 @@ const Define = (() => {
                 words: ['Jeans', 'Sweater', 'cap', 'shorts', 'frock', 'skirt', 'hat', 'Vest', 'clothes', 'socks', 't-shirt', 'trousers', 'shirt', 'scarf', 'tie']
             }
         },
-        // qId : 40, mId : 39
+        // id : 40,
         {
             id: 40,
             lang: 'hi',
@@ -1636,20 +1624,20 @@ const Define = (() => {
                 replacement: '#',
                 col: { col: 12, md: 6, sm: 12 },
                 image: {
-                    path: 'img/1.png',
+                    path: 'images/1.png',
                     width: '20%',
                 },
                 words: [
                     { text: "#बल्टी# #घड़या# नद #सरस्वत# `theta`", answer: ['बाल्टी', 'घड़िया', 'सरस्वती'] },
                     { text: "नद", answer: "नदी" },
-                    { text: "#घड़या#", image: { path: 'img/3.png', width: '15%' }, answer: ["घड़िया"] },
-                    { text: "सरस्वत #बल्टी# #नद#", image: { path: 'img/4.png', width: '15%' }, answer: ['बाल्टी', 'नदी'] },
-                    { text: "#बल्टी#", image: { path: 'img/5.png', width: '15%' }, answer: ["बाल्टी"] }
+                    { text: "#घड़या#", image: { path: 'images/3.png', width: '15%' }, answer: ["घड़िया"] },
+                    { text: "सरस्वत #बल्टी# #नद#", image: { path: 'images/4.png', width: '15%' }, answer: ['बाल्टी', 'नदी'] },
+                    { text: "#बल्टी#", image: { path: 'images/5.png', width: '15%' }, answer: ["बाल्टी"] }
                 ],
                 vowels: ["ा", "ि", "ी", "ु", "ू", "े", "ै", "ो", "ौ", "ं", "ः", "ँ"]
             }
         },
-        // qId : 41, mId : 19
+        // id : 41,
         {
             id: 41,
             lang: 'en',
@@ -1662,7 +1650,7 @@ const Define = (() => {
                     meaning: 'कूद-कूदकर',
                     sentence: 'छोटी चिड़ियाँ `theta` appleing चलना सीखती हैं। appleing',
                     image: {
-                        path: 'img/1.png',
+                        path: 'images/1.png',
                         width: '20%'
                     },
                     titles: [
@@ -1677,7 +1665,7 @@ const Define = (() => {
                     meaning: 'कूद-कूदकर',
                     sentence: 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।',
                     image: {
-                        path: 'img/2.png',
+                        path: 'images/2.png',
                         width: '20%'
                     },
                     titles: [
@@ -1688,7 +1676,7 @@ const Define = (() => {
                 }
             ]
         },
-        // qId : 42, mId : 40
+        // id : 42,
         {
             id: 42,
             head: 'Template : 40, VirtualTour `theta`',
@@ -1717,10 +1705,10 @@ const Define = (() => {
                                         position: 'top',
                                         width: '50%',
                                         images: [
-                                            { path: 'img/1.png', caption: 'police-man-1' },
-                                            { path: 'img/2.png', caption: 'police-man-2 `theta`' },
-                                            { path: 'img/3.png', caption: 'police-man-3' },
-                                            { path: 'img/3.png', caption: 'police-man-3' }
+                                            { path: 'images/1.png', caption: 'police-man-1' },
+                                            { path: 'images/2.png', caption: 'police-man-2 `theta`' },
+                                            { path: 'images/3.png', caption: 'police-man-3' },
+                                            { path: 'images/3.png', caption: 'police-man-3' }
                                         ]
                                     }
                                 }
@@ -1747,11 +1735,11 @@ const Define = (() => {
                                 col: 3,
                             },
                             images: [
-                                { path: 'img/1.png', caption: 'text-1' },
-                                { path: 'img/2.png', caption: 'text-2' },
-                                { path: 'img/3.png', caption: 'text-3' },
-                                { path: 'img/4.png', caption: 'text-4' },
-                                { path: 'img/5.png', caption: 'text-5' }
+                                { path: 'images/1.png', caption: 'text-1' },
+                                { path: 'images/2.png', caption: 'text-2' },
+                                { path: 'images/3.png', caption: 'text-3' },
+                                { path: 'images/4.png', caption: 'text-4' },
+                                { path: 'images/5.png', caption: 'text-5' }
                             ],
                             audio: { path: 'audio/ohGalat.mp3' }
                         }
@@ -1777,9 +1765,9 @@ const Define = (() => {
                                         position: 'left',
                                         width: '150px',
                                         images: [
-                                            { path: 'img/1.png', caption: 'police-man-1' },
-                                            { path: 'img/2.png', caption: 'police-man-2' },
-                                            { path: 'img/3.png', caption: 'police-man-3' }
+                                            { path: 'images/1.png', caption: 'police-man-1' },
+                                            { path: 'images/2.png', caption: 'police-man-2' },
+                                            { path: 'images/3.png', caption: 'police-man-3' }
                                         ]
                                     }
                                 }
@@ -1789,35 +1777,35 @@ const Define = (() => {
                 ]
             }
         },
-        // qId : 43, mId : 41
+        // id : 43,
         {
-            id      : 43,
-            head    : 'Template : 43, CircleAndUnderline `theta`',
-            lang    : 'mt',
-            config  : {
+            id: 43,
+            head: 'Template : 43, CircleAndUnderline `theta`',
+            lang: 'mt',
+            config: {
                 // To hide the menu, make either of them true, but not both.
-                menuOptions : {
-                    circle    : false,
-                    underline : true
+                menuOptions: {
+                    circle: false,
+                    underline: true
                 }
             },
-            content : {
+            content: {
                 questions: [
                     {
-                        id    : 1,
-                        words : [ 'lorem', 'ipsum', 'red dipsum', 'bipsum', 'chipsum', '`theta`', 'lipsum', '.' ],
-                        highlight : { // Index of words
-                            circle    : [ 0, 2 ],
-                            underLine : [ 4, 5 ],
-                            disabled  : [ 3, 6 ]
+                        id: 1,
+                        words: ['lorem', 'ipsum', 'red dipsum', 'bipsum', 'chipsum', '`theta`', 'lipsum', '.'],
+                        highlight: { // Index of words
+                            circle: [0, 2],
+                            underLine: [4, 5],
+                            disabled: [3, 6]
                         }
                     },
                     {
-                        id    : 2,
-                        words : [ 'lorem', 'ipsum', 'red dipsum', 'bipsum', 'chipsum', 'lipsum' ],
-                        highlight : {
-                            circle    : [ 0, 2 ],
-                            underLine : [ 1, 5 ]
+                        id: 2,
+                        words: ['lorem', 'ipsum', 'red dipsum', 'bipsum', 'chipsum', 'lipsum'],
+                        highlight: {
+                            circle: [0, 2],
+                            underLine: [1, 5]
                         }
                     }
                 ]
@@ -1826,25 +1814,25 @@ const Define = (() => {
     ];
 
     const questionContainer = '.question-container';
-    const head    = 'qNum';
+    const head = 'qNum';
     const subHead = 'questionText';
 
     const loadScript = (src) => {
         return new Promise((resolve, reject) => {
-            if( !src ) {
+            if (!src) {
                 reject(new Error('No script src provided'));
                 return;
             }
 
             const exists = [...document.querySelectorAll('script')].some(script => script.src.includes(src));
-            if( exists ) {
+            if (exists) {
                 resolve('already-loaded');
                 return;
             }
-            
-            const s   = document.createElement('script');
-            s.src     = src;
-            s.onload  = () => resolve(s);
+
+            const s = document.createElement('script');
+            s.src = src;
+            s.onload = () => resolve(s);
             s.onerror = (err) => {
                 s.remove();
                 reject(new Error(`Failed to load script: ${src}`));
@@ -1856,7 +1844,6 @@ const Define = (() => {
     (async () => {
         const p = 'js/newActJS';
         const v = Date.now();
-
         await loadScript(`${p}/modules.js?v=${v}`);
         await loadScript(`${p}/templates.js?v=${v}`);
         await loadScript(`${p}/ui.js?v=${v}`);
@@ -1875,3 +1862,5 @@ const Define = (() => {
 
     return { get };
 })();
+
+

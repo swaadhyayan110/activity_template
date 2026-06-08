@@ -59,7 +59,7 @@
 /* ================== BUTTONS ================== */
 .btnAdapt {
     padding: 8px 23px;
-    border-radius: 0 0 15px 15px;
+    border-radius: 15px 15px;
     background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
     border: 2px solid #90caf9;
     border-top: none;
@@ -194,8 +194,10 @@
     overflow: hidden;
     position: fixed;
     top: 0;
+    left: 0;
     background: #0a0a0aab;
     width: 100%;
+    z-index: 999;
 }
 
 /* ================== ANIMATIONS ================== */
@@ -431,10 +433,10 @@
 }
 
 .contAdapt {
-    background: #f6fcff;
-    padding: 71px 15px;
-    margin-top: 20px;
-    border: 2px solid #8bc5ff75;
+    /* background: #f6fcff; */
+    padding: 18px 15px;
+    /* margin-top: 20px; */
+    /* border: 2px solid #8bc5ff75; */
     border-radius: 20px;
 }
 
