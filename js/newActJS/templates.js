@@ -6016,7 +6016,7 @@ const DragAndDropMulti = (() => {
                                             <div class="mcq-context p-1"></div>
                                             <div class="question-block position-relative ">
                                                 <div class="dragItems drag-container2 " id="${containerId}" data-qid="${questionId}"></div>
-                                                <div class="drag-question-box2 mt-3 "></div>
+                                                <div class="drag-question-box2 mt-3 forImgSetV2"></div>
                                             </div>
                                             ${!singleQuestionMode ? `
                                                     <div class="buttons machiNgs">
@@ -14541,16 +14541,16 @@ const VirtualTour = (() => {
                             ${title?.main?.text && title.main.text != ''
                         ? `
                                     <div 
-                                        class="col-12 col-sm-3 p-3 fw-bold text-light text-uppercase rounded-3"                  
+                                        class="col-12 col-sm-3 fw-bold text-light text-uppercase rounded-3"                  
                                     ><div class="frintBoxDesignVT2">${title.main.text}</div></div>
                                 ` : ''
                     }
                             ${title?.sub?.text && title.sub.text != ''
                         ? `
                                     <div 
-                                        class="col row g-0 align-items-center  ${title?.main?.text ? '' : 'justify-content-center'} p-3"
+                                        class="col row g-0 align-items-center  ${title?.main?.text ? '' : 'justify-content-center'}"
                                     >
-                                    <div class="vTSecondHeading">${title.sub.text}</div></div>
+                                    <div class="vTSecondHeading p-1">${title.sub.text}</div></div>
                                 ` : ''
                     }
                         </div>

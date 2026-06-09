@@ -276,6 +276,10 @@
 
 /* vowe Drag and Drop end*/
 
+.forImgSetV2 img{
+  width: 100% !important;
+}
+
 /* Responsive */
 @media (max-width: 880px) {
   .questLine {
