@@ -9093,18 +9093,32 @@ const CrossWord = (() => {
                     if (__isBox(r, c, renderedQuestion)) {
                         let answer = undefined;
                         if (nums.length) {
+
                             const firstSequence = nums[0];
-                            const question = questions[firstSequence - 1];
+
+                            const question = questions.find(
+                                q => q.sequence == firstSequence
+                            );
 
                             if (typeof question?.answer === 'string') {
+
                                 answer = question.answer;
+
                             }
                             else if (typeof question?.answer === 'object') {
+
                                 answer = question.answer?.text;
+
                             }
+
                         }
-                        const showFirstLetter = (showHint && answer != undefined) ? `value='${answer[0]}'` : ''
-                        table.push(`<span class="num" style="top: 8px; left: -2px;">${num || ''}</span><input type="text" class="box" maxlength="1" ${showFirstLetter}  ${(showHint && answer != undefined) ? "disabled" : ''} />`);
+                        
+                        const showFirstLetter = (showHint && answer) ? `value="${answer.charAt(0).toUpperCase()}"` : '';
+                        table.push(
+                            `
+                                <span class="num" style="top: 8px; left: -2px;">${num || ''}</span>
+                                <input type="text" class="box" maxlength="1" ${showFirstLetter}  ${(showHint && answer != undefined) ? "disabled" : ''} />
+                            `);
                     } else {
                         table.push('&nbsp;');
                     }

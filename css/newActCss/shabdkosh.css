@@ -233,12 +233,12 @@
 
   border-radius: 35px;
 
-  background: linear-gradient(145deg,
+  /* background: linear-gradient(145deg,
       #ffffff,
-      #dbeafe);
+      #dbeafe); */
 
-  box-shadow:
-    0 15px 35px rgba(37, 99, 235, 0.2);
+  /* box-shadow:
+    0 15px 35px rgba(37, 99, 235, 0.2); */
 
   transition: all 0.4s ease;
 }
