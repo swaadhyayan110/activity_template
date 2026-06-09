@@ -2331,7 +2331,7 @@ const FillInTheBlanksHindiKb = (() => {
                 const colCondition = definedCol instanceof Object && Object.entries(definedCol).length;
                 const inputBelowCondition = question?.inputBelow === true && question?.answers;
 
-                if (colCondition) div.classList.add(`d-flex`, `gap-2`, `flex-wrap`, `col-sm-${col.sm}`, `col-md-${col.md}`, `col-${col.col}`, `${subQuestion.length == 0 && !inputBelowCondition ? 'align-items-center' : 'align-items-start'}`);
+                if (colCondition) div.classList.add(`row`, `gap-2`, `flex-wrap`, `col-sm-${col.sm}`, `col-md-${col.md}`, `col-${col.col}`, `${subQuestion.length == 0 && !inputBelowCondition ? 'align-items-center' : 'align-items-start'}`);
 
                 if (subQuestion.length || inputBelowCondition) {
                     const imageView = __renderImageInQuestionText({
