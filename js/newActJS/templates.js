@@ -15182,7 +15182,14 @@ const CustomTemplate = (() => {
 
         html = __prefixMediaPaths(html);
 
-        parent.innerHTML = `<div class="question p-3 h-100" id="${id}">${html}</div>`;
+        parent.innerHTML = `
+            <div class="match1Back">
+                    <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
+                    <div class="onTheImagesFill2">
+                        <div class="question p-3 h-100" id="${id}">${html}</div>
+                    </div>
+            </div>
+        `;
 
         return { flag: true, parent: parent };
     };

@@ -14,8 +14,8 @@ const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = [
-        // { qid: 44, text: ['Q-44', 'id : 0 - Math'], module: 0 },
-        // { qid: 0, text: ['Q-0', 'id : 0 - Audio'], module: 0 },
+        { qid: 44, text: ['Q-44', 'id : 0 - Math'], module: 0 },
+        { qid: 0, text: ['Q-0', 'id : 0 - Audio'], module: 0 },
         { qid: 1, text: ['Q-1', 'id : 1 - Match-1'], module: 1, landscape: true },
         { qid: 2, text: ['Q-2', 'id : 2 - Match-2'], module: 2 },
         { qid: 3, text: ['Q-3', 'id : 3 - Match-3'], module: 3 },
@@ -156,7 +156,7 @@ const Define = (() => {
                             <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">uc</span> = uppercase
                         </p>
                         <table class="table table-bordered table-hover align-middle">
-                            <thead class="table-dark position-sticky top-0 z-1 align-middle text-center">
+                            <thead class="table-dark align-middle text-center">
                                 <tr>
                                     <th>Type</th>
                                     <th>Usage</th>
