@@ -137,6 +137,8 @@ const UI = (() => {
                         image.src   = 'images/headerImage_button.png';
                         image.id    = 'header-image-button';
                         container.insertAdjacentElement( 'beforebegin', image );
+                    } else {
+                        container.remove();
                     }
 
                     activity(itemSelector, itemId, moduleId, landscape);
