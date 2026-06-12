@@ -3237,9 +3237,11 @@ const Mcq_PathKaSaar = (() => {
             const lang = activity.lang ?? 'en';
 
             const only_text =
-                !!content.text?.text?.trim() &&
-                !content.img &&
-                (!content.mcq || content.mcq.length === 0);
+                !!content.text?.text?.trim()
+                && content.text.text.length <= 225
+                && !content.img
+                && (!content.mcq || content.mcq.length === 0);
+            // ..
 
             const text = content.text?.text?.trim();
 

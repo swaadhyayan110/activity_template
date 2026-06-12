@@ -146,12 +146,12 @@ const Define = (() => {
                         class="position-fixed top-50 start-50 translate-middle-x p-3"
                     ></div>
                     <div 
-                        class="border border-primary-subtle text-center fs-5 fw-semibold text-primary-emphasis bg-primary-subtle rounded-3 my-3 shadow-sm p-2 w-75 mx-auto"
+                        class="border border-primary-subtle text-center fs-5 fw-semibold text-primary-emphasis bg-primary-subtle rounded-3 my-3 shadow-sm p-2 w-100 mx-auto"
                     >
                         MathJax V2 Syntax
                     </div>
 
-                    <div class="w-75 mx-auto bg-body-tertiary p-3 rounded-3 shadow-sm">
+                    <div class="w-100 mx-auto bg-body-tertiary p-3 rounded-3 shadow-sm">
                         <p class="text-muted">
                             <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">lc</span> = lowercase ;
                             <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">uc</span> = uppercase
@@ -1824,7 +1824,7 @@ const Define = (() => {
             id: 45,
             content: {
                 text: {
-                    text: 'We are all equal in the eyes of God.',
+                    text: 'We are all equal in the eyes of God. We are all equal in the eyes of God.We are all equal in the eyes of God.We are all equal in the eyes of God.We are all equal in the eyes of God.We are all equal in the eyes of God.',
                 },
             }
         },

@@ -87,13 +87,7 @@ const UI = (() => {
             btn.classList.remove('activeBtns')
         );
 
-        document.querySelector('.question-container').innerHTML = '';       
-
-        // if( landscape === true ) {
-        //     landscapeMode();
-        // } else {
-        //     portraitMode();
-        // }
+        document.querySelector('.question-container').innerHTML = '';
 
         const quesEle = document.getElementById(selector);        
         if( quesEle ) {
