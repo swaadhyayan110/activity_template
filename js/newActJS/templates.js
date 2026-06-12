@@ -600,8 +600,8 @@ const Activity = (() => {
             }
 
             temp.render(questionId, activityId);
-            
-            if( Define.get('loadScript') ) await Define.get('loadScript')('js/newActJS/MathJax-2.7.9/MathJax.js?config=TeX-MML-AM_CHTML');
+
+            if (Define.get('loadScript')) await Define.get('loadScript')('js/newActJS/MathJax-2.7.9/MathJax.js?config=TeX-MML-AM_CHTML');
         } catch (err) {
             console.error('Activity.render : ', err);
         }
@@ -2727,12 +2727,29 @@ const JumbleLetters = (() => {
 
             $("#letterContainer").empty();
 
+            const config = data?.config;
+
+            const defaultCol = {
+                md: 6,
+                sm: 12,
+                col: 12
+            };
+            const col = {
+                md: config?.col?.md ?? defaultCol.md,
+                sm: config?.col?.sm ?? defaultCol.sm,
+                col: config?.col?.col ?? defaultCol.col
+            };
+
+
+            const colSize = `col-sm-${col.sm} col-md-${col.md} col-${col.col}`;
+
             const words = data?.content;
+
             words.forEach((word, index) => {
                 const jumbled = shuffle(word);
 
                 const gameBox = $(`
-                    <div class="col-md-6 col-12 col-sm-12">
+                    <div class="${colSize}">
                         <div class="rowLines">
                         <div class="numb">${index + 1}.</div>
                         <div class="letterjumbRow" id="letters-${index}" aria-label="Arrange the letters for ${word}"></div>
@@ -3216,39 +3233,60 @@ const Mcq_PathKaSaar = (() => {
             }
 
             const activity = Activity.getDefine(questionId) ?? {};
+            const content = activity?.content ?? {};
             const lang = activity.lang ?? 'en';
 
-            parent.innerHTML = `
-                            <div class="mcqOuterScorV2_">
-                                <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
-                                <div class="question mcq_1MenV2">
-                                    <div class="container">
-                                        <div class="rowWithAudios">
-                                            <span class="m-0 ${Define.get('head')}"></span> 
-                                            <span class="colorsDiff ${Define.get('subHead')}"></span>
-                                        </div>
-                                        <div class="mcq-context p-1"></div>
-                                        <div id="${heading}"></div>
+            const only_text =
+                !!content.text?.text?.trim() &&
+                !content.img &&
+                (!content.mcq || content.mcq.length === 0);
+
+            const text = content.text?.text?.trim();
+
+            parent.innerHTML = only_text ? `
+                        <div class="match1Back">
+                            <img class="backImgsM1" draggable="false" src="images/moralAct.jpg"/>
+                            <div class="onTheImagesFill2">
+                                <div class="question p-3 h-100">
+                                    <div class="textontheImgs">
+                                        ${text}
                                     </div>
                                 </div>
-                                 <div id="popupDialogAns">
-                                            <div class="baseMod">
-                                                <div class="answerdiv">
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
-                                                        <button id="close-popup" class="btn btn-secondary">X</button>
-                                                    </div>
-                                                    <div id="answerShowMCW"></div>
-                                                </div>
-                                            </div>
+                            </div>
+                        </div>`
+                :
+                `<div class="mcqOuterScorV2_">
+                            <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
+                            <div class="question mcq_1MenV2">
+                                <div class="container">
+                                    <div class="rowWithAudios">
+                                        <span class="m-0 ${Define.get('head')}"></span> 
+                                        <span class="colorsDiff ${Define.get('subHead')}"></span>
+                                    </div>
+                                    <div class="mcq-context p-1"></div>
+                                    <div id="${heading}"></div>
                                 </div>
                             </div>
+                                <div id="popupDialogAns">
+                                <div class="baseMod">
+                                    <div class="answerdiv">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                            <button id="close-popup" class="btn btn-secondary">X</button>
+                                        </div>
+                                        <div id="answerShowMCW"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                    `;
 
             // ..
 
             const closeBtn = parent.querySelector('#close-popup');
             if (closeBtn) closeBtn.addEventListener("click", closeFnMCQ);
+
+            return {only_text}
         } catch (e) {
             console.error('Mcq.ui :', e);
         }
@@ -3256,7 +3294,9 @@ const Mcq_PathKaSaar = (() => {
 
     const renderAllQuestionsMCQ = (questionId) => {
         try {
-            ui(questionId);
+            const {only_text} = ui(questionId);
+
+            if (only_text) return;
 
             const headElem = Activity.setHeader(questionId);
             if (!headElem.head && !headElem.subhead) {
@@ -7283,7 +7323,7 @@ const Pdf = (() => {
             }
 
             const response = await fetch(path, { method: 'HEAD' });
-            if ( !response.ok ) {
+            if (!response.ok) {
                 toggle_loader(false);
 
                 const containerClass = Define.get('questionContainer');
@@ -7297,7 +7337,7 @@ const Pdf = (() => {
                 return;
             }
 
-            const downloadBtn     = document.getElementById("downloadBtn");
+            const downloadBtn = document.getElementById("downloadBtn");
             const downloadAllowed = activity?.content?.download;
             if (downloadBtn && downloadAllowed) {
                 downloadBtn.onclick = () => {
@@ -7307,7 +7347,7 @@ const Pdf = (() => {
                     a.click();
                 };
             } else {
-                if( downloadBtn ) downloadBtn.remove();
+                if (downloadBtn) downloadBtn.remove();
             }
 
             toggle_loader(true);
@@ -7334,7 +7374,7 @@ const Pdf = (() => {
             try {
                 pdfDoc = await loadingTask.promise;
             } catch (err) {
-                console.log( err );
+                console.log(err);
                 return;
             }
 
@@ -9134,7 +9174,7 @@ const CrossWord = (() => {
                             }
 
                         }
-                        
+
                         const showFirstLetter = (showHint && answer) ? `value="${answer.charAt(0).toUpperCase()}"` : '';
                         table.push(
                             `
@@ -12456,7 +12496,7 @@ const AudioAndVideoFromYoutube = (() => {
                 });
             }
 
-            if( Define.get('loadScript') ) {
+            if (Define.get('loadScript')) {
                 await Define.get('loadScript')('https://www.youtube.com/iframe_api');
                 await ytReady;
                 buttonUI();

@@ -1821,7 +1821,8 @@ body {
 
 .onTheImagesFill2 {
   position: absolute;
-  top: 14vh;
+  top: 9vh;
+  /* top: 14vh; */
   left: 50%;
   width: 80%;
   height: 70vh;
@@ -1909,6 +1910,21 @@ body {
   transform: translate(-50%, 18%);
   overflow: auto;
   padding: 3.5vw 0;
+}
+
+.textontheImgs {
+  width: 54%;
+  /* border: 1px solid #fffdfd; */
+  margin: 10vh auto;
+  height: 38vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0.5vw;
+  font-size: 2vw;
+  color: #000;
+  overflow: auto;
 }
 
 /* =========================

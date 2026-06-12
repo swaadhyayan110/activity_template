@@ -59,6 +59,7 @@ const Define = (() => {
         { qid: 41, text: ['Q-41', 'qid:41; mid:19 - Shabdkosh type-2'], module: 19 },
         { qid: 42, text: ['Q-42', 'qid:42; mid:40 - Virtual Tour'], module: 40 },
         { qid: 43, text: ['Q-43', 'qid:43; mid:41 - Circle and underline'], module: 41 },
+        { qid: 45, text: ['Q-45', 'qid:45; mid:9 - Moral of the chapter'], module: 9 },
     ];
 
     // DEFINE QUESTIONS
@@ -590,6 +591,13 @@ const Define = (() => {
             lang: 'hi',
             head: 'Template : 6',
             subhead: 'text.. `theta`',
+            config: {
+                col: {
+                    md: 12,
+                    sm: 12,
+                    col: 12
+                },
+            },
             content: [
                 'SCHOOL', 'TEACHER', 'STUDENT', 'BOOK', '`theta`',
                 'CLASS', 'COLLEGE', 'EXAM', 'LEARN', 'STUDY'
@@ -1809,6 +1817,15 @@ const Define = (() => {
                         }
                     }
                 ]
+            }
+        },
+        // id : 45,
+        {
+            id: 45,
+            content: {
+                text: {
+                    text: 'We are all equal in the eyes of God.',
+                },
             }
         },
     ];

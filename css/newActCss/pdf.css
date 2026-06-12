@@ -7,11 +7,11 @@
         body {
             height: 100vh;
 
-            background:
+            /* background:
                 linear-gradient(135deg,
                     #9cf7cb,
                     #d9fff1,
-                    #ffffff);
+                    #ffffff); */
 
             font-family: Arial;
             overflow: hidden;
