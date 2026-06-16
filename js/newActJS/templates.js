@@ -5514,26 +5514,24 @@ const TrueAndFalse = (() => {
                     <div class="col p-0">
                         <div class="row m-0 align-items-center ">
                             <div class="col-9 p-0">&nbsp; ${question}</div>
-                           <div class="col-auto options tnfOptionsRowV2">
-                            <button class="btn btn-sm tnfBtn trueBtnAct"
-                                data-answer="true"
-                                data-ind="${ind}">
-                                <span>
-                                    <span class="emojiBtn">✔</span>
-                                    TRUE
-                                </span>
-                            </button>
-
-                            <button class="btn btn-sm tnfBtn falseBtnAct"
-                                data-answer="false"
-                                data-ind="${ind}">
-                                <span>
-                                    <span class="emojiBtn">✖</span>
-                                    FALSE
-                                </span>
-                            </button>
-
-                        </div>
+                            <div class="col-auto options tnfOptionsRowV2">
+                                <button class="btn btn-sm tnfBtn trueBtnAct"
+                                    data-answer="true"
+                                    data-ind="${ind}">
+                                    <span>
+                                        <span class="emojiBtn">✔</span>
+                                        ${btnLabels[0]}
+                                    </span>
+                                </button>
+                                <button class="btn btn-sm tnfBtn falseBtnAct"
+                                    data-answer="false"
+                                    data-ind="${ind}">
+                                    <span>
+                                        <span class="emojiBtn">✖</span>
+                                        ${btnLabels[1]}
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -8832,6 +8830,15 @@ const TextArea = (() => {
         $('.submit-btn').removeClass('disable');
     };
 
+    const normalizeAnswer = (text) => {
+        return text
+            .replace(/\r\n/g, '\n')
+            .split('\n')
+            .map(line => line.replace(/\s+/g, ' ').trim())
+            .join('\n')
+            .trim();
+    }
+
     const checkAnswers = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`));
         const lang = activity?.lang ?? 'en';
@@ -8871,7 +8878,9 @@ const TextArea = (() => {
                     resultIcon = '⚠ ' + popupLabels.emptyLabel;
                     userClass = 'wrong';
                     emptyCount++;
-                } else if (user === correct) {
+                } 
+                if (normalizeAnswer(user) === normalizeAnswer(correct)) {
+                // else if (user === correct) {
                     resultIcon = '✔️';
                     userClass = 'correct';
                     correctCount++;

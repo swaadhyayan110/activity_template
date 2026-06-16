@@ -1181,7 +1181,7 @@ const Define = (() => {
                     imageclass: 'text-center'
                 },
                 questions: [
-                    { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'a' },
+                    { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: '1. test-1\n2. test-2' },
                     { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'b' }
                 ]
             }
