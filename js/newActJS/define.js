@@ -1215,7 +1215,7 @@ const Define = (() => {
         // id : 25,
         {
             id: 25,
-            lang: 'hi',
+            lang: 'ro',
             head: 'Template : 24',
             content: {
                 main: {

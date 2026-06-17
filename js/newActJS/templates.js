@@ -481,23 +481,20 @@ const Activity = (() => {
                 next: 'अगला',
                 prev: 'पिछला'
             };
-        }
-        else if (lang == 'en' || lang == 'mt') {
-            return {
-                next: 'Next',
-                prev: 'Prev'
-            };
-        }
-        else if (lang == 'fr') {
+        } else if (lang == 'fr') {
             return {
                 next: 'suivante',
                 prev: 'précédente'
             };
-        }
-        else if (lang == 'sk') {
+        } else if (lang == 'sk') {
             return {
                 next: 'अग्रिम',
                 prev: 'पूर्वतनम्‌'
+            };
+        } else {
+            return {
+                next: 'Next',
+                prev: 'Prev'
             };
         }
     };
@@ -3518,7 +3515,6 @@ const Mcq_PathKaSaar = (() => {
             userAnswers[qi] = oi;
 
             updateAttemptedCountMCQ();
-            renderAllQuestionsMCQ(questionId);
             checkIfAllAnsweredMCW();
         } catch (e) {
             console.error('Mcq.selectOptionMCQ', e);
