@@ -9938,7 +9938,7 @@ const ShravanKaushalWithImages = (() => {
                                             ${userAnswers[questionIndex] === i ? "checked" : ""}
                                         >
                                         <strong class="alpha">
-                                            (${Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: true })})
+                                            (${Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: false })})
                                         </strong>
                                         <span>${opt.text || ""}</span>
                                     </div>
