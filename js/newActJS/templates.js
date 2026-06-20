@@ -143,9 +143,9 @@ const Activity = (() => {
             if (exists) return;
 
             const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = completePath;
+            link.rel   = 'stylesheet';
+            link.type  = 'text/css';
+            link.href  = `${completePath}?v=${Date.now()}`;
 
             link.onerror = () => link.remove();
 
