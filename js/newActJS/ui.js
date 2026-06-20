@@ -131,6 +131,7 @@ const UI = (() => {
                         image.src   = 'images/headerImage_button.png';
                         image.id    = 'header-image-button';
                         container.insertAdjacentElement( 'beforebegin', image );
+                        container.parentElement.style.top = '3vh';
                     } else {
                         container.remove();
                     }
