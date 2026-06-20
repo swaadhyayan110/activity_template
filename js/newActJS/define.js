@@ -533,11 +533,15 @@ const Define = (() => {
                             { path: 'images/5.png', width: '200px' },
                             { path: 'images/4.png', width: '200px' }
                         ],
-                        answers: ['हिंदी']
+                        answers: ['हिंदी'],
                     },
                     {
                         qid: 2,
-                        question: 'भारत की राजधानी #_# है।'
+                        question: '#img# भारत की #img# राजधानी #_# है।',
+                        images: [
+                            { path: 'images/5.png', width: '200px' },
+                            { path: 'images/4.png', width: '200px' }
+                        ],
                     },
                     {
                         question: 'भारत की #_# #img# राजभाषा #_# है।',
@@ -577,12 +581,12 @@ const Define = (() => {
                 ],
                 subquestions: [
                     { sqid: 1, qid: 1, inputWidth: '80px', text: '~ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers: ['~पंख'], maxLength: 1 },
-                    { sqid: 2, qid: 1, inputWidth: '180px', text: '#_#', answers: ['!पंख', '!पंख'] },
+                    { sqid: 2, qid: 1, inputWidth: '180px', text: '#_#, #_#', answers: ['!पंख', 'पंख'] },
                     { sqid: 3, qid: 2, text: 'भारत बनाने के लिए तारों को #_# से बाँधा गया।', answers: ['@पंख', '@नाचने'], inputBelow: true, maxLength: 1 },
                     { sqid: 4, qid: 2, inputWidth: '40px', text: '# सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers: ['#पंख'] },
                     { sqid: 5, qid: 2, text: '$ सितार बनाने के लिए तारों को #_# से बाँधा गया।', answers: ['$पंख'] }
                 ],
-                audio: ''
+                audio: 'bg.mp3'
             }
         },
         // id : 6
@@ -910,7 +914,7 @@ const Define = (() => {
         // id : 15,
         {
             id: 15,
-            lang: 'en',
+            lang: 'hi',
             head: 'Template : 15',
             replacement: '#_#',
             content: [
@@ -944,7 +948,7 @@ const Define = (() => {
         {
             id: 16,
             lang: 'hi',
-            head: '',
+            head: 'वर्षा ऋतु `theta` अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता',
             content: {
                 shuffle: false,
                 strictMatch: false,
@@ -978,7 +982,7 @@ const Define = (() => {
                     { qid: 4, text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image: 'images/1.png', options: ['खूँटी'], answer: 0 },
                     { qid: 5, text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image: 'images/1.png', options: ['जतन'], answer: 0 }
                 ],
-                // audio     : 'audio/1.mp3'
+                audio     : 'bg.mp3'
             }
         },
         // id : 17,
@@ -1019,9 +1023,9 @@ const Define = (() => {
             content: [
                 {
                     id: 1,
-                    tabtitle: 'aPPle',
+                    tabtitle: 'apple',
                     meaning: 'कूद-कूदकर',
-                    sentence: 'छोटी चिड़ियाँ appleing `theta` चलना सीखती हैं। appleing',
+                    sentence: 'Apple छोटी चिड़ियाँ appleing `theta` चलना सीखती हैं। appleing',
                     image: [
                         {
                             path: 'images/1.png',
@@ -1105,39 +1109,45 @@ const Define = (() => {
             },
             content: [
                 {
-                    text: 'a person who controls traffic on the road _______________',
+                    text: 'a person who controls traffic on the road _______________ #_#',
                     answer: 'policeman',
                     row: 0,
                     col: 0,
-                    direction: 'h'
+                    direction: 'h',
+                    image: { path: 'images/1.png', width: '15%' },
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
                 {
                     text: 'It is the other name of roundabout in the road _______________',
                     answer: 'circle',
                     row: 3,
                     col: 3,
-                    direction: 'h'
+                    direction: 'h',
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
                 {
                     text: 'a covered road on which people can walk _______________',
                     answer: 'pavement',
                     row: 6,
                     col: 5,
-                    direction: 'h'
+                    direction: 'h',
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
                 {
                     text: 'this is worn to protect the head _______________',
                     answer: 'helmet',
                     row: 10,
                     col: 7,
-                    direction: 'h'
+                    direction: 'h',
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
                 {
                     text: 'you must stop when this light is on _______________',
                     answer: 'red',
                     row: 4,
                     col: 0,
-                    direction: 'h'
+                    direction: 'h',
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
 
                 {
@@ -1145,21 +1155,24 @@ const Define = (() => {
                     answer: 'down',
                     row: 4,
                     col: 2,
-                    direction: 'v'
+                    direction: 'v',
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
                 {
                     text: 'you need these to start a car _______________',
                     answer: 'keys',
                     row: 2,
                     col: 8,
-                    direction: 'v'
+                    direction: 'v',
+                    colSize: { col: 12, md: 12, sm: 6 }
                 },
                 {
                     text: 'you must wear this before you drive or ride a car _______________',
                     answer: 'seatbelt',
                     row: 5,
                     col: 8,
-                    direction: 'v'
+                    direction: 'v',
+                    colSize: { col: 12, md: 12, sm: 6 }
                 }
             ]
         },
@@ -1182,8 +1195,8 @@ const Define = (() => {
                 },
                 questions: [
                     { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: '1. test-1\n2. test-2' },
-                    { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'b' }
-                ]
+                    { text: 'sfsf jsfjsvbf jsbvfjsfs jsfjsf `theta` <br> #_#', answer: 'asdffffffffffffffffffffff asdffffffffffffffffff asfffffffffffff saddddddddddddddd sdaffffffff fffff sdaf fffff sfda dasfda fdasfdasfdas dasfdasfda sfdasfda sf dsfd sfdsfdsfdsfdsfdsfd fdsfd sfdas fdasfdasfdas fdasfdasfdasfdasfda sfdsfds fdsfdsfdsfdsfdsfdsfd fd asdffffffffffffffffffffff asdffffffffffffffffff asfffffffffffff saddddddddddddddd sdaffffffff fffff sdaf fffff sfda dasfda fdasfdasfdas dasfdasfda sfdasfda sf dsfd sfdsfdsfdsfdsfdsfd fdsfd sfdas fdasfdasfdas fdasfdasfdasfdasfda sfdsfds fdsfdsfdsfdsfdsfdsfd fd sfdasfdsfds fdsfdsfdsf dsfd' }
+                ] 
             }
         },
         // id : 24,
@@ -1227,12 +1240,12 @@ const Define = (() => {
                         width: `20%`,
                         path: `images/ch4_1.png`,
                     },
-                    audio: 'audio/correct.mp3',
+                    audio: 'bg.mp3',
                 },
                 col: { col: 12, md: 6, sm: 6 },
                 questions: [
                     {
-                        question1: {
+                        question: {
                             text: 'बच्चों की किन बातों से घर के लोग खुश होते हैं?',
                             image: 'images/ch4_1.png',
                             audio: 'audio/1.mp3'
@@ -1248,7 +1261,7 @@ const Define = (() => {
                     {
                         question: {
                             text: 'बच्चों की किन बातों से घर के लोग परेशान होते हैं?',
-                            audio: ''
+                            audio: 'audio/2.mp3'
                         },
                         options: [
                             { text: 'खूब रोने से' },
@@ -1261,7 +1274,7 @@ const Define = (() => {
                     {
                         question: {
                             text: '3बच्चों की किन बातों से घर के लोग परेशान होते हैं?',
-                            audio: 'audio/2.mp3'
+                            audio: 'audio/correct.mp3'
                         },
                         options: [
                             { text: 'खूब रोने से' },
@@ -1365,7 +1378,7 @@ const Define = (() => {
         // id : 30,
         {
             id: 30,
-            lang: 'hi',
+            lang: 'en',
             head: 'Template : 29',
             subhead: 'अपनी छोटी बहन को मोबाइल पर `theta` व्यर्थ समय बिताने की जगह पढ़ाई पर ध्यान देने का सुझाव देते हुए पत्र लिखिए।',
             content: {
@@ -1384,6 +1397,10 @@ const Define = (() => {
                 placeholder: {
                     left: 'यहाँ सामग्री लिखें...',
                     right: 'यहाँ विधि लिखें...'
+                },
+                heading : {
+                    left: 'सामग्री',
+                    right: 'विधि',
                 },
                 question: [
                     { id: 1, text: "घर का पता एवं स्थान", answer: `ए-25/26,  पश्चिमी (वेस्ट) पटेल नगर,  नई दिल्ली - 110007` },
@@ -1663,7 +1680,7 @@ const Define = (() => {
                     },
                     titles: [
                         { title: "1कूद-कूदकर", text: "1छोटी चिड़ियाँ `theta` appleing चलना सीखती हैं। appleing" },
-                        { title: "SentenCe", text: "छोटी apple" },
+                        { title: "SentenCe", text: "Apple छोटी apple" },
                         { title: "1Antonyms", text: "चिड़ियाँ" },
                     ]
                 },
@@ -1695,7 +1712,7 @@ const Define = (() => {
                         id: 1,
                         title: {
                             main: {
-                                text: '`theta` Fascinating Facts'
+                                text: '`theta` Fascinating Facts / Divisiiondddddddss'
                             },
                             sub: {
                                 text: 'here `theta` some sub title text',
@@ -1824,7 +1841,7 @@ const Define = (() => {
             id: 45,
             content: {
                 text: {
-                    text: 'We are all equal in the eyes of God. We are all equal in the eyes of God.We are all equal in the eyes of God.We are all equal in the eyes of God.We are all equal in the eyes of God.We are all equal in the eyes of God.',
+                    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam libero impedit deleniti qui adipisci eum in voluptas, facilis fugit consectetur magni consequatur debitis tenetur officiis iste doloribus.',
                 },
             }
         },

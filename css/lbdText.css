@@ -246,6 +246,7 @@ body {
       rgba(255, 255, 255, 0.95),
       rgba(255, 255, 255, 0.05));
   pointer-events: none;
+  opacity: 0.5;
 }
 
 /* SHINE EFFECT */
@@ -1944,7 +1945,6 @@ body {
   height: 38vh;
   display: flex;
   justify-content: center;
-  align-items: center;
   text-align: center;
   padding: 0.5vw;
   font-size: 2vw;
@@ -2111,7 +2111,7 @@ body {
 }
 
 .mtopv2 {
-  margin-top: 3vh;
+  margin-top: 6vh;
   height: 71vh;
 }
 

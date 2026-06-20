@@ -26,7 +26,7 @@ const Templates = (() => {
         { id : 21, template : 'WordSearch' },
         { id : 22, template : 'TextArea' },
         { id : 23, template : 'CrossWord' },
-        { id : 24, template : 'ShravanKaushalWithImages' },
+        { id : 24, template : 'ShravanKaushalWithPara' },
         { id : 25, template : 'VideoPlayer' },
         { id : 26, template : 'RachnatmakParaWithImages' },
         { id : 27, template : 'RachnatmakWithKeyboard' },
