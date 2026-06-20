@@ -3248,53 +3248,55 @@ const Mcq_PathKaSaar = (() => {
             const moralEle   = document.querySelector('.headersSections').lastElementChild;
             const moralText  = moralEle?.innerText ?? 'null';
             const isMoral    = moralArray.includes( moralText.toLowerCase() ) ? true : false;
+            
+            const isMoralAndText = only_text && isMoral;
 
             const text = content.text?.text?.trim();
 
-            parent.innerHTML = only_text && isMoral ? `
-                        <div class="match1Back">
-                            <img class="backImgsM1" draggable="false" src="images/moralAct.jpg"/>
-                            <div class="onTheImagesFill2">
-                                <div class="question p-3 h-100">
-                                    <div class="textontheImgs">
-                                        ${text}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`
-                :
-                `<div class="mcqOuterScorV2_">
-                            <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
-                            <div class="question mcq_1MenV2">
-                                <div class="container">
-                                    <div class="rowWithAudios">
-                                        <span class="m-0 ${Define.get('head')}"></span> 
-                                        <span class="colorsDiff ${Define.get('subHead')}"></span>
-                                    </div>
-                                    <div class="mcq-context p-1"></div>
-                                    <div id="${heading}"></div>
-                                </div>
-                            </div>
-                                <div id="popupDialogAns">
-                                <div class="baseMod">
-                                    <div class="answerdiv">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
-                                            <button id="close-popup" class="btn btn-secondary">X</button>
-                                        </div>
-                                        <div id="answerShowMCW"></div>
-                                    </div>
+            parent.innerHTML = isMoralAndText ? 
+                `
+                    <div class="match1Back">
+                        <img class="backImgsM1" draggable="false" src="images/moralAct.jpg"/>
+                        <div class="onTheImagesFill2">
+                            <div class="question p-3 h-100">
+                                <div class="textontheImgs">
+                                    ${text}
                                 </div>
                             </div>
                         </div>
-                   `;
-
+                    </div>
+                ` : `
+                    <div class="mcqOuterScorV2_">
+                        <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
+                        <div class="question mcq_1MenV2">
+                            <div class="container">
+                                <div class="rowWithAudios">
+                                    <span class="m-0 ${Define.get('head')}"></span> 
+                                    <span class="colorsDiff ${Define.get('subHead')}"></span>
+                                </div>
+                                <div class="mcq-context p-1"></div>
+                                <div id="${heading}"></div>
+                            </div>
+                        </div>
+                            <div id="popupDialogAns">
+                            <div class="baseMod">
+                                <div class="answerdiv">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4 id="scoreTextQ1" class="text-center mb-3"></h4>
+                                        <button id="close-popup" class="btn btn-secondary">X</button>
+                                    </div>
+                                    <div id="answerShowMCW"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             // ..
 
             const closeBtn = parent.querySelector('#close-popup');
             if (closeBtn) closeBtn.addEventListener("click", closeFnMCQ);
 
-            return {only_text}
+            return {isMoralAndText}
         } catch (e) {
             console.error('Mcq.ui :', e);
         }
@@ -3302,9 +3304,9 @@ const Mcq_PathKaSaar = (() => {
 
     const renderAllQuestionsMCQ = (questionId) => {
         try {
-            const {only_text} = ui(questionId);
+            const {isMoralAndText} = ui(questionId);
 
-            if (only_text) return;
+            if (isMoralAndText) return;
 
             const headElem = Activity.setHeader(questionId);
             if (!headElem.head && !headElem.subhead) {
