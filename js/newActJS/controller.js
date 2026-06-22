@@ -45,7 +45,7 @@ const Controller = (() => {
     })();
 
     const timer = setInterval( async () => {
-        if (Define) {
+        if (Define !== undefined) {
             clearInterval(timer);
 
             config.DEPENDENCIES_BLOCKED = false;
