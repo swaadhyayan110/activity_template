@@ -98,12 +98,20 @@ const Helper = (() => {
             try {
                 const pdfjsLib = await import(`${base}/pdf.mjs`);
                 pdfjsLib.GlobalWorkerOptions.workerSrc = `${base}/pdf.worker.mjs`;
+
+                console.info(`PDF.js loaded`);
                 return pdfjsLib;
             } catch (err) {
                 console.warn(`Failed to load PDF.js from ${base}`);
             }
         }
         throw new Error('Unable to load PDF.js');
+    };
+
+    const vars = {
+        questionContainer : '.question-container',
+        head : 'qNum',
+        subHead : 'questionText',
     };
 
     return {
@@ -113,7 +121,8 @@ const Helper = (() => {
         pauseAudio,
         audio: __audio,
         defaultCol,
-        loadPdfJs
+        loadPdfJs,
+        vars
     }
 })();
 
@@ -122,7 +131,7 @@ const Activity = (() => {
     const store = { templates: {} };
 
     const initMathJax = () => {
-        const container = document.querySelector('.question-container');
+        const container = document.querySelector(Helper.vars.questionContainer);
         if (!container) return;
 
         const interval = setInterval(() => {
@@ -222,14 +231,14 @@ const Activity = (() => {
     const setHeader = (questionID) => {
         try {
             const data = getDefine(questionID);
-            const container = document.querySelector(Define.get('questionContainer'));
+            const container = document.querySelector(Helper.vars.questionContainer);
             if (!container) {
                 console.warn('setHeader: container not found:', container);
                 return;
             }
 
-            const head = Define.get('head');
-            const subHead = Define.get('subHead');
+            const head = Helper.vars.head;
+            const subHead = Helper.vars.subHead;
             const eleArr = [head, subHead].map(item => `.${item}`);
 
             const elements = {};
@@ -252,7 +261,7 @@ const Activity = (() => {
 
     const toggleCheckBtn = (selector, disable) => {
         try {
-            const container = document.querySelector(Define.get('questionContainer'));
+            const container = document.querySelector(Helper.vars.questionContainer);
             const btn = container.querySelector(selector);
             if (!btn) return;
             btn.disabled = disable;
@@ -606,7 +615,10 @@ const Activity = (() => {
 
             temp.render(questionId, activityId);
 
-            if (Define.get('loadScript')) await Define.get('loadScript')('js/newActJS/MathJax-2.7.9/MathJax.js?config=TeX-MML-AM_CHTML');
+            await Controller.importScript({
+                src:'js/newActJS/MathJax-2.7.9/MathJax.js?config=TeX-MML-AM_CHTML',
+                version:false
+            });
         } catch (err) {
             console.error('Activity.render : ', err);
         }
@@ -854,8 +866,8 @@ const MatchLeftToRight = (() => {
                 <div class="question match1_V2">
                     <div class="container">
                         <div class="qSections">
-                            <div class="${Define.get('head')}"></div>
-                            <p class="${Define.get('subHead')}"></p>
+                            <div class="${Helper.vars.head}"></div>
+                            <p class="${Helper.vars.subHead}"></p>
                         </div>
                         <hr/>
                         <div class="forLevelAB">
@@ -896,7 +908,7 @@ const MatchLeftToRight = (() => {
                     </div>
                 </div>`;
             // ..
-            const cont = document.querySelector(Define.get('questionContainer'));
+            const cont = document.querySelector(Helper.vars.questionContainer);
             cont.innerHTML = html;
         } catch (err) {
             console.error('MatchLeftToRight.ui :', err);
@@ -1353,7 +1365,7 @@ const MatchLeftRightToCenter = (() => {
             activities[activityId].selectedLeft = null;
             activities[activityId].selectedRight = null;
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const cont = document.querySelector(container);
             if (!cont) {
                 console.warn("Container not found:", container);
@@ -1367,8 +1379,8 @@ const MatchLeftRightToCenter = (() => {
                      <div id="${activityId}" class="question match1_V2">
                             <div class="container">
                                 <div class="qSections">
-                                    <div class="${Define.get('head')}"></div>
-                                    <p class="${Define.get('subHead')}"></p>
+                                    <div class="${Helper.vars.head}"></div>
+                                    <p class="${Helper.vars.subHead}"></p>
                                 </div>
                                 <hr />
                                 <div class="rowM3 matching-area user-select-none match2ForScrollV2" style="position:relative; ">
@@ -1731,7 +1743,7 @@ const MatchTopToBottom = (() => {
 
     const ui = (activityId, questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const cont = document.querySelector(container);
             if (!cont) {
                 console.error("Container not found:", container);
@@ -1750,8 +1762,8 @@ const MatchTopToBottom = (() => {
                     <div class="question match1_V2">
                         <div class="container">
                         <div class="qSections">
-                            <div class="${Define.get('head')}"></div>
-                            <p class="${Define.get('subHead')}"></p>
+                            <div class="${Helper.vars.head}"></div>
+                            <p class="${Helper.vars.subHead}"></p>
                         </div>
 
                         <div class="m3Holders">
@@ -1874,7 +1886,7 @@ const MatchTopToBottom = (() => {
 
             Activity.initMathJax();
 
-            const containerEl = document.querySelector(Define.get('questionContainer'));
+            const containerEl = document.querySelector(Helper.vars.questionContainer);
             const checkBtn = containerEl.querySelector(".buttons.machiNgs [data-check]");
             const showBtn = containerEl.querySelector(".buttons.machiNgs [data-show]");
             const resetBtn = containerEl.querySelector(".buttons.machiNgs [data-reset]");
@@ -1906,7 +1918,7 @@ const FillInTheBlanksWithImage = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -1925,8 +1937,8 @@ const FillInTheBlanksWithImage = (() => {
                         <div class="question user-select-none v2FIllForScrolls">
                             <div class="container">
                                 <div class="qSections">
-                                    <div class="${Define.get('head')}"></div>
-                                    <p class="${Define.get('subHead')}"></p>
+                                    <div class="${Helper.vars.head}"></div>
+                                    <p class="${Helper.vars.subHead}"></p>
                                 </div>
                                 <div class="wordRows"></div>
                                 <div class="row">
@@ -1969,7 +1981,7 @@ const FillInTheBlanksWithImage = (() => {
             ui(questionId);
             Activity.setHeader(questionId);
 
-            document.querySelector(Define.get('questionContainer')).querySelector("#checkBtnF").dataset.qid = data?.id;
+            document.querySelector(Helper.vars.questionContainer).querySelector("#checkBtnF").dataset.qid = data?.id;
 
             const container2 = document.getElementById("inputsContainer");
             if (!container2) {
@@ -2134,7 +2146,7 @@ const FillInTheBlanksHindiKb = (() => {
         try {
             __subQuestions = undefined;
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -2166,7 +2178,7 @@ const FillInTheBlanksHindiKb = (() => {
                                         }
                                         <div id="question_header_container" ${(audioSrc || !activity.head) ? `style="display: none"` : ''}>
                                             <div class="qSections row g-0 mt-3 rowWithAudios">
-                                                <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
+                                                <div class="col font18 fontBold ${Helper.vars.head} m-0"></div>
                                                 ${audioSrc ?
                                                     `<div class="col-auto" id="listening_common_audio_container">
                                                         <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
@@ -2343,7 +2355,7 @@ const FillInTheBlanksHindiKb = (() => {
                 const html = [content?.questions.length != 1 && queLabel ? `<div style="width: 40px">${mainBullet})</div><div class='col'>` : null];
 
                 const div = document.createElement('div');
-                div.classList.add('questionFILL');
+                div.classList.add('questionFILL', 'row');
                 div.id = `que_${qIndex}`;
 
                 const colCondition = definedCol instanceof Object && Object.entries(definedCol).length;
@@ -2624,7 +2636,7 @@ const FillInTheBlanksHindiKb = (() => {
 
         Helper.setAudio(Activity.pathToCWD() + src);
 
-        const containerSelector = Define.get('questionContainer');
+        const containerSelector = Helper.vars.questionContainer;
         const parent = document.querySelector(containerSelector);
 
         const audio_playBtns = parent.querySelectorAll('.common_playBtn');
@@ -2673,7 +2685,7 @@ const JumbleLetters = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -2691,8 +2703,8 @@ const JumbleLetters = (() => {
                     <div class="question">
                         <div class="container">
                             <div class="qSections">
-                                <div class="${Define.get('head')}"></div>
-                                <p class="${Define.get('subHead')}"></p>
+                                <div class="${Helper.vars.head}"></div>
+                                <p class="${Helper.vars.subHead}"></p>
                             <hr />
                             <div class="row" id="letterContainer"></div>
                         </div>
@@ -2728,7 +2740,7 @@ const JumbleLetters = (() => {
                 document.querySelector('hr').remove();
             }
 
-            document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid = data?.id;
+            document.querySelector(Helper.vars.questionContainer).querySelector(".reset-btn").dataset.qid = data?.id;
 
             $("#letterContainer").empty();
 
@@ -2853,7 +2865,7 @@ const JumbleLetters = (() => {
         try {
             let score = 0;
 
-            const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
+            const questionId = document.querySelector(Helper.vars.questionContainer).querySelector(".reset-btn").dataset.qid;
             const activity = Activity.getDefine(questionId);
             const lang = activity?.lang || 'en';
             const popupLabels = Activity.translatePopupLabels(lang);
@@ -2887,7 +2899,7 @@ const JumbleLetters = (() => {
     const reset = () => {
         try {
             Activity.toggleCheckBtn('#submit', false);
-            const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
+            const questionId = document.querySelector(Helper.vars.questionContainer).querySelector(".reset-btn").dataset.qid;
             loadAllQuestions(questionId);
         } catch (err) {
             console.log('JumbleLetters.reset : ', err);
@@ -2898,7 +2910,7 @@ const JumbleLetters = (() => {
         try {
             Activity.toggleCheckBtn('#submit', true);
 
-            const questionId = document.querySelector(Define.get('questionContainer')).querySelector(".reset-btn").dataset.qid;
+            const questionId = document.querySelector(Helper.vars.questionContainer).querySelector(".reset-btn").dataset.qid;
             const jumbleData = Activity.getDefine(questionId)?.content;
 
             jumbleData.forEach((word, index) => {
@@ -2935,7 +2947,7 @@ const JumbleWords = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -2953,8 +2965,8 @@ const JumbleWords = (() => {
                     <div class="onTheImagesFill2">
                                 <div class="question">
                                     <div class="container">
-                                        <div class="${Define.get('head')}"></div>
-                                        <p class="${Define.get('subHead')}"></p>
+                                        <div class="${Helper.vars.head}"></div>
+                                        <p class="${Helper.vars.subHead}"></p>
                                         <div id="idiomContainer"></div>
                                         <div class="buttons machiNgs">
                                             <button class="submit-btn" id="submit7">${buttonLabel.check}</button>
@@ -3231,7 +3243,7 @@ const Mcq_PathKaSaar = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -3271,8 +3283,8 @@ const Mcq_PathKaSaar = (() => {
                         <div class="question mcq_1MenV2">
                             <div class="container">
                                 <div class="rowWithAudios">
-                                    <span class="m-0 ${Define.get('head')}"></span> 
-                                    <span class="colorsDiff ${Define.get('subHead')}"></span>
+                                    <span class="m-0 ${Helper.vars.head}"></span> 
+                                    <span class="colorsDiff ${Helper.vars.subHead}"></span>
                                 </div>
                                 <div class="mcq-context p-1"></div>
                                 <div id="${heading}"></div>
@@ -3668,7 +3680,7 @@ const Adaptiv = (() => {
 
     const ui = (questionId, totalQues) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -4388,7 +4400,7 @@ const DropDown = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -4406,7 +4418,7 @@ const DropDown = (() => {
                                 <div class="question ddMainV2">
                                     <div class="container">
                                         <div class="qSections">
-                                            <div class="questHindi ${Define.get('head')}"></div>
+                                            <div class="questHindi ${Helper.vars.head}"></div>
                                         </div>
                                         <div class="${quesClass}"></div>
                                     </div>
@@ -4616,7 +4628,7 @@ const DropDown = (() => {
     }
 
     const showAnswersDD = () => {
-        const container = Define.get('questionContainer');
+        const container = Helper.vars.questionContainer;
         const parent = document.querySelector(container);
         const btn = parent.querySelector('.show-btn')
         const btnGroup = btn.closest(".buttons");
@@ -4648,7 +4660,7 @@ const DropDown = (() => {
     }
 
     const resetActivityDD = () => {
-        const container = Define.get('questionContainer');
+        const container = Helper.vars.questionContainer;
         const parent = document.querySelector(container);
         const btn = parent.querySelector('.reset-btn')
         const btnGroup = btn.closest(".buttons");
@@ -4680,7 +4692,7 @@ const Circle = (() => {
 
     const ui = (questionId) => {
         try {
-            const containerSelector = Define.get('questionContainer');
+            const containerSelector = Helper.vars.questionContainer;
             const parent = document.querySelector(containerSelector);
             if (!parent) {
                 console.error("ui container not found:", containerSelector);
@@ -4698,7 +4710,7 @@ const Circle = (() => {
                             <div class="question clickToCMainV2">
                                     <div class="container" id="${dataKey}">
                                         <div class="${quesClass}">
-                                            <div class="questHindi ${Define.get('head')}"></div>
+                                            <div class="questHindi ${Helper.vars.head}"></div>
                                         </div>
                                         <div id="datClikToCir"></div>
                                         <div class="buttons machiNgs">
@@ -5029,7 +5041,7 @@ const ShravanKaushal = (() => {
 
     const ui = (questionId) => {
         try {
-            const containerSelector = Define.get('questionContainer');
+            const containerSelector = Helper.vars.questionContainer;
             const btnid = 'shravanPopupClose'
             const parent = document.querySelector(containerSelector);
             if (!parent) {
@@ -5055,8 +5067,8 @@ const ShravanKaushal = (() => {
                                     </div>
                                     <div class="afterClicks" style="display:none;">
                                         <div class="container">
-                                            <div class="bigHeadingS ${Define.get('head')}"></div>
-                                            <div class="runingHead ${Define.get('subHead')}"></div>
+                                            <div class="bigHeadingS ${Helper.vars.head}"></div>
+                                            <div class="runingHead ${Helper.vars.subHead}"></div>
                                             <div id="${inputDataId}" class="rowInputsData"></div>
                                             <div class="secondRowaBB">
                                                 <div class="nextPreviRow">
@@ -5349,7 +5361,7 @@ const TrueAndFalse = (() => {
 
     const ui = (questionId) => {
         try {
-            const containerSelector = Define.get('questionContainer');
+            const containerSelector = Helper.vars.questionContainer;
             const parent = document.querySelector(containerSelector);
             if (!parent) {
                 console.error("ui container not found:", containerSelector);
@@ -5378,7 +5390,7 @@ const TrueAndFalse = (() => {
                             }
                             <div id="question_header_container" ${(audioSrc || !activity.head) ? `style="display: none"` : ''}>
                                 <div class="qSections row g-0 ${!activity.head ? 'justify-content-end': ''}">
-                                    <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
+                                    <div class="col font18 fontBold ${Helper.vars.head} m-0"></div>
                                     ${audioSrc ?
                                         `<div class="col-auto" id="listening_common_audio_container">
                                             <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
@@ -5551,7 +5563,7 @@ const TrueAndFalse = (() => {
 
         rowDiv.innerHTML = rowContent.join('');
 
-        const containerSelector = Define.get('questionContainer');
+        const containerSelector = Helper.vars.questionContainer;
         const parent = document.querySelector(containerSelector);
         const tnfBtns = parent.querySelectorAll('.tnfBtn');
 
@@ -5688,7 +5700,7 @@ const TrueAndFalse = (() => {
 
         Helper.setAudio(Activity.pathToCWD() + src);
 
-        const containerSelector = Define.get('questionContainer');
+        const containerSelector = Helper.vars.questionContainer;
         const parent = document.querySelector(containerSelector);
 
         const audio_playBtns = parent.querySelectorAll('.common_playBtn');
@@ -5716,7 +5728,7 @@ const DragAndDrop = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
             if (!parent) {
                 console.error("ui container not found:", container);
@@ -5736,8 +5748,8 @@ const DragAndDrop = (() => {
                                 <div class="container">
                                     <div class="rowWithAudios">
                                         <p class="questLine"> 
-                                            <span class="${Define.get('head')}"></span> 
-                                            <span class="hindTrans ${Define.get('subHead')}"></span>
+                                            <span class="${Helper.vars.head}"></span> 
+                                            <span class="hindTrans ${Helper.vars.subHead}"></span>
                                         </p>
                                         <div class="playsBtns">
                                             <svg fill="currentColor" id="playSvg" class="bi bi-play-fill btnSounds common_playBtn" viewBox="0 0 16 16">
@@ -6040,7 +6052,7 @@ const DragAndDropMulti = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -6075,7 +6087,7 @@ const DragAndDropMulti = (() => {
                             }
                             <div id="question_header_container" ${(audioSrc || !activity.head) ? `style="display: none"` : ''}>
                                 <div class="qSections row g-0 mt-3 rowWithAudios">
-                                    <div class="col font18 fontBold ${Define.get('head')} m-0"></div>
+                                    <div class="col font18 fontBold ${Helper.vars.head} m-0"></div>
                                     ${audioSrc ?
                                         `<div class="col-auto" id="listening_common_audio_container">
                                             <svg id="" fill="currentColor" width="33" height="33" class="bi bi-play-circle-fill common_playBtn" viewBox="0 0 16 16" role="button">
@@ -6998,7 +7010,7 @@ const DragAndDropMulti = (() => {
 
         Helper.setAudio(Activity.pathToCWD() + src);
 
-        const containerSelector = Define.get('questionContainer');
+        const containerSelector = Helper.vars.questionContainer;
         const parent = document.querySelector(containerSelector);
 
         const audio_playBtns = parent.querySelectorAll('.common_playBtn');
@@ -7028,7 +7040,7 @@ const Sorting = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -7047,7 +7059,7 @@ const Sorting = (() => {
                             <div class="shortingMain">
                                 <div class="question">
                                     <div class="container contAdapt" id="${containerId}">
-                                        <div class="questionHeadingMCQ ${Define.get('head')}"></div>
+                                        <div class="questionHeadingMCQ ${Helper.vars.head}"></div>
                                         <div class="question-card justify-content-center animate__animated animate__fadeInDown animate__bounceInLeft" id="quizContainerAdaptiv">
                                             <ul id="dragOptions" class="${sequenceClass} ulBoxMain"></ul>
                                         </div>
@@ -7241,7 +7253,7 @@ const Pdf = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -7343,7 +7355,7 @@ const Pdf = (() => {
             if (!response.ok) {
                 toggle_loader(false);
 
-                const containerClass = Define.get('questionContainer');
+                const containerClass = Helper.vars.questionContainer;
                 const container = document.querySelector(containerClass);
 
                 container.querySelector('.viewer').innerHTML = `
@@ -7492,7 +7504,7 @@ const Shabdkosh = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -7506,7 +7518,7 @@ const Shabdkosh = (() => {
                             <div class="shabdKoshMain">
                                 <div class="question">
                                     <div class="containe" id="${containerId}">
-                                        <div class="rowWithAudios font18 fontBold mx-4 mb-4 ${Define.get('head')}"></div>
+                                        <div class="rowWithAudios font18 fontBold mx-4 mb-4 ${Helper.vars.head}"></div>
                                         <div class="question-block">
                                             <div class="tab-containerz">
                                                 <div class="tab-content mx-auto">
@@ -7749,7 +7761,7 @@ const Shrutlekh = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -8178,7 +8190,7 @@ const WordSearch = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -8201,7 +8213,7 @@ const WordSearch = (() => {
                             <div class="onTheImagesFill2">
                                 <div class="question word-searched">                                    
                                     <div class="container" id="${containerId}">
-                                        <div class="${Define.get('head')}"></div>
+                                        <div class="${Helper.vars.head}"></div>
                                         <div class="hints" style="${isqueSection_mainHeading ? 'display:block;' : 'display:none;'}">
                                             ${isqueSection_mainHeading}
                                         </div>
@@ -8629,7 +8641,7 @@ const TextArea = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -8654,7 +8666,7 @@ const TextArea = (() => {
                                 <div class="textAreaOnImgs">
                                     <div class="question">
                                         <div class="container" id="${containerId}">
-                                            <h5 class="questionHeading mt-3 border-bottom pb-2 ${Define.get('head')}"></h5>
+                                            <h5 class="questionHeading mt-3 border-bottom pb-2 ${Helper.vars.head}"></h5>
                                             <div class="mcq-context p-1"></div>
                                             <div id="short-answer-container" class="ps-1 pe-3">
                                                 <div id="${quesContId}" class="mb-2" style="font-size: 20px;"></div>
@@ -8995,7 +9007,7 @@ const CrossWord = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -9017,7 +9029,7 @@ const CrossWord = (() => {
                          <div class="question">
                             <div class="container" id="${containerId}">                                        
                                 <div class="cross-word-puzzle crossword-content" style="text-align:left;">
-                                    <div class="${Define.get('head')}"></div>
+                                    <div class="${Helper.vars.head}"></div>
                                     <div class="cross-puzzle ${que_side === 'top' || que_side === 'bottom' ? 'flex-column' : ''} ${que_side === 'bottom' ? 'flex-column-reverse' : que_side === 'right' ? 'flex-row-reverse' : ''}" style="gap: 2vw;">
                                         ${showQuestion ? `<div class="criss-cross ${que_side === 'top' || que_side === 'bottom' ? 'w-100 d-flex justify-content-evenly' : ''}"></div>` : ''}
                                         <div id="puzzle2" class='w-100' style="display:block;"></div>
@@ -9577,7 +9589,7 @@ const ShravanKaushalWithPara = (() => {
             queAudio.currentTime = 0;
             queAudio.pause();
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -9609,7 +9621,7 @@ const ShravanKaushalWithPara = (() => {
                                     ${isMain? `
                                             <div class="poem-sec" style="display:none;">
                                                 <div class="my-3 container" id="questionTitle">
-                                                    <b class="${Define.get('head')}"></b>
+                                                    <b class="${Helper.vars.head}"></b>
                                                     <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn common_playBtn" viewBox="0 0 16 16">
                                                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
                                                     </svg>
@@ -9629,7 +9641,7 @@ const ShravanKaushalWithPara = (() => {
                                     <div class="question-sec" style="${activity.content?.main != undefined ? "display:none" : 'display:block'}">
                                         <div class="container contListen">
                                             <div class="my-3 container" id="questionTitle">
-                                                <b class="${Define.get('head')}"></b>
+                                                <b class="${Helper.vars.head}"></b>
                                                 ${isMain ? `
                                                         <svg id="ado-play" fill="currentColor" class="bi bi-play-circle-fill playBtn common_playBtn" viewBox="0 0 16 16">
                                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z" />
@@ -9917,7 +9929,7 @@ const ShravanKaushalWithPara = (() => {
         const questions = content?.questions ?? [];
         const q = questions[questionIndex];
 
-        $(`.${Define.get('head')}`).html(activity.head);
+        $(`.${Helper.vars.head}`).html(activity.head);
 
         const html = [];
 
@@ -10370,11 +10382,11 @@ const OnlyAudio = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define && typeof Define.get === "function" ? Define.get('questionContainer') : null;
+            const container = Define && typeof Define.get === "function" ? Helper.vars.questionContainer : null;
             const parent = container ? document.querySelector(container) : null;
 
             if (!parent) {
-                console.error("Audio.renderUI: ui container not found (Define.get('questionContainer') =>", container, ")");
+                console.error("Audio.renderUI: ui container not found (Helper.vars.questionContainer =>", container, ")");
                 return;
             }
 
@@ -10629,7 +10641,7 @@ const VideoPlayer = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -10684,7 +10696,7 @@ const RachnatmakParaWithImages = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -10701,8 +10713,8 @@ const RachnatmakParaWithImages = (() => {
                         <div class="rachNatmalPara1V2">
                             <div class="question">
                                 <div class="container" id="${containerId}">
-                                    <div class="menHeading ${Define.get('head')}"></div>
-                                    <p class="nameOfTopic ${Define.get('subHead')}"></p>
+                                    <div class="menHeading ${Helper.vars.head}"></div>
+                                    <p class="nameOfTopic ${Helper.vars.subHead}"></p>
                                     ${activity.instruction != undefined && activity.instruction !== "" ?
                     `<div class="instForFillText shadow-sm">
                                             <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
@@ -10780,7 +10792,7 @@ const RachnatmakWithKeyboard = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -10802,8 +10814,8 @@ const RachnatmakWithKeyboard = (() => {
                             <div class="onTheImagesFill2 forHeightControl">
                             <div class="question">
                                 <div class="container" id="${containerId}">
-                                    <div class="menHeading ${Define.get('head')}"></div>
-                                    <div class="nameOfTopic ${Define.get('subHead')}"></div>
+                                    <div class="menHeading ${Helper.vars.head}"></div>
+                                    <div class="nameOfTopic ${Helper.vars.subHead}"></div>
                                     <div id="activitiesRachnatmal"></div>
                                     <div class='clear'></div>
                                     <div class="buttons machiNgs">
@@ -11032,7 +11044,7 @@ const RachnatmakWithTabBtns = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -11053,8 +11065,8 @@ const RachnatmakWithTabBtns = (() => {
                                 <div class="container" id="${containerId}">
                                     <div class="container">
                                         <div class="wrapers">
-                                            <div class="menHeading text-center ${Define.get('head')}" id="mainHRach"></div>
-                                            <div class="nameOfTopic text-center ${Define.get('subHead')}" id="subHeadRach"></div>
+                                            <div class="menHeading text-center ${Helper.vars.head}" id="mainHRach"></div>
+                                            <div class="nameOfTopic text-center ${Helper.vars.subHead}" id="subHeadRach"></div>
                                             <div class="holderLeterBox">
                                                 <div class="rowRachnaButtons animate__animated animate__fadeInDown" id="dynamicTabs"></div>
                                                 <div class="showContentBox" id="dynamicContent"></div>
@@ -11172,7 +11184,7 @@ const RachnatmakWithInputs = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -11197,8 +11209,8 @@ const RachnatmakWithInputs = (() => {
                                 <div class="container" id="${containerId}">
                                     <div class="container">
                                         <div class="wrapers">
-                                            <div class="menHeading text-center ${Define.get('head')}" id="mainHRach"></div>
-                                            <div class="nameOfTopic text-center ${Define.get('subHead')}" id="subHeadRach"></div>
+                                            <div class="menHeading text-center ${Helper.vars.head}" id="mainHRach"></div>
+                                            <div class="nameOfTopic text-center ${Helper.vars.subHead}" id="subHeadRach"></div>
                                             ${content?.hint ?
                                                 `<div class="instForFillText shadow-sm">
                                                     <div class="headNirdesh">${Activity.translateHintLabel(lang)}</div>
@@ -11448,31 +11460,6 @@ const RachnatmakWithInputs = (() => {
 
             autoResizeTextarea(ta);
         });
-
-
-        return
-
-
-        if (content.inputLeft == false) {
-            let fillAppli = document.querySelectorAll(".fillAppli");
-            content.question.forEach((item, index) => {
-                if (fillAppli[index]) {
-                    if (index === content.showAnswerOfId) {
-                        fillAppli[index].value = item.ans.replaceAll("<br/>", "\n");
-                    } else {
-                        fillAppli[index].value = "";
-                    }
-                    autoResizeTextarea(fillAppli[index]);
-                }
-            });
-        }
-        else {
-            const textareas = getAllTextareas();
-            textareas.forEach((ta) => {
-                ta.value = "";
-                ta.classList.remove("pointer-none", "correctAnswer", "wrongAnswer");
-            });
-        }
     }
 
     const checkAnswers = () => {
@@ -11594,7 +11581,7 @@ const ClickOnImage = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -11616,8 +11603,8 @@ const ClickOnImage = (() => {
                                 <div class="container" id="${containerId}">
                                     <div class="container">
                                         <div class="wrapers">
-                                            <div class="menHeading text-center ${Define.get('head')}" id="mainHRach"></div>
-                                            <div class="nameOfTopic text-center ${Define.get('subHead')}" id="subHeadRach"></div>
+                                            <div class="menHeading text-center ${Helper.vars.head}" id="mainHRach"></div>
+                                            <div class="nameOfTopic text-center ${Helper.vars.subHead}" id="subHeadRach"></div>
                                             <div class="clikImhCRow row g-0" id="clikImhCRow"></div>
                                             <div class="buttons machiNgs">
                                                 <button class="submit-btn">${buttonLabel.check}</button>
@@ -11780,7 +11767,7 @@ const FillOnClick = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -11801,7 +11788,7 @@ const FillOnClick = (() => {
                                 <div class="container" id="${containerId}">
                                     <div class="container">
                                         <div class="wrapers">                                            
-                                            <div class="instTextEng ${Define.get('head')}"></div>
+                                            <div class="instTextEng ${Helper.vars.head}"></div>
                                             <div id="readingHolders"></div>
                                             <div id="rowOpts"></div>
                                             <div class="buttons machiNgs">
@@ -11836,7 +11823,7 @@ const FillOnClick = (() => {
     const renderActivity = (questionId) => {
         ui(questionId);
 
-        const container = Define.get('questionContainer');
+        const container = Helper.vars.questionContainer;
         const parent = document.querySelector(container);
 
         const activity = Activity.getDefine(questionId) ?? {};
@@ -11983,7 +11970,7 @@ const Dictionary = (() => {
     const ui = (questionId) => {
         try {
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -12005,8 +11992,8 @@ const Dictionary = (() => {
                                     <div class="wrapers">
                                         <div class="menHeDic">
                                             <div class="dictHeadintTexts">
-                                                <span class="${Define.get('head')}"></span>
-                                                <span class="secondTextsRed ${Define.get('subHead')}"></span>
+                                                <span class="${Helper.vars.head}"></span>
+                                                <span class="secondTextsRed ${Helper.vars.subHead}"></span>
                                             </div>
                                         </div>
                                         <div id="dictionaryHolders"></div>
@@ -12215,7 +12202,7 @@ const MentalMath = (() => {
         try {
             __questionID = questionId;
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -12244,9 +12231,9 @@ const MentalMath = (() => {
                                         ${activity?.head
                     ?
                     `<div class="menHeDicMath text-center">
-                                                        <span class="menHeadingMath ${Define.get('head')}"></span>
+                                                        <span class="menHeadingMath ${Helper.vars.head}"></span>
                                                         ${activity?.subhead
-                        ? ` (<span class="secondTextsRedMath ${Define.get('subHead')}"></span>)`
+                        ? ` (<span class="secondTextsRedMath ${Helper.vars.subHead}"></span>)`
                         : ''
                     }
                                                     </div>`
@@ -12502,7 +12489,7 @@ const AudioAndVideoFromYoutube = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -12555,15 +12542,13 @@ const AudioAndVideoFromYoutube = (() => {
                     item.addEventListener('click', () => loadandplay(ind));
                 });
             }
+            
+            await Controller.importScript({src:'https://www.youtube.com/iframe_api', version:false});
+            await ytReady;
+            buttonUI();
 
-            if (Define.get('loadScript')) {
-                await Define.get('loadScript')('https://www.youtube.com/iframe_api');
-                await ytReady;
-                buttonUI();
-
-                if (buttons.length) loadandplay(0);
-                return null;
-            }
+            if (buttons.length) loadandplay(0);
+            return null;
         } catch (err) {
             console.error('AudioAndVideoFromYoutube.render :', err);
         }
@@ -12761,7 +12746,7 @@ const MathMoney = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -12776,7 +12761,7 @@ const MathMoney = (() => {
                                  <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="menHeDicMath">
-                                            <div class="menHeadingMath ${Define.get('head')}"></div>
+                                            <div class="menHeadingMath ${Helper.vars.head}"></div>
                                         </div>
                                         <div id="${optionViewId}" class="drpOptionsMath"></div>
                                         <div id="${sectionViewId}" class="bill-wrapper d-block"></div>
@@ -13011,7 +12996,7 @@ const ShabdRachna = (() => {
 
     const ui = (questionId) => {
         try {
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) {
@@ -13032,9 +13017,9 @@ const ShabdRachna = (() => {
                              <div class="mathBackMainDivs addAdvV2">
                                 <div class="question">
                                     <div class="container-fluid" id="${containerId}">                                        
-                                        <div class="nameofChapter d-block ${Define.get('head')}" style="width: ${headWidth};"></div>
+                                        <div class="nameofChapter d-block ${Helper.vars.head}" style="width: ${headWidth};"></div>
                                             <div class="sabadRach">
-                                                <div class="headingTextSabad ${Define.get('subHead')}"></div>
+                                                <div class="headingTextSabad ${Helper.vars.subHead}"></div>
                                                 <div class="boxAutoScroll" id="${quesContId}"></div>
                                                 <div class="buttons machiNgs">
                                                     <button class="submit-btn submitBtnSabd">${buttonLabel.check}</button>
@@ -13298,7 +13283,7 @@ const SpellCheck = (() => {
 
     const ui = (questionId) => {
         try {
-            const containerSelector = Define.get('questionContainer');
+            const containerSelector = Helper.vars.questionContainer;
             const parent = document.querySelector(containerSelector);
             if (!parent) {
                 console.error("ui container not found:", containerSelector);
@@ -13316,7 +13301,7 @@ const SpellCheck = (() => {
                                 <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="${quesClass}">
-                                            <div class="questHindi ${Define.get('head')}"></div>
+                                            <div class="questHindi ${Helper.vars.head}"></div>
                                         </div>
                                         <div id="datClikToCir"></div>
                                         <div class="buttons machiNgs">
@@ -13799,7 +13784,7 @@ const SpellItOut = (() => {
 
     const ui = (questionId) => {
         try {
-            const containerSelector = Define.get('questionContainer');
+            const containerSelector = Helper.vars.questionContainer;
             const parent = document.querySelector(containerSelector);
             if (!parent) {
                 console.error("ui container not found:", containerSelector);
@@ -13817,7 +13802,7 @@ const SpellItOut = (() => {
                             <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="${quesClass}">
-                                            <div class="questHindi ${Define.get('head')}"></div>
+                                            <div class="questHindi ${Helper.vars.head}"></div>
                                         </div>
                                         <div class='spell-out-box spell-out-font-23 d-flex flex-wrap gap-2 justify-content-center' id="spell-out-container"></div>
                                         <div id="${inputContainer}" class="spell-out-font spell-out-font-23 mt-3"></div>
@@ -14067,7 +14052,7 @@ const VowelDragAndDrop = (() => {
 
     const ui = (questionId) => {
         try {
-            const containerSelector = Define.get('questionContainer');
+            const containerSelector = Helper.vars.questionContainer;
             const parent = document.querySelector(containerSelector);
             if (!parent) {
                 console.error("ui container not found:", containerSelector);
@@ -14084,7 +14069,7 @@ const VowelDragAndDrop = (() => {
                              <div class="mathBackMainDivs">
                                 <div class="question">
                                     <div class="container">
-                                        <div class="rowWithAudios font18 fontBold ${Define.get('head')}"></div>
+                                        <div class="rowWithAudios font18 fontBold ${Helper.vars.head}"></div>
                                         <div class="question-block">
                                             <div class='common-image-container d-flex justify-content-center'></div>
                                             <div class="dragItems drag-container2" id="${containerId}" data-qid="${questionId}"></div>
@@ -14547,7 +14532,7 @@ const VirtualTour = (() => {
 
     const ui = (questionId) => {
         try {
-            const containerSelector = Define.get('questionContainer');
+            const containerSelector = Helper.vars.questionContainer;
             const parent = document.querySelector(containerSelector);
             if (!parent) {
                 console.error("ui container not found:", containerSelector);
@@ -14568,7 +14553,7 @@ const VirtualTour = (() => {
                              <div class="vtMainBacks">
                                 <div class="question">
                                     <div class="container-fluid">
-                                        <div class="p-2 rounded-3 border bg-light text-center ${Define.get('head')}"></div>
+                                        <div class="p-2 rounded-3 border bg-light text-center ${Helper.vars.head}"></div>
                                         <div id="${containerId}" class="">
                                             ${questionsLength > 1
                     ? `<div class="text-end navBtnWrapper mt-2">
@@ -14686,7 +14671,7 @@ const VirtualTour = (() => {
                                     <div 
                                         class="col row g-0 align-items-center  ${title?.main?.text ? '' : 'justify-content-center'}"
                                     >
-                                    <div class="vTSecondHeading p-1">${title.sub.text}</div></div>
+                                    <div class="vTSecondHeading p-2">${title.sub.text}</div></div>
                                 ` : ''
                     }
                         </div>
@@ -14887,7 +14872,7 @@ const CircleAndUnderline = (() => {
         try {
             __state = {};
 
-            const container = Define.get('questionContainer');
+            const container = Helper.vars.questionContainer;
             const parent = document.querySelector(container);
 
             if (!parent) return;
@@ -14902,8 +14887,8 @@ const CircleAndUnderline = (() => {
                     <div class="vtMainBacks">
                         <div class="question">
                             <div class="container cu position-relative contAdapt p-3" id="${containerId}">
-                                <div class="questionHeadingMCQ ${Define.get('head')}"></div>
-                                <div class="${Define.get('subHead')}"></div>
+                                <div class="questionHeadingMCQ ${Helper.vars.head}"></div>
+                                <div class="${Helper.vars.subHead}"></div>
                                 <div class="sentence my-3" id="sentence"></div>
                                 <div class="buttons machiNgs">
                                     <button class="submit-btn">${buttonLabel.check}</button>
@@ -15313,7 +15298,7 @@ const CustomTemplate = (() => {
     };
 
     const __ui = ({ html, id } = {}) => {
-        const container = Define.get('questionContainer');
+        const container = Helper.vars.questionContainer;
         const parent = document.querySelector(container);
 
         if (!parent) return { flag: false };

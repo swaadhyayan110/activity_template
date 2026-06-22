@@ -14,52 +14,52 @@ const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = [
-        { qid: 44, text: ['Q-44', 'qid:44; mid:0 - Math'], module: 0 },
-        { qid: 0, text: ['Q-0', 'qid:0; mid:0 - Audio'], module: 0 },
-        { qid: 1, text: ['Q-1', 'qid:1; mid:1 - Match-1'], module: 1, landscape: true },
-        { qid: 2, text: ['Q-2', 'qid:2; mid:2 - Match-2'], module: 2 },
-        { qid: 3, text: ['Q-3', 'qid:3; mid:3 - Match-3'], module: 3 },
-        { qid: 4, text: ['Q-4', 'qid:4; mid:4 - Fill-1'], module: 4 },
-        { qid: 5, text: ['Q-5', 'qid:5; mid:5 - Fill-2'], module: 5 },
-        { qid: 6, text: ['Q-6', 'qid:6; mid:6 - Jumble-Letter'], module: 6 },
-        { qid: 7, text: ['Q-7', 'qid:7; mid:7 - Jumble-Word'], module: 7 },
-        { qid: 8, text: ['Q-8', 'qid:8; mid:8 - DND-1'], module: 8 },
-        { qid: 9, text: ['Q-9', 'qid:9; mid:9 - MCQ-1'], module: 9 },
-        { qid: 10, text: ['Q-10', 'qid:10; mid:10 - Adaptiv'], module: 10 },
-        { qid: 11, text: ['Q-11', 'qid:11; mid:11 - Audio'], module: 11 },
-        { qid: 12, text: ['Q-12', 'qid:12; mid:12 - Drop Down'], module: 12 },
-        { qid: 13, text: ['Q-13', 'qid:13; mid:13 - Circle'], module: 13 },
-        { qid: 14, text: ['Q-14', 'qid:14; mid:14 - श्रवण कौशल'], module: 14 },
-        { qid: 15, text: ['Q-15', 'qid:15; mid:15 - T&F'], module: 15 },
-        { qid: 16, text: ['Q-16', 'qid:16; mid:16 - DND-2'], module: 16 },
-        { qid: 17, text: ['Q-17', 'qid:17; mid:16 - DND-3'], module: 16 },
-        { qid: 18, text: ['Q-18', 'qid:18; mid:17 - Sorting'], module: 17 },
-        { qid: 19, text: ['Q-19', 'qid:19; mid:18 - PDF'], module: 18 },
-        { qid: 20, text: ['Q-20', 'qid:20; mid:19 - Shabdkosh'], module: 19 },
-        { qid: 21, text: ['Q-21', 'qid:21; mid:20 - Shrutlekh'], module: 20 },
-        { qid: 22, text: ['Q-22', 'qid:22; mid:21 - WordSearch'], module: 21 },
-        { qid: 23, text: ['Q-23', 'qid:23; mid:22 - TextArea'], module: 22 },
-        { qid: 24, text: ['Q-24', 'qid:24; mid:23 - CrossWord'], module: 23 },
-        { qid: 25, text: ['Q-25', 'qid:25; mid:24 - ShravanKaushalWithPara'], module: 24 },
-        { qid: 26, text: ['Q-26', 'qid:26; mid:25 - VideoPlayer'], module: 25 },
-        { qid: 27, text: ['Q-27', 'qid:27; mid:26 - Rachnatmak_Para-1'], module: 26 },
-        { qid: 28, text: ['Q-28', 'qid:28; mid:27 - Rachnatmak_Inputs&Images-2'], module: 27 },
-        { qid: 29, text: ['Q-29', 'qid:29; mid:28 - Rachnatmak_Tab_Btns-3'], module: 28 },
-        { qid: 30, text: ['Q-30', 'qid:30; mid:29 - Rachnatmak_multi_Inputs-4'], module: 29 },
-        { qid: 31, text: ['Q-31', 'qid:31; mid:30 - ClickOnImage'], module: 30 },
-        { qid: 32, text: ['Q-32', 'qid:32; mid:31 - FillOnClick'], module: 31 },
-        { qid: 33, text: ['Q-33', 'qid:33; mid:32 - Dictionary'], module: 32 },
-        { qid: 34, text: ['Q-34', 'qid:34; mid:33 - MentalMath'], module: 33 },
-        { qid: 35, text: ['Q-35', 'qid:35; mid:34 - Youtube-Audio-Video'], module: 34 },
-        { qid: 36, text: ['Q-36', 'qid:36; mid:35 - Math Money'], module: 35 },
-        { qid: 37, text: ['Q-37', 'qid:37; mid:36 - Shabd Rachna'], module: 36 },
-        { qid: 38, text: ['Q-38', 'qid:38; mid:37 - Spell Check'], module: 37 },
-        { qid: 39, text: ['Q-39', 'qid:39; mid:38 - Spell It out'], module: 38 },
-        { qid: 40, text: ['Q-40', 'qid:40; mid:39 - Vowel Drag and Drop'], module: 39 },
-        { qid: 41, text: ['Q-41', 'qid:41; mid:19 - Shabdkosh type-2'], module: 19 },
-        { qid: 42, text: ['Q-42', 'qid:42; mid:40 - Virtual Tour'], module: 40 },
-        { qid: 43, text: ['Q-43', 'qid:43; mid:41 - Circle and underline'], module: 41 },
-        { qid: 45, text: ['Q-45', 'qid:45; mid:9 - Moral of the chapter'], module: 9 },
+        { qid: 44, text: ['Q-44', 'Q:44; M:0 - Math'], module: 0 },
+        { qid: 0, text: ['Q-0', 'Q:0; M:0 - Audio'], module: 0 },
+        { qid: 1, text: ['Q-1', 'Q:1; M:1 - Match-1'], module: 1, landscape: true },
+        { qid: 2, text: ['Q-2', 'Q:2; M:2 - Match-2'], module: 2 },
+        { qid: 3, text: ['Q-3', 'Q:3; M:3 - Match-3'], module: 3 },
+        { qid: 4, text: ['Q-4', 'Q:4; M:4 - Fill-1'], module: 4 },
+        { qid: 5, text: ['Q-5', 'Q:5; M:5 - Fill-2'], module: 5 },
+        { qid: 6, text: ['Q-6', 'Q:6; M:6 - Jumble-Letter'], module: 6 },
+        { qid: 7, text: ['Q-7', 'Q:7; M:7 - Jumble-Word'], module: 7 },
+        { qid: 8, text: ['Q-8', 'Q:8; M:8 - DND-1'], module: 8 },
+        { qid: 9, text: ['Q-9', 'Q:9; M:9 - MCQ-1'], module: 9 },
+        { qid: 10, text: ['Q-10', 'Q:10; M:10 - Adaptiv'], module: 10 },
+        { qid: 11, text: ['Q-11', 'Q:11; M:11 - Audio'], module: 11 },
+        { qid: 12, text: ['Q-12', 'Q:12; M:12 - Drop Down'], module: 12 },
+        { qid: 13, text: ['Q-13', 'Q:13; M:13 - Circle'], module: 13 },
+        { qid: 14, text: ['Q-14', 'Q:14; M:14 - श्रवण कौशल'], module: 14 },
+        { qid: 15, text: ['Q-15', 'Q:15; M:15 - T&F'], module: 15 },
+        { qid: 16, text: ['Q-16', 'Q:16; M:16 - DND-2'], module: 16 },
+        { qid: 17, text: ['Q-17', 'Q:17; M:16 - DND-3'], module: 16 },
+        { qid: 18, text: ['Q-18', 'Q:18; M:17 - Sorting'], module: 17 },
+        { qid: 19, text: ['Q-19', 'Q:19; M:18 - PDF'], module: 18 },
+        { qid: 20, text: ['Q-20', 'Q:20; M:19 - Shabdkosh'], module: 19 },
+        { qid: 21, text: ['Q-21', 'Q:21; M:20 - Shrutlekh'], module: 20 },
+        { qid: 22, text: ['Q-22', 'Q:22; M:21 - WordSearch'], module: 21 },
+        { qid: 23, text: ['Q-23', 'Q:23; M:22 - TextArea'], module: 22 },
+        { qid: 24, text: ['Q-24', 'Q:24; M:23 - CrossWord'], module: 23 },
+        { qid: 25, text: ['Q-25', 'Q:25; M:24 - ShravanKaushalWithPara'], module: 24 },
+        { qid: 26, text: ['Q-26', 'Q:26; M:25 - VideoPlayer'], module: 25 },
+        { qid: 27, text: ['Q-27', 'Q:27; M:26 - Rachnatmak_Para-1'], module: 26 },
+        { qid: 28, text: ['Q-28', 'Q:28; M:27 - Rachnatmak_Inputs&Images-2'], module: 27 },
+        { qid: 29, text: ['Q-29', 'Q:29; M:28 - Rachnatmak_Tab_Btns-3'], module: 28 },
+        { qid: 30, text: ['Q-30', 'Q:30; M:29 - Rachnatmak_multi_Inputs-4'], module: 29 },
+        { qid: 31, text: ['Q-31', 'Q:31; M:30 - ClickOnImage'], module: 30 },
+        { qid: 32, text: ['Q-32', 'Q:32; M:31 - FillOnClick'], module: 31 },
+        { qid: 33, text: ['Q-33', 'Q:33; M:32 - Dictionary'], module: 32 },
+        { qid: 34, text: ['Q-34', 'Q:34; M:33 - MentalMath'], module: 33 },
+        { qid: 35, text: ['Q-35', 'Q:35; M:34 - Youtube-Audio-Video'], module: 34 },
+        { qid: 36, text: ['Q-36', 'Q:36; M:35 - Math Money'], module: 35 },
+        { qid: 37, text: ['Q-37', 'Q:37; M:36 - Shabd Rachna'], module: 36 },
+        { qid: 38, text: ['Q-38', 'Q:38; M:37 - Spell Check'], module: 37 },
+        { qid: 39, text: ['Q-39', 'Q:39; M:38 - Spell It out'], module: 38 },
+        { qid: 40, text: ['Q-40', 'Q:40; M:39 - Vowel Drag and Drop'], module: 39 },
+        { qid: 41, text: ['Q-41', 'Q:41; M:19 - Shabdkosh type-2'], module: 19 },
+        { qid: 42, text: ['Q-42', 'Q:42; M:40 - Virtual Tour'], module: 40 },
+        { qid: 43, text: ['Q-43', 'Q:43; M:41 - Circle and underline'], module: 41 },
+        { qid: 45, text: ['Q-45', 'Q:45; M:9 - Moral of the chapter'], module: 9 },
     ];
 
     // DEFINE QUESTIONS
@@ -128,49 +128,6 @@ const Define = (() => {
                     { type: 'trigonometry', text: '`sin^2 theta`' },
                 ];
 
-                const html = [];
-
-                const heading = `
-                    <style>
-                        .copy-text {
-                            transition : 0.3s all ease;
-                            display: inline-block;
-                        }
-                        .copy-text:hover {
-                            transform: scale(1.4);
-                            color : #58151c !important;
-                        }
-                    </style>
-                    <div 
-                        id="toast-container" 
-                        class="position-fixed top-50 start-50 translate-middle-x p-3"
-                    ></div>
-                    <div 
-                        class="border border-primary-subtle text-center fs-5 fw-semibold text-primary-emphasis bg-primary-subtle rounded-3 my-3 shadow-sm p-2 w-100 mx-auto"
-                    >
-                        MathJax V2 Syntax
-                    </div>
-
-                    <div class="w-100 mx-auto bg-body-tertiary p-3 rounded-3 shadow-sm">
-                        <p class="text-muted">
-                            <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">lc</span> = lowercase ;
-                            <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">uc</span> = uppercase
-                        </p>
-                        <table class="table table-bordered table-hover align-middle">
-                            <thead class="table-dark align-middle text-center">
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Usage</th>
-                                    <th>
-                                        Expected Output 
-                                        <small class="text-white-50">(click on symbols to copy)</small>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-                html.push(heading);
-
                 const express = exp?.map(({ type, text }) => {
                     return `
                         <tr>
@@ -203,10 +160,55 @@ const Define = (() => {
                     `;
                 }).join('');
 
-                const tableEnd = `</tbody></table></div>`;
-                html.push(express + tableEnd);
+                const html = `
+                    <style>
+                        .copy-text {
+                            transition : 0.3s all ease;
+                            display: inline-block;
+                        }
+                        .copy-text:hover {
+                            transform: scale(1.4);
+                            color : #58151c !important;
+                        }
+                    </style>
+                    <div class="h-100 d-flex flex-column">
+                        <div 
+                            class="border border-primary-subtle text-center fs-5 fw-semibold text-primary-emphasis bg-primary-subtle rounded-3 my-2 shadow-sm p-2 w-100 mx-auto"
+                        >
+                            MathJax V2 Syntax
+                        </div>
 
-                return html.join('');
+                        <div
+                            style="height:80%;" 
+                            class="w-100 mx-auto bg-body-tertiary p-3 mb-2 shadow-sm"
+                        >
+                            <p class="text-muted">
+                                <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">lc</span> = lowercase ;
+                                <span class="bg-secondary-subtle px-2 py-1 rounded fw-semibold">uc</span> = uppercase
+                            </p>
+                            <div class="overflow-auto" style="height:93%;">
+                                <table class="table table-bordered table-hover align-middle">
+                                    <thead class="table-dark align-middle text-center">
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Usage</th>
+                                            <th>
+                                                Expected Output 
+                                                <small class="text-white-50">(click on symbols to copy)</small>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${express}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div 
+                            id="toast-container" class="text-center d-flex justify-content-center align-items-center"
+                        ></div>
+                    </div>
+                `;
+
+                return html;
             },
             logic: {
                 // Each function automatically receives `event`, `el`, `root`, and `logic`
@@ -217,37 +219,38 @@ const Define = (() => {
                     const text = el.dataset.copy ?? undefined;
 
                     if (!text) {
-                        logic.renderToast({ message: 'Couldn\'t copy symbol.', bsClass: "warning" });
+                        logic.renderToast({ message: 'Couldn\'t copy symbol.'});
                         return;
                     }
 
                     navigator.clipboard.writeText(text).then(() => {
-                        logic.renderToast({ text: text });
+                        logic.renderToast({ message: `${text} copied to clipboard!` });
                     });
                 },
 
                 // This (`renderToast`) function is not registered in `events.handle`,
                 // so it does not receive the default injected parameters
-                renderToast: ({ text, bsClass, message } = {}) => {
+                renderToast: ({ message=null, bsClass='success' } = {}) => {
                     document.querySelector('#copyToast')?.remove();
 
-                    const toastClass = bsClass ?? 'success';
+                    const toastContainer = document.getElementById('toast-container');
+                    if( !toastContainer || !message ) return null;
 
-                    const toastHtml = `
-                            <div 
-                                id="copyToast"
-                                class="toast align-items-center text-${toastClass}-emphasis bg-${toastClass}-subtle border-${toastClass}-subtle"
-                            >
+                    const toastHtml  = `
+                        <div 
+                            id="copyToast"
+                            class="toast align-items-center text-${bsClass}-emphasis bg-${bsClass}-subtle border-${bsClass}-subtle"
+                        >
                             <div class="d-flex">
                                 <div class="toast-body fs-6 font-monospace"></div>
                                 <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
                             </div>
                         </div>
                     `;
-                    document.querySelector('#toast-container').innerHTML = toastHtml;
+                    toastContainer.innerHTML = toastHtml;
 
                     const toastEl = document.getElementById('copyToast');
-                    const toast = bootstrap.Toast.getOrCreateInstance(toastEl);
+                    const toast   = bootstrap.Toast.getOrCreateInstance(toastEl);
 
                     if (!toast) return;
 
@@ -1847,54 +1850,12 @@ const Define = (() => {
         },
     ];
 
-    const questionContainer = '.question-container';
-    const head = 'qNum';
-    const subHead = 'questionText';
-
-    const loadScript = (src) => {
-        return new Promise((resolve, reject) => {
-            if (!src) {
-                reject(new Error('No script src provided'));
-                return;
-            }
-
-            const exists = [...document.querySelectorAll('script')].some(script => script.src.includes(src));
-            if (exists) {
-                resolve('already-loaded');
-                return;
-            }
-
-            const s = document.createElement('script');
-            s.src = src;
-            s.onload = () => resolve(s);
-            s.onerror = (err) => {
-                s.remove();
-                reject(new Error(`Failed to load script: ${src}`));
-            };
-            document.body.appendChild(s);
-        });
-    };
-
-    (async () => {
-        const p = 'js/newActJS';
-        const v = Date.now();
-        await loadScript(`${p}/modules.js?v=${v}`);
-        await loadScript(`${p}/templates.js?v=${v}`);
-        await loadScript(`${p}/ui.js?v=${v}`);
-    })();
-
     const store = {
-        head,
         buttons,
-        subHead,
-        questions,
-        loadScript,
-        questionContainer
+        questions
     };
 
     const get = (key) => store[key];
 
     return { get };
 })();
-
-

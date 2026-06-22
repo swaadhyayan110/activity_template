@@ -33,6 +33,7 @@
 	<script src="js/jquery.ui.touch-punch.min.js"></script>
 	<link rel="stylesheet" href="css/aos.css">
 	<script src="js/aos.js"></script>
+	<script src="js/newActJS/controller.js"></script>
 	<script>
 		const assets_url = `<?=IMAGES_URL?>`
 	</script>

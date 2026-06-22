@@ -263,7 +263,7 @@ body {
 }
 
 /* HOVER */
-.boxQ:hover {
+.boxQ:hover:not(.activeBtns) {
   transform: translateY(-4px) scale(1.05);
 
   background:
@@ -1851,7 +1851,7 @@ body {
   /* top: 14vh; */
   left: 50%;
   width: 80%;
-  height: 70vh;
+  height: 80vh;
   transform: translate(-50%);
   overflow: auto;
   padding-top: 5vh;
@@ -2665,7 +2665,7 @@ body {
 }
 
 /* Simple Gloss */
-.vTSecondHeading::before {
+/* .vTSecondHeading::before {
   content: '';
   position: absolute;
   top: 2px;
@@ -2678,7 +2678,7 @@ body {
   background: linear-gradient(to bottom,
       rgba(255, 255, 255, .7),
       rgba(255, 255, 255, 0));
-}
+} */
 
 .vTSecondHeading:hover {
   transform: translateY(-2px);
