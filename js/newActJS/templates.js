@@ -100,7 +100,7 @@ const Helper = (() => {
                 pdfjsLib.GlobalWorkerOptions.workerSrc = `${base}/pdf.worker.mjs`;
 
                 console.info(`PDF.js loaded`);
-                return pdfjsLib;
+                return { pdfjsLib, base };
             } catch (err) {
                 console.warn(`Failed to load PDF.js from ${base}`);
             }
@@ -7380,7 +7380,8 @@ const Pdf = (() => {
             }
 
             toggle_loader(true);
-            window.pdfjsLib = await Helper.loadPdfJs();
+            const {pdfjsLib, base} = await Helper.loadPdfJs();
+            window.pdfjsLib = pdfjsLib;
 
             const canvas = document.getElementById("pdfCanvas");
             const ctx = canvas.getContext("2d");
@@ -7393,7 +7394,8 @@ const Pdf = (() => {
             let rotation = 0;
 
             const loadingTask = pdfjsLib.getDocument({
-                url: path
+                url: path,
+                wasmUrl: `${base}/wasm/`
             });
 
             loadingTask.onProgress = (data) => {

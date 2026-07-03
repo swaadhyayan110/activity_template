@@ -1014,7 +1014,7 @@ const Define = (() => {
             id: 19,
             lang: 'en',
             content: {
-                pdf: 'pdf.pdf',
+                pdf: 'textable-pdf/6.pdf',
                 download: true
             }
         },
