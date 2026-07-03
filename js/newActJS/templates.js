@@ -7384,14 +7384,15 @@ const Pdf = (() => {
             window.pdfjsLib = pdfjsLib;
 
             const canvas = document.getElementById("pdfCanvas");
-            const ctx = canvas.getContext("2d");
-            const pageNumInput = document.getElementById("pageNum");
-            const pageCountEl = document.getElementById("pageCount");
+            const ctx    = canvas.getContext("2d");
 
-            let pdfDoc = null;
+            const pageNumInput = document.getElementById("pageNum");
+            const pageCountEl  = document.getElementById("pageCount");
+
+            let pdfDoc      = null;
             let currentPage = 1;
-            let scale = __scale();
-            let rotation = 0;
+            let scale       = __scale();
+            let rotation    = 0;
 
             const loadingTask = pdfjsLib.getDocument({
                 url: path,
