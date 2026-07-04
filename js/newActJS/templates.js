@@ -12028,18 +12028,16 @@ const Dictionary = (() => {
     };
 
     const sortDictionaryItems = (container) => {
-        const items = $(container).children(".wordDragDic").get();
+        const items = Array.from(container.querySelectorAll(":scope > .wordDragDic"));
 
         items.sort((a, b) => {
-            const textA = $(a).text().trim().toLowerCase();
-            const textB = $(b).text().trim().toLowerCase();
+            const textA = a.textContent.trim().toLowerCase();
+            const textB = b.textContent.trim().toLowerCase();
 
             return textA.localeCompare(textB);
         });
 
-        $.each(items, function (_, item) {
-            $(container).append(item);
-        });
+        container.append(...items);
     };
 
     const renderActivity = (questionId) => {
@@ -12074,7 +12072,8 @@ const Dictionary = (() => {
 
         const optHolders = document.getElementById("optHolders");
 
-        content.forEach(item => {
+        const options = Activity.shuffleArray(content)
+        options.forEach(item => {
             const firstLetter = item.trim()[0].toUpperCase();
             optHolders.innerHTML += `<div class="disDragItems wordDragDic" data-ans="${firstLetter}">${item}</div>`;
         });
@@ -12162,7 +12161,7 @@ const Dictionary = (() => {
 
     const showAnswers = () => {
         const activity = Activity.getDefine(Activity.getQid(`#${containerId}`)) ?? {};
-        const content = activity?.content ?? [];
+        const content  = activity?.content ?? [];
 
         $(".submit-btn").addClass("disabled");
         $(".dropBoxDict").empty();
@@ -12176,6 +12175,9 @@ const Dictionary = (() => {
         });
         $(".dropBoxDict").droppable("disable");
         Activity.initMathJax();
+
+        document.querySelectorAll('.dropBoxDict')
+            ?.forEach(element => sortDictionaryItems(element));
     };
 
     return {
