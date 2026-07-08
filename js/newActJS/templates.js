@@ -6368,14 +6368,7 @@ const DragAndDropMulti = (() => {
 
         replacedText = replacedText.replace(replacementRegex, () => {
             const ans = quesOptions[index] || '';
-            return `
-                <div 
-                    class="drop-Box dropBox_2 ui-droppable" 
-                    data-ans="${ans}"
-                    data-blankindex="${index++}"
-                    style="width:${inputWidth};">
-                </div>
-            `;
+            return `<div class="drop-Box dropBox_2 ui-droppable d-inline-block" data-ans="${ans}" data-blankindex="${index++}" style="width:${inputWidth};"></div>`;
         });
 
         const image = [];
@@ -6422,6 +6415,7 @@ const DragAndDropMulti = (() => {
         } else {
             if (isCol === false) {
                 const imageSide = questions[ind]?.imageSide ?? 'left';
+                console.log(0);
 
                 const html = `
                     <div class="my-2 p-1">
@@ -6433,9 +6427,7 @@ const DragAndDropMulti = (() => {
                                 <div class='col-auto'>
                                     ${image.join('')}
                                 </div>
-                                <div class='col d-flex flex-wrap' data-queindex="${ind}">
-                                    ${replacedText}
-                                </div>
+                                <div class='col d-flex flex-wrap' data-queindex="${ind}" style="white-space: pre-wrap;">${replacedText}</div>
                             </div>
                         </div>
                     </div>
@@ -6465,7 +6457,7 @@ const DragAndDropMulti = (() => {
                                     ` : ''
                     }
                                 <div 
-                                    class="row g-0 gap-4 my-3 ${!singleQuestionMode && col_size.md == 4 ? 'justify-content-center' : ''}" 
+                                    class="my-3 ${!singleQuestionMode && col_size.md == 4 ? 'justify-content-center' : ''}" 
                                     data-queindex="${ind}"
                                 >
                                     ${replacedText}
@@ -9023,6 +9015,11 @@ const CrossWord = (() => {
             const que_side = activity.content?.side ?? 'left';
             const showQuestion = activity.content?.config?.showQuestion ?? 'true';
 
+            const header_image       = activity?.content?.header?.image ?? null;
+            const header_image_path  = ( header_image?.path == '' || !header_image?.path ) ? null : header_image?.path;
+            const header_image_size  = ( header_image?.size?.width && header_image?.size?.height ) ? header_image?.size : {width : '50px', height : '50px'};
+            const header_image_class = header_image?.imageWrapperClass ?? null;
+
             const buttonLabel = Activity.translateButtonLabels(lang);
 
             const uiHtml = `
@@ -9030,9 +9027,20 @@ const CrossWord = (() => {
                         <img class="backImgsM1" draggable="false" src="images/wp.png"/>
                         <div class="wordPuzzleBox">
                          <div class="question">
-                            <div class="container" id="${containerId}">                                        
+                            <div class="container" id="${containerId}">
                                 <div class="cross-word-puzzle crossword-content" style="text-align:left;">
                                     <div class="${Helper.vars.head}"></div>
+                                    ${
+                                        header_image_path !== null ? `
+                                                <div class="${header_image_class}">
+                                                    <img 
+                                                        style="width:${header_image_size?.width};height:${header_image_size?.height};" 
+                                                        src="${Activity.pathToCWD()}${header_image_path}"
+                                                    >
+                                                </div>
+                                            ` 
+                                            : ''
+                                    }
                                     <div class="cross-puzzle ${que_side === 'top' || que_side === 'bottom' ? 'flex-column' : ''} ${que_side === 'bottom' ? 'flex-column-reverse' : que_side === 'right' ? 'flex-row-reverse' : ''}" style="gap: 2vw;">
                                         ${showQuestion ? `<div class="criss-cross ${que_side === 'top' || que_side === 'bottom' ? 'w-100 d-flex justify-content-evenly' : ''}"></div>` : ''}
                                         <div id="puzzle2" class='w-100' style="display:block;"></div>

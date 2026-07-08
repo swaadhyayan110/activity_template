@@ -64,7 +64,7 @@ const Define = (() => {
 
     // DEFINE QUESTIONS
     const questions = [
-        // id : 44
+        // qid : 44 || mid : 0;
         {
             id: 44,
             ui: () => {
@@ -264,7 +264,7 @@ const Define = (() => {
                 { event: 'click', selector: '.copy-text', handle: ['copyText'] },
             ]
         },
-        // id : 0
+        // qid : 0 || mid : 0;
         {
             id: 0,
             path: {
@@ -411,7 +411,7 @@ const Define = (() => {
                 { event: 'click', selector: '#audioImage', handle: ['playMedia'] }
             ]
         },
-        // id : 1
+        // qid : 1 || mid : 1;
         {
             id: 1,
             lang: 'en',
@@ -426,7 +426,7 @@ const Define = (() => {
                 { id: 6, left: 'Be an eye-opener', right: 'To understand something' }
             ]
         },
-        // id : 2
+        // qid : 2 || mid : 2;
         {
             id: 2,
             lang: 'hi',
@@ -455,7 +455,7 @@ const Define = (() => {
                 correctRight: { 1: 6, 2: 1, 3: 2 }
             },
         },
-        // id : 3
+        // qid : 3 || mid : 3;
         {
             id: 3,
             lang: 'hi',
@@ -469,7 +469,7 @@ const Define = (() => {
                 { id: 5, top: 'Catch someone\'s eye', bottom: 'To be a favourite or loved' }
             ]
         },
-        // id : 4
+        // qid : 4 || mid : 4;
         {
             id: 4,
             lang: 'en',
@@ -507,7 +507,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 5
+        // qid : 5 || mid : 5;
         {
             id: 5,
             lang: 'hi',
@@ -592,7 +592,7 @@ const Define = (() => {
                 audio: 'bg.mp3'
             }
         },
-        // id : 6
+        // qid : 6 || mid : 6;
         {
             id: 6,
             lang: 'hi',
@@ -610,7 +610,7 @@ const Define = (() => {
                 'CLASS', 'COLLEGE', 'EXAM', 'LEARN', 'STUDY'
             ]
         },
-        // id : 7,
+        // qid : 7, || mid : 7;
         {
             id: 7,
             lang: 'en',
@@ -627,7 +627,7 @@ const Define = (() => {
                 'Honesty is the best policy.'
             ]
         },
-        // id : 8,
+        // qid : 8, || mid : 8;
         {
             id: 8,
             lang: 'hi',
@@ -656,7 +656,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 9,
+        // qid : 9, || mid : 9;
         {
             id: 9,
             lang: 'hi',
@@ -717,7 +717,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 10,
+        // qid : 10, || mid : 10;
         {
             id: 10,
             lang: 'en',
@@ -838,7 +838,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 11,
+        // qid : 11, || mid : 11;
         {
             id: 11,
             lang: 'hi',
@@ -851,7 +851,7 @@ const Define = (() => {
                 // src : 'https://www.youtube.com/embed/gIoyGYYCAxE?si=8bhfXCJ1WKJpoIp8',
             }
         },
-        // id : 12,
+        // qid : 12, || mid : 12;
         {
             id: 12,
             lang: 'hi',
@@ -867,7 +867,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 13,
+        // qid : 13, || mid : 13;
         {
             id: 13,
             lang: 'hi',
@@ -886,7 +886,7 @@ const Define = (() => {
                 { id: 7, text: 'छोटी बहन के लिए - तुम, तू, आप', answer: 'तुम' },
             ]
         },
-        // id : 14,
+        // qid : 14, || mid : 14;
         {
             id: 14,
             lang: 'hi',
@@ -914,7 +914,7 @@ const Define = (() => {
                 }
             }
         },
-        // id : 15,
+        // qid : 15, || mid : 15;
         {
             id: 15,
             lang: 'hi',
@@ -947,7 +947,7 @@ const Define = (() => {
                 audio: 'audio/1.mp3'
             }
         },
-        // id : 16,
+        // qid : 16, || mid : 16;
         {
             id: 16,
             lang: 'hi',
@@ -983,12 +983,12 @@ const Define = (() => {
                     { qid: 2, text: '#_#', image: 'images/1.png', options: ['`theta`'], answer: 0 },
                     { qid: 3, text: 'सितार पर खाली जगह पर #_# की गई।', image: 'images/1.png', options: ['नक्काषी'], answer: 0 },
                     { qid: 4, text: 'सितार बनाने के लिए तारों को #_# से बाँधा गया।', image: 'images/1.png', options: ['खूँटी'], answer: 0 },
-                    { qid: 5, text: 'कोयल ने सितार को बड़े ही #_# से पकड़ा।', image: 'images/1.png', options: ['जतन'], answer: 0 }
+                    { qid: 5, text: '<strong>कोयल</strong> ने सितार को बड़े ही #_# से पकड़ा।', image: 'images/1.png', options: ['जतन'], answer: 0 }
                 ],
                 audio     : 'bg.mp3'
             }
         },
-        // id : 17,
+        // qid : 17, || mid : 16;
         {
             id: 17,
             lang: 'hi',
@@ -1000,7 +1000,7 @@ const Define = (() => {
                 },
             }
         },
-        // id : 18,
+        // qid : 18, || mid : 17;
         {
             id: 18,
             lang: 'en',
@@ -1009,7 +1009,7 @@ const Define = (() => {
                 sequence: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', '`theta`'],
             }
         },
-        // id : 19,
+        // qid : 19, || mid : 18;
         {
             id: 19,
             lang: 'en',
@@ -1018,7 +1018,7 @@ const Define = (() => {
                 download: true
             }
         },
-        // id : 20,
+        // qid : 20, || mid : 19;
         {
             id: 20,
             lang: 'en',
@@ -1070,7 +1070,7 @@ const Define = (() => {
                 },
             ]
         },
-        // id : 21,
+        // qid : 21, || mid : 20;
         {
             id: 21,
             lang: 'en',
@@ -1085,7 +1085,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 22,
+        // qid : 22, || mid : 21;
         {
             id: 22,
             lang: 'en',
@@ -1179,7 +1179,7 @@ const Define = (() => {
                 }
             ]
         },
-        // id : 23,
+        // qid : 23, || mid : 22;
         {
             id: 23,
             lang: 'en',
@@ -1202,7 +1202,7 @@ const Define = (() => {
                 ] 
             }
         },
-        // id : 24,
+        // qid : 24, || mid : 23;
         {
             id: 24,
             lang: 'hi',
@@ -1213,6 +1213,16 @@ const Define = (() => {
                 hint: true,
                 config: {
                     showQuestion: true,
+                },
+                header : {
+                    image : {
+                        imageWrapperClass : 'text-center',
+                        path : 'images/6.png',
+                        size : { //  Define both (width & height) or neither.
+                            width  : '78px',
+                            height : '',
+                        }
+                    }
                 },
                 questions: [
                     { sequence: 1, direction: 'v', row: [2, 16], col: [20], question: '`theta` Fossil scientists', answer: "paLEONTOLOGISTS" },
@@ -1228,7 +1238,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 25,
+        // qid : 25, || mid : 24;
         {
             id: 25,
             lang: 'ro',
@@ -1290,7 +1300,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 26,
+        // qid : 26, || mid : 25;
         {
             id: 26,
             lang: 'en',
@@ -1302,7 +1312,7 @@ const Define = (() => {
                 }
             }
         },
-        // id : 27,
+        // qid : 27, || mid : 26;
         {
             id: 27,
             lang: 'hi',
@@ -1318,7 +1328,7 @@ const Define = (() => {
                 text: "पेड़-पौधे `theta` हमारी धरती माँ के सिर्फ़ शृंगार ही नहीं, #_# बल्कि उसपर स्थित जीवन के आधार भी हैं। इनके बिना हम जीवन की कल्पना भी #_# नहीं कर सकते। प्राचीन काल से ही हमारे ऋषियों, मुनियों और विचारकों ने पेड़-पौधों के महत्त्व को समझा। यही कारण है कि हमारी संस्कृति में वनों का इतना महत्त्व है। हमारे यहाँ पेड़-पौधों को लगाना, इनकी पूजा करना और वन-महोत्सव की प्रथा का प्रचलन प्राचीन काल से है और इसके वैज्ञानिक कारण भी हैं। #_# पेड़ों की पूजा अंधविश्वास नहीं है। पेड़-पौधे हमारे लिए बहुत लाभदायक हैं। इनसे हमें खाने के लिए फ़ल, विश्राम के लिए छाया, रोगों के लिए औषधियाँ, जलाने के लिए ईंधन एवं शुद्ध वातावरण आदि मिलता है। अतः उनके प्रति कृतज्ञता प्रकट करना हमारा प्रथम कर्तव्य है। पेड़-पौधे हमेशा से हम पर उपकार करते आए हैं। पेड़-पौधों द्वारा जलवायु औरवातावरण का संतुलन बना रहता है। इनकी जड़ें मिट्टी को जकड़कर रखती हैं तथा पत्तियाँ सड़कर खाद (ह्यूमस) का काम करती हैं। #_# इससे मृदा-क्षरण कम होता है। यह तो हम सभी जानते हैं कि पेड़-पौधों में जीवन होता है। वे भी हमारी तरह दुख-सुख का अनुभव कर अपनी प्रतिक्रिया व्यक्त करते हैं। कहा जाता है कि मनुष्य पर उसके चारों ओर के वातावरण का असर पड़ता है, इसलिए अगर हम अपने चारों तरफ़ की धरती को पेड़ लगाकर हरा कर दें, तो चारों तरफ़ का सौंदर्य देखने लायक होगा, फिर जो मनुष्य ऐसे वातावरण में रहेगा, उसका हृदय भी उसी तरह खुशहाल हो जाएगा। पेड़ तो प्रकृति का सबसे बड़ा वरदान है। #_# अगर पेड़ हैं तो वर्षा होगी, पानी की समस्या नहीं रहेगी एवं ऑक्सीजन और कार्बन डाइऑक्साइड गैसों में संतुलन रहेगा। यदि पेड़ों की संख्या बढ़ा दी जाए तो ग्रीन हाउस गैसों के असर से भी हम बच सकते हैं। प्रगति की ओर बढ़ रहे मानव ने नगर, महानगर, यहाँ तक कि कस्बे और देहात तक में छोटे-बड़े उद्योग-धंधों के रूप में अनेक छोटी-बड़ी फ़ैक्टरियाँ लगाई हैं। उनसे धुआँ, तरह-तरह की विषैली गैसें आदि निकलकर पर्यावरण को प्रदूषित कर रही हैं। पेड़-पौधे उनसे निकलने वाली प्रदूषित गैसों को पर्यावरण में घुलने से रोककर पर्यावरण को दूषित होने से बचाते हैं। पेड़-पौधे उस कामधेनु की भाँति हैं, जिसके बिना जीना असंभव है। इनके बिना हमारा अस्तित्व ही समाप्त हो जाएगा, अतः हमें चाहिए कि ज़्यादा-से-ज़्यादा पेड़ लगाकर अपनी पृथ्वी को बचाएँ, अन्यथा वह समय दूर नहीं, जब पृथ्वी पर जीव और जीवन एक इतिहास बन जाएगा।",
             }
         },
-        // id : 28,
+        // qid : 28, || mid : 27;
         {
             id: 28,
             lang: 'hi',
@@ -1359,7 +1369,7 @@ const Define = (() => {
                 showInput: true,
             }
         },
-        // id : 29,
+        // qid : 29, || mid : 28;
         {
             id: 29,
             lang: 'hi',
@@ -1378,7 +1388,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 30,
+        // qid : 30, || mid : 29;
         {
             id: 30,
             lang: 'en',
@@ -1416,7 +1426,7 @@ const Define = (() => {
                 ]
             },
         },
-        // id : 31,
+        // qid : 31, || mid : 30;
         {
             id: 31,
             lang: 'en',
@@ -1435,7 +1445,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 32,
+        // qid : 32, || mid : 31;
         {
             id: 32,
             lang: 'en',
@@ -1451,7 +1461,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 33,
+        // qid : 33, || mid : 32;
         {
             id: 33,
             lang: 'en',
@@ -1463,7 +1473,7 @@ const Define = (() => {
                 'Grimly', 'Hankering', 'Quavered', 'Angel', 'Deterrence', 'Lavender', 'aeroplane',
             ]
         },
-        // id : 34,
+        // qid : 34, || mid : 33;
         {
             id: 34,
             lang: 'en',
@@ -1500,7 +1510,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 35,
+        // qid : 35, || mid : 34;
         {
             id: 35,
             content: {
@@ -1518,7 +1528,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 36,
+        // qid : 36, || mid : 35;
         {
             id: 36,
             lang: 'en',
@@ -1583,7 +1593,7 @@ const Define = (() => {
                 }
             }
         },
-        // id : 37,
+        // qid : 37, || mid : 36;
         {
             id: 37,
             lang: 'en',
@@ -1616,7 +1626,7 @@ const Define = (() => {
                 }
             }
         },
-        // id : 38,
+        // qid : 38, || mid : 37;
         {
             id: 38,
             lang: 'en',
@@ -1633,7 +1643,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 39,
+        // qid : 39, || mid : 38;
         {
             id: 39,
             lang: 'en',
@@ -1643,7 +1653,7 @@ const Define = (() => {
                 words: ['Jeans', 'Sweater', 'cap', 'shorts', 'frock', 'skirt', 'hat', 'Vest', 'clothes', 'socks', 't-shirt', 'trousers', 'shirt', 'scarf', 'tie']
             }
         },
-        // id : 40,
+        // qid : 40, || mid : 39;
         {
             id: 40,
             lang: 'hi',
@@ -1665,7 +1675,7 @@ const Define = (() => {
                 vowels: ["ा", "ि", "ी", "ु", "ू", "े", "ै", "ो", "ौ", "ं", "ः", "ँ"]
             }
         },
-        // id : 41,
+        // qid : 41, || mid : 19;
         {
             id: 41,
             lang: 'en',
@@ -1704,7 +1714,7 @@ const Define = (() => {
                 }
             ]
         },
-        // id : 42,
+        // qid : 42, || mid : 40;
         {
             id: 42,
             head: 'Template : 40, VirtualTour `theta`',
@@ -1805,7 +1815,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 43,
+        // qid : 43, || mid : 41;
         {
             id: 43,
             head: 'Template : 43, CircleAndUnderline `theta`',
@@ -1839,7 +1849,7 @@ const Define = (() => {
                 ]
             }
         },
-        // id : 45,
+        // qid : 45, || mid : 9;
         {
             id: 45,
             content: {
