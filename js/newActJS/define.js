@@ -1453,7 +1453,24 @@ const Define = (() => {
             content: {
                 replacement: '#_#',
                 question: [
-                    { text: 'The `theta` maximum tally marks fell in a #_# range', options: ['general', 'particular'], answer: 0 },
+                    { 
+                        text: 'The `theta` maximum tally marks fell in a #_# range', 
+                        options: ['general', 'particular'], 
+                        answer: 0,
+                        images : {
+                            imageWrapperClass : 'justify-content-center', // wrapper is a flex item.
+                            content : [
+                                { 
+                                    path : 'images/6.png',
+                                },
+                                { 
+                                    path   : 'images/1.png',
+                                    width  : '100px',
+                                    height : '100px',
+                                },
+                            ]
+                        }
+                    },
                     { text: 'Raw data can be condensed using a #_#', options: ['class intervals', 'age intervals'], answer: 1 },
                     { text: 'No two students had identical #_#', options: ['heights and weights', 'health requirements'], answer: 1 },
                     { text: 'Many students had their data falling under the same #_#', options: ['index', 'range'], answer: 1 },
@@ -1743,7 +1760,14 @@ const Define = (() => {
                                         position: 'top',
                                         width: '50%',
                                         images: [
-                                            { path: 'images/1.png', caption: 'police-man-1' },
+                                            {
+                                                path: 'images/1.png',
+                                                caption: 'police-man-1',
+                                                description : {
+                                                    wrapperClass : '',
+                                                    text : 'A standard photosynthesis image visually <b>diagrams</b> how plants, algae, and cyanobacteria convert light into energy. It features a plant with arrows pointing to the inputs (sunlight, carbon dioxide, and water) and outputs (glucose/sugar and oxygen), providing a perfect visual summary of the process.'
+                                                },
+                                            },
                                             { path: 'images/2.png', caption: 'police-man-2 `theta`' },
                                             { path: 'images/3.png', caption: 'police-man-3' },
                                             { path: 'images/3.png', caption: 'police-man-3' }

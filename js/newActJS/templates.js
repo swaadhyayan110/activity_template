@@ -11845,15 +11845,35 @@ const FillOnClick = (() => {
 
         const opts = [];
         content?.question.map((item, index) => {
+            const images = item?.images?.content?.map((image) => {
+                if( !image.path ) return null;
+                return `
+                    <img 
+                        style="width:${image.width ?? '50px'};height:${image.height ?? '50px'};"
+                        src="${Activity.pathToCWD() + image.path}"
+                    >
+                `;
+            }).join( '' ) ?? '';
+            // ..
+
             const modifiedText = item?.text.replace(replacement, `<input type="text" data-q="${index}" class="form-control clickToFillsRed fullInputs"/>`);
             const optionsHtml = item?.options.map((opt) =>
                 `<div class="clickedLetter" data-opt="${opt}" data-q="${index}">${opt}</div>`
             ).join("");
 
-            const html = `<div class="rowFillClick">
-                            <div class="firstColRe">
-                                <div class="levelsLe">${index + 1} </div>
-                                <div class="withInputsRowsRed">${modifiedText}</div>
+            const html = `<div class="rowFillClick align-items-center">
+                            <div class="firstColRe align-items-center row g-0">
+                                <div class="levelsLe col-auto">${index + 1}</div>
+                                <div class="col">
+                                    ${
+                                        images ? `
+                                            <div class="align-items-center p-1 my-1 d-flex gap-2 ${item.images.imageWrapperClass ?? ''}">
+                                                ${images}
+                                            </div>
+                                        ` : ''
+                                    }
+                                    <div class="withInputsRowsRed" style="white-space: pre-wrap;">${modifiedText}</div>
+                                </div>
                             </div>
                             <div class="optionsBoxClicked">${optionsHtml}</div>
                         </div>`;
@@ -14797,9 +14817,16 @@ const VirtualTour = (() => {
                                 <div class="col-12 text-center">
                                     ${renderImage({ path: image.path, imageWidth: imageWidth })}
                                 </div>
-                                ${image?.caption && image?.caption != ''
-                            ? captionTextView(image.caption) : ''
-                        }
+                                ${ ( image?.caption && image?.caption != '' ) ? captionTextView(image.caption) : '' }
+                                ${
+                                    image?.description?.text ? `
+                                        <div 
+                                            class="p-1 ${image?.description?.wrapperClass ?? ''}"
+                                        >
+                                            ${image.description.text}
+                                        </div>
+                                    ` : ''
+                                }
                             </div>
                         ` : ''
                     // ..
