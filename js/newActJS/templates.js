@@ -3630,6 +3630,8 @@ const Mcq_PathKaSaar = (() => {
             if (scoreText) {
                 scoreText.innerText = popupLabels.scored(correctCount, totalQues);
             }
+
+            Activity.initMathJax();
         } catch (e) {
             console.error('Mcq.showAnswerPopupMCQ', e);
         }
