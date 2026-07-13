@@ -75,6 +75,7 @@ const Define = (() => {
                     { type: 'symbol', text: '`mbox{speed}/mbox{distance}`' },
                     { type: 'symbol', text: '`mbox{Total Speed}=mbox{Total Distance}/mbox{Total Time}`' },
                     { type: 'symbol', text: '`mbox{n(n-1)}/2`' },
+                    { type: 'symbol', text: '`frac{n^2(n-1)}{2}`' },
                     { type: 'symbol', text: '`alpha`' },
                     { type: 'symbol', text: '`beta`' },
                     { type: 'symbol', text: '#{lc :}# `gamma` #{and uc :}# `Gamma`' },
