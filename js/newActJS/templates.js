@@ -2592,8 +2592,6 @@ const FillInTheBlanksHindiKb = (() => {
             const index = dataset.index;
             const input = $(`.hindiInput.inPutHindiNew[data-qid="${qid}"][data-index="${index}"][data-sqid="${sqid}"]`);
 
-            input[0].classList.add("noClick");
-
             input[0] != undefined ? input[0].style.borderColor = 'dodgerblue' : '';
 
             if (sqid == 'false') {
