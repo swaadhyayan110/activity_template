@@ -2355,7 +2355,8 @@ const FillInTheBlanksHindiKb = (() => {
                 const html = [content?.questions.length != 1 && queLabel ? `<div style="width: 40px">${mainBullet})</div><div class='col'>` : null];
 
                 const div = document.createElement('div');
-                div.classList.add('questionFILL', 'row');
+                div.classList.add('questionFILL');
+
                 div.id = `que_${qIndex}`;
 
                 const colCondition = definedCol instanceof Object && Object.entries(definedCol).length;
