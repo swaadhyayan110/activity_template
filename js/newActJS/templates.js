@@ -2352,7 +2352,7 @@ const FillInTheBlanksHindiKb = (() => {
                 const subQuestion = __subQuestions?.filter(subques => subques.qid === question.qid) ?? [];
                 const questionId = question?.qid !== undefined ? question?.qid : (qIndex + 1);
                 const mainBullet = Activity.translateBulletLabels({ lang: lang, ind: qIndex });
-                const html = [content?.questions.length != 1 && queLabel ? `<div style="width: 40px">${mainBullet})</div><div class='col'>` : null];
+                const html = [content?.questions.length != 1 && queLabel ? `<div style="width: 40px">${mainBullet})</div><div class='col'>` : `<div class='col'>`];
 
                 const div = document.createElement('div');
                 div.classList.add('questionFILL', 'row');
