@@ -8730,7 +8730,7 @@ const TextArea = (() => {
             const content = activity?.content ?? {};
             const text = content?.text ?? {};
             const img = content?.img ?? {};
-            const isShuffled = activity?.shuffle ?? true;
+            const isShuffled = content?.shuffle ?? true;
 
             const mcqContextContainer = $('.mcq-context');
             mcqContextContainer.empty();

@@ -1188,8 +1188,8 @@ const Define = (() => {
             id: 23,
             lang: 'en',
             head: 'Template : 22',
-            shuffle : false,
             content: {
+                shuffle : false,
                 replacement: '#_#',
                 showInput: false,
                 text: {
