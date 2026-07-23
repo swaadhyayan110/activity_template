@@ -1100,13 +1100,13 @@ const Define = (() => {
                 questionSection: {
                     heading: {
                         main: {
-                            text: ''
+                            text: 'Hints' // false || "text"
                         },
                         vertical: {
-                            text: 'Across'
+                            text: false // false || "text"
                         },
                         horizontal: {
-                            text: 'Down'
+                            text: 'Across' // false || "text"
                         }
                     },
                     col: { col: 12, md: 12, sm: 12 },
@@ -1188,6 +1188,7 @@ const Define = (() => {
             id: 23,
             lang: 'en',
             head: 'Template : 22',
+            shuffle : false,
             content: {
                 replacement: '#_#',
                 showInput: false,

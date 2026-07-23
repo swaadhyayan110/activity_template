@@ -27,8 +27,6 @@ const Helper = (() => {
 
         }
         catch (err) {
-
-            // ignore AbortError (normal behavior)
             if (err.name !== "AbortError") {
                 console.error("Playback failed:", err);
             }
@@ -4120,52 +4118,50 @@ const Adaptiv = (() => {
             if (submitWrapper) submitWrapper.innerHTML = '';
             if (!container) return;
 
+            const showLevelSeqText = !skipnextbtn && levels.length > 1;
+
             const btnLabel = Activity.translateButtonLabels(lang);
             container.innerHTML = `
                 <div class="result-box">
-                    ${!skipnextbtn ? `<h4><strong class="fs-1">${popupLabels.levelLabel} ${currentLevel} ${whenCompleteLevel}</strong></h4>` : ''}
+                    ${showLevelSeqText ? `<h4><strong class="fs-1">${popupLabels.levelLabel} ${currentLevel} ${whenCompleteLevel}</strong></h4>` : ''}
                     ${!skipOptions ? `
-                        <p class="text-danger-adaptive my-3">
-                            ${popupLabels.totalQuestions} : 
-                            ${currentQuizData?.length || 0}
-                        </p>
-                        <p class="text-success my-3">
-                            ${popupLabels.correctAnswers}: ${correct}
-                        </p>
-                        <p class="text-success my-3">
-                            ${popupLabels.attemptNo}: ${attemptCount}
-                        </p>
-                        ` : ''
-                }
+                            <p class="text-danger-adaptive my-3">
+                                ${popupLabels.totalQuestions} : 
+                                ${currentQuizData?.length || 0}
+                            </p>
+                            <p class="text-success my-3">
+                                ${popupLabels.correctAnswers}: ${correct}
+                            </p>
+                            <p class="text-success my-3">
+                                ${popupLabels.attemptNo}: ${attemptCount}
+                            </p>
+                            ` : ''
+                    }
                     <div class="rowBtns">
                         ${((showNextLevel || skiplevels) && !skipnextbtn) ? `
                             <button class='btn btn-success mt-3 mx-3' id='btn-next-level'>
                                 ${popupLabels.goToLevel(currentLevel + 1)}
                             </button>` : ''
-                }
+                        }
                         ${(showRetryBtn || showNextLevel) ? `
                                 <button class='btn btn-primary mt-3 mx-3' id='btn-retry'>
                                     ${btnLabel.try}
                                 </button>
                             ` : ''
-                }
+                        }
                         ${!skipOptions ? `
                             ${(!skipOptions || showAnswerBtn || showNextLevel || skipansbtn) ? `
                                     <button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>
                                         ${btnLabel.show}
                                     </button>
                                 ` : ''
-                    }
+                            }
                             ` : ''
-                }
-                        ${(finished && showNextLevel && !skipnextbtn) ? `
-                                <button class='btn btn-success mt-3 mx-3' id='btn-finish'>
-                                    ${popupLabels.finished}
-                                </button>
-                            ` : ''
-                }
+                        }                        
                     </div>
-                </div>`;
+                </div>
+            `;
+            // ..
 
             const btnNextLevel = document.getElementById('btn-next-level');
             const btnRetry = document.getElementById('btn-retry');
@@ -6172,7 +6168,7 @@ const DragAndDropMulti = (() => {
                             <table class="table table-bordered" style="font-size:20px">
                                 <thead class="text-light" style="white-space: nowrap;">
                                     <tr>
-                                        <th>${headLabels.sequence}</th>
+                                        ${__getQuestionData().isBullets ? `<th>${headLabels.sequence}</th>` : '' }
                                         <th>${headLabels.attempted}</th>
                                         <th>${headLabels.correct}</th>
                                         <th>${headLabels.result}</th>
@@ -6208,7 +6204,7 @@ const DragAndDropMulti = (() => {
 
                     const body = `
                         <tr clsss='trData'>
-                            <th>(${Activity.translateBulletLabels({ lang: lang, key: key })})</th>
+                            ${__getQuestionData().isBullets ? `<th>(${Activity.translateBulletLabels({ lang: lang, key: key })})</th>` : '' }
                             <td class="${isCorrect ? 'text-success' : 'text-danger'}">${ans.toString()}</td>
                             <td></td>
                             <td class="${isCorrect ? 'text-success' : 'text-danger'} ">${isCorrect ? '✔' : '✘'}</td>
@@ -6263,7 +6259,7 @@ const DragAndDropMulti = (() => {
 
                 const body = `
                     <tr clsss='trData'>
-                        <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
+                        ${__getQuestionData().isBullets ? `<th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>` : '' }
                         <td class="${isCorrect ? 'text-success' : 'text-danger'}">
                             ${userAnswerArr.length ? userAnswerArr.join(', ') : popupLabels.notAttempted}
                         </td>
@@ -6400,9 +6396,12 @@ const DragAndDropMulti = (() => {
             });
             const html = `
                 <div class="row g-0 my-3 align-items-center ">
-                    <div class="col-auto me-1">
-                        (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
-                    </div>
+                    ${ __getQuestionData().isBullets ? `
+                            <div class="col-auto me-1">
+                                (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
+                            </div>
+                        ` : ''
+                    }
                     <div class="col d-flex flex-wrap align-items-center question-container_2" data-queindex="${ind}">
                         ${image.join('')}
                         ${replacedText}
@@ -6416,14 +6415,16 @@ const DragAndDropMulti = (() => {
         } else {
             if (isCol === false) {
                 const imageSide = questions[ind]?.imageSide ?? 'left';
-                console.log(0);
 
                 const html = `
                     <div class="my-2 p-1">
                         <div class="row g-0 border rounded h-100 p-2 ">
-                            <div class="col-auto me-1 d-flex align-items-center">
-                                (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
-                            </div>
+                            ${ __getQuestionData().isBullets ? `
+                                    <div class="col-auto me-1 d-flex align-items-start">
+                                        (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
+                                    </div>
+                                ` : ''
+                            }
                             <div class="col question-container_2 d-flex flex-wrap align-items-center ${imageSide === 'right' ? 'flex-row-reverse' : ''}" style="gap: 5px" data-queindex="${ind}">
                                 <div class='col-auto'>
                                     ${image.join('')}
@@ -6447,9 +6448,12 @@ const DragAndDropMulti = (() => {
                         `
                     }
                         <div class="d-flex h-100 border rounded p-2">
-                            <div class="col-auto p-1 d-flex align-items-center me-1">
-                                (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
-                            </div>
+                            ${__getQuestionData().isBullets ? `
+                                    <div class="col-auto p-1 d-flex align-items-start me-1">
+                                        (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
+                                    </div>
+                                ` : ''
+                            }
                             <div class="d-flex flex-column justify-content-between col question-container_2">
                                 ${image.length ? `
                                         <div class="d-flex align-items-center h-100 ${!singleQuestionMode && col_size.md == 4 ? 'justify-content-center' : ''}">
@@ -6608,12 +6612,17 @@ const DragAndDropMulti = (() => {
 
             const questionHtml = [];
             if (hasTypeSet) {
+                const questionData = __getQuestionData();
                 type_set?.answers.map((_, ind) => {
                     const html = `
                         <div class="row g-0 my-3 qblockRow">
-                            <div class="col-auto me-2">
-                                (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
-                            </div>
+                            ${
+                                __getQuestionData().isBullets ? `
+                                    <div class="col-auto me-2">
+                                        (${Activity.translateBulletLabels({ lang: lang, ind: ind })})
+                                    </div>
+                                ` : ''
+                            }                            
                             <div class="col question-container_2 d-flex flex-wrap align-items-center" style="gap: 5px" data-queindex="${ind}">
                                 <div class="drop-Box dropBox_2 ui-droppable changeBorderV2"></div>
                             </div>
@@ -6715,10 +6724,13 @@ const DragAndDropMulti = (() => {
         const content = data?.content ?? {};
         const questions = content?.questions ?? [];
 
+        const isBullets = questions.length > 1;
+
         return {
             lang: lang,
             content: content,
-            questions: questions
+            questions: questions,
+            isBullets : isBullets
         }
     }
 
@@ -6856,7 +6868,7 @@ const DragAndDropMulti = (() => {
             <table class="table table-bordered" style="font-size:20px">
                 <thead class="text-light" style="white-space: nowrap;">
                     <tr>
-                        <th>${tableHeadLabel.sequence}</th>
+                        ${__getQuestionData().isBullets ? `<th>${tableHeadLabel.sequence}</th>` : '' }
                         <th>${tableHeadLabel.attempted}</th>
                         <th>${tableHeadLabel.correct}</th>
                         <th>${tableHeadLabel.result}</th>
@@ -6901,7 +6913,7 @@ const DragAndDropMulti = (() => {
 
             const body = `
                 <tr clsss='trData'>
-                    <th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>
+                    ${__getQuestionData().isBullets ? `<th>(${Activity.translateBulletLabels({ lang: lang, ind: i })})</th>` : '' }
                     <td class="${isCorrect ? 'text-success' : 'text-danger'}">
                         ${userAnswerArr.length ? userAnswerArr.join(', ') : '-'}
                     </td>
@@ -8184,6 +8196,8 @@ const WordSearch = (() => {
 
     let __grid;
 
+    const isFalse = (value='') => ['', null, false, undefined].includes(value);
+
     const ui = (questionId) => {
         try {
             const container = Helper.vars.questionContainer;
@@ -8197,7 +8211,8 @@ const WordSearch = (() => {
             const activity = Activity.getDefine(questionId) ?? {};
             const que_side = activity?.config?.side ?? 'left';
 
-            const isqueSection_mainHeading = activity?.config?.questionSection?.heading?.main?.text ?? 'Hints';
+            const mainHeadingText     = activity?.config?.questionSection?.heading?.main?.text;            
+            const mainHeadingTextBool = !isFalse(mainHeadingText) ?? mainHeadingText;
 
             const lang = activity.lang ?? 'en';
 
@@ -8210,8 +8225,8 @@ const WordSearch = (() => {
                                 <div class="question word-searched">                                    
                                     <div class="container" id="${containerId}">
                                         <div class="${Helper.vars.head}"></div>
-                                        <div class="hints" style="${isqueSection_mainHeading ? 'display:block;' : 'display:none;'}">
-                                            ${isqueSection_mainHeading}
+                                        <div class="hints" style="${mainHeadingTextBool !== false ? 'display:block;' : 'display:none;'}">
+                                            ${mainHeadingText}
                                         </div>
                                         <div class="divDisplay gap-3 justify-content-center ${que_side === 'top' || que_side === 'bottom' ? 'flex-column' : ''} ${que_side === 'bottom' ? 'flex-column-reverse' : que_side === 'right' ? 'flex-row-reverse' : ''}">
                                             <div id="${puzzleTextId}" class="text ${que_side === 'top' || que_side === 'bottom' ? 'w-100 d-flex justify-content-evenly flex-wrap' : ''}"></div>
@@ -8272,7 +8287,10 @@ const WordSearch = (() => {
             if (queSection != undefined) {
                 col = que_side === 'left' || que_side === 'right' ? Helper.defaultCol : activity?.config?.questionSection?.col;
                 puzzle.push(`<div class='col-md-${col?.md} col-sm-${col?.sm} col-${col?.col}  ${queSection == undefined ? 'd-flex flex-wrap' : ''}'>`);
-                if (ques?.across.length) puzzle.push(`<div class="hints">${queHeading?.vertical?.text ?? 'Across'}</div>`);
+                if (
+                    ques?.across.length 
+                    && !isFalse(queHeading?.vertical?.text)
+                ) puzzle.push(`<div class="hints">${queHeading?.vertical?.text ?? 'Across'}</div>`);
 
                 let __acrossIndex = 1;
                 ques?.across.map((item, index) => {
@@ -8284,9 +8302,12 @@ const WordSearch = (() => {
                     __acrossIndex++;
                 });
 
-                puzzle.push(`</div><div class='col-md-${col?.md} col-sm-${col?.sm} col-${col.col}'>`);
+                puzzle.push(`</div><div class='col-md-${col?.md} col-sm-${col?.sm} col-${col.col}'>`);               
                 
-                if (ques?.down.length) puzzle.push(`<div class="hints">${queHeading?.horizontal?.text ?? 'Down'}</div>`);
+                if (
+                    ques?.down.length 
+                    && !isFalse(queHeading?.horizontal?.text)
+                ) puzzle.push(`<div class="hints">${queHeading?.horizontal?.text ?? 'Down'}</div>`);
 
                 let __downIndex = 1;
                 ques?.down.map((item, index) => {
@@ -8709,6 +8730,7 @@ const TextArea = (() => {
             const content = activity?.content ?? {};
             const text = content?.text ?? {};
             const img = content?.img ?? {};
+            const isShuffled = activity?.shuffle ?? true;
 
             const mcqContextContainer = $('.mcq-context');
             mcqContextContainer.empty();
@@ -8790,7 +8812,10 @@ const TextArea = (() => {
                 showInput = true;
             }
 
-            shuffledQuestions = Activity.shuffleArray(content?.questions ?? []) ?? [];
+            shuffledQuestions = isShuffled 
+                                    ? Activity.shuffleArray(content?.questions ?? []) 
+                                    : (content?.questions ?? []);
+            // ..
 
             const placeholder = Activity.translateWriteAnsLabel(lang);
             const textArea = `<textarea class="hindiInput w-100 ui-keyboard-input ui-widget-content ui-corner-all ui-keyboard-autoaccepted" rows="3" data-qindex="0" data-blankindex="0" autocomplete="off" placeholder="${placeholder}" style="border-radius: 10px; margin-top: 1%; padding: 10px 0 0 10px; ${!showInput ? `display: none; pointer-events: none;` : ''}" role="textbox"></textarea>`;
@@ -13657,7 +13682,7 @@ const SpellCheck = (() => {
             const inputs = input_container.querySelectorAll('input');
             spans.forEach((span) => {
                 span.classList.add('itemDisabled');
-                if (answers.includes(span.dataset.word) && span.dataset.word != span.innerHTML) {
+                if (answers.includes(span.dataset.word) && span.dataset.word.trim() != span.innerHTML.trim()) {
                     span.classList.add("circle");
                 }
             });

@@ -157,6 +157,11 @@ const UI = (() => {
 
                     const landscape = item.landscape ?? false;
                     div.addEventListener( 'click', () => {
+                        div.scrollIntoView({
+                            behavior: 'smooth',
+                            inline: 'center',
+                            block: 'nearest'
+                        });
                         activity( itemSelector, itemId, moduleId, landscape )
                     });
 
@@ -203,3 +208,13 @@ const UI = (() => {
 
     return { detectMobile, buttons }
 })();
+
+const question = (questionId) => {
+    try {
+        const btn = $(`#q${questionId}`);
+        btn?.click();
+        return btn;
+    } catch (err) {
+        console.log( err );
+    }
+};
