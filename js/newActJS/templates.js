@@ -9968,14 +9968,38 @@ const ShravanKaushalWithPara = (() => {
 
         $(`.${Helper.vars.head}`).html(activity.head);
 
+        const imageConfig = q?.question?.imageConfig;
+        const hasImageConfig = (
+            imageConfig
+            && ( 
+                (Object.hasOwn(imageConfig, 'width') ) || 
+                (Object.hasOwn(imageConfig, 'height') )
+            )
+        ) ?? false;
+        const questionImage = {
+            width : imageConfig?.width !== undefined ? `width:${imageConfig.width};` : false,
+            height : imageConfig?.height !== undefined ? `height:${imageConfig.height};` : false
+        };
+
         const html = [];
 
         const headHtml = `
             <div class='question-block animate__animated animate__fadeInRight'>
             ${questions.length > 1 ? `<div class="Ques"><b>${questionIndex + 1}. ${q?.question?.text ?? ''}</b></div>` : ''}
-            ${q?.question?.image
-                ? `<img src="${Activity.pathToCWD() + q.question?.image}" class="question-img mb-2 image-Center">`
-                : ''
+            ${
+                q?.question?.image
+                    ? `
+                        <img 
+                            src="${Activity.pathToCWD() + q.question?.image}" 
+                            ${
+                                hasImageConfig !== false ? `
+                                    style="${questionImage.height !== false ? questionImage.height : ''}${questionImage.width !== false ? questionImage.width : ''}"
+                                ` : ''
+                            }
+                            class="question-img mb-2 image-Center"
+                        >
+                    `
+                    : ''
             }
             <div class='row m-0 mt-2'>
         `;
