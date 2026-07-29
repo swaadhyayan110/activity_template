@@ -1267,7 +1267,7 @@ const Define = (() => {
                             text: 'बच्चों की किन बातों से घर के लोग खुश होते हैं?',
                             image: 'images/ch4_1.png',
                             imageConfig : {
-                                width : '200px',
+                                width : '400px',
                                 height : '150px'
                             },
                             audio: 'audio/1.mp3'

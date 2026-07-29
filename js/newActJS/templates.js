@@ -9978,7 +9978,8 @@ const ShravanKaushalWithPara = (() => {
         ) ?? false;
         const questionImage = {
             width : imageConfig?.width !== undefined ? `width:${imageConfig.width};` : false,
-            height : imageConfig?.height !== undefined ? `height:${imageConfig.height};` : false
+            height : imageConfig?.height !== undefined ? `height:${imageConfig.height};` : false,
+            maxWidth : imageConfig?.width !== undefined ? `max-width:${imageConfig.width} !important;` : false,
         };
 
         const html = [];
@@ -9993,7 +9994,7 @@ const ShravanKaushalWithPara = (() => {
                             src="${Activity.pathToCWD() + q.question?.image}" 
                             ${
                                 hasImageConfig !== false ? `
-                                    style="${questionImage.height !== false ? questionImage.height : ''}${questionImage.width !== false ? questionImage.width : ''}"
+                                    style="${questionImage.height !== false ? questionImage.height : ''}${questionImage.width !== false ? questionImage.width : ''}${questionImage.maxWidth !== false ? questionImage.maxWidth : ''}"
                                 ` : ''
                             }
                             class="question-img mb-2 image-Center"
