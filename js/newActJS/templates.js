@@ -861,7 +861,7 @@ const MatchLeftToRight = (() => {
             const html = `<div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
                 <div class="onImgLayer">
-                <div class="question match1_V2">
+                <div class="question match1_V2 match1_height">
                     <div class="container">
                         <div class="qSections">
                             <div class="${Helper.vars.head}"></div>
