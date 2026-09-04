@@ -3666,6 +3666,8 @@ const Adaptiv = (() => {
     const headerContainer = 'headersTopT';
     const levelHeadingID = 'levelHeading';
 
+    const MAX_ATTEMPT_COUNT = 5;
+
     let currentLevel = 1;
     let currentQuestion = 0;
     let attemptCount = 0;
@@ -4109,7 +4111,7 @@ const Adaptiv = (() => {
             const correct = (userAnswersAdaptiv || []).filter((a, i) => a === (currentQuizData?.[i]?.answer)).length;
             const showAnswerBtn = attemptCount >= 5;
             const showRetryBtn = correct < (currentQuizData?.length || 0);
-            const showNextLevel = correct === skipnextbtn || skipOptions || ((currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0);
+            const showNextLevel = !wrongQuestions.length;
             const finished = currentLevel === levels.length;
             const whenCompleteLevel = showNextLevel ? popupLabels.levelComplete : "";
             const navButtonsEl = document.getElementById("nav-buttons");
@@ -4138,26 +4140,20 @@ const Adaptiv = (() => {
                             ` : ''
                     }
                     <div class="rowBtns">
-                        ${((showNextLevel || skiplevels) && !skipnextbtn) ? `
+                        ${showNextLevel ? `
                             <button class='btn btn-success mt-3 mx-3' id='btn-next-level'>
                                 ${popupLabels.goToLevel(currentLevel + 1)}
                             </button>` : ''
-                        }
-                        ${(showRetryBtn || showNextLevel) ? `
-                                <button class='btn btn-primary mt-3 mx-3' id='btn-retry'>
-                                    ${btnLabel.try}
+                        }                        
+                        <button class='btn btn-primary mt-3 mx-3' id='btn-retry'>
+                            ${btnLabel.try}
+                        </button>
+                        ${(attemptCount >= MAX_ATTEMPT_COUNT || (finished && showNextLevel ) || showNextLevel) ? `
+                                <button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>
+                                    ${btnLabel.show}
                                 </button>
                             ` : ''
                         }
-                        ${!skipOptions ? `
-                            ${(!skipOptions || showAnswerBtn || showNextLevel || skipansbtn) ? `
-                                    <button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>
-                                        ${btnLabel.show}
-                                    </button>
-                                ` : ''
-                            }
-                            ` : ''
-                        }                        
                     </div>
                 </div>
             `;

@@ -13,54 +13,57 @@ const Define = (() => {
     */
 
     // DEFINE BUTTONS
-    const buttons = [
-        { qid: 44, text: ['Q-44', 'Q:44; M:0 - Math'], module: 0 },
-        { qid: 0, text: ['Q-0', 'Q:0; M:0 - Audio'], module: 0 },
-        { qid: 1, text: ['Q-1', 'Q:1; M:1 - Match-1'], module: 1, landscape: true },
-        { qid: 2, text: ['Q-2', 'Q:2; M:2 - Match-2'], module: 2 },
-        { qid: 3, text: ['Q-3', 'Q:3; M:3 - Match-3'], module: 3 },
-        { qid: 4, text: ['Q-4', 'Q:4; M:4 - Fill-1'], module: 4 },
-        { qid: 5, text: ['Q-5', 'Q:5; M:5 - Fill-2'], module: 5 },
-        { qid: 6, text: ['Q-6', 'Q:6; M:6 - Jumble-Letter'], module: 6 },
-        { qid: 7, text: ['Q-7', 'Q:7; M:7 - Jumble-Word'], module: 7 },
-        { qid: 8, text: ['Q-8', 'Q:8; M:8 - DND-1'], module: 8 },
-        { qid: 9, text: ['Q-9', 'Q:9; M:9 - MCQ-1'], module: 9 },
-        { qid: 10, text: ['Q-10', 'Q:10; M:10 - Adaptiv'], module: 10 },
-        { qid: 11, text: ['Q-11', 'Q:11; M:11 - Audio'], module: 11 },
-        { qid: 12, text: ['Q-12', 'Q:12; M:12 - Drop Down'], module: 12 },
-        { qid: 13, text: ['Q-13', 'Q:13; M:13 - Circle'], module: 13 },
-        { qid: 14, text: ['Q-14', 'Q:14; M:14 - श्रवण कौशल'], module: 14 },
-        { qid: 15, text: ['Q-15', 'Q:15; M:15 - T&F'], module: 15 },
-        { qid: 16, text: ['Q-16', 'Q:16; M:16 - DND-2'], module: 16 },
-        { qid: 17, text: ['Q-17', 'Q:17; M:16 - DND-3'], module: 16 },
-        { qid: 18, text: ['Q-18', 'Q:18; M:17 - Sorting'], module: 17 },
-        { qid: 19, text: ['Q-19', 'Q:19; M:18 - PDF'], module: 18 },
-        { qid: 20, text: ['Q-20', 'Q:20; M:19 - Shabdkosh'], module: 19 },
-        { qid: 21, text: ['Q-21', 'Q:21; M:20 - Shrutlekh'], module: 20 },
-        { qid: 22, text: ['Q-22', 'Q:22; M:21 - WordSearch'], module: 21 },
-        { qid: 23, text: ['Q-23', 'Q:23; M:22 - TextArea'], module: 22 },
-        { qid: 24, text: ['Q-24', 'Q:24; M:23 - CrossWord'], module: 23 },
-        { qid: 25, text: ['Q-25', 'Q:25; M:24 - ShravanKaushalWithPara'], module: 24 },
-        { qid: 26, text: ['Q-26', 'Q:26; M:25 - VideoPlayer'], module: 25 },
-        { qid: 27, text: ['Q-27', 'Q:27; M:26 - Rachnatmak_Para-1'], module: 26 },
-        { qid: 28, text: ['Q-28', 'Q:28; M:27 - Rachnatmak_Inputs&Images-2'], module: 27 },
-        { qid: 29, text: ['Q-29', 'Q:29; M:28 - Rachnatmak_Tab_Btns-3'], module: 28 },
-        { qid: 30, text: ['Q-30', 'Q:30; M:29 - Rachnatmak_multi_Inputs-4'], module: 29 },
-        { qid: 31, text: ['Q-31', 'Q:31; M:30 - ClickOnImage'], module: 30 },
-        { qid: 32, text: ['Q-32', 'Q:32; M:31 - FillOnClick'], module: 31 },
-        { qid: 33, text: ['Q-33', 'Q:33; M:32 - Dictionary'], module: 32 },
-        { qid: 34, text: ['Q-34', 'Q:34; M:33 - MentalMath'], module: 33 },
-        { qid: 35, text: ['Q-35', 'Q:35; M:34 - Youtube-Audio-Video'], module: 34 },
-        { qid: 36, text: ['Q-36', 'Q:36; M:35 - Math Money'], module: 35 },
-        { qid: 37, text: ['Q-37', 'Q:37; M:36 - Shabd Rachna'], module: 36 },
-        { qid: 38, text: ['Q-38', 'Q:38; M:37 - Spell Check'], module: 37 },
-        { qid: 39, text: ['Q-39', 'Q:39; M:38 - Spell It out'], module: 38 },
-        { qid: 40, text: ['Q-40', 'Q:40; M:39 - Vowel Drag and Drop'], module: 39 },
-        { qid: 41, text: ['Q-41', 'Q:41; M:19 - Shabdkosh type-2'], module: 19 },
-        { qid: 42, text: ['Q-42', 'Q:42; M:40 - Virtual Tour'], module: 40 },
-        { qid: 43, text: ['Q-43', 'Q:43; M:41 - Circle and underline'], module: 41 },
-        { qid: 45, text: ['Q-45', 'Q:45; M:9 - Moral of the chapter'], module: 9 },
-    ];
+    const buttons = Controller.filterByQids({
+        filterIds:[10],
+        buttons:[
+            { qid: 44, text: ['Q-44', 'Q:44; M:0 - Math'], module: 0 },
+            { qid: 0, text: ['Q-0', 'Q:0; M:0 - Audio'], module: 0 },
+            { qid: 1, text: ['Q-1', 'Q:1; M:1 - Match-1'], module: 1, landscape: true },
+            { qid: 2, text: ['Q-2', 'Q:2; M:2 - Match-2'], module: 2 },
+            { qid: 3, text: ['Q-3', 'Q:3; M:3 - Match-3'], module: 3 },
+            { qid: 4, text: ['Q-4', 'Q:4; M:4 - Fill-1'], module: 4 },
+            { qid: 5, text: ['Q-5', 'Q:5; M:5 - Fill-2'], module: 5 },
+            { qid: 6, text: ['Q-6', 'Q:6; M:6 - Jumble-Letter'], module: 6 },
+            { qid: 7, text: ['Q-7', 'Q:7; M:7 - Jumble-Word'], module: 7 },
+            { qid: 8, text: ['Q-8', 'Q:8; M:8 - DND-1'], module: 8 },
+            { qid: 9, text: ['Q-9', 'Q:9; M:9 - MCQ-1'], module: 9 },
+            { qid: 10, text: ['Q-10', 'Q:10; M:10 - Adaptiv'], module: 10 },
+            { qid: 11, text: ['Q-11', 'Q:11; M:11 - Audio'], module: 11 },
+            { qid: 12, text: ['Q-12', 'Q:12; M:12 - Drop Down'], module: 12 },
+            { qid: 13, text: ['Q-13', 'Q:13; M:13 - Circle'], module: 13 },
+            { qid: 14, text: ['Q-14', 'Q:14; M:14 - श्रवण कौशल'], module: 14 },
+            { qid: 15, text: ['Q-15', 'Q:15; M:15 - T&F'], module: 15 },
+            { qid: 16, text: ['Q-16', 'Q:16; M:16 - DND-2'], module: 16 },
+            { qid: 17, text: ['Q-17', 'Q:17; M:16 - DND-3'], module: 16 },
+            { qid: 18, text: ['Q-18', 'Q:18; M:17 - Sorting'], module: 17 },
+            { qid: 19, text: ['Q-19', 'Q:19; M:18 - PDF'], module: 18 },
+            { qid: 20, text: ['Q-20', 'Q:20; M:19 - Shabdkosh'], module: 19 },
+            { qid: 21, text: ['Q-21', 'Q:21; M:20 - Shrutlekh'], module: 20 },
+            { qid: 22, text: ['Q-22', 'Q:22; M:21 - WordSearch'], module: 21 },
+            { qid: 23, text: ['Q-23', 'Q:23; M:22 - TextArea'], module: 22 },
+            { qid: 24, text: ['Q-24', 'Q:24; M:23 - CrossWord'], module: 23 },
+            { qid: 25, text: ['Q-25', 'Q:25; M:24 - ShravanKaushalWithPara'], module: 24 },
+            { qid: 26, text: ['Q-26', 'Q:26; M:25 - VideoPlayer'], module: 25 },
+            { qid: 27, text: ['Q-27', 'Q:27; M:26 - Rachnatmak_Para-1'], module: 26 },
+            { qid: 28, text: ['Q-28', 'Q:28; M:27 - Rachnatmak_Inputs&Images-2'], module: 27 },
+            { qid: 29, text: ['Q-29', 'Q:29; M:28 - Rachnatmak_Tab_Btns-3'], module: 28 },
+            { qid: 30, text: ['Q-30', 'Q:30; M:29 - Rachnatmak_multi_Inputs-4'], module: 29 },
+            { qid: 31, text: ['Q-31', 'Q:31; M:30 - ClickOnImage'], module: 30 },
+            { qid: 32, text: ['Q-32', 'Q:32; M:31 - FillOnClick'], module: 31 },
+            { qid: 33, text: ['Q-33', 'Q:33; M:32 - Dictionary'], module: 32 },
+            { qid: 34, text: ['Q-34', 'Q:34; M:33 - MentalMath'], module: 33 },
+            { qid: 35, text: ['Q-35', 'Q:35; M:34 - Youtube-Audio-Video'], module: 34 },
+            { qid: 36, text: ['Q-36', 'Q:36; M:35 - Math Money'], module: 35 },
+            { qid: 37, text: ['Q-37', 'Q:37; M:36 - Shabd Rachna'], module: 36 },
+            { qid: 38, text: ['Q-38', 'Q:38; M:37 - Spell Check'], module: 37 },
+            { qid: 39, text: ['Q-39', 'Q:39; M:38 - Spell It out'], module: 38 },
+            { qid: 40, text: ['Q-40', 'Q:40; M:39 - Vowel Drag and Drop'], module: 39 },
+            { qid: 41, text: ['Q-41', 'Q:41; M:19 - Shabdkosh type-2'], module: 19 },
+            { qid: 42, text: ['Q-42', 'Q:42; M:40 - Virtual Tour'], module: 40 },
+            { qid: 43, text: ['Q-43', 'Q:43; M:41 - Circle and underline'], module: 41 },
+            { qid: 45, text: ['Q-45', 'Q:45; M:9 - Moral of the chapter'], module: 9 },
+        ],
+    });
 
     // DEFINE QUESTIONS
     const questions = [
@@ -726,11 +729,11 @@ const Define = (() => {
             id: 10,
             lang: 'en',
             content: {
-                skiplevels: true,
-                skipanswerbutton: true,
-                skipnextlevel: false,
-                skipOptions: false,
-                skipQuestionSequence: false,
+                // skiplevels: true,
+                // skipanswerbutton: true,
+                // skipnextlevel: false,
+                // skipOptions: false,
+                // skipQuestionSequence: false,
                 headings: {
                     left: 'स्तर',
                     mid: {
@@ -759,54 +762,54 @@ const Define = (() => {
                             ],
                         },
                         questions: [
-                            {
-                                imageReplacement: '#img#',
-                                imageAboveOption: {
-                                    image: 'images/2.png',
-                                    width: '10%'
-                                },
-                                question: {
-                                    text: '`theta` कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
-                                    images: {
-                                        path: ['images/1.png', 'images/2.png'],
-                                        style: [ // style[i] applies to path[i]
-                                            {
-                                                height: 'auto',
-                                                width: '100px'
-                                            },
-                                        ]
-                                    }
-                                },
-                                options: [
-                                    {
-                                        text: '#img# सैनिकों को #img#',
-                                        images: {
-                                            path: ['images/ch4_1.png', 'images/5.png'],
-                                            width: '40%'
-                                        }
-                                    },
-                                    {
-                                        text: 'किसान #img# सपूतों को',
-                                        images: {
-                                            path: ['images/2.png']
-                                        }
-                                    },
-                                    {
-                                        text: 'another sample text'
-                                    },
-                                    'this is sample text'
-                                ],
-                                answer: 1
-                            },
+                            // {
+                            //     imageReplacement: '#img#',
+                            //     imageAboveOption: {
+                            //         image: 'images/2.png',
+                            //         width: '10%'
+                            //     },
+                            //     question: {
+                            //         text: '`theta` कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
+                            //         images: {
+                            //             path: ['images/1.png', 'images/2.png'],
+                            //             style: [ // style[i] applies to path[i]
+                            //                 {
+                            //                     height: 'auto',
+                            //                     width: '100px'
+                            //                 },
+                            //             ]
+                            //         }
+                            //     },
+                            //     options: [
+                            //         {
+                            //             text: '#img# सैनिकों को #img#',
+                            //             images: {
+                            //                 path: ['images/ch4_1.png', 'images/5.png'],
+                            //                 width: '40%'
+                            //             }
+                            //         },
+                            //         {
+                            //             text: 'किसान #img# सपूतों को',
+                            //             images: {
+                            //                 path: ['images/2.png']
+                            //             }
+                            //         },
+                            //         {
+                            //             text: 'another sample text'
+                            //         },
+                            //         'this is sample text'
+                            //     ],
+                            //     answer: 1
+                            // },
                             { question: '`theta` कविता में ‘नव निर्माण’ का अर्थ है -', options: ['नया खाना बनाना', 'नई इमारत बनाना', 'समाज का पुनर्निर्माण करना', 'नई सड़क बनाना'], answer: 3 },
                             { question: '‘उठो’ शब्द से कवि क्या करना चाहता है?', options: ['जगाना', 'सुलाना', 'डराना', 'चुप कराना'], answer: 3 },
-                            { question: '‘नव प्रात’ का अर्थ है -', options: ['नया गाँव', 'नई सुबह', 'नया जीवन', 'नया काम'], answer: 3 },
-                            { question: '‘नव’ शब्द का अर्थ क्या है?', options: ['पुराना', 'रंगीन', 'नया', 'अधूरा'], answer: 3 },
-                            { question: '‘नई स्मृति’ से कवि का क्या तात्पर्य है?', options: ['पुरानी यादें', 'नई यादें', 'किताबें', 'फिल्में'], answer: 3 },
-                            { question: '‘नव प्राण भरो’ का क्या अर्थ है?', options: ['नया भोजन', 'नई ऊर्जा भरना', 'नींद लेना', 'अभ्यास करना'], answer: 3 },
-                            { question: 'कविता में मुस्कान भरने की बात कही गई है-', options: ['कवि की', 'माता की', 'पृथ्वी की', 'युग-युग के सपनों में'], answer: 3 },
-                            { question: 'कविता का स्वर कैसा है?', options: ['दुखी', 'प्रेरणादायक', 'क्रोधित', 'डरावना'], answer: 3 },
-                            { question: 'कविता के अंत में कवि क्या दोहराता है?', options: ['नई यादें बनाओ', 'नई सोच लाओ', 'पुन: नया निर्माण करो', 'घर चलो'], answer: 3 }
+                            // { question: '‘नव प्रात’ का अर्थ है -', options: ['नया गाँव', 'नई सुबह', 'नया जीवन', 'नया काम'], answer: 3 },
+                            // { question: '‘नव’ शब्द का अर्थ क्या है?', options: ['पुराना', 'रंगीन', 'नया', 'अधूरा'], answer: 3 },
+                            // { question: '‘नई स्मृति’ से कवि का क्या तात्पर्य है?', options: ['पुरानी यादें', 'नई यादें', 'किताबें', 'फिल्में'], answer: 3 },
+                            // { question: '‘नव प्राण भरो’ का क्या अर्थ है?', options: ['नया भोजन', 'नई ऊर्जा भरना', 'नींद लेना', 'अभ्यास करना'], answer: 3 },
+                            // { question: 'कविता में मुस्कान भरने की बात कही गई है-', options: ['कवि की', 'माता की', 'पृथ्वी की', 'युग-युग के सपनों में'], answer: 3 },
+                            // { question: 'कविता का स्वर कैसा है?', options: ['दुखी', 'प्रेरणादायक', 'क्रोधित', 'डरावना'], answer: 3 },
+                            // { question: 'कविता के अंत में कवि क्या दोहराता है?', options: ['नई यादें बनाओ', 'नई सोच लाओ', 'पुन: नया निर्माण करो', 'घर चलो'], answer: 3 }
                         ]
                     },
                     {
@@ -814,11 +817,11 @@ const Define = (() => {
                         questions: [
                             { question: '‘नव किरण है, ज्योति नई’ पंक्ति का क्या तात्पर्य है?', options: ['नया दीपक जलाना', 'प्रकाश और आशा का संदेश', 'बिजली का उपयोग', 'सूर्य का अस्त होना'], answer: 1 },
                             { question: '‘जन-जन के जीवन में -', options: ['जीवन को फिर से कठिन बनाना', 'पुनः ऊर्जा भरना', 'जीवन समाप्त करना', 'जीवन से ऊब जाना'], answer: 1 },
-                            { question: '‘नई उमंग, नई तरंग’ का अर्थ है-', options: ['डर', 'क्रोध', 'उत्साह और ऊर्जा', 'आलस्य'], answer: 1 },
-                            { question: '‘नव स्मृति’ और ‘नव प्राण’ किनका प्रतीक हैं?', options: ['अतीत का', 'पुनरुत्थान और जागरूकता का', 'नींद और आराम का', 'दुःख और पीड़ा का'], answer: 1 },
-                            { question: '‘पुन: नया निर्माण करो’ कविता में कितनी बार आया है?', options: ['एक बार', 'दो बार', 'तीन बार', 'चार बार'], answer: 1 },
-                            { question: 'कविता में ‘साँस नई’ का अर्थ क्या है?', options: ['नई हवा', 'नया जीवन व आत्मविश्वास', 'साँस की दवा', 'साँस लेना'], answer: 1 },
-                            { question: 'कविता का मुख्य उद्देश्य क्या है?', options: ['मनोरंजन करना', 'शिक्षा देना', 'देश के विकास हेतु प्रेरित करना', 'दुख बताना'], answer: 1 },
+                            // { question: '‘नई उमंग, नई तरंग’ का अर्थ है-', options: ['डर', 'क्रोध', 'उत्साह और ऊर्जा', 'आलस्य'], answer: 1 },
+                            // { question: '‘नव स्मृति’ और ‘नव प्राण’ किनका प्रतीक हैं?', options: ['अतीत का', 'पुनरुत्थान और जागरूकता का', 'नींद और आराम का', 'दुःख और पीड़ा का'], answer: 1 },
+                            // { question: '‘पुन: नया निर्माण करो’ कविता में कितनी बार आया है?', options: ['एक बार', 'दो बार', 'तीन बार', 'चार बार'], answer: 1 },
+                            // { question: 'कविता में ‘साँस नई’ का अर्थ क्या है?', options: ['नई हवा', 'नया जीवन व आत्मविश्वास', 'साँस की दवा', 'साँस लेना'], answer: 1 },
+                            // { question: 'कविता का मुख्य उद्देश्य क्या है?', options: ['मनोरंजन करना', 'शिक्षा देना', 'देश के विकास हेतु प्रेरित करना', 'दुख बताना'], answer: 1 },
                             { question: '‘नई-नई मुस्कान भरो’ से क्या संकेत मिलता है?', options: ['लोगों को हँसाना', 'सकारात्मक सोच फैलाना', 'मजाक करना', 'कविता सुनाना'], answer: 1 },
                             { question: '‘युग-युग के’ शब्द का क्या अर्थ है?', options: ['आज के लिए', 'आने वाली पीढ़ियों के लिए', 'एक ही समय के लिए', 'रात के लिए'], answer: 1 },
                             { question: 'कविता के किस भाव ने इसे प्रेरणास्पद बनाया है?', options: ['क्रोध', 'डर', 'पुनर्निर्माण और आशा', 'विरोध'], answer: 1 }
@@ -829,14 +832,14 @@ const Define = (() => {
                         questions: [
                             { question: 'कविता में प्रयुक्त शैली कौन-सी है?', options: ['वर्णनात्मक', 'प्रश्नोत्तरी', 'आवाहनात्मक', 'व्यंग्यात्मक'], answer: 2 },
                             { question: '‘धरती के अमर सपूतों’ में ‘अमर’ विशेषण का प्रयोग क्यों हुआ है?', options: ['क्योंकि वे मृत्यु से अजेय हैं', 'क्योंकि वे प्रेरणास्रोत हैं', 'क्योंकि वे युद्ध करते हैं', 'क्योंकि वे भगवान हैं'], answer: 2 },
-                            { question: '‘सपनों में मुस्कान’ डालने का क्या तात्पर्य है?', options: ['नींद में हँसना', 'भविष्य के सपनों को सुंदर बनाना', 'सोते समय सपना देखना', 'झूठे सपने दिखाना'], answer: 2 },
-                            { question: '‘नई बात’ से कवि का आशय है-', options: ['नई कहानी', 'नवीन सोच व विचारधारा', 'नई योजना', 'अफवाह'], answer: 2 },
-                            { question: 'कवि के अनुसार हर बालक क्या है?', options: ['शिक्षक और छात्र', 'रक्षक और पुजारी', 'सैनिक और राजकुमार', 'कलाकार और कवि'], answer: 2 },
-                            { question: 'इस कविता की संरचना किस प्रकार की है?', options: ['दोहा', 'छंद मुक्त कविता', 'चौपाई', 'गीत'], answer: 2 },
-                            { question: '‘नई-नई मुस्कान’ किसका प्रतीक है?', options: ['हास्य का', 'नया जीवन व प्रसन्नता का', 'उदासी का', 'कार्यभार का'], answer: 2 },
-                            { question: 'कविता की पंक्तियों में कौन-सा काल प्रमुख है?', options: ['भूतकाल', 'वर्तमान', 'भविष्य', 'मिश्रित काल'], answer: 2 },
-                            { question: '‘पुनः’ शब्द के प्रयोग से कवि क्या दिखाना चाहता है?', options: ['एक बार प्रयास काफी है', 'बार-बार प्रयास ज़रूरी है', 'एक बार हार मान लो', 'पुराना काफी है'], answer: 2 },
-                            { question: 'इस कविता से हमें कौन-सा नैतिक सन्देश मिलता है?', options: ['केवल अपने लिए जियो', 'सब कुछ भगवान पर छोड़ दो', 'समाज के नव निर्माण के लिए आगे आओ', 'संघर्ष मत करो'], answer: 2 }
+                            // { question: '‘सपनों में मुस्कान’ डालने का क्या तात्पर्य है?', options: ['नींद में हँसना', 'भविष्य के सपनों को सुंदर बनाना', 'सोते समय सपना देखना', 'झूठे सपने दिखाना'], answer: 2 },
+                            // { question: '‘नई बात’ से कवि का आशय है-', options: ['नई कहानी', 'नवीन सोच व विचारधारा', 'नई योजना', 'अफवाह'], answer: 2 },
+                            // { question: 'कवि के अनुसार हर बालक क्या है?', options: ['शिक्षक और छात्र', 'रक्षक और पुजारी', 'सैनिक और राजकुमार', 'कलाकार और कवि'], answer: 2 },
+                            // { question: 'इस कविता की संरचना किस प्रकार की है?', options: ['दोहा', 'छंद मुक्त कविता', 'चौपाई', 'गीत'], answer: 2 },
+                            // { question: '‘नई-नई मुस्कान’ किसका प्रतीक है?', options: ['हास्य का', 'नया जीवन व प्रसन्नता का', 'उदासी का', 'कार्यभार का'], answer: 2 },
+                            // { question: 'कविता की पंक्तियों में कौन-सा काल प्रमुख है?', options: ['भूतकाल', 'वर्तमान', 'भविष्य', 'मिश्रित काल'], answer: 2 },
+                            // { question: '‘पुनः’ शब्द के प्रयोग से कवि क्या दिखाना चाहता है?', options: ['एक बार प्रयास काफी है', 'बार-बार प्रयास ज़रूरी है', 'एक बार हार मान लो', 'पुराना काफी है'], answer: 2 },
+                            // { question: 'इस कविता से हमें कौन-सा नैतिक सन्देश मिलता है?', options: ['केवल अपने लिए जियो', 'सब कुछ भगवान पर छोड़ दो', 'समाज के नव निर्माण के लिए आगे आओ', 'संघर्ष मत करो'], answer: 2 }
                         ]
                     }
                 ]

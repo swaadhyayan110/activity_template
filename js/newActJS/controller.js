@@ -27,6 +27,18 @@ const Controller = (() => {
         });
     };
 
+    const filterByQids = ({filterIds=[], buttons}) => {
+        try {
+            if (!filterIds.length) return buttons;
+
+            filterIds = filterIds.map(id => parseInt(id));
+            return buttons.filter(btn => filterIds.includes(parseInt(btn.qid)));
+        } catch (err) {
+            console.warn(err);
+            return buttons;
+        }
+    };
+
     (() => {
         const originalAppendChild = Node.prototype.appendChild;
         Node.prototype.appendChild = function(node) {
@@ -58,6 +70,7 @@ const Controller = (() => {
     }, 10);
 
     return {
-        importScript
+        importScript,
+        filterByQids
     }
 })();
