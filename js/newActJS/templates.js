@@ -3819,7 +3819,7 @@ const Adaptiv = (() => {
         const lang = activity?.lang ?? 'en';
         const content = activity?.content;
         const data = content?.levels;
-        const skipOptions = content?.skipOptions ?? false;
+        const skipOptions = false;
         const skipQuestionSequence = content?.skipQuestionSequence ?? false;
         const found = (data || []).find(lvl => lvl.level === level);
         const questLen = found?.questions?.length || 0;
@@ -4024,7 +4024,7 @@ const Adaptiv = (() => {
 
     const nextQuestion = () => {
         const limit = getQuestionLimit();
-        const skipOptions = __activity?.content?.skipOptions ?? false;
+        const skipOptions = false;
 
         if (skipOptions) userAnswersAdaptiv[currentQuestion] = true;
 
@@ -4064,7 +4064,7 @@ const Adaptiv = (() => {
         const total = retryWrongOnly ? wrongQuestions.length : currentQuizData.length;
         const isLast = currentQuestion === total - 1;
 
-        const skipOptions = __activity?.content?.skipOptions ?? false;
+        const skipOptions = false;
 
         const allAnswered = retryWrongOnly
             ? wrongQuestions.every(i => userAnswersAdaptiv[i] !== null)
@@ -4088,10 +4088,8 @@ const Adaptiv = (() => {
             const lang = activity?.lang ?? 'en';
             const content = activity?.content ?? {};
             const levels = content?.levels ?? [];
-            const skiplevels = content?.skiplevels ?? false;
-            const skipansbtn = content?.skipanswerbutton ?? false;
-            const skipnextbtn = content?.skipnextlevel ?? false;
-            const skipOptions = __activity?.content?.skipOptions ?? false;
+            const skipnextbtn = false;
+            const skipOptions = false;
 
             const levelTextEl = document.getElementById("levelText");
             if (levelTextEl) levelTextEl.style.display = 'none';
