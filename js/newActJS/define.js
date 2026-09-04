@@ -1890,6 +1890,100 @@ const Define = (() => {
                 },
             }
         },
+        // qid : NA, || mid : 10;
+        {
+            id: 'NA',
+            lang: 'en',
+            content: {
+                skiplevels: true,
+                skipanswerbutton: true,
+                skipnextlevel: false,
+                skipOptions: false,
+                skipQuestionSequence: false,
+                headings: {
+                    left: 'स्तर',
+                    mid: {
+                        attempted: 'किए गए प्रश्न:',
+                        outof: 'में से'
+                    },
+                    right: {
+                        heading: 'निर्देश',
+                        instruction: [
+                            'निम्नलिखित में से प्रत्येक प्रश्न में सही विकल्प चुनें।',
+                            'कुल 3 स्तर (लेवल) हैं। प्रत्येक स्तर में 10 प्रश्न होंगे।',
+                            'अगले स्तर पर जाने के लिए, आपको प्रत्येक प्रश्न का सही उत्तर देना होगा।',
+                            'पाँच गलत प्रयासों के बाद, आप अपनी वर्तमान स्तर की रिपोर्ट देख पाएंगे।'
+                        ]
+                    }
+                },
+                levels: [
+                    {
+                        level: 1,
+                        heading: {
+                            text: 'this is `theta` sample heading',
+                            classes: [
+                                'text-center', 'fs-4', 'text-capitalize',
+                                'text-primary-emphasis', 'bg-primary-subtle',
+                                'rounded-2', 'p-1'
+                            ],
+                        },
+                        questions: [
+                            {
+                                imageReplacement: '#img#',
+                                imageAboveOption: {
+                                    image: 'images/2.png',
+                                    width: '10%'
+                                },
+                                question: {
+                                    text: '`theta` कवि धरती #img# के किन सपूतों #img# को पुकारता है?',
+                                    images: {
+                                        path: ['images/1.png', 'images/2.png'],
+                                        style: [ // style[i] applies to path[i]
+                                            {
+                                                height: 'auto',
+                                                width: '100px'
+                                            },
+                                        ]
+                                    }
+                                },
+                                options: [
+                                    {
+                                        text: '#img# सैनिकों को #img#',
+                                        images: {
+                                            path: ['images/ch4_1.png', 'images/5.png'],
+                                            width: '40%'
+                                        }
+                                    },
+                                    {
+                                        text: 'किसान #img# सपूतों को',
+                                        images: {
+                                            path: ['images/2.png']
+                                        }
+                                    },
+                                    {
+                                        text: 'another sample text'
+                                    },
+                                    'this is sample text'
+                                ],
+                                answer: 1
+                            },                            
+                        ]
+                    },
+                    {
+                        level: 2,
+                        questions: [
+                            { question: '‘नव किरण है, ज्योति नई’ पंक्ति का क्या तात्पर्य है?', options: ['नया दीपक जलाना', 'प्रकाश और आशा का संदेश', 'बिजली का उपयोग', 'सूर्य का अस्त होना'], answer: 1 },                            
+                        ]
+                    },
+                    {
+                        level: 3,
+                        questions: [
+                            { question: 'कविता में प्रयुक्त शैली कौन-सी है?', options: ['वर्णनात्मक', 'प्रश्नोत्तरी', 'आवाहनात्मक', 'व्यंग्यात्मक'], answer: 2 },                            
+                        ]
+                    }
+                ]
+            }
+        },
     ];
 
     const store = {

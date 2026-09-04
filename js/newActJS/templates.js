@@ -15477,6 +15477,736 @@ const CustomTemplate = (() => {
     }
 })();
 
+const AdaptiveMultiUse = (() => {
+
+    Activity.css('adaptiv.css');
+
+    const headerContainer = 'headersTopT';
+    const levelHeadingID = 'levelHeading';
+
+    let currentLevel = 1;
+    let currentQuestion = 0;
+    let attemptCount = 0;
+    let submitted = false;
+    let currentQuizData = undefined;
+    let userAnswersAdaptiv = undefined;
+    let showResultPending = false;
+    let retryWrongOnly = false;
+    let wrongQuestions = [];
+    let __activity = undefined;
+
+    const ui = (questionId, totalQues) => {
+        try {
+            const container = Helper.vars.questionContainer;
+            const parent = document.querySelector(container);
+            if (!parent) {
+                console.error("ui container not found:", container);
+                return;
+            }
+
+            const activity = Activity.getDefine(questionId);
+            const data = activity?.content;
+            const lang = activity?.lang ?? 'en';
+
+            const instructions = [];
+            (data?.headings?.right?.instruction || []).forEach((item) => {
+                instructions.push(`<li>${item}</li>`);
+            });
+
+            const prevNextLabel = Activity.translateNextPrevLabel(lang);
+            const buttonLabels = Activity.translateButtonLabels(lang);
+            parent.innerHTML = `
+             <div class="mcqOuterScorV2_">
+                                <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
+                                <div class="question mcq_1MenV2">
+            <div class="question">
+                                    <div class="container-fluid">
+                                        <div class="${headerContainer}">
+                                            ${data?.headings?.left ?
+                    `<div class="btnAdapt">
+                                                    <span class="level-text">${data?.headings?.left ?? ''}</span>
+                                                    - 
+                                                    <span class="levelUpdate">${currentLevel}</span>
+                                                </div>`
+                    : ''
+                }
+                                            ${data?.headings?.mid ?
+                    `<div class="btnAdapt">
+                                                    <span id="attempted-text">${data?.headings?.mid?.attempted ?? ''}</span> 
+                                                    <span class="showD" id="attempted-count"> 0 </span> 
+                                                    <span id="outof-text">${data?.headings?.mid?.outof ?? ''}</span>
+                                                    <span class="showD" id="total-questions"> ${totalQues ?? 0} </span>
+                                                </div>`
+                    : ''
+                }
+                                            ${data?.headings?.right ?
+                    `<div class="btnAdapt" id="nirdesh" style="cursor: pointer;">
+                                                    <svg class="iconsIns" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                                                    </svg>
+                                                    <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
+                                                </div>`
+                    : ''
+                }
+                                        </div>
+                                        <div class="container contAdapt">
+                                            <div class="mb-2" id="${levelHeadingID}"></div>
+                                            <div class="question-card justify-content-center animate__animated animate__fadeInDown" id="quizContainerAdaptiv"></div>
+                                            <div class="buttonection" id="nav-buttons">
+                                                <div class="buttons machiNgs">
+                                                    <button class="submit-btn" id="prev-btn">${prevNextLabel.prev}</button>
+                                                    <button class="show-btn" id="next-btn">${prevNextLabel.next}</button>
+                                                    <button class="reset-btn" id="sub-btn" style="display: none;">${buttonLabels.submit}</button>
+                                                </div>
+                                                <div id="submit-btn-wrapper" class="text-center"></div>
+                                            </div>
+                                        </div>
+                                        <div id="overlayAns"></div>
+                                    </div>
+                                   
+                                </div>
+                               
+                            </div>
+                             <div id="overlay">
+                                        <div id="popupDialog">
+                                            <p class="text-danger fw-bold">
+                                                <span class="instruction-heading">${data?.headings?.right?.heading ?? ''}</span>
+                                            </p>
+                                            <ul class="instructionsList">${instructions.join('')}</ul>
+                                            <div class="mt-3 text-center">
+                                                <button class="btn btn-primary close-overlay">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                             <div id="popupDialogAnsAd">
+                                    <div class="baseMod2">
+                                        <div class="answerdiv2" id="answer-reviewAD">
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>`;
+
+            const headerCont = document.querySelector('.' + headerContainer);
+            if (headerCont && questionId !== undefined) {
+                headerCont.dataset.qid = questionId;
+            }
+
+            updateAttemptedCount();
+
+            const prevBtn = parent.querySelector('#prev-btn');
+            const nextBtn = parent.querySelector('#next-btn');
+            const submitBtn = parent.querySelector('#sub-btn');
+            const nirdeshBtn = parent.querySelector('#nirdesh');
+            const closeOverlayBtn = parent.querySelector('.close-overlay');
+
+            if (closeOverlayBtn) closeOverlayBtn.addEventListener("click", closeFn);
+            if (prevBtn) prevBtn.addEventListener("click", prevQuestion);
+            if (nextBtn) nextBtn.addEventListener("click", nextQuestion);
+            if (submitBtn) submitBtn.addEventListener("click", showResult);
+            if (nirdeshBtn) nirdeshBtn.addEventListener("click", openFn);
+
+        } catch (e) {
+            console.error('Adaptiv.ui :', e);
+        }
+    }
+
+    const __image = (src, width = false) => `<img src="${Activity.pathToCWD()}${src}" style="${!width ? 'height:150px;' : ''} width:${!width ? '150px' : `${width}`}; object-fit:contain;" ondragstart="return false;">`;
+
+    const __option_images = ({ data, replacement } = {}) => {
+        const imageData = data?.images ?? {};
+        const imagePath = imageData?.path ?? [];
+        const width = imageData?.width ?? false;
+        const text = data?.text ?? '';
+
+        if (!text && !imagePath.length) return '';
+
+        if (!imagePath.length) return text;
+
+        const regex = new RegExp(replacement, 'g');
+
+        let index = 0;
+
+        return text.replace(regex, () => __image(imagePath[index++], width));
+    }
+
+    const renderQuestion = (questionId, direction) => {
+        const level = currentLevel;
+        const activity = Activity.getDefine(questionId);
+        const lang = activity?.lang ?? 'en';
+        const content = activity?.content;
+        const data = content?.levels;
+        const skipOptions = content?.skipOptions ?? false;
+        const skipQuestionSequence = content?.skipQuestionSequence ?? false;
+        const found = (data || []).find(lvl => lvl.level === level);
+        const questLen = found?.questions?.length || 0;
+        let realIndex = currentQuestion;
+
+        __activity = activity;
+
+        if (retryWrongOnly) {
+            realIndex = wrongQuestions[currentQuestion];
+        }
+
+        const q = found?.questions?.[realIndex];
+        currentQuizData = found?.questions || [];
+
+        ui(questionId, questLen);
+
+        if (userAnswersAdaptiv == undefined) {
+            userAnswersAdaptiv = new Array(questLen).fill(null);
+        } else if (userAnswersAdaptiv.length !== questLen) {
+            const newArr = new Array(questLen).fill(null);
+            for (let i = 0; i < Math.min(newArr.length, userAnswersAdaptiv.length); i++) {
+                newArr[i] = userAnswersAdaptiv[i];
+            }
+            userAnswersAdaptiv = newArr;
+        }
+
+        const container = document.getElementById("quizContainerAdaptiv");
+        if (!container) return;
+
+        container.classList.remove('animate__fadeInDown', 'animate__fadeInUp');
+
+        if (direction === 'next') {
+            container.classList.add('animate__animated', 'animate__fadeInDown');
+        } else if (direction === 'prev') {
+            container.classList.add('animate__animated', 'animate__fadeInUp');
+        } else {
+            container.classList.add('animate__animated', 'animate__fadeInDown');
+        }
+
+        void container.offsetWidth;
+
+        if (!q) {
+            const popupLabels = Activity.translatePopupLabels(lang);
+            container.innerHTML = `<div class="row m-0"><div class="col">${popupLabels.questionNotFound}</div></div>`;
+            updateNavButtons();
+            return;
+        }
+
+        const levelHeadingText = found?.heading ?? {};
+        const levelHeadContainer = document.querySelector('#' + levelHeadingID);
+        if (levelHeadingText?.text && levelHeadContainer) {
+            const text = levelHeadingText.text;
+            const classes = levelHeadingText?.classes ?? [];
+            levelHeadContainer.innerHTML = text;
+
+            classes.forEach(cls => levelHeadContainer.classList.add(cls));
+        }
+
+        const imageReplacement = q?.imageReplacement ?? '#img#';
+
+        const __renderQuestionText = (data) => {
+
+            const imageData = data?.images ?? {};
+            const imagePath = imageData?.path ?? [];
+            const imageStyle = imageData?.style ?? [];
+            const text = data?.text ?? '';
+
+            if (!text && !imagePath.length) return '';
+
+            if (!imagePath.length) return text;
+
+            const __image = (index) => {
+                const src = imagePath[index];
+                const style = imageStyle[index] ?? null;
+
+                const w_h_style = !style
+                    ? `height:50px;width:50px;`
+                    : `height:${style.height};width:${style.width};`;
+                // ..
+
+                return `
+                    <img 
+                        src="${Activity.pathToCWD()}${src}" 
+                        style="${w_h_style} object-fit:contain;" 
+                        ondragstart="return false;"
+                    >
+                `;
+            }
+
+            const regex = new RegExp(imageReplacement, 'g');
+
+            let index = 0;
+            return text.replace(regex, () => __image(index++));
+        }
+
+        const questionText = (q?.question && typeof q?.question === 'string')
+            ? q.question
+            : __renderQuestionText(q.question);
+        // ..
+
+        const imageAboveOption = (q?.imageAboveOption && q?.imageAboveOption?.image != '') ?
+            `
+                        <div class="text-center my-1">
+                            <img src="${Activity.pathToCWD()}${q.imageAboveOption.image}" style="width :${q.imageAboveOption.width ?? '150px'};">
+                        </div>
+                    ` : '';
+        // ..
+
+        const popupLabels = Activity.translatePopupLabels(lang);
+
+        container.innerHTML = `${questionText != ''
+            ? `
+                    <div class="row m-0 g-0 align-items-center" style="font-size:18px">
+                        ${!skipQuestionSequence ? `
+                            <div style="min-width:30px;" class="col-auto questionHeadingMCQ me-2">
+                                <strong>${popupLabels.questionLabel}${realIndex + 1}.</strong>
+                            </div>
+                            ` : ''
+            }
+                        <div class="col questionHeadingMCQ">${questionText}</div>
+                    </div>
+                ` : ''
+            }
+            ${imageAboveOption}
+            ${!skipOptions ? `
+                    <div class="row mt-3">
+                        <div class="row mt-2 gx-0 px-3">
+                        ${q.options.map((opt, i) => {
+                const optionLabel = Activity.translateBulletLabels({ lang: lang, ind: i, upperCase: true });
+                const isSelected = userAnswersAdaptiv[realIndex] === i;
+                let extraClass = isSelected ? "selected" : "";
+
+                if (typeof opt === 'string') {
+                    if (submitted) {
+                        if (i === q.answer) extraClass = "correct";
+                        else if (isSelected && i !== q.answer) extraClass = "incorrect";
+                    }
+                    return `
+                                    <div class="col-md-6 col-sm-12 mb-2">
+                                        <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
+                                            <input type="radio" name="question-${realIndex}" ${isSelected ? "checked" : ""} />
+                                            <strong>${optionLabel}.</strong>
+                                            ${opt}
+                                        </label>
+                                    </div>
+                                `;
+                } else if (opt instanceof Object) {
+                    const optionText = __option_images({ data: opt, replacement: imageReplacement });
+                    return `
+                                    <div class="col-md-6 col-sm-12 mb-2">
+                                        <label class="option-btnAdpt ${extraClass}" data-option-index="${i}">
+                                            <input type="radio" name="question-${realIndex}" ${isSelected ? "checked" : ""} />
+                                            <strong>${optionLabel}.</strong> 
+                                            ${optionText}
+                                        </label>
+                                    </div>
+                                `;
+                }
+            }).join('')}
+                        </div>
+                    </div>
+                ` : ''
+            }
+        `;
+
+        if (!skipOptions) {
+            Array.from(document.querySelectorAll('.option-btnAdpt')).forEach((optionEl) => {
+                optionEl.addEventListener("click", (ev) => {
+                    const idxAttr = optionEl.getAttribute('data-option-index');
+                    const idx = idxAttr !== null ? parseInt(idxAttr, 10) : 0;
+                    selectOption(realIndex, idx);
+                });
+            });
+        }
+
+        updateNavButtons();
+
+        Activity.initMathJax();
+    }
+
+    const selectOption = (realIndex, optIndex) => {
+        if (submitted) return;
+        if (!Array.isArray(userAnswersAdaptiv) || realIndex < 0) return;
+
+        userAnswersAdaptiv[realIndex] = optIndex;
+        updateAttemptedCount();
+
+        if (!retryWrongOnly) {
+            const allAnswered = userAnswersAdaptiv.every(ans => ans !== null);
+            if (allAnswered && currentQuestion === currentQuizData.length - 1) {
+                showResultPending = true;
+            }
+        }
+
+        if (retryWrongOnly) {
+            const allWrongAnswered = wrongQuestions.every(i => userAnswersAdaptiv[i] !== null);
+            if (allWrongAnswered) {
+                showResultPending = true;
+            }
+        }
+    };
+
+    const nextQuestion = () => {
+        const limit = getQuestionLimit();
+        const skipOptions = __activity?.content?.skipOptions ?? false;
+
+        if (skipOptions) userAnswersAdaptiv[currentQuestion] = true;
+
+        if (userAnswersAdaptiv[currentQuestion] === null) {
+            const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
+            const lang = activity?.lang ?? 'en';
+            const popupLabels = Activity.translatePopupLabels(lang);
+            Swal.fire({
+                title: popupLabels.info,
+                text: popupLabels.selectOptionBeforeNext,
+                icon: 'info'
+            });
+            return;
+        }
+
+        if (currentQuestion < limit - 1) {
+            currentQuestion++;
+            renderQuestion(Activity.getQid(`.${headerContainer}`), 'next');
+        }
+
+        updateNavButtons();
+    };
+
+    const prevQuestion = () => {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            renderQuestion(Activity.getQid(`.${headerContainer}`), 'prev');
+        }
+        updateNavButtons();
+    }
+
+    const updateNavButtons = () => {
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const subBtn = document.getElementById("sub-btn");
+
+        const total = retryWrongOnly ? wrongQuestions.length : currentQuizData.length;
+        const isLast = currentQuestion === total - 1;
+
+        const skipOptions = __activity?.content?.skipOptions ?? false;
+
+        const allAnswered = retryWrongOnly
+            ? wrongQuestions.every(i => userAnswersAdaptiv[i] !== null)
+            : userAnswersAdaptiv.every(ans => ans !== null);
+
+        if (prevBtn) prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
+        if (nextBtn && subBtn) {
+            if (isLast && (allAnswered || skipOptions)) {
+                nextBtn.style.display = 'none';
+                subBtn.style.display = 'inline-block';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                subBtn.style.display = 'none';
+            }
+        }
+    };
+
+    const showResult = () => {
+        try {
+            const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`)) ?? {};
+            const lang = activity?.lang ?? 'en';
+            const content = activity?.content ?? {};
+            const levels = content?.levels ?? [];
+            const skiplevels = content?.skiplevels ?? false;
+            const skipansbtn = content?.skipanswerbutton ?? false;
+            const skipnextbtn = content?.skipnextlevel ?? false;
+            const skipOptions = __activity?.content?.skipOptions ?? false;
+
+            const levelTextEl = document.getElementById("levelText");
+            if (levelTextEl) levelTextEl.style.display = 'none';
+            const container = document.getElementById("quizContainerAdaptiv");
+            submitted = true;
+            attemptCount++;
+
+            wrongQuestions = [];
+            (currentQuizData || []).forEach((q, i) => {
+                if (userAnswersAdaptiv[i] !== q.answer) {
+                    wrongQuestions.push(i);
+                }
+            });
+
+            const popupLabels = Activity.translatePopupLabels(lang);
+
+            const correct = (userAnswersAdaptiv || []).filter((a, i) => a === (currentQuizData?.[i]?.answer)).length;
+            const showAnswerBtn = attemptCount >= 5;
+            const showRetryBtn = correct < (currentQuizData?.length || 0);
+            const showNextLevel = correct === skipnextbtn || skipOptions || ((currentQuizData?.length || 0) && (currentQuizData?.length || 0) > 0);
+            const finished = currentLevel === levels.length;
+            const whenCompleteLevel = showNextLevel ? popupLabels.levelComplete : "";
+            const navButtonsEl = document.getElementById("nav-buttons");
+            if (navButtonsEl) navButtonsEl.style.display = "none";
+            const submitWrapper = document.getElementById("submit-btn-wrapper");
+            if (submitWrapper) submitWrapper.innerHTML = '';
+            if (!container) return;
+
+            const showLevelSeqText = !skipnextbtn && levels.length > 1;
+
+            const btnLabel = Activity.translateButtonLabels(lang);
+            container.innerHTML = `
+                <div class="result-box">
+                    ${showLevelSeqText ? `<h4><strong class="fs-1">${popupLabels.levelLabel} ${currentLevel} ${whenCompleteLevel}</strong></h4>` : ''}
+                    ${!skipOptions ? `
+                            <p class="text-danger-adaptive my-3">
+                                ${popupLabels.totalQuestions} : 
+                                ${currentQuizData?.length || 0}
+                            </p>
+                            <p class="text-success my-3">
+                                ${popupLabels.correctAnswers}: ${correct}
+                            </p>
+                            <p class="text-success my-3">
+                                ${popupLabels.attemptNo}: ${attemptCount}
+                            </p>
+                            ` : ''
+                    }
+                    <div class="rowBtns">
+                        ${((showNextLevel || skiplevels) && !skipnextbtn) ? `
+                            <button class='btn btn-success mt-3 mx-3' id='btn-next-level'>
+                                ${popupLabels.goToLevel(currentLevel + 1)}
+                            </button>` : ''
+                        }
+                        ${(showRetryBtn || showNextLevel) ? `
+                                <button class='btn btn-primary mt-3 mx-3' id='btn-retry'>
+                                    ${btnLabel.try}
+                                </button>
+                            ` : ''
+                        }
+                        ${!skipOptions ? `
+                            ${(!skipOptions || showAnswerBtn || showNextLevel || skipansbtn) ? `
+                                    <button class='btn btn-danger mt-3 mx-3' id='btn-show-answers'>
+                                        ${btnLabel.show}
+                                    </button>
+                                ` : ''
+                            }
+                            ` : ''
+                        }                        
+                    </div>
+                </div>
+            `;
+            // ..
+
+            const btnNextLevel = document.getElementById('btn-next-level');
+            const btnRetry = document.getElementById('btn-retry');
+            const btnShowAnswers = document.getElementById('btn-show-answers');
+            const btnFinish = document.getElementById('btn-finish');
+
+            if (btnNextLevel) {
+                btnNextLevel.addEventListener('click', (e) => {
+                    loadNextLevel();
+                });
+            }
+            if (btnRetry) {
+                btnRetry.addEventListener('click', (e) => {
+                    retryQuiz();
+                });
+            }
+            if (btnShowAnswers) {
+                btnShowAnswers.addEventListener('click', (e) => {
+                    showAnswerPopup();
+                });
+            }
+            if (btnFinish) {
+                btnFinish.addEventListener('click', (e) => {
+                    finishMessage();
+                });
+            }
+
+            showResultPending = false;
+            $(".instruc").hide();
+            $(".submit-info").hide();
+
+            const hideBtn = document.getElementById("btn-next-level");
+            if (finished && showNextLevel) {
+                if (hideBtn) hideBtn.style.display = 'none';
+            } else {
+                if (hideBtn) hideBtn.style.display = 'inline-block';
+            }
+
+            retryWrongOnly = false;
+        } catch (e) {
+            console.error('Adaptiv.showResult error:', e);
+        }
+    }
+
+    const getQuestionLimit = () => {
+        return retryWrongOnly
+            ? wrongQuestions.length
+            : currentQuizData?.length || 0;
+    };
+
+    const loadNextLevel = () => {
+        const levelTextEl = document.getElementById("levelText");
+        if (levelTextEl) levelTextEl.style.display = 'block';
+        if (currentLevel < 3) currentLevel++;
+
+        if (currentLevel === 2 && typeof quizDataLevelB !== 'undefined') currentQuizData = quizDataLevelB;
+        if (currentLevel === 3 && typeof quizDataLevelC !== 'undefined') currentQuizData = quizDataLevelC;
+        currentQuestion = 0;
+        submitted = false;
+        userAnswersAdaptiv = new Array(currentQuizData?.length || 0).fill(null);
+        attemptCount = 0;
+        const navButtonsEl = document.getElementById("nav-buttons");
+        if (navButtonsEl) navButtonsEl.style.display = "block";
+        const levelUpdateEl = document.querySelector(".levelUpdate");
+        if (levelUpdateEl && typeof levelHeadings !== 'undefined') levelUpdateEl.textContent = levelHeadings[currentLevel];
+
+        renderQuestion(Activity.getQid(`.${headerContainer}`));
+        updateAttemptedCount();
+        $(".instruc").show();
+        $(".submit-info").show();
+        if (currentLevel === 2) {
+            $("#quizContainerAdaptiv").removeClass("animate__bounceInLeft").addClass("animate__bounceInRight");
+        }
+        else if (currentLevel === 3) {
+            $("#quizContainerAdaptiv").removeClass("animate__bounceInRight").addClass("animate__bounceInLeft");
+        }
+        if (navButtonsEl) navButtonsEl.style.display = "block";
+    }
+
+    const updateAttemptedCount = () => {
+        if (!Array.isArray(userAnswersAdaptiv)) {
+            const el = document.getElementById("attempted-count");
+            if (el) el.textContent = 0;
+            return;
+        }
+        const attempted = userAnswersAdaptiv.filter(a => a !== null).length;
+        const el = document.getElementById("attempted-count");
+        if (el) el.textContent = attempted;
+    }
+
+    const retryQuiz = () => {
+        submitted = false;
+
+        if (wrongQuestions.length > 0) {
+            retryWrongOnly = true;
+            currentQuestion = 0;
+
+            wrongQuestions.forEach(i => {
+                userAnswersAdaptiv[i] = null;
+            });
+        } else {
+            retryWrongOnly = false;
+            currentQuestion = 0;
+            userAnswersAdaptiv = new Array(currentQuizData.length).fill(null);
+        }
+
+        renderQuestion(Activity.getQid(`.${headerContainer}`));
+        updateAttemptedCount();
+
+        $(".instruc").show();
+        $(".submit-info").show();
+
+        const levelTextEl = document.getElementById("levelText");
+        if (levelTextEl) levelTextEl.style.display = 'block';
+    };
+
+    const showAnswerPopup = () => {
+        const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
+        const lang = activity?.lang ?? 'en';
+
+        let totalCorrect = 0;
+        let totalQuestion = 0;
+        let topData = ``;
+        let midData1 = ``;
+        let midData2 = ``;
+        let midData3 = ``;
+        const optionLabel = index => (typeof index === 'number' && index >= 0) ? String.fromCharCode(65 + index) : "";
+
+        const label = index => Activity.translateBulletLabels({ lang: lang, ind: index, upperCase: true });
+        (currentQuizData || []).forEach((q, i) => {
+            const userIndex = userAnswersAdaptiv?.[i];
+            const userAnswerText = (userIndex !== null && userIndex !== undefined) ? `${label(userIndex)}` : "Not attempted";
+            const correctAnswerText = `${label(q.answer)}`;
+            if (userAnswerText === correctAnswerText) totalCorrect++;
+            totalQuestion++;
+
+            let resultSymbol = '✘';
+            let resultClass = 'text-danger-adaptive';
+            if (userAnswerText === correctAnswerText) {
+                resultSymbol = '✔';
+                resultClass = 'text-success';
+            }
+
+            midData2 += `<tr class="trData">
+                <th>${lang == 'hi' ? 'प्र' : 'Q'}${totalQuestion}.</th>
+                <td class="text-danger-adaptive">${userAnswerText}</td>
+                <td class="text-success">${correctAnswerText}</td>
+                <td class="${resultClass}">${resultSymbol}</td>
+            </tr>`;
+        });
+
+        const popupLabels = Activity.translatePopupLabels(lang);
+        const headLabel = Activity.translateTableHeads(lang);
+        topData = `<div class="d-flex justify-content-between align-items-center">
+                    <h4 id="scoreTextQ1" class="text-center mb-3">
+                        ${popupLabels.scored(totalCorrect, totalQuestion)}
+                    </h4>
+                    <button class="btn btn-secondary" id="btn-close-answers">X</button>
+                </div>`;
+        midData1 = `<div id="" class="innerDIV">
+                    <div class="table-responsive p-2">
+                        <table class="table table-bordered" style="font-size:20px">
+                        <thead class="thead-light" style="white-space: nowrap;">
+                            <tr>
+                                <th>${headLabel.sequence}</th>
+                                <th>${headLabel.attempted}</th>
+                                <th>${headLabel.correct}</th>
+                                <th>${headLabel.result}</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+        midData3 = `</tbody>
+                        </table>
+                    </div>
+                </div>`;
+        const reviewHtml = topData + midData1 + midData2 + midData3;
+        const reviewEl = document.getElementById("answer-reviewAD");
+        if (reviewEl) reviewEl.innerHTML = reviewHtml;
+
+        $("#popupDialogAnsAd").css("display", "block");
+        const btnCloseAnswers = document.getElementById("btn-close-answers");
+        if (btnCloseAnswers) {
+            btnCloseAnswers.addEventListener("click", closeFnAD);
+        }
+    }
+
+    const closeFnAD = () => {
+        $("#popupDialogAnsAd").hide();
+    }
+
+    const finishMessage = () => {
+        const activity = Activity.getDefine(Activity.getQid(`.${headerContainer}`));
+        const lang = activity?.lang ?? 'en';
+        const popupLabels = Activity.translatePopupLabels(lang);
+
+        Swal.fire({
+            title: popupLabels.allCorrect,
+            text: "",
+            icon: "success",
+            timer: 3000,
+            showConfirmButton: false
+        });
+    }
+
+    const openFn = () => {
+        const ov = document.getElementById('overlay');
+        if (ov) ov.classList.add('active');
+    }
+
+    const closeFn = () => {
+        const ov = document.getElementById('overlay');
+        if (ov) ov.classList.remove('active');
+    }
+
+    return {
+        render: renderQuestion,
+        userAnswersAdaptiv,
+        currentLevel,
+        currentQuestion,
+        submitted,
+        currentQuizData,
+        attemptCount,
+        showResultPending
+    }
+
+})();
+
 Templates.get('templates').map(({ template }) => {
     try {
         const mod = eval(template);

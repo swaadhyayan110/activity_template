@@ -43,7 +43,8 @@ const Templates = (() => {
         { id : 38, template : 'SpellItOut' },
         { id : 39, template : 'VowelDragAndDrop' },
         { id : 40, template : 'VirtualTour' },
-        { id : 41, template : 'CircleAndUnderline' }
+        { id : 41, template : 'CircleAndUnderline' },
+        { id : 42, template : 'AdaptiveMultiUse' },
     ];
 
     const store = {
