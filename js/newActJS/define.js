@@ -14,7 +14,7 @@ const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = Controller.filterByQids({
-        filterIds:[],
+        filterIds:[16],
         buttons:[
             { qid: 44, text: ['Q-44', 'Q:44; M:0 - Math'], module: 0 },
             { qid: 0, text: ['Q-0', 'Q:0; M:0 - Audio'], module: 0 },
@@ -961,7 +961,7 @@ const Define = (() => {
                 replacement: '#_#',
                 option_side: 'top',
                 singleQuestionMode: false,
-                col: { col: 12, md: 6, sm: 6 },
+                col: { col: 12, md: 6, sm: 6, lg : 2 },
                 addOptions: ['op1', 'op2', 'op3', '`theta`', 'op1'],
                 text: {
                     text: 'वर्षा ऋतु `theta` अत्यंत सुहावनी होती है। वर्षा की बूँदें गर्मी से तपती प्रकृति को शीतलता प्रदान करती हैं। बारिश होने  पर बच्चे-बड़े, पेड़-पौधे, पशु-पक्षी सभी प्रसन्नता से झूम उठते हैं, परंतु इस मौसम में असावधानी से हमें कई  परेशानियों का सामना करना पड़ सकता है।नीचे कुछ प्रश्न दिए गए हैं। इनके सही उत्तर चुनिए-',
@@ -990,7 +990,7 @@ const Define = (() => {
                 ],
                 audio     : 'bg.mp3'
             }
-        },
+        },        
         // qid : 17, || mid : 16;
         {
             id: 17,

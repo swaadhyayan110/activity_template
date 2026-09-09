@@ -6334,11 +6334,13 @@ const DragAndDropMulti = (() => {
         const singleQuestionMode = content?.singleQuestionMode ?? false;
 
         const defaultCol = {
+            lg: 4,
             md: 4,
             sm: 6,
             col: 12
         };
         const col_size = {
+            lg: content?.col?.lg ?? defaultCol.lg,
             md: content?.col?.md ?? defaultCol.md,
             sm: content?.col?.sm ?? defaultCol.sm,
             col: content?.col?.col ?? defaultCol.col
