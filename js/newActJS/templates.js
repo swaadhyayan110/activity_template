@@ -6438,7 +6438,7 @@ const DragAndDropMulti = (() => {
 
                 const html = `
                     ${col_size && !singleQuestionMode ? `
-                            <div class="my-2 col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm} p-1">
+                            <div class="my-2 col-lg-${col_size.lg} col-${col_size.col} col-md-${col_size.md} col-sm-${col_size.sm} p-1">
                         ` : `
                             <div class="my-2 p-1">
                         `
