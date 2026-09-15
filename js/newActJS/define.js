@@ -13,8 +13,8 @@ const Define = (() => {
     */
 
     // DEFINE BUTTONS
-    const buttons = Controller.filterByQids({
-        filterIds:[],
+    const buttons = Controller.filterByModuleIds({
+        filterIds:[16],
         buttons:[
             { qid: 44, text: ['Q-44', 'Q:44; M:0 - Math'], module: 0 },
             { qid: 0, text: ['Q-0', 'Q:0; M:0 - Audio'], module: 0 },
@@ -975,13 +975,13 @@ const Define = (() => {
                 questions: [
                     {
                         qid: 1,
-                        text: 'सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।',
+                        text: 'सितार बनने पर कोयल सितार बनने पर कोयल #_# नचाकर #_# नाचने लगी।',
                         inputWidth: '100px',
                         image: 'images/1.png',
                         width: '120px',      // image-width
                         options: ['पंख', 'नाचने'],
                         answer: 1,
-                        imageSide: 'right'
+                        imageSide: 'right',
                     },
                     { qid: 2, text: '#_#', image: 'images/1.png', options: ['`theta`'], answer: 0 },
                     { qid: 3, text: 'सितार पर खाली जगह पर #_# की गई।', image: 'images/1.png', options: ['नक्काषी'], answer: 0 },
@@ -1027,11 +1027,14 @@ const Define = (() => {
             lang: 'en',
             head: 'Template : 19',
             content: [
+                // ~#word#ing~  → underline only the word between #
+                // ~!word~   → ignore underline
+                // ~word~    → underline the complete word
                 {
                     id: 1,
                     tabtitle: 'apple',
-                    meaning: 'कूद-कूदकर',
-                    sentence: 'Apple छोटी चिड़ियाँ appleing `theta` चलना सीखती हैं। appleing',
+                    meaning: 'सेब',
+                    sentence: 'Apple ~completeWord~ ~word#Boundry#Example~ ~!ignoredWord~ चलना सीखती `theta` हैं।',
                     image: [
                         {
                             path: 'images/1.png',
@@ -1056,9 +1059,9 @@ const Define = (() => {
                 },
                 {
                     id: 2,
-                    tabtitle: 'कूद-कूदकर `theta`',
+                    tabtitle: 'कूद-कूदकर',
                     meaning: 'कूद-कूदकर',
-                    sentence: 'छोटी चिड़ियाँ कूद-कूदकरकू चलना सीखती हैं।'
+                    sentence: 'छोटी चिड़ियाँ कूद-कूदकर चलना सीखती हैं।'
                 },
                 {
                     id: 3,
@@ -1794,7 +1797,7 @@ const Define = (() => {
                             sub: {
                                 text: 'here some sub `theta` title text',
                                 classes: 'text-success bg-success-subtle rounded-3 w-50 text-uppercase p-2'
-                            }
+                            }                            
                         },
                         set: {
                             virtualTour: true,
@@ -1811,7 +1814,11 @@ const Define = (() => {
                                 { path: 'images/4.png', caption: 'text-4' },
                                 { path: 'images/5.png', caption: 'text-5' }
                             ],
-                            audio: { path: 'audio/ohGalat.mp3' }
+                            audio: { path: 'audio/ohGalat.mp3' },
+                            footer : {
+                                html : '<span class="border border-primary">footer html...</span>',
+                                wrapperClass : 'border border-danger text-center p-2',
+                            }
                         }
                     },
                     {

@@ -6412,6 +6412,8 @@ const DragAndDropMulti = (() => {
             if (isCol === false) {
                 const imageSide = questions[ind]?.imageSide ?? 'left';
 
+                const imageBasedClass = image.length ? 'd-flex flex-wrap' : 'block';
+
                 const html = `
                     <div class="my-2 p-1">
                         <div class="row g-0 border rounded h-100 p-2 ">
@@ -6425,7 +6427,7 @@ const DragAndDropMulti = (() => {
                                 <div class='col-auto'>
                                     ${image.join('')}
                                 </div>
-                                <div class='col d-flex flex-wrap' data-queindex="${ind}" style="white-space: pre-wrap;">${replacedText}</div>
+                                <div class='col ${imageBasedClass}' data-queindex="${ind}" style="white-space: collapse;">${replacedText}</div>
                             </div>
                         </div>
                     </div>
@@ -7632,38 +7634,110 @@ const Shabdkosh = (() => {
 
         const titleLower = tabitem[0].tabtitle.toLowerCase();
         const tabTitle = titleLower.charAt(0).toUpperCase() + titleLower.slice(1).toLowerCase();
+        
+        const renderSentence = (sentence) => {
+            if (!sentence) return '';
+
+            const protectedParts = [];
+            let protectedIndex = 0;
+
+            sentence = sentence.replace(
+                /~([^~]*?)#([^#~]+)#([^~]*?)~|~!([^~]+)~|~([^~]+)~/g,
+                (
+                    match,
+                    beforeHash,
+                    underlineText,
+                    afterHash,
+                    noUnderlineWord,
+                    normalWord
+                ) => {
+                    const token = `\u0000SPECIAL_${protectedIndex}\u0000`;
+
+                    if (underlineText !== undefined) {
+                        protectedParts.push({
+                            token,
+                            content:
+                                `${beforeHash}` +
+                                `<span class="blinking-underline sometextcolor">${underlineText}</span>` +
+                                `${afterHash}`
+                        });
+
+                    } else if (noUnderlineWord !== undefined) {
+                        protectedParts.push({
+                            token,
+                            content: noUnderlineWord
+                        });
+
+                    } else {
+                        protectedParts.push({
+                            token,
+                            content:
+                                `<span class="blinking-underline sometextcolor">${normalWord}</span>`
+                        });
+                    }
+
+                    protectedIndex++;
+
+                    return token;
+                }
+            );
+
+            const escapedTitle = titleLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+            sentence = sentence.replace(
+                new RegExp(escapedTitle, 'gi'),
+                (match) => `<span class="blinking-underline sometextcolor">${match}</span>`
+            );
+
+            protectedParts.forEach((item) => {
+                sentence = sentence.replace(item.token, item.content);
+            });
+
+            return sentence;
+        };
 
         const titlesHtml = [];
         let tabpanecontent = "";
 
-        titlesHtml.push(`<div class='tab-pane active'> ${tabitem[0]?.tabtitle ? `<div class="over my-3"><b>${tabTitle}</b></div>` : ''}`);
+        titlesHtml.push(
+            `<div class='tab-pane active'> ${
+                tabitem[0]?.tabtitle
+                    ? `<div class="over my-3"><b>${tabTitle}</b></div>`
+                    : ''
+            }`
+        );
 
         if (!isTitles) {
             tabpanecontent = `
-                    ${titles?.meaning ? `<div class="meaning me-1"><b class="me-1 arth">${Activity.translateMeaningLabel(lang)} :</b>${titles.meaning}</div>` : ''}
-                    ${titles?.sentence ?
-                        `<div class="sentence-use">
+                ${
+                    titles?.meaning
+                        ? `<div class="meaning me-1">
+                                <b class="me-1 arth">${Activity.translateMeaningLabel(lang)} :</b>
+                                ${titles.meaning}
+                        </div>`
+                        : ''
+                }
+
+                ${
+                    titles?.sentence
+                        ? `<div class="sentence-use">
                                 <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
-                                ${titles?.sentence
-                                    ? titles?.sentence
-                                        .replace(
-                                            new RegExp(titleLower, 'gi'),
-                                            (match) => `<span class="blinking-underline sometextcolor">${match}</span>`
-                                        )
-                                    : ''
-                                }
-                        </div>` : ''
-                    }
-                    ${titles?.image?.path ?
-                        __imageContainer({
+                                ${renderSentence(titles.sentence)}
+                        </div>`
+                        : ''
+                }
+
+                ${
+                    titles?.image?.path
+                        ? __imageContainer({
                             width: titles?.image?.width,
                             path: titles?.image?.path,
                             caption: titles?.image?.caption
-                        }): 
-                        `
+                        })
+                        : `
                             ${
-                                titles?.image instanceof Array ? 
-                                    `<div class="row align-items-center justify-content-center w-75 mx-auto">
+                                titles?.image instanceof Array
+                                    ? `<div class="row align-items-center justify-content-center w-75 mx-auto">
                                         ${
                                             titles?.image.map((item) => {
                                                 return __imageContainer({
@@ -7672,39 +7746,50 @@ const Shabdkosh = (() => {
                                                     classes: 'col-lg-3 col-md-4 col-sm-6 col-12 p-1',
                                                     inBox: false,
                                                     caption: item?.caption
-                                                })
+                                                });
                                             }).join('')
                                         }
                                     </div>`
-                                : ''
+                                    : ''
                             }
                         `
-                    }
-                </div>
+                }
+            </div>
             `;
+
             titlesHtml.push(tabpanecontent);
+
         } else {
             titles.map((item) => {
                 const labelName = item?.title;
                 const labelText = item?.text;
+
                 if (!labelName || !labelText) return;
-                if (labelName.toLowerCase() == Activity.translateSentenceLabel(lang).toLocaleLowerCase()) {
-                    tabpanecontent = `<div class="sentence-use">
-                                        <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
-                                        ${item?.text ?
-                                            item?.text.replace(
-                                                new RegExp(titleLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
-                                                (match) => `<span class="blinking-underline sometextcolor">${match}</span>`
-                                            )
-                                            : ''
-                                        }
-                                    </div>`
+
+                if (
+                    labelName.toLowerCase() ==
+                    Activity.translateSentenceLabel(lang).toLocaleLowerCase()
+                ) {
+                    tabpanecontent = `
+                        <div class="sentence-use">
+                            <b class="sent-head">${Activity.translateSentenceLabel(lang)} -</b> 
+                            ${
+                                item?.text
+                                    ? renderSentence(item.text)
+                                    : ''
+                            }
+                        </div>
+                    `;
                 } else {
-                    tabpanecontent = `<div class="meaning me-1"><b class="me-1 arth">${labelName} :</b>${item.text}</div>`;
+                    tabpanecontent = `
+                        <div class="meaning me-1">
+                            <b class="me-1 arth">${labelName} :</b>
+                            ${item.text}
+                        </div>
+                    `;
                 }
 
                 titlesHtml.push(tabpanecontent);
-
             });
 
             if (tabitem[0]?.image && tabitem[0]?.image?.path) {
@@ -7719,7 +7804,10 @@ const Shabdkosh = (() => {
         }
 
         const tabPanes = document.getElementById("tabPanes");
-        if (tabPanes) tabPanes.innerHTML = titlesHtml.join('');
+
+        if (tabPanes) {
+            tabPanes.innerHTML = titlesHtml.join('');
+        }
 
         Activity.initMathJax();
     };
@@ -9691,7 +9779,7 @@ const ShravanKaushalWithPara = (() => {
                                                     <button class="submit-btn" id="listen-prev-btn" style="${activity.content?.main?.text != undefined ? "display:block" : "display:none"}">${prevNextLabel.prev}</button>
                                                     <button class="show-btn" id="listen-next-btn">${prevNextLabel.next}</button>
                                                     <button class="reset-btn" id="listen-sub-btn" style="display:none;">${buttonLabel.submit}</button> 
-                                                    <button class="replay-btn" id="listen-replay-btn">${lang == 'en' ? 'Replay' : 'दुबारा सुने'}</button>
+                                                    <button class="replay-btn" id="listen-replay-btn">${lang == 'hi' ? 'दुबारा सुने' : 'Replay' }</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -14551,7 +14639,7 @@ const VowelDragAndDrop = (() => {
                 }
             });
         } catch (e) {
-            console.error('DragAndDropMulti.makeDraggable :', e);
+            console.error('VowelDragAndDrop.makeDraggable :', e);
         }
     }
 
@@ -14586,6 +14674,7 @@ const VirtualTour = (() => {
     const titleWrapperId = 'title-wrapper';
     const audioWrapperId = 'audio-wrapper';
     const imageContainerCls = 'question-image-container';
+    const footerContainer = 'footerContainer';
 
     let __currentIndex = 0;
     let __questions = undefined;
@@ -14628,38 +14717,39 @@ const VirtualTour = (() => {
             const toggleBtns = Activity.translateNextPrevLabel(lang);
 
             parent.innerHTML = `
-                             <div class="match1Back">
-                            <img class="backImgsM1" draggable="false" src="images/vt.png"/>
-                             <div class="vtMainBacks">
-                                <div class="question">
-                                    <div class="container-fluid">
-                                        <div class="p-2 rounded-3 border bg-light text-center ${Helper.vars.head}"></div>
-                                        <div id="${containerId}" class="">
-                                            ${questionsLength > 1
-                    ? `<div class="text-end navBtnWrapper mt-2">
-                                                <button id="previousBtn" class="nav3dBtn prev3dBtn" disabled>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                                                        class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                                                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                                                    </svg>
-                                                    <span>${toggleBtns.prev}</span>
-                                                </button>
-
-                                                <button id="nextBtn" class="nav3dBtn next3dBtn" disabled>
-                                                    <span>${toggleBtns.next}</span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                                                        class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                                ` : ''
-                }
-                                            <div class="question-content-container">
-                                                <div id="${titleWrapperId}"></div>
-                                                <div id="${audioWrapperId}"></div>
-                                                <div class="row g-0 ${imageContainerCls}"></div>
-                                            </div>
+                            <div class="match1Back">
+                                <img class="backImgsM1" draggable="false" src="images/vt.png"/>
+                                <div class="vtMainBacks">
+                                    <div class="question">
+                                        <div class="container-fluid">
+                                            <div class="p-2 rounded-3 border bg-light text-center ${Helper.vars.head}"></div>
+                                            <div id="${containerId}" class="">
+                                                ${questionsLength > 1
+                                                    ? `
+                                                        <div class="text-end navBtnWrapper mt-2">
+                                                            <button id="previousBtn" class="nav3dBtn prev3dBtn" disabled>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                                                    class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                                                    <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                                                </svg>
+                                                                <span>${toggleBtns.prev}</span>
+                                                            </button>
+                                                            <button id="nextBtn" class="nav3dBtn next3dBtn" disabled>
+                                                                <span>${toggleBtns.next}</span>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                                                    class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    ` : ''
+                                                }
+                                                <div class="question-content-container">
+                                                    <div id="${titleWrapperId}"></div>
+                                                    <div id="${audioWrapperId}"></div>
+                                                    <div class="row g-0 ${imageContainerCls}"></div>
+                                                    <div id="${footerContainer}"></div>
+                                                </div>
                                         </div>
                                     </div>
                                 </div>
@@ -14770,11 +14860,22 @@ const VirtualTour = (() => {
 
         if (currentQuestion?.set?.virtualTour === true) {
             const definedCol = currentQuestion?.set?.col ?? {};
+            const footer     = currentQuestion?.set?.footer ?? {};
+
             const col = {
                 md: definedCol?.md ?? defaultCol.md,
                 sm: definedCol?.sm ?? defaultCol.sm,
                 col: definedCol?.col ?? defaultCol.col
             };
+
+            if (Object.entries(footer).length) {
+                const footEle = $(`#${footerContainer}`);
+
+                if (footer?.html) {
+                    footEle.html(footer.html);
+                    if (footer?.wrapperClass != '' ) footEle.addClass(footer.wrapperClass);
+                }
+            }
 
             const audioPath = currentQuestion?.set?.audio && currentQuestion?.set?.audio?.path
                 ? currentQuestion.set.audio.path

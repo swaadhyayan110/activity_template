@@ -27,12 +27,12 @@ const Controller = (() => {
         });
     };
 
-    const filterByQids = ({filterIds=[], buttons}) => {
+    const filterByModuleIds = ({filterIds=[], buttons}) => {
         try {
             if (!filterIds.length) return buttons;
 
             filterIds = filterIds.map(id => parseInt(id));
-            return buttons.filter(btn => filterIds.includes(parseInt(btn.qid)));
+            return buttons.filter(btn => filterIds.includes(parseInt(btn.module)));
         } catch (err) {
             console.warn(err);
             return buttons;
@@ -71,6 +71,6 @@ const Controller = (() => {
 
     return {
         importScript,
-        filterByQids
+        filterByModuleIds
     }
 })();
