@@ -14868,9 +14868,9 @@ const VirtualTour = (() => {
                 col: definedCol?.col ?? defaultCol.col
             };
 
+            const footEle = $(`#${footerContainer}`);
+            footEle.empty();
             if (Object.entries(footer).length) {
-                const footEle = $(`#${footerContainer}`);
-
                 if (footer?.html) {
                     footEle.html(footer.html);
                     if (footer?.wrapperClass != '' ) footEle.addClass(footer.wrapperClass);
