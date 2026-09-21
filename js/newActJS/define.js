@@ -14,7 +14,7 @@ const Define = (() => {
 
     // DEFINE BUTTONS
     const buttons = Controller.filterByModuleIds({
-        filterIds:[16],
+        // filterIds:[16],
         buttons:[
             { qid: 44, text: ['Q-44', 'Q:44; M:0 - Math'], module: 0 },
             { qid: 0, text: ['Q-0', 'Q:0; M:0 - Audio'], module: 0 },
