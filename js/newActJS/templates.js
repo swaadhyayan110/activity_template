@@ -861,7 +861,7 @@ const MatchLeftToRight = (() => {
             const html = `<div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
                 <div class="onImgLayer">
-                <div class="question match1_V2 match1_height">
+                <div class="question uiContainer-module-box uiContainer-module-1">
                     <div class="container">
                         <div class="qSections">
                             <div class="${Helper.vars.head}"></div>
@@ -873,7 +873,7 @@ const MatchLeftToRight = (() => {
                             <div class="levelText">${columnLabel}-<span class='text-uppercase'>${lang === 'hi' ? 'ब' : 'B'}</span></div>
                         </div>
                         <div class="content user-select-none">
-                            <div class="instructions scroll_v2">
+                            <div class="instructions p-3">
                                 <div class="activity-wrapper">
                                 <div class="matching-area ${activityId}" data-id="${activityId}">
                                     <div class="left-items" id="leftItems_${activityId}"></div>
@@ -1374,14 +1374,14 @@ const MatchLeftRightToCenter = (() => {
             <div class="match1Back">
                <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
                 <div class="onImgLayer">
-                     <div id="${activityId}" class="question match1_V2">
+                     <div id="${activityId}" class="question uiContainer-module-box uiContainer-module-2">
                             <div class="container">
                                 <div class="qSections">
                                     <div class="${Helper.vars.head}"></div>
                                     <p class="${Helper.vars.subHead}"></p>
                                 </div>
                                 <hr />
-                                <div class="rowM3 matching-area user-select-none match2ForScrollV2" style="position:relative; ">
+                                <div class="rowM3 matching-area user-select-none" style="position:relative; ">
                                     <div class="colmn1 matchItems1"></div>
                                     <div class="colmn1 matchItems2"></div>
                                     <div class="colmn1 matchItems3"></div>
@@ -1757,7 +1757,7 @@ const MatchTopToBottom = (() => {
             <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/op1.png"/>
                 <div class="onImgLayer">
-                    <div class="question match1_V2">
+                    <div class="question uiContainer-module-box uiContainer-module-3">
                         <div class="container">
                         <div class="qSections">
                             <div class="${Helper.vars.head}"></div>
@@ -1931,8 +1931,8 @@ const FillInTheBlanksWithImage = (() => {
             parent.innerHTML = `
              <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
-                    <div class="onTheImages">
-                        <div class="question user-select-none v2FIllForScrolls">
+                    <div class="uiContainer-module-box uiContainer-module-4">
+                        <div class="question user-select-none">
                             <div class="container">
                                 <div class="qSections">
                                     <div class="${Helper.vars.head}"></div>
@@ -15496,7 +15496,7 @@ const CustomTemplate = (() => {
         parent.innerHTML = `
             <div class="match1Back">
                     <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
-                    <div class="onTheImagesFill2">
+                    <div class="uiContainer-module-box uiContainer-module-0">
                         <div class="question p-3 h-100" id="${id}">${html}</div>
                     </div>
             </div>
