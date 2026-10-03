@@ -2164,7 +2164,7 @@ const FillInTheBlanksHindiKb = (() => {
             parent.innerHTML = `
             <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/fill2.png"/>
-                    <div class="onTheImagesFill2">
+                    <div class="uiContainer-module-box uiContainer-module-5">
             <div class="question">
                                     <div class="container">
                                         ${audioSrc ?
@@ -2696,7 +2696,7 @@ const JumbleLetters = (() => {
             parent.innerHTML = `
             <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/fill2.png"/>
-                    <div class="onTheImagesFill2">
+                    <div class="uiContainer-module-box uiContainer-module-6">
                     <div class="question">
                         <div class="container">
                             <div class="qSections">
@@ -2959,7 +2959,7 @@ const JumbleWords = (() => {
             parent.innerHTML = `
              <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/fill2.png"/>
-                    <div class="onTheImagesFill2">
+                    <div class="uiContainer-module-box uiContainer-module-7">
                                 <div class="question">
                                     <div class="container">
                                         <div class="${Helper.vars.head}"></div>
@@ -3277,7 +3277,7 @@ const Mcq_PathKaSaar = (() => {
                 ` : `
                     <div class="mcqOuterScorV2_">
                         <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
-                        <div class="question mcq_1MenV2">
+                        <div class="question uiContainer-module-box uiContainer-module-9">
                             <div class="container">
                                 <div class="rowWithAudios">
                                     <span class="m-0 ${Helper.vars.head}"></span> 
@@ -3702,7 +3702,7 @@ const Adaptiv = (() => {
             parent.innerHTML = `
              <div class="mcqOuterScorV2_">
                                 <img class="backImgsM1" draggable="false" src="images/mcq.png"/>
-                                <div class="question mcq_1MenV2">
+                                <div class="question uiContainer-module-box uiContainer-module-10">
             <div class="question">
                                     <div class="container-fluid">
                                         <div class="${headerContainer}">
@@ -4405,7 +4405,7 @@ const DropDown = (() => {
             parent.innerHTML = `
                 <div class="mcqOuterScorV2_">
                                 <img class="backImgsM1" draggable="false" src="images/dd.png"/>
-                                <div class="question ddMianBackV2">
+                                <div class="question uiContainer-module-box uiContainer-module-12">
                                 <div class="question ddMainV2">
                                     <div class="container">
                                         <div class="qSections">
@@ -4697,7 +4697,7 @@ const Circle = (() => {
             parent.innerHTML = `
                 <div class="match1Back">
                     <img class="backImgsM1" draggable="false" src="images/dd.png"/>
-                    <div class="onTheImagesClickToC">
+                    <div class="uiContainer-module-box uiContainer-module-13">
                             <div class="question clickToCMainV2">
                                     <div class="container" id="${dataKey}">
                                         <div class="${quesClass}">
@@ -5048,7 +5048,7 @@ const ShravanKaushal = (() => {
             parent.innerHTML = `
                  <div class="match1Back">
                     <img class="backImgsM1" draggable="false" src="images/skills.png"/>
-                    <div class="lesionSkills">
+                    <div class="uiContainer-module-box uiContainer-module-14">
                              <div class="question">
                                     <audio id="audioPlayer" preload="auto"></audio>
                                     <div class="startActBtns">
@@ -5369,7 +5369,7 @@ const TrueAndFalse = (() => {
             parent.innerHTML = `
             <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/tnf.png"/>
-                <div class="onTheImagesFill2 mtopTnf">
+                <div class="uiContainer-module-box uiContainer-module-15">
                     <div class="question">
                         <div class="container">
                             ${audioSrc ?
@@ -5734,7 +5734,7 @@ const DragAndDrop = (() => {
             parent.innerHTML = `
             <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/DND1.png"/>
-                    <div class="onTheImagesFill3">
+                    <div class="uiContainer-module-box uiContainer-module-8">
                          <div class="question">
                                 <div class="container">
                                     <div class="rowWithAudios">
@@ -6066,7 +6066,7 @@ const DragAndDropMulti = (() => {
             parent.innerHTML = `
             <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/random.jpg"/>
-                <div class="onTheImagesFill2 mtopv2 p-0">
+                <div class="uiContainer-module-box uiContainer-module-16 p-0">
                     <div class="question">
                         <div class="container">
                             ${audioSrc ?
@@ -7059,7 +7059,7 @@ const Sorting = (() => {
             parent.innerHTML = `
                     <div class="match1Back">
                         <img class="backImgsM1" draggable="false" src="images/shorting.png"/>
-                            <div class="shortingMain">
+                            <div class="uiContainer-module-box uiContainer-module-17">
                                 <div class="question">
                                     <div class="container contAdapt" id="${containerId}">
                                         <div class="questionHeadingMCQ ${Helper.vars.head}"></div>
@@ -7276,7 +7276,7 @@ const Pdf = (() => {
             parent.innerHTML = `
                                 <div class="question" id="${containerId}">
                                     <img src="images/pdf.png" class="backImgs" draggable="false" />
-                                    <div class="pdfFrame3D" style="${tabBtns > 1 ? 'top: 8vh; height: 83vh;': ''}">
+                                    <div class="uiContainer-module-box uiContainer-module-18" tyle="${tabBtns > 1 ? 'top: 8vh; height: 83vh;': ''}">
                                         <div class="pdfHeader">
                                             <button class="" id="downloadBtn">
                                                 <span>
@@ -7310,7 +7310,7 @@ const Pdf = (() => {
                                             </button>
                                             <button class="magicBtn" id="zoomInBtn">+</button>
                                         </div>
-                                        <div class="viewerArea viewer">
+                                        <div class="viewerArea viewer h-100">
                                             <canvas id="pdfCanvas" width="756" height="972" style="width: 756px; height: 972px;"></canvas>
                                         </div>
                                     </div>
@@ -7521,7 +7521,7 @@ const Shabdkosh = (() => {
             parent.innerHTML = `
                         <div class="match1Back">
                             <img class="backImgsM1" draggable="false" src="images/shabdkosh.png"/>
-                            <div class="shabdKoshMain">
+                            <div class="uiContainer-module-box uiContainer-module-19">
                                 <div class="question">
                                     <div class="containe" id="${containerId}">
                                         <div class="rowWithAudios font18 fontBold mx-4 mb-4 ${Helper.vars.head}"></div>
@@ -7869,7 +7869,7 @@ const Shrutlekh = (() => {
             parent.innerHTML = `
                      <div class="match1Back">
                             <img class="backImgsM1" draggable="false" src="images/shrutlekh.png"/>
-                            <div class="shabdKoshMain">
+                            <div class="uiContainer-module-box uiContainer-module-20">
                                 <div class="question">
                                     <div class="qq-Box" id="${containerId}">
                                         <div class="play-btn common_playBtn">
@@ -8305,7 +8305,7 @@ const WordSearch = (() => {
             parent.innerHTML = `
                     <div class="match1Back">
                         <img class="backImgsM1" draggable="false" src="images/wordSearch.png"/>
-                            <div class="onTheImagesFill2">
+                            <div class="uiContainer-module-box uiContainer-module-21">
                                 <div class="question word-searched">                                    
                                     <div class="container" id="${containerId}">
                                         <div class="${Helper.vars.head}"></div>
@@ -8764,7 +8764,7 @@ const TextArea = (() => {
             parent.innerHTML = `
                         <div class="match1Back">
                             <img class="backImgsM1" draggable="false" src="images/textArea.png"/>
-                                <div class="textAreaOnImgs">
+                                <div class="uiContainer-module-box uiContainer-module-22">
                                     <div class="question">
                                         <div class="container" id="${containerId}">
                                             <h5 class="questionHeading mt-3 border-bottom pb-2 ${Helper.vars.head}"></h5>
@@ -9135,7 +9135,7 @@ const CrossWord = (() => {
             const uiHtml = `
                      <div class="match1Back">
                         <img class="backImgsM1" draggable="false" src="images/wp.png"/>
-                        <div class="wordPuzzleBox">
+                        <div class="uiContainer-module-box uiContainer-module-23">
                          <div class="question">
                             <div class="container" id="${containerId}">
                                 <div class="cross-word-puzzle crossword-content" style="text-align:left;">
@@ -9731,7 +9731,7 @@ const ShravanKaushalWithPara = (() => {
             const uiHtml = `
             <div class="match1Back">
                         <img class="backImgsM1" draggable="false" src="images/shravanKaushalWithPara.png"/>
-                        <div class="ShravanKaushalWithParaBox">
+                        <div class="uiContainer-module-box uiContainer-module-24">
                      <div class="question">
                                 <div class="container shrawan-kaushal" id="${containerId}">
                                     <div class="listen-activity-container ${!isMain ? 'd-none' : ''}">
@@ -10546,7 +10546,7 @@ const OnlyAudio = (() => {
             parent.innerHTML = `
             <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/audioBgs.png"/>
-                    <div class="onTheImagesFill2 overtFHideV2">
+                    <div class="uiContainer-module-box uiContainer-module-11 overtFHideV2">
                     <div class="question" id="particle-container">
                         <div class="container">
                             <div class="audio-music-bg"></div>
@@ -10856,7 +10856,7 @@ const RachnatmakParaWithImages = (() => {
             const uiHtml = `
                     <div class="match1Back">
                         <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
-                        <div class="rachNatmalPara1V2">
+                        <div class="uiContainer-module-box uiContainer-module-26">
                             <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="menHeading ${Helper.vars.head}"></div>
@@ -10957,7 +10957,7 @@ const RachnatmakWithKeyboard = (() => {
             const uiHtml = `
                      <div class="match1Back">
                          <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
-                            <div class="onTheImagesFill2 forHeightControl">
+                            <div class="uiContainer-module-box uiContainer-module-27">
                             <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="menHeading ${Helper.vars.head}"></div>
@@ -11206,7 +11206,7 @@ const RachnatmakWithTabBtns = (() => {
             const uiHtml = `
                     <div class="match1Back">
                         <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
-                        <div class="onTheImagesFill2">
+                        <div class="uiContainer-module-box uiContainer-module-28">
                              <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
@@ -11350,7 +11350,7 @@ const RachnatmakWithInputs = (() => {
             const uiHtml = `
                     <div class="match1Back">
                         <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
-                        <div class="onTheImagesFill2">
+                        <div class="uiContainer-module-box uiContainer-module-29">
                             <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
@@ -11744,7 +11744,7 @@ const ClickOnImage = (() => {
             parent.innerHTML = `
             <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/imgClick.png"/>
-                     <div class="onTheImagesFill2">
+                     <div class="uiContainer-module-box uiContainer-module-30">
                         <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
@@ -11929,7 +11929,7 @@ const FillOnClick = (() => {
             parent.innerHTML = `
              <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/imgClick.png"/>
-                     <div class="onTheImagesFill2">
+                     <div class="uiContainer-module-box uiContainer-module-31">
                         <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="container">
@@ -12152,7 +12152,7 @@ const Dictionary = (() => {
             parent.innerHTML = `
                  <div class="match1Back">
                     <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
-                         <div class="onTheImagesFill2">
+                         <div class="uiContainer-module-box uiContainer-module-32">
                              <div class="question">
                                 <div class="container" id="${containerId}">
                                     <div class="wrapers">
@@ -12393,7 +12393,7 @@ const MentalMath = (() => {
             parent.innerHTML = `
                <div class="match1Back">
                     <img class="backImgsM1" draggable="false" src="images/rachnatmakPara.png"/>
-                         <div class="onTheImagesFill2">
+                         <div class="uiContainer-module-box uiContainer-module-33">
             <div class="question">
                                     <div class="container" id="${containerId}">
                                         ${activity?.head
@@ -12925,7 +12925,7 @@ const MathMoney = (() => {
             parent.innerHTML = `
                         <div class="match1Back">
                             <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
-                             <div class="mathBackMainDivs">
+                             <div class="uiContainer-module-box uiContainer-module-35">
                                  <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="menHeDicMath">
@@ -13182,7 +13182,7 @@ const ShabdRachna = (() => {
             parent.innerHTML = `
                          <div class="match1Back">
                             <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
-                             <div class="mathBackMainDivs addAdvV2">
+                             <div class="uiContainer-module-box uiContainer-module-36">
                                 <div class="question">
                                     <div class="container-fluid" id="${containerId}">                                        
                                         <div class="nameofChapter d-block ${Helper.vars.head}" style="width: ${headWidth};"></div>
@@ -13465,7 +13465,7 @@ const SpellCheck = (() => {
             parent.innerHTML = `
                         <div class="match1Back">
                             <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
-                             <div class="mathBackMainDivs">
+                             <div class="uiContainer-module-box uiContainer-module-37">
                                 <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="${quesClass}">
@@ -13966,7 +13966,7 @@ const SpellItOut = (() => {
             parent.innerHTML = `
                          <div class="match1Back">
                             <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
-                             <div class="mathBackMainDivs">
+                             <div class="uiContainer-module-box uiContainer-module-38">
                             <div class="question">
                                     <div class="container" id="${containerId}">
                                         <div class="${quesClass}">
@@ -14234,7 +14234,7 @@ const VowelDragAndDrop = (() => {
             parent.innerHTML = `
                          <div class="match1Back">
                             <img class="backImgsM1" draggable="false" src="images/mathTy.png"/>
-                             <div class="mathBackMainDivs">
+                             <div class="uiContainer-module-box uiContainer-module-39">
                                 <div class="question">
                                     <div class="container">
                                         <div class="rowWithAudios font18 fontBold ${Helper.vars.head}"></div>
@@ -14719,7 +14719,7 @@ const VirtualTour = (() => {
             parent.innerHTML = `
                             <div class="match1Back">
                                 <img class="backImgsM1" draggable="false" src="images/vt.png"/>
-                                <div class="vtMainBacks">
+                                <div class="uiContainer-module-box uiContainer-module-40">
                                     <div class="question">
                                         <div class="container-fluid">
                                             <div class="p-2 rounded-3 border bg-light text-center ${Helper.vars.head}"></div>
@@ -15072,7 +15072,7 @@ const CircleAndUnderline = (() => {
             parent.innerHTML = `
               <div class="match1Back">
                 <img class="backImgsM1" draggable="false" src="images/vt.png"/>
-                    <div class="vtMainBacks">
+                    <div class="uiContainer-module-box uiContainer-module-41">
                         <div class="question">
                             <div class="container cu position-relative contAdapt p-3" id="${containerId}">
                                 <div class="questionHeadingMCQ ${Helper.vars.head}"></div>

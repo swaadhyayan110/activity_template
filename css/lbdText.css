@@ -524,7 +524,7 @@ body {
 
 /* SELECTED */
 .item.selected {
-  border-color: #7e52f8;  
+  border-color: #7e52f8;
 
   /* background:
     linear-gradient(180deg,
@@ -2705,6 +2705,191 @@ body {
 .addAdvV2 {
   top: 17vh;
   height: 67vh;
+}
+
+.uiContainer-module-5 {
+  height: 68vh;
+  width: 82%;
+}
+
+.uiContainer-module-6 {
+  height: 68vh;
+  width: 82%;
+}
+
+.uiContainer-module-7 {
+  height: 68vh;
+  width: 82%;
+}
+
+.uiContainer-module-8 {
+  height: 67vh;
+  width: 78%;
+}
+
+.uiContainer-module-9 {
+  height: 72vh;
+  width: 78%;
+}
+
+.uiContainer-module-10 {
+  height: 72vh;
+  width: 78%;
+}
+
+.uiContainer-module-11 {
+  height: 64vh;
+  width: 59%;
+  overflow: hidden !important;
+}
+
+.uiContainer-module-12 {
+  height: 65vh;
+  width: 69%;
+}
+
+.uiContainer-module-13 {
+  height: 65vh;
+  width: 69%;
+}
+
+.uiContainer-module-14 {
+  height: 62vh;
+  width: 69%;
+}
+
+.uiContainer-module-15 {
+  height: 70vh;
+  width: 81%;
+}
+
+.uiContainer-module-16 {
+  height: 74vh;
+  width: 88%;
+}
+
+.uiContainer-module-17 {
+  height: 63vh;
+  width: 73%;
+}
+
+.uiContainer-module-18 {
+  height: 76vh;
+  width: 91%;
+}
+
+.uiContainer-module-19 {
+  height: 70vh;
+  width: 78%;
+}
+
+.uiContainer-module-20 {
+  height: 70vh;
+  width: 78%;
+}
+
+.uiContainer-module-21 {
+  height: 70vh;
+  width: 83%;
+}
+
+.uiContainer-module-22 {
+  height: 67vh;
+  width: 77%;
+}
+
+.uiContainer-module-23 {
+  height: 64vh;
+  width: 75%;
+}
+
+.uiContainer-module-24 {
+  height: 66vh;
+  width: 82%;
+}
+
+.uiContainer-module-26 {
+  height: 66vh;
+  width: 77%;
+}
+
+.uiContainer-module-27 {
+  height: 66vh;
+  width: 82%;
+}
+
+.uiContainer-module-28 {
+  height: 66vh;
+  width: 82%;
+}
+
+.uiContainer-module-29 {
+  height: 66vh;
+  width: 82%;
+}
+
+.uiContainer-module-30 {
+  height: 66vh;
+  width: 74%;
+}
+
+.uiContainer-module-31 {
+  height: 66vh;
+  width: 74%;
+}
+
+.uiContainer-module-32 {
+  height: 66vh;
+  width: 80%;
+}
+
+.uiContainer-module-33 {
+  height: 66vh;
+  width: 82%;
+}
+
+.uiContainer-module-35 {
+  height: 65vh;
+  width: 75%;
+}
+
+.uiContainer-module-36 {
+  height: 66vh;
+  width: 76%;
+}
+
+.uiContainer-module-37 {
+  height: 65vh;
+  width: 75%;
+}
+
+.uiContainer-module-38 {
+  height: 65vh;
+  width: 75%;
+}
+
+.uiContainer-module-39 {
+  height: 65vh;
+  width: 75%;
+}
+
+.uiContainer-module-40 {
+  height: 68vh;
+  width: 75%;
+}
+
+.uiContainer-module-41 {
+  height: 69vh;
+  width: 78%;
+}
+
+.uiContainer-module-box {
+  position: absolute;
+  top: 7.5rem;
+  background-color: #000;
+  overflow: auto;
+  transform: translateX(-50%);
+  left: 50%;
 }
 
 /* MOBILE */
