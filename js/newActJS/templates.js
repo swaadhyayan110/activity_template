@@ -10904,7 +10904,7 @@ const RachnatmakParaWithImages = (() => {
                     if (path) {
                         const align = Array.isArray(image.align) ? (image.align[count] || 'right') : (image.align || 'right');
                         const fullPath = path ? Activity.pathToCWD() + path : '';
-                        const imageTag = `<img src="${fullPath}" style="width:${width};" class="img-${align}" >`;
+                        const imageTag = `<img src="${fullPath}" style="max-width:none !important;width:${width};" class="img-${align}" >`;
                         count++;
                         return imageTag;
                     }
@@ -10914,7 +10914,7 @@ const RachnatmakParaWithImages = (() => {
                 const align = (image?.align == 'left' || image?.align == 'right') ? image?.align : 'right';
                 const path = image?.path ? Activity.pathToCWD() + image.path : false;
                 if (path != false && text.includes(replacement)) {
-                    const imageTag = `<img src="${path}" style="width:${width};" class="img-${align}" >`;
+                    const imageTag = `<img src="${path}" style="max-width:none !important;width:${width};" class="img-${align}" >`;
                     text = text.replace(replacement, imageTag);
                 }
             }
