@@ -2915,6 +2915,7 @@ body {
   overflow: auto;
   transform: translateX(-50%);
   left: 50%;
+  padding: 3rem;
 }
 
 /* MOBILE */

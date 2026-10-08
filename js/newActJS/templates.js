@@ -15849,9 +15849,20 @@ const AdaptiveMultiUse = (() => {
 
         const popupLabels = Activity.translatePopupLabels(lang);
 
+        const isFooter = q?.footer ?? false;
+        const isFooterHead = isFooter?.head ?? false;
+        const isFooterBody = isFooter?.body ?? false;
+        const isFooterText = isFooterBody?.text ?? false;
+        const isFooterImgLayout = isFooterBody?.imageLayout ?? false;
+
+        const position = isFooterImgLayout?.position;
+        const containerClass = position === 'top' || position === 'bottom'? 'd-flex flex-column' : 'd-flex flex-row';
+        const textOrder = position === 'left' || position === 'top' ? 'order-2' : 'order-1';
+        const imageOrder = position === 'left' || position === 'top' ? 'order-1' : 'order-2';
+
         container.innerHTML = `${questionText != ''
             ? `
-                    <div class="row m-0 g-0 align-items-center" style="font-size:18px">
+                    <div class="row m-0 g-0 align-items-start" style="font-size:18px">
                         ${!skipQuestionSequence ? `
                             <div style="min-width:30px;" class="col-auto questionHeadingMCQ me-2">
                                 <strong>${popupLabels.questionLabel}${realIndex + 1}.</strong>
@@ -15901,6 +15912,35 @@ const AdaptiveMultiUse = (() => {
                         </div>
                     </div>
                 ` : ''
+            }
+            ${(isFooter) ?
+                `<div class="${isFooter?.classes ?? 'border border-dark rounded-3 p-3 bg-danger-subtle'}">
+                    ${isFooterHead ? 
+                        `<div class="${isFooterHead?.classes ?? ''}">
+                            <div>
+                                ${isFooterHead?.text}
+                            </div>
+                        </div>` : ''
+                    }
+                    ${isFooterBody ? 
+                        `<div class="d-flex ${isFooterBody?.classes ?? ''} ${containerClass}">
+                            <div class="${textOrder}">
+                                ${isFooterText}
+                            </div>
+                            ${isFooterImgLayout ? 
+                                `<div class="${imageOrder} ${isFooterImgLayout?.classes ?? ''}">
+                                    ${isFooterImgLayout?.images?.map((item) => {
+                                        const path = item?.path;
+                                        const width = item?.style?.width ?? '150px';
+                                        const height = item?.style?.height ?? '150px';
+                                        const image = `<img src="${Activity.pathToCWD()}${path}" style="height:${height}; width:${width}; object-fit:contain;" ondragstart="return false;"/>`
+                                        return image
+                                    }).join('')}
+                                </div>`: ''
+                            }
+                        </div>` : ''
+                    }
+                </div>` : ''
             }
         `;
 

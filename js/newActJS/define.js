@@ -62,6 +62,7 @@ const Define = (() => {
             { qid: 42, text: ['Q-42', 'Q:42; M:40 - Virtual Tour'], module: 40 },
             { qid: 43, text: ['Q-43', 'Q:43; M:41 - Circle and underline'], module: 41 },
             { qid: 45, text: ['Q-45', 'Q:45; M:9 - Moral of the chapter'], module: 9 },
+            { qid: 46, text: ['Q-46', 'Q:46; M:42 - Adaptive MultiUse'], module: 42 },
         ],
     });
 
@@ -1897,9 +1898,9 @@ const Define = (() => {
                 },
             }
         },
-        // qid : NA, || mid : 10;
+        // qid : 46, || mid : 10;
         {
-            id: 'NA',
+            id: 46,
             lang: 'en',
             content: {
                 skiplevels: true,
@@ -1972,8 +1973,107 @@ const Define = (() => {
                                     },
                                     'this is sample text'
                                 ],
-                                answer: 1
+                                answer: 1,
+                                footer : {
+                                    classes: "border border-info border-3 p-3 rounded-4 bg-danger-subtle",
+                                    head: {
+                                        text: 'Header',
+                                        classes: 'fs-5 text-center mb-2'
+                                    },
+                                    body : {
+                                        classes: "d-flex justify-content-center align-items-center gap-4 flex-wrap",
+                                        text: "Rene Descartes is credited with the invention of coordinate geometry.",
+                                        imageLayout: {
+                                            classes: 'd-flex gap-2 justify-content-center flex-wrap',
+                                            position: 'bottom',
+                                            images: [
+                                                {
+                                                    path: 'images/1.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                },
+                                                {
+                                                    path: 'images/2.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                },
+                                            ]
+                                        },
+                                    }
+                                }
                             },                            
+                            { question: '‘नव किरण है, ज्योति नई’ पंक्ति का क्या तात्पर्य है?', options: ['नया दीपक जलाना', 'प्रकाश और आशा का संदेश', 'बिजली का उपयोग', 'सूर्य का अस्त होना'], answer: 1,
+                                footer : {
+                                    classes: "border border-info border-2 p-3 rounded-3 bg-danger-subtle",
+                                    head: {
+                                        text: 'Header...',
+                                        classes: 'fs-5 text-center mb-2'
+                                    },
+                                    body : {
+                                        classes: "d-flex justify-content-center align-items-center gap-4 flex-wrap",
+                                        text: "Pragraph...",
+                                        imageLayout: {
+                                            classes: 'd-flex gap-2 justify-content-center flex-wrap',
+                                            position: 'bottom',
+                                            images: [
+                                                {
+                                                    path: 'images/1.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                },
+                                                {
+                                                    path: 'images/2.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                },
+                                                {
+                                                    path: 'images/1.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                },
+                                                {
+                                                    path: 'images/2.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                },
+                                                {
+                                                    path: 'images/1.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                },
+                                                {
+                                                    path: 'images/2.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                },
+                                                {
+                                                    path: 'images/1.png',
+                                                    style: {
+                                                        height: 'auto',
+                                                        width: '100px'
+                                                    },
+                                                }
+                                            ]
+                                        },
+                                    }
+                                }
+                             },
                         ]
                     },
                     {
