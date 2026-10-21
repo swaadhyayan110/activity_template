@@ -484,6 +484,7 @@ body {
     box-shadow 0.22s ease,
     border-color 0.22s ease;
   margin: 3px 0;
+  flex-wrap: wrap;
 }
 
 /* TOP LIGHT */
@@ -2178,6 +2179,7 @@ body {
 .ulBoxMain {
   /* width: 98%; */
   margin: 0 auto;
+  padding: 0;
 }
 
 .liShortingBoxV2 {
@@ -2708,93 +2710,93 @@ body {
 }
 
 .uiContainer-module-0 {
-  height: 74vh;
+  height: 80vh;
   width: 92%;
 }
 
 .uiContainer-module-1 {
-  height: 74vh;
+  height: 80vh;
   width: 92%;
 }
 
 .uiContainer-module-2 {
-  height: 74vh;
+  height: 80vh;
   width: 92%;
 }
 
 .uiContainer-module-3 {
-  height: 65vh;
+  height: 72vh;
   width: 80%;
 }
 
 .uiContainer-module-4 {
-  height: 73vh;
+  height: 80vh;
   width: 87%;
 }
 
 .uiContainer-module-5 {
-  height: 68vh;
+  height: 73.5vh;
   width: 82%;
 }
 
 .uiContainer-module-6 {
-  height: 68vh;
+  height: 74vh;
   width: 82%;
 }
 
 .uiContainer-module-7 {
-  height: 68vh;
+  height: 74vh;
   width: 82%;
 }
 
 .uiContainer-module-8 {
-  height: 67vh;
+  height: 73vh;
   width: 78%;
 }
 
 .uiContainer-module-9 {
-  height: 72vh;
+  height: 78vh;
   width: 78%;
 }
 
 .uiContainer-module-10 {
-  height: 72vh;
+  height: 78vh;
   width: 78%;
 }
 
 .uiContainer-module-11 {
-  height: 64vh;
+  height: 69vh;
   width: 59%;
   overflow: hidden !important;
 }
 
 .uiContainer-module-12 {
-  height: 65vh;
+  height: 71vh;
   width: 69%;
 }
 
 .uiContainer-module-13 {
-  height: 65vh;
+  height: 71vh;
   width: 69%;
 }
 
 .uiContainer-module-14 {
-  height: 62vh;
+  height: 69vh;
   width: 69%;
 }
 
 .uiContainer-module-15 {
-  height: 70vh;
+  height: 76vh;
   width: 81%;
 }
 
 .uiContainer-module-16 {
-  height: 74vh;
+  height: 80vh;
   width: 88%;
 }
 
 .uiContainer-module-17 {
-  height: 63vh;
+  height: 69vh;
   width: 73%;
 }
 
@@ -2806,107 +2808,107 @@ body {
 }
 
 .uiContainer-module-19 {
-  height: 70vh;
+  height: 75vh;
   width: 78%;
 }
 
 .uiContainer-module-20 {
-  height: 70vh;
+  height: 77vh;
   width: 78%;
 }
 
 .uiContainer-module-21 {
-  height: 70vh;
+  height: 75vh;
   width: 83%;
 }
 
 .uiContainer-module-22 {
-  height: 67vh;
+  height: 74vh;
   width: 77%;
 }
 
 .uiContainer-module-23 {
-  height: 64vh;
+  height: 71vh;
   width: 75%;
 }
 
 .uiContainer-module-24 {
-  height: 66vh;
+  height: 72vh;
   width: 82%;
 }
 
 .uiContainer-module-26 {
-  height: 66vh;
+  height: 72vh;
   width: 77%;
 }
 
 .uiContainer-module-27 {
-  height: 66vh;
+  height: 72vh;
   width: 82%;
 }
 
 .uiContainer-module-28 {
-  height: 66vh;
+  height: 72vh;
   width: 82%;
 }
 
 .uiContainer-module-29 {
-  height: 66vh;
+  height: 72vh;
   width: 82%;
 }
 
 .uiContainer-module-30 {
-  height: 66vh;
+  height: 72vh;
   width: 74%;
 }
 
 .uiContainer-module-31 {
-  height: 66vh;
+  height: 72vh;
   width: 74%;
 }
 
 .uiContainer-module-32 {
-  height: 66vh;
+  height: 72vh;
   width: 80%;
 }
 
 .uiContainer-module-33 {
-  height: 66vh;
+  height: 72vh;
   width: 82%;
 }
 
 .uiContainer-module-35 {
-  height: 65vh;
+  height: 71vh;
   width: 75%;
 }
 
 .uiContainer-module-36 {
-  height: 66vh;
+  height: 72vh;
   width: 76%;
 }
 
 .uiContainer-module-37 {
-  height: 65vh;
+  height: 71vh;
   width: 75%;
 }
 
 .uiContainer-module-38 {
-  height: 65vh;
+  height: 71.5vh;
   width: 75%;
 }
 
 .uiContainer-module-39 {
-  height: 65vh;
+  height: 71.5vh;
   width: 75%;
 }
 
 .uiContainer-module-40 {
-  height: 68vh;
+  height: 74.5vh;
   width: 75%;
 }
 
 .uiContainer-module-41 {
-  height: 69vh;
+  height: 75vh;
   width: 78%;
 }
 
@@ -2921,6 +2923,191 @@ body {
 }
 
 /* MOBILE */
+@media(max-width:1025px) {
+  .uiContainer-module-0 {
+    height: 74vh;
+  }
+
+  .uiContainer-module-1 {
+    height: 74vh;
+  }
+
+  .uiContainer-module-2 {
+    height: 74vh;
+  }
+
+  .uiContainer-module-3 {
+    height: 67vh;
+  }
+
+  .uiContainer-module-4 {
+    height: 74vh;
+  }
+
+  .uiContainer-module-5 {
+    height: 68vh;
+  }
+
+  .uiContainer-module-6 {
+    height: 68vh;
+  }
+
+  .uiContainer-module-7 {
+    height: 68vh;
+  }
+
+  .uiContainer-module-8 {
+    height: 68vh;
+  }
+
+  .uiContainer-module-9 {
+    height: 72vh;
+  }
+
+  .uiContainer-module-10 {
+    height: 72vh;
+  }
+
+  /* module-11 */
+  .uiContainer-module-11 {
+    height: 63vh;
+  }
+  
+  .audio-box{
+    display: block;
+  }
+  
+  /* module-11 */
+  
+  .uiContainer-module-12 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-13 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-14 {
+    height: 63vh;
+  }
+
+  .uiContainer-module-15 {
+    height: 70.5vh;
+  }
+
+  .uiContainer-module-16 {
+    height: 74vh;
+  }
+
+  .uiContainer-module-17 {
+    height: 63vh;
+  }
+
+  .uiContainer-module-18 {
+    height: 86vh;
+  }
+
+  .uiContainer-module-19 {
+    height: 70vh;
+  }
+
+  .uiContainer-module-20 {
+    height: 71vh;
+  }
+
+  .uiContainer-module-21 {
+    height: 70vh;
+  }
+
+  .uiContainer-module-22 {
+    height: 68.5vh;
+  }
+
+  .uiContainer-module-23 {
+    height: 65vh;
+  }
+
+  .uiContainer-module-24 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-26 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-27 {
+    height: 66vh;
+  }
+  
+  .uiContainer-module-28 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-29 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-30 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-31 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-32 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-33 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-35 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-36 {
+    height: 66vh;
+  }
+  
+  .uiContainer-module-37 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-38 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-39 {
+    height: 66vh;
+  }
+
+  .uiContainer-module-40 {
+    height: 69vh;
+  }
+
+  .uiContainer-module-41 {
+    height: 69vh;
+  }
+
+}
+
+@media(max-width:881px) {
+  .uiContainer-module-box{
+    top: 3rem;
+    width: 100%;
+    height: 92vh;
+    padding: 0;
+  }
+
+  .textontheImgs{
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+
 @media(max-width:768px) {
   .tnfBtn {
     min-width: 92px;

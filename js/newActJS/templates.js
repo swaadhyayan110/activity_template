@@ -1786,7 +1786,7 @@ const MatchTopToBottom = (() => {
                             </div>
                             </div>
                         </div>
-                        <div class="buttons machiNgs">
+                        <div class="buttons machiNgs mt-3">
                             <button class="submit-btn" data-check>${buttonLabel.check}</button>
                             <button class="show-btn" data-show>${buttonLabel.show}</button>
                             <button class="reset-btn" data-reset>${buttonLabel.try}</button>
@@ -5753,7 +5753,7 @@ const DragAndDrop = (() => {
                                     </div>
                                     <div id="question1" class="question-block">
                                         <div class="dragItems" id="${containerId}"></div>
-                                        <div class="dropItems"></div>
+                                        <div class="dropItems d-flex justify-content-center"></div>
                                         <div class="buttons machiNgs">
                                             <button class="submit-btn">${buttonLabel.check}</button>
                                             <button class="show-btn">${buttonLabel.show}</button>
@@ -8380,7 +8380,7 @@ const WordSearch = (() => {
                 ques?.across.map((item, index) => {
                     if (!item?.text && !item?.image) return;
                     const html = `<div class="criss-item clues-text mb-1">
-                                    ${__acrossIndex}. ${renderQuestion(item)}
+                                    ${item?.sequence? item?.sequence: __acrossIndex}. ${renderQuestion(item)}
                                 </div>`;
                     puzzle.push(html);
                     __acrossIndex++;
@@ -8397,7 +8397,7 @@ const WordSearch = (() => {
                 ques?.down.map((item, index) => {
                     if (!item?.text && !item?.image) return;
                     const html = `<div class="criss-item clues-text mb-1">
-                                    ${__downIndex}. ${renderQuestion(item)}
+                                    ${item?.sequence? item?.sequence: __downIndex}. ${renderQuestion(item)}
                                 </div>`;
                     puzzle.push(html);
                     __downIndex++;
@@ -9298,7 +9298,9 @@ const CrossWord = (() => {
                             nums.push(item.sequence);
                         }
                     }
-                    const num = nums.join(',');
+
+                    const isSamePoint = nums[0] === nums[1];                    
+                    const num = isSamePoint ? nums[0] : nums.join(',');
 
                     table.push('<td>');
                     if (__isBox(r, c, renderedQuestion)) {
