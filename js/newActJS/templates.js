@@ -89,7 +89,8 @@ const Helper = (() => {
     const loadPdfJs = async () => {
         const locations = [
             '/data/e-Learning/js/newActJS/pdf_v6',
-            '/js/newActJS/pdf_v6'
+            '/js/newActJS/pdf_v6',
+            '/resources/views/activities/js/newActJS/pdf_v6',
         ];
 
         for (const base of locations) {
